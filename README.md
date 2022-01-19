@@ -1,70 +1,50 @@
-# Getting Started with Create React App
+<h1>CS261 Group Project</h1>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Please follow the steps below to make 
+sure you have the same setup to everyone else.
 
-## Available Scripts
+<h3>Step 1: Cloning the repository</h3>
+Run `git clone https://github.com/cs261-group46/cs261-group46-project.git` in
+the directory you wish for the project to reside.
 
-In the project directory, you can run:
 
-### `npm start`
+<h3>Step 2: Creating a virtual environment</h3>
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+If you have never worked with python much before, and you don't 
+know what a virtual environment is, to put it simply, 
+it's a way for the developer to isolate the Python interpreter 
+and libraries installed as part of a project from other projects 
+and the system - so you definitely want to use them!
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+In order to create a virtual environment, run:
+```
+python3 -m venv ./cs261-group46-project/venv
+```
+<h3>Step 3: Activating the virtual environment</h3>
+```
+   cd cs261-group46-project
+```
+Then run:
+```
+. venv/bin/activate
+```
 
-### `npm test`
+<h3>Step 4: Installing dependencies</h3>
+To install python dependencies, run (make sure you activated venv in step 3):
+```
+pip install -r requirements.txt
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+To install node dependencies, run: 
+```
+npm install
+```
 
-### `npm run build`
+<h3>Bonus: Running the server(s)</h3>
+During the development, there are two servers 
+that will need to run : the backend server and the react server.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+1. Start the backend server by running : `npm run start-api` or `yarn start-api`. This 
+will start a server on port 5000.
+2. In a different terminal, start the react server by running `npm start` or `yarn start`. This 
+will start a react server.
