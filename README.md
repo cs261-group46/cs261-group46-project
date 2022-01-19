@@ -5,9 +5,11 @@ sure you have the same setup to everyone else.
 
 <h3>Step 1: Cloning the repository</h3>
 Run 
+
 ```
 git clone https://github.com/cs261-group46/cs261-group46-project.git
-``` 
+```
+
 in the directory you wish want project to reside in.
 
 
