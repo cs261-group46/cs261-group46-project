@@ -10,7 +10,7 @@ Run
 git clone https://github.com/cs261-group46/cs261-group46-project.git
 ```
 
-in the directory you wish want project to reside in.
+in the directory you wish the project to reside in.
 
 
 <h3>Step 2: Creating a virtual environment</h3>
