@@ -1,7 +1,7 @@
 import os, shutil, sys
 
 sep = os.sep
-flask_dir_name = "flask"
+flask_dir_name = "app"
 original_location        = ".."+sep+"build"+sep
 original_css_location    = ".."+sep+"build"+sep+"static"+sep+"css"+sep
 original_js_location     = ".."+sep+"build"+sep+"static"+sep+"js"+sep
@@ -10,13 +10,16 @@ target_location_template = ".."+sep+flask_dir_name+sep+"templates"+sep+"react"+s
 target_location_template_statics = ".."+sep+flask_dir_name+sep+"static"+sep+"react"+sep+"template"+sep
 target_location_static = ".."+sep+flask_dir_name+sep+"static"+sep+"react"+sep
 
+print(os.path.abspath(os.path.curdir))
+
 dirs = [
     target_location_template,
     target_location_template_statics,
     target_location_static,
     target_location_static+"css"+sep,
     target_location_static+"js"+sep,
-    target_location_static+"media"+sep
+    target_location_static+"media"+sep,
+    target_location_static+"template"+sep
 ]
 
 
