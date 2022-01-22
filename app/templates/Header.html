@@ -1,213 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        {% if title %}
-        <title>{{ title }}</title>
-        {% else %}
-        <title>Party Games</title>
-        {% endif %}
-
-        <meta name="viewport" content="width=device-width,initial-scale=1">
-
-        <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" > <!-- Bootstrap "./static/bootstrap.css" -->
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/materialize.min.css') }}" >
-
-
-        <link href="{{ url_for('static', filename='font-awesome/css/fontawesome.css') }}" rel="stylesheet">
-        <link href="{{ url_for('static', filename='font-awesome/css/brands.css') }}" rel="stylesheet">
-        <link href="{{ url_for('static', filename='font-awesome/css/solid.css') }}" rel="stylesheet">
-        <link href="{{ url_for('static', filename='font-awesome/css/all.css') }}" rel="stylesheet">
-
-        <link rel="stylesheet" href="{{ url_for('static', filename='customcss/topbar.css') }}" >
-        <link rel="stylesheet" href="{{ url_for('static', filename='customcss/loader.css') }}" >
-        <link rel="stylesheet" href="{{ url_for('static', filename='customcss/home.css') }}" >
-
-        {% block css_stylesheets %}
-
-        {% endblock %}
-
-        <link rel="shortcut icon" href="{{ url_for('static', filename='images/icon.ico') }}">
-
-        <style>
-            {% block css_style %} {% endblock %}
-        </style>
-    </head>
-    <header>
-
-        <ul class="topmenu">
-            <li class="topbar">
-                <a href="/" class="baricon topbar"> <!-- style="padding: 0px 0px" -->
-                    <img src="{{ url_for('static', filename='images/PartyGamesQuickLogo.ico') }}" width="200" height="50" class="d-inline-block align-top" alt="">
-                </a>
-            </li>
-
-            {% if type %}
-            <!-- Home bar-active-->
-                {% if type == "home" %}
-                    <li class="topbar"><a href="/home" class="bar-active topbar">Home</a></li>
-                {% else %}
-                    <li class="topbar"><a href="/home" class="topbar">Home</a></li>
-                {% endif %}
-            <!-- About bar-active-->
-                {% if type == "about" %}
-                    <li class="topbar"><a href="/about" class="bar-active topbar">About</a></li>
-                {% else %}
-                    <li class="topbar"><a href="/about" class="topbar">About</a></li>
-                {% endif %}
-            <!-- Shop bar-active-->
-                {% if type == "shop" %}
-                    <li class="topbar"><a href="/shop" class="bar-active topbar">Shop</a></li>
-                {% else %}
-                    <li class="topbar"><a href="/shop" class="topbar">Shop</a></li>
-                {% endif %}
-            <!-- Bans bar-active-->
-                {% if type == "bans" %}
-                    <li class="topbar"><a href="/bans" class="bar-active topbar">Bans</a></li>
-                {% else %}
-                    <li class="topbar"><a href="/bans" class="topbar">Bans</a></li>
-                {% endif %}
-            <!-- Bans bar-active-->
-                {% if type == "forum" %}
-                    <li class="topbar"><a href="/forum" class="bar-active topbar">Forum</a></li>
-                {% else %}
-                    <li class="topbar"><a href="/forum" class="topbar">Forum</a></li>
-                {% endif %}
-            {% else %}
-                <li class="topbar"><a href="/home" class="topbar">Home</a></li>
-                <li class="topbar"><a href="/about" class="topbar">About</a></li>
-                <li class="topbar"><a href="/shop" class="topbar">Shop</a></li>
-                <li class="topbar"><a href="/bans" class="topbar">Bans</a></li>
-                <li class="topbar"><a href="/forum" class="topbar">Forum</a></li>
-            {% endif %}
-
-
-            <li style="float:right" class="topbar"><a href="/contact" class="bar-active topbar">Contact us</a></li>
-            {% if session.logged_in %}
-                <!-- {{ session.logged_in }} -->
-                {% if session.logged_in == True %}
-                    <li style="float:right" class="topbar"><a href="/logout" class="topbar">Log-out</a></li>
-                    {% if g.user %}
-                    {% if g.user.is_admin() %}
-                    <li style="float:right" class="topbar"><a href="/acp" class="topbar">ACP</a></li>
-                    {% endif %}{% endif %}
-                    <li style="float:right" class="topbar"><a href="/profile" class="topbar">Profile ({{ g.user.username }})</a></li>
-                {% else %}
-                    <li style="float:right" class="topbar"><a href="/login" class="topbar">Log-in</a></li>
-                    <li style="float:right"><button type="button" class="topbar" data-toggle="modal" data-target="#modalLogIn">Modal Log-in</button></li>
-                    <li style="float:right" class="topbar"><a href="/register" class="topbar">Register</a></li>
-                {% endif %}
-            {% else %}
-                <li style="float:right" class="topbar"><a href="/login" class="topbar">Log-in</a></li>
-                <li style="float:right"><button type="button" class="topbar" data-toggle="modal" data-target="#modalLogIn">Modal Log-in</button></li>
-                <li style="float:right" class="topbar"><a href="/register" class="topbar">Register</a></li>
-            {% endif %}
-
-            <!-- <li style="float:right"><a href="/login">Log-in</a></li>-->
-
-
-
-            </ul>
-    </header>
-
-    <body>
-        <!-- Flashes -->
-        <div class="container-fluid" style="padding-left:0px;padding-right:0px;">
-            {% with flashes = get_flashed_messages(with_categories=true) %}
-                {% if flashes %}
-                    {% for category, flash in flashes %}
-                        {% if category %}
-                            <div class="alert alert-{{ category }} alert-dismissible" role="alert" style="margin-top:10px">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                                {{ flash }}
-                            </div>
-                        {% else %}
-                            <div class="alert alert-warning alert-dismissible" role="alert" style="margin-top:10px">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                                {{ flash }}
-                            </div>
-                        {% endif %}
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
-
-
-            {% block body %} {% endblock %}
-
-        </div>
-
-
-        <!-- Modal -->
-    <div class="modal fade" id="modalLogIn" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="background:none;overflow:hidden;box-shadow:none"> <!-- border:none;padding:0px; -->
-        <div class="modal-dialog" role="document"> <!-- style="width:100%;outline:none;border:none;" -->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Login</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-
-                <div class="modal-body">
-                    {% if loginerror %}
-                    <p style="color:red">
-                        {{ loginerror }}
-                    </p>
-                    {% endif %}
-                    <form action="" method="post">
-                        <label>Username:</label>
-                        <input type="text" placeholder="Username" name="username"><br>
-                        <label>Password:</label>
-                        <input type="password" placeholder="Password" name="password"><br>
-                        <input class="btn" type="submit" value="Login" style="background-color:#FFD166;color:#000">
-                    </form>
-
-
-
-                    <div class="container">
-                        <br><p>No account? <a href='/register'>Register here</a></p>
-                        <p><a href='/reset_password'>Forgot Password?</a></p>
-                    </div>
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    {% block modals %} {% endblock %}
-
-
-
-
-    <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
-    {% block scripts %} {% endblock %}
-    <script>
-        $('.editable').each(function(){
-            this.contentEditable = true;
-        });
-    </script>
-
-
-
-    {% if openmodal %}
-        {% if openmodal == True %}
-            <script>$('#modalLogIn').modal({show: true})</script>
-        {% endif %}
+<head>
+    <meta charset="UTF-8">
+    {% if title %}
+    <title>{{ title }}</title>
+    {% else %}
+    <title>SkillQuest</title>
     {% endif %}
 
+    <meta name="viewport" content="width=device-width,initial-scale=1">
 
-    <div id="copyright" class="container" style="min-height:100%;margin-left:0px">
-        <p>Copyright (c) 2019 www.mc-partygames.com. All rights reserved.</p>
-    </div>
 
-    </body>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/materialize.min.css') }}" >
+    {% block css_stylesheets %} {% endblock %}
+
+    <link rel="shortcut icon" href="{{ url_for('static', filename='media/icon.ico') }}">
+</head>
+<body>
+<div>
+    {% block body %} {% endblock %}
+</div>
+
+<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/materialize.min.js') }}"></script>
+
+</body>
 </html>
-

@@ -10,18 +10,18 @@ def get_dir_changes():
         ["static/media", "static/react/media"]
     ]
 
-    moves = {"index.html": False, "manifest.json": False, "asset-manifest.json": False}
-
     for bit in os.listdir(original_location):
         if not os.path.isdir(original_location+bit):
             if bit != "index.html":
                 dir_changes.append([bit, "static/react/template/"+bit])
     return dir_changes
 
+
 def load_index():
     with open("../build/index.html", "r") as file:
         file_contents = file.read()
     return spoof_index(file_contents)
+
 
 def spoof_index(index_html: str) -> str:
     new_file_contents = ""
@@ -47,8 +47,6 @@ def spoof_index(index_html: str) -> str:
 
     return new_file_contents
 
-def static_react():
-    pass
 
 def static_js_sendback(file_name):
     with open("../build/static/"+file_name, "r") as file:
@@ -78,23 +76,33 @@ def static_js_sendback(file_name):
             index += 1
     return new_file_contents
 
+
 def static_sendback(file_name, send_file):
     return send_file("../build/static/" + file_name)
+
 
 def static_template_sendback(file_name, send_file):
     return send_file("../build/" + file_name)
 
+
 def load_to_app(app, send_file):
-    @app.route("/static/<path:file_name>")
-    def static(file_name: str):
-        app.send_static_file(file_name)
+    print("Load to app")
+
+    @app.route("/static/react/template/<path:file_name>")
+    def static_react_template_file(file_name: str):
+        return static_template_sendback(file_name, send_file)
 
     @app.route("/static/react/<path:file_name>")
-    def static_react(file_name: str):
+    def static_react_file(file_name: str):
         if file_name.endswith(".js"):
             return static_js_sendback(file_name)
         else:
             return static_sendback(file_name, send_file)
-    @app.route("/static/react/template/<path:file_name>")
-    def static_react_template(file_name: str):
-        return static_template_sendback(file_name, send_file)
+
+    @app.route("/static/<path:file_name>")
+    def static_file(file_name: str):
+        app.send_static_file(file_name)
+
+    @app.route('/', methods=["GET"])
+    def index():
+        return load_index()
