@@ -1,9 +1,9 @@
 import os
 sep = os.sep
-
+env_root_dir = ""
 
 def get_dir_changes():
-    original_location = ".."+sep+"build"+sep
+    original_location = env_root_dir+sep+"build"+sep
     dir_changes = [
         ["static/css", "static/react/css"],
         ["static/js", "static/react/js"],
@@ -18,7 +18,7 @@ def get_dir_changes():
 
 
 def load_index():
-    with open("../build/index.html", "r") as file:
+    with open(env_root_dir+"/build/index.html", "r") as file:
         file_contents = file.read()
     return spoof_index(file_contents)
 
@@ -49,7 +49,7 @@ def spoof_index(index_html: str) -> str:
 
 
 def static_js_sendback(file_name):
-    with open("../build/static/"+file_name, "r") as file:
+    with open(env_root_dir+"/build/static/"+file_name, "r") as file:
         file_contents = file.read()
 
     new_file_contents = ""
@@ -78,11 +78,11 @@ def static_js_sendback(file_name):
 
 
 def static_sendback(file_name, send_file):
-    return send_file("../build/static/" + file_name)
+    return send_file(env_root_dir+"/build/static/" + file_name)
 
 
 def static_template_sendback(file_name, send_file):
-    return send_file("../build/" + file_name)
+    return send_file(env_root_dir+"/build/" + file_name)
 
 
 def load_to_app(app, send_file):

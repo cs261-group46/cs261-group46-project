@@ -19,9 +19,14 @@
 from flask import Flask, request, session, redirect, url_for, send_file, render_template
 from flask_mail import Mail, Message
 import os
-import app.ReactSpoof as ReactSpoof
-import app.Config as config
-import app.SQL as sql
+try:
+    import app.ReactSpoof as ReactSpoof
+    import app.Config     as config
+    import app.SQL        as sql
+except Exception as e:
+    import ReactSpoof as ReactSpoof
+    import Config     as config
+    import SQL        as sql
 
 ##########################
 # Config Options/Loading #
@@ -46,7 +51,11 @@ else:               app = Flask(__name__, static_folder="../build", static_url_p
 app.config["SECRET_KEY"] = "va_tLgio5_XvHQ1MTXqn_geISuIBxkctGw3Fmz7cwutYAxq0Xl7twJQAXl£XShE3T8JjWPQCXbSgTXdoV39VMmiSt9ybQ+WIg!i-iHFe+!Bsv!LGN-DvtxVq!dvwHxP9BZ1mo!NTbK£8dzb3£AalqJkQ%W55L+pntywMnz&q6*5yAz02X47f864&KqM+&U=QlbBfYdPe"
 
 if jinja_quick_dev: ReactSpoof.load_to_app(app, send_file)
-
+else:
+    @app.route('/')
+    def index():
+        #do stuff here
+        return app.send_static_file("index.html")
 
 @app.route("/api/helloworld", methods=["GET"])
 def api_get_current_time():

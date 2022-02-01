@@ -17,19 +17,24 @@ def create_connection(loaded_config: dict) -> conn:
 
     try:
         return connect()
-    except sql.OperationalError as e:
+    except sql.OperationalError as e1:
         try:
             # Database does not exist, creating
             db_temp = sql.connect(host=loaded_config["host"], port=loaded_config["port"],
-                                  user=loaded_config["user"], password=loaded_config["password"])
+                                  user=loaded_config["user"], password=loaded_config["password"], database="template1")
             db_temp.autocommit = True
+
+            print(f"Creating database {loaded_config['database']}")
 
             cursor_temp = db_temp.cursor()
             cursor_temp.execute(f"CREATE DATABASE {loaded_config['database']};")
             db_temp.close()
-        except:
+        except Exception as e2:
             print("Impossible to connect")
+            print(e1)
+            print(e2)
         else:
+            print(f"Created Database {loaded_config['database']}, reconnecting")
             return connect()
 
 
