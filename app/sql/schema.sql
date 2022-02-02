@@ -4,11 +4,22 @@ CREATE TABLE IF NOT EXISTS DEPARTMENTS (
     primary key (departmentID)
 );
 
+CREATE TABLE IF NOT EXISTS NOTIFICATION_TYPE (
+    notificationTypeID serial,
+    notificationTypeName varchar(128),
+    primary key (notificationTypeID)
+);
+
 CREATE TABLE IF NOT EXISTS SUBJECTS (
     subjectID serial,
     subjectName varchar(128),
     primary key (subjectID)
 );
+
+
+
+
+
 
 CREATE TABLE IF NOT EXISTS PERMISSION_GROUPS (
     groupID serial,
@@ -73,6 +84,18 @@ CREATE TABLE IF NOT EXISTS MENTOR_MENTEE_RELATION (
     foreign key (mentorID) references MENTORS(mentorID),
     foreign key (menteeID) references MENTEES(menteeID)
 );
+
+CREATE TABLE IF NOT EXISTS NOTIFICATIONS (
+    notificationID serial,
+    notificationTypeID integer,
+    userID integer,
+    permissionText text,
+    emailed boolean,
+    primary key (notificationID),
+    foreign key (notificationTypeID) references NOTIFICATION_TYPE(notificationTypeID),
+    foreign key (userID) references USERS(userID)
+);
+
 
 CREATE OR REPLACE VIEW view_InheritedGroups AS WITH RECURSIVE inherited_groups AS (
 	SELECT groupID, groupID as inheritedGroupID FROM PERMISSION_GROUPS
