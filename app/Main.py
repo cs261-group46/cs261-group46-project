@@ -47,15 +47,16 @@ for sql_file in sql_config["sql_files"]:
 jinja_quick_dev = False
 
 if jinja_quick_dev: app = Flask(__name__, static_url_path="/flask_static")
-else:               app = Flask(__name__, static_folder="../build", static_url_path="/")
+else:               app = Flask(__name__, static_folder="../build/static/", static_url_path="/static")
 app.config["SECRET_KEY"] = "va_tLgio5_XvHQ1MTXqn_geISuIBxkctGw3Fmz7cwutYAxq0Xl7twJQAXl£XShE3T8JjWPQCXbSgTXdoV39VMmiSt9ybQ+WIg!i-iHFe+!Bsv!LGN-DvtxVq!dvwHxP9BZ1mo!NTbK£8dzb3£AalqJkQ%W55L+pntywMnz&q6*5yAz02X47f864&KqM+&U=QlbBfYdPe"
 
 if jinja_quick_dev: ReactSpoof.load_to_app(app, send_file)
 else:
     @app.route('/')
     def index():
-        #do stuff here
-        return app.send_static_file("index.html")
+        with open("../build/index.html", "r") as file:
+            file_contents = file.read()
+        return file_contents
 
 @app.route("/api/helloworld", methods=["GET"])
 def api_get_current_time():
