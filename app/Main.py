@@ -10,6 +10,7 @@
 #   flask-wtf                     #
 #   passlib                       #
 #   psycopg2                      #
+#   gunicorn                      #
 ###################################
 
 ###########
@@ -20,11 +21,9 @@ from flask import Flask, request, session, redirect, url_for, send_file, render_
 from flask_mail import Mail, Message
 import os
 try:
-    import app.ReactSpoof as ReactSpoof
     import app.Config     as config
     import app.SQL        as sql
 except Exception as e:
-    import ReactSpoof as ReactSpoof
     import Config     as config
     import SQL        as sql
 
@@ -44,19 +43,15 @@ for sql_file in sql_config["sql_files"]:
 # App setup #
 #############
 
-jinja_quick_dev = False
-
-if jinja_quick_dev: app = Flask(__name__, static_url_path="/flask_static")
-else:               app = Flask(__name__, static_folder="../build/static/", static_url_path="/static")
+app = Flask(__name__, static_folder="../build/static/", static_url_path="/static")
 app.config["SECRET_KEY"] = "va_tLgio5_XvHQ1MTXqn_geISuIBxkctGw3Fmz7cwutYAxq0Xl7twJQAXl£XShE3T8JjWPQCXbSgTXdoV39VMmiSt9ybQ+WIg!i-iHFe+!Bsv!LGN-DvtxVq!dvwHxP9BZ1mo!NTbK£8dzb3£AalqJkQ%W55L+pntywMnz&q6*5yAz02X47f864&KqM+&U=QlbBfYdPe"
 
-if jinja_quick_dev: ReactSpoof.load_to_app(app, send_file)
-else:
-    @app.route('/')
-    def index():
-        with open("../build/index.html", "r") as file:
-            file_contents = file.read()
-        return file_contents
+
+@app.route('/')
+def index():
+    with open(os.path.abspath(f"{app.static_folder}/../index.html"), "r") as file:
+        file_contents = file.read()
+    return file_contents
 
 @app.route("/api/helloworld", methods=["GET"])
 def api_get_current_time():
@@ -79,10 +74,9 @@ def route_logout():
     return render_template("Login.html")
 
 
-
-print(os.path.abspath(app.template_folder))
-print(app.template_folder, app.static_folder, app.static_url_path)
 if __name__ == "__main__":
+    print(app.static_folder)
+    print((app.static_folder))
     app.run()
 
 
