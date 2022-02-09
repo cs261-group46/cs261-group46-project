@@ -4,15 +4,17 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        {/* webpage index */}
-        <Route path="/" element={<Homepage/>}/>
+      <div data-testid="App">
+          <BrowserRouter>
+              <Routes>
+                  {/* webpage index */}
+                  <Route path="/" element={<Homepage/>}/>
 
-        {/* catch all 404 page if nothing matches */}
-        <Route path="*" element={<p>404!</p>}/>
-      </Routes>
-    </BrowserRouter>
+                  {/* catch all 404 page if nothing matches */}
+                  <Route path="*" element={<p>404!</p>}/>
+              </Routes>
+        </BrowserRouter>
+      </div>
   );
 }
 
