@@ -8,8 +8,8 @@ const Homepage: FC<HomepageProps> = () => (
     <div className={styles.Homepage} data-testid="Homepage">
         <h1>Welcome to SkillShare!</h1>
         <div className={styles.Buttons}>
-            <Link to="/register">Register</Link>
-            <Link to="/login">Login</Link>
+            <Link to="/auth/register">Register</Link>
+            <Link to="/auth/login">Login</Link>
         </div>
     </div>
 );
