@@ -1,0 +1,11 @@
+@import "../../../_variables.scss";
+
+.Header {
+  width: 100%;
+  margin: 40px 0;
+  h1 {
+    font-weight: 900;
+    font-size: 42pt;
+    color: $sq_black;
+  }
+}
