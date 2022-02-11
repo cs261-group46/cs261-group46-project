@@ -19,6 +19,10 @@ function MultiSelect<T>(
 
     return <div className={styles.MultiSelect}>
 
+        <span className={styles.selection}>
+            <p>Fishing</p>
+            <button>X</button>
+        </span>
         <span role="search" contentEditable>Text</span>
 
         {/*<input value={search} type={"text"} name={props.id} id={props.id} placeholder={""} onChange={event => setSearch((event.target as HTMLInputElement).value)} onBlur={props.onBlur}/>*/}
