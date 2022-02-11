@@ -26,8 +26,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+/app/static/react
+/app/templates/react
 /app/config/sql.json
 /app/config/email.json
 
-package-lock.json
-yarn.lock
