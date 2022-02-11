@@ -30,3 +30,6 @@ yarn-error.log*
 /app/templates/react/
 /app/config/sql.json
 /app/config/email.json
+
+package-lock.json
+yarn.lock
