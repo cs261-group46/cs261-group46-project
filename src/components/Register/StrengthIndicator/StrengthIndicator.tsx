@@ -1,14 +1,43 @@
 import React, { FC } from 'react';
 import styles from './StrengthIndicator.module.scss';
 import Twemoji from "react-twemoji";
-import passwordInput from "../PasswordInput/PasswordInput";
 
 interface StrengthIndicatorProps {
     password: string
 }
 
 const calculateStrength : (string) => number = (password : string) => {
-    return Math.min(password.length, 4)
+    let passwordRating = 0;
+    let maxReturn = 4
+    if (password.length >= 10) {
+        passwordRating++;
+    }else {
+        maxReturn = 2
+    }
+
+    const capitalLetters = /[A-Z]/
+    const lowercaseLetters = /[a-z]/
+    const numbers = /[0-9]/
+    const symbol = /-|_|\.|\,|\[|]|\(|\'|\)|\`|\@|!|\\|\/|\^|\*|\?|\||\$/
+
+    if (capitalLetters.test(String(password))){
+        passwordRating++;
+    }
+
+    if (lowercaseLetters.test(String(password))){
+        passwordRating++;
+    }
+
+    if (numbers.test(String(password))){
+        passwordRating++;
+    }
+
+    if (symbol.test(String(password))){
+        passwordRating++;
+    }
+
+
+    return Math.min(passwordRating, 4, maxReturn)
 }
 
 const STRENGTH_BRACKETS = [
