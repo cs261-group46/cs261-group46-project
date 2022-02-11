@@ -1,4 +1,17 @@
 .Button {
   padding: 10px 20px;
   background-color: #EA596E;
+  color: white;
+  width: min-content;
+  border-radius: 10px;
+  align-items: center;
+  display: flex;
+  height: 20px;
+  font-weight: bold;
+  margin: 20px 0;
+
+  .Icon {
+    height: 100%;
+    margin-right: 20px;
+  }
 }

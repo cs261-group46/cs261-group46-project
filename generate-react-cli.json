@@ -6,13 +6,27 @@
   "component": {
     "default": {
       "path": "src/components",
+      "withLazy": false,
+      "withStory": false,
+      "withStyle": true,
+      "withTest": true
+    },
+    "lazy": {
+      "path": "src/components",
       "withLazy": true,
       "withStory": false,
       "withStyle": true,
       "withTest": true
     },
-    "page": {
-      "path": "src/pages",
+    "UI": {
+      "path": "src/components/UI",
+      "withLazy": false,
+      "withStory": false,
+      "withStyle": true,
+      "withTest": true
+    },
+    "route": {
+      "path": "src/routes",
       "withLazy": true,
       "withStory": false,
       "withStyle": true,

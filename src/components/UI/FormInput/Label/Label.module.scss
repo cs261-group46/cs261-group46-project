@@ -1,0 +1,14 @@
+.Label{
+  font-weight: bold;
+  font-size: 17px;
+  margin-bottom: 10px;
+  display: flex;
+  height: 20px;
+  label {
+      align-self: end;
+  }
+  .Icon {
+    height: 100%;
+    margin-right: 20px;
+  }
+}

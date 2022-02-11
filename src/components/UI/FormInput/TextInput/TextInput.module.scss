@@ -1,0 +1,15 @@
+@import "../../../../variables";
+
+.TextInput {
+  margin: 20px 0 40px;
+  input{
+    width: 100%;
+    height: 40px;
+    border-radius: 10px;
+    border: 1px solid $sq_light_gray;
+    padding: 15px 20px;
+    position: relative;
+    box-sizing: border-box;
+  }
+}
+
