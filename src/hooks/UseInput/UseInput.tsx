@@ -1,17 +1,15 @@
 import {FormEventHandler, useState} from 'react';
 
-
-
 const UseInput:
     (fn: ((string) => boolean))
-        => [
-            string,
-            boolean,
-            boolean,
-            FormEventHandler<HTMLInputElement>,
-            FormEventHandler<HTMLInputElement>,
-            () => void
-        ] = (validate: (value: string) => boolean) => {
+        => {
+        enteredValue: string,
+        isValueValid: boolean,
+        isInputValid: boolean,
+        changeHandler: FormEventHandler<HTMLInputElement>,
+        blurHandler: FormEventHandler<HTMLInputElement>,
+        reset: () => void
+    } = (validate: (value: string) => boolean) => {
 
     const [enteredValue, updateEnteredValue] = useState("");
     const [isTouched, updateIsTouched] = useState(false);
@@ -35,14 +33,14 @@ const UseInput:
         updateIsTouched(false);
     };
 
-    return [
+    return {
         enteredValue,
         isValueValid,
         isInputValid,
         changeHandler,
         blurHandler,
         reset
-    ];
+    };
 };
 
 export default UseInput;

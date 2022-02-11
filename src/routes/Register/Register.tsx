@@ -24,31 +24,33 @@ function validatePassword(password: string) {
 function validateRepeatedPassword(password: string, repeatedPassword:string) {
     return password === repeatedPassword;
 }
-
+// enteredValue,
+//         isValueValid,
+//         isInputValid,
+//         changeHandler,
+//         blurHandler,
+//         reset
 const Register: FC<RegisterProps> = () => {
-    const [
-        enteredEmail,
-        ,
-        isInputEmailValid,
-        emailChangeHandler,
-        emailBlurHandler
-    ] = useInput(validateEmail)
+    const {
+        enteredValue: enteredEmail,
+        isInputValid: isInputEmailValid,
+        changeHandler: emailChangeHandler,
+        blurHandler: emailBlurHandler
+        } = useInput(validateEmail)
 
-    const [
-        enteredPassword,
-        ,
-        isInputPasswordValid,
-        passwordChangeHandler,
-        passwordBlurHandler
-    ] = useInput(validatePassword)
+    const {
+        enteredValue: enteredPassword,
+        isInputValid: isInputPasswordValid,
+        changeHandler: passwordChangeHandler,
+        blurHandler: passwordBlurHandler
+    } = useInput(validatePassword)
 
-    const [
-        enteredRepeatedPassword,
-        ,
-        isInputRepeatedPasswordValid,
-        repeatedPasswordChangeHandler,
-        repeatedPasswordBlurHandler
-    ] = useInput(validateRepeatedPassword.bind(null, enteredPassword))
+    const {
+        enteredValue: enteredRepeatedPassword,
+        isInputValid: isInputRepeatedPasswordValid,
+        changeHandler: repeatedPasswordChangeHandler,
+        blurHandler: repeatedPasswordBlurHandler
+    } = useInput(validateRepeatedPassword.bind(null, enteredPassword))
 
 
 
