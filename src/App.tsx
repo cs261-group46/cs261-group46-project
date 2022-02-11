@@ -1,8 +1,9 @@
 import React from 'react';
-import {Switch, BrowserRouter, Route, Redirect} from "react-router-dom";
+import {Routes, BrowserRouter, Route} from "react-router-dom";
 import './App.scss';
 import Button from "./components/UI/Button/Button";
-import Register from "./pages/Register/Register.lazy";
+import Register from "./routes/Register/Register.lazy";
+import MainLayout from "./layouts/MainLayout/MainLayout";
 
 function App() {
 
@@ -10,15 +11,9 @@ function App() {
   return (
       <BrowserRouter>
         <div className="App">
-            <Switch>
-                <Route path="/register">
-                  <Register/>
-                </Route>
-
-                <Route path="/">
-                    <Redirect to="/register"/> {/* Just for dev */}
-                </Route>
-            </Switch>
+            <Routes>
+                <Route path="/register" element={<Register/>}/>
+            </Routes>
         </div>
       </BrowserRouter>
   );
