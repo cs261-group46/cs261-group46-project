@@ -16,11 +16,6 @@ CREATE TABLE IF NOT EXISTS SUBJECTS (
     primary key (subjectID)
 );
 
-
-
-
-
-
 CREATE TABLE IF NOT EXISTS PERMISSION_GROUPS (
     groupID serial,
     groupName varchar(32),
@@ -48,7 +43,8 @@ CREATE TABLE IF NOT EXISTS USERS (
     unique_user_id varchar(36),
     email varchar(128),
     hashedPassword varchar(128),
-    fullName varchar(128),
+    firstName varchar(128),
+    lastName varchar(128),
     accountCreationDate timestamp,
     verified bool,
     currentDepartment integer,
