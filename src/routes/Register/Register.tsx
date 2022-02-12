@@ -18,18 +18,39 @@ function validateEmail(email: string) {
 }
 
 function validatePassword(password: string) {
-    return true
+    let passwordRating = 0
+
+    const passwordLength = password.length
+    const capitalLetters = /[A-Z]/
+    const lowercaseLetters = /[a-z]/
+    const numbers = /[0-9]/
+    const symbol = /-|_|\.|\,|\[|]|\(|\'|\)|\`|\@|!|\\|\/|\^|\*|\?|\||\$/
+
+    if (passwordLength < 10)
+        return false
+
+    if (capitalLetters.test(password))
+        passwordRating++;
+
+    if (lowercaseLetters.test(password))
+        passwordRating++;
+
+    if (numbers.test(password))
+        passwordRating++;
+
+    if (symbol.test(password))
+        passwordRating++;
+
+    return passwordRating >= 3
 }
 
 function validateRepeatedPassword(password: string, repeatedPassword:string) {
     return password === repeatedPassword;
 }
-// enteredValue,
-//         isValueValid,
-//         isInputValid,
-//         changeHandler,
-//         blurHandler,
-//         reset
+function validateDepartment(department: string) {
+    return true
+}
+
 const Register: FC<RegisterProps> = () => {
     const {
         enteredValue: enteredEmail,

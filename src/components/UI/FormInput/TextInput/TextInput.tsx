@@ -21,6 +21,7 @@ const TextInput: FC<TextInputProps> = (props) => {
         <div className={`${styles.TextInput} ${props.className}`} data-testid="TextInput">
             <Label htmlFor={props.id} icon={props.icon}>{props.label}</Label>
             <input value={props.value} type={props.type ?? "text"} name={props.id} id={props.id} placeholder={props.placeholder} onChange={props.onChange} onBlur={props.onBlur}/>
+
         </div>
     )
 };

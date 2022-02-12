@@ -1,8 +1,7 @@
 import React, {FC, FormEventHandler, useCallback, useState} from 'react';
-// import styles from './PasswordInput.module.scss';
+import styles from './PasswordInput.module.scss';
 import TextInput from "../../UI/FormInput/TextInput/TextInput";
 import StrengthIndicator from "../StrengthIndicator/StrengthIndicator";
-import styles from "./PasswordInput.module.scss"
 
 interface PasswordInputProps {
     value: string
