@@ -3,36 +3,52 @@
 .MultiSelect {
   margin: 20px 0 40px;
   width: 100%;
-  border-radius: 10px;
-  border: 1px solid $sq_light_gray;
-  position: relative;
-  box-sizing: border-box;
-  transition-duration: 0.05s;
-  outline: 0 solid $sq_dark_gray;
-  display: flex;
-  align-items: center;
-  padding: 20px 15px;
-  flex-wrap: wrap;
-  gap: 10px;
+  .selectarea {
+    border-radius: 10px;
+    border: 1px solid $sq_light_gray;
+    position: relative;
+    box-sizing: border-box;
+    transition-duration: 0.05s;
+    outline: 0 solid $sq_dark_gray;
+    display: flex;
+    align-items: center;
+    padding: 20px 15px;
+    flex-wrap: wrap;
+    gap: 10px;
 
-  &:focus-visible {
-    outline: 2px solid $sq_dark_gray;
-    border-color: $sq_dark_gray;
+    &:focus-visible {
+      outline: 2px solid $sq_dark_gray;
+      border-color: $sq_dark_gray;
+    }
+
+    .selection {
+      padding: 5px;
+      background-color: #F7F7F7;
+      border: #AFAFAF 1px solid;
+      border-radius: 5px;
+
+      p, button {
+        display: inline;
+        color: #393838;
+      }
+
+      button {
+        background-color: #F7F7F7;
+        border: none;
+      }
+    }
   }
 
-  .selection {
+  .autocomplete {
+    border-radius: 10px;
+    border: 1px solid $sq_light_gray;
+    position: relative;
+    box-sizing: border-box;
+    transition-duration: 0.05s;
+    outline: 0 solid $sq_dark_gray;
+  }
+
+  .search {
     padding: 5px;
-    background-color: #EA596E;
-    border-radius: 5px;
-
-    p, button {
-      display: inline;
-      color: white;
-    }
-
-    button {
-      background-color: #EA596E;
-      border: none;
-    }
   }
 }
