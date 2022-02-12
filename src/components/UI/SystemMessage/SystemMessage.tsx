@@ -6,6 +6,7 @@ interface SystemMessageProps {
     type: "warning" | "alert" | "information"
     description: string
     children?: React.ReactNode
+    onClose: () => void
 }
 
 const SystemMessage: FC<SystemMessageProps> = (props) => {
