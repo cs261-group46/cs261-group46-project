@@ -1,22 +1,21 @@
-import React, {FC, useCallback, useState} from 'react';
+import React, {FC, FormEventHandler, useCallback, useState} from 'react';
 // import styles from './PasswordInput.module.scss';
 import TextInput from "../../UI/FormInput/TextInput/TextInput";
 import StrengthIndicator from "../StrengthIndicator/StrengthIndicator";
 import styles from "./PasswordInput.module.scss"
 
-interface PasswordInputProps {}
+interface PasswordInputProps {
+    value: string
+    isValid: boolean
+    onChange: FormEventHandler<HTMLInputElement>
+    onBlur: FormEventHandler<HTMLInputElement>
+}
 
-const PasswordInput: FC<PasswordInputProps> = () => {
-    const [enteredPassword, changeEnteredPassword] = useState("")
-
-    const inputHandler = useCallback((enteredPassword : string) => {
-        changeEnteredPassword(enteredPassword)
-    }, [])
-
+const PasswordInput: FC<PasswordInputProps> = (props) => {
     return(
         <>
-            <TextInput icon="🔒" className={styles.AvoidMargin} id="password" type="password" label="Password" placeholder="Please provide your password" onInput={inputHandler}/>
-            <StrengthIndicator password={enteredPassword}/>
+            <TextInput icon="🔒" value={props.value} isValid={props.isValid} onChange={props.onChange} onBlur={props.onBlur} className={styles.AvoidMargin} id="password" type="password" label="Password" placeholder="Please provide your password"/>
+            <StrengthIndicator password={props.value}/>
         </>
     )
         }

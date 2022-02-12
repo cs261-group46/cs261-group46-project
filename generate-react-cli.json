@@ -38,6 +38,13 @@
       "withStory": false,
       "withStyle": false,
       "withTest": true
+    },
+    "hook": {
+      "path": "src/hooks",
+      "withLazy": false,
+      "withStory": false,
+      "withStyle": false,
+      "withTest": true
     }
   }
 }

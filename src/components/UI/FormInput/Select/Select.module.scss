@@ -10,8 +10,16 @@
     position: relative;
     box-sizing: border-box;
     background-color: white;
+    transition-duration: 0.05s;
+    outline: 0 solid $sq_dark_gray;
+
     option {
       border-radius: 20px;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $sq_dark_gray;
+      border-color: $sq_dark_gray;
     }
   }
 }

@@ -12,12 +12,12 @@ interface SelectProps {
 }
 
 const Select: FC<SelectProps> = (props) => {
-    const options = props.options.map(({option_id, option}) => <option value={option_id}>{option}</option>)
+    const options = props.options.map(({option_id, option}) => <option key={option_id} value={option_id}>{option}</option>)
     return (
         <div className={`${styles.Select} ${textInputStyles.TextInput}`} data-testid="Select">
             <Label htmlFor={props.id} icon={props.icon}>{props.label}</Label>
-            <select name={props.id} id={props.id}>
-                <option value="" disabled selected>{props.placeholder}</option>
+            <select name={props.id} id={props.id} defaultValue={0}>
+                <option value={0} disabled>{props.placeholder}</option>
                 {options}
             </select>
         </div>
