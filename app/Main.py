@@ -74,6 +74,23 @@ app.config["SECRET_KEY"] = secret_key
 def api_get_current_time():
     return {"helloworld": "This is working"}
 
+@app.route("/api/user/register")
+def api_user_register():
+    print(dict(request.args))
+    print(dict(request.form))
+    return "Unknown data Location, please tell Thibault how you want the data to look"
+
+@app.route("/api/user/login")
+def api_user_login():
+    print(dict(request.args))
+    print(dict(request.form))
+    return "Unknown data Location, please tell Thibault how you want the data to look"
+
+@app.route("/api/user/logout")
+def api_user_logout():
+    print(dict(request.args))
+    print(dict(request.form))
+    return "Unknown data Location, please tell Thibault how you want the data to look"
 
 @app.errorhandler(404)
 def index(error):
