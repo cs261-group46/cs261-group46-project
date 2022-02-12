@@ -65,5 +65,5 @@ def read_file(file_name: str) -> str:
     with open(file_name, "r") as file:
         file_content = file.read()
 
-    print(file_content)
+    # print(file_content)
     return file_content
