@@ -1,7 +1,7 @@
 import {FormEventHandler, useState} from 'react';
 
 const UseInput:
-    (fn: ((string) => boolean))
+    (validateFunction: ((input: string) => boolean))
         => {
         enteredValue: string,
         isValueValid: boolean,

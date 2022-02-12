@@ -17,7 +17,7 @@
       border-radius: 20px;
     }
 
-    &:focus-visible {
+    &:focus-visible, &:hover {
       outline: 2px solid $sq_dark_gray;
       border-color: $sq_dark_gray;
     }

@@ -13,7 +13,7 @@
     transition-duration: 0.05s;
     outline: 0 solid $sq_dark_gray;
 
-    &:focus-visible {
+    &:focus-visible, &:hover {
       outline: 2px solid $sq_dark_gray;
       border-color: $sq_dark_gray;
     }
