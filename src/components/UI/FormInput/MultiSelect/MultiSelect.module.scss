@@ -12,7 +12,6 @@
     border-radius: 10px;
     display: flex;
     align-items: center;
-    // padding: 10px 15px;
     padding: 10px 20px;
     flex-wrap: wrap;
     gap: 5px;
@@ -37,19 +36,18 @@
       }
     }
 
-    .search {
-      // width: 19px;
-      padding: 5px 10px;
+    .search, .placeholder {
+      padding: 5px 10px 5px 0;
       border: none;
       outline: none;
+    }
+
+    .search {
       z-index: 2;
     }
 
     .placeholder {
       position: absolute;
-      padding: 5px 10px;
-      border: none;
-      outline: none;
       z-index: 1;
     }
   }
@@ -69,16 +67,14 @@
     border-top-right-radius: 0;
     border-top-left-radius: 0;
     margin: 0;
-    // border: 1px solid $sq_light_gray;
+    border: 1px solid $sq_dark_gray;
     outline: 2px solid $sq_dark_gray;
     position: absolute;
     box-sizing: border-box;
     transition-duration: 0.05s;
-    // outline: 0 solid $sq_dark_gray;
 
     .autocompleteoption {
-      border: 1px solid #AFAFAF;
-      padding: 20px;
+      padding: 15px 20px;
       cursor: pointer;
 
       b {

@@ -52,7 +52,7 @@ function MultiSelect<T>(
                 searchSubject.next((event.target as HTMLSpanElement).innerHTML);
                 setCurrentSearch((event.target as HTMLSpanElement).innerHTML);
                 }}></span>
-            { currentSearch.length == 0 && <span className={styles.placeholder}>Search...</span> }
+            { currentSearch.length === 0 && <span className={styles.placeholder}>Search...</span> }
         </div>
 
         { focused &&

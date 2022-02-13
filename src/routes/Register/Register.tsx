@@ -58,7 +58,7 @@ const Register: FC<RegisterProps> = () => {
         blurHandler: repeatedPasswordBlurHandler
     } = useInput(validateRepeatedPassword.bind(null, enteredPassword))
 
-    let [expertises, setExpertises] = useState([{label: "1", value: 1}, {label: "2", value: 2}]);
+    let [expertises, setExpertises] = useState([] as {label: string, value: string}[]);
 
     return (
         <MainLayout title="Register">
