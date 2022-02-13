@@ -10,11 +10,10 @@ interface MultiSelectProps<T> {
     label: string
     default: T
     value: LabelledList<T>
-    options: LabelledList<T>
     isValid: boolean
     onChange: ((value: LabelledList<T>) => void)
     onBlur: FormEventHandler<HTMLInputElement>
-    icon?: React.ReactNode;
+    icon?: React.ReactNode
     searchPromise?: ((value: string) => Promise<LabelledList<T>>)
 }
 
@@ -22,7 +21,9 @@ function MultiSelect<T>(
     props: PropsWithChildren<MultiSelectProps<T>>
 ) {
     let [searchResults, setSearchResults] = useState<LabelledList<T>>([])
+    let [currentSearch, setCurrentSearch] = useState("");
     let [searchSubject, _] = useState(new Subject<string>());
+    let [focused, setFocused] = useState(false);
 
     useEffect(() => {
         searchSubject.pipe(
@@ -35,11 +36,11 @@ function MultiSelect<T>(
         });
     }, [])
 
-    return <div className={styles.MultiSelect}>
+    return <div className={styles.MultiSelect} tabIndex={0} onFocus={(event) => setFocused(true)} onBlur={event => setFocused(false)}>
 
         <Label htmlFor={props.id} icon={props.icon}>{props.label}</Label>
 
-        <div className={styles.selectarea}>
+        <div className={`${styles.selectarea} ${focused && styles.focused}`}>
             {props.value.map((option, index) => 
                 <span className={styles.selection} key={index}>
                     <p>{option.label}</p>
@@ -47,20 +48,59 @@ function MultiSelect<T>(
                 </span>)}
             
             {/* <input type="text" className={styles.search} onChange={(event) => searchSubject.next((event.target as HTMLInputElement).value)}/> */}
-            <span className={styles.search} role="search" contentEditable onInput={(event) => searchSubject.next((event.target as HTMLSpanElement).innerHTML)}>Search...</span>
+            <span className={styles.search} role="search" contentEditable onInput={(event) => {
+                searchSubject.next((event.target as HTMLSpanElement).innerHTML);
+                setCurrentSearch((event.target as HTMLSpanElement).innerHTML);
+                }}></span>
+            { currentSearch.length == 0 && <span className={styles.placeholder}>Search...</span> }
         </div>
 
-        <ol className={styles.autocomplete}>
-            {props.options
-                // filters to stuff not currently in selected options
-            .filter(option => !props.value.map(val => val.value).includes(option.value))
-                // filters to stuff only in search (if search is set)
-            .filter(option => searchResults.length == 0 && !searchResults.map(val => val.value).includes(option.value))
-            .map(option => <span className={styles.selection}>
-                <li className={styles.search} onClick={() => props.onChange(props.value.concat(option))}>{option.label}</li>
-            </span>)}
-        </ol>
+        { focused &&
+            <ol className={styles.autocomplete}>
+                {searchResults.map(option => <span className={styles.selection}>
+                    <li className={styles.autocompleteoption} onClick={() => {
+                        props.onChange(props.value.concat(option));
+                        }}><b>{currentSearch}</b><span>{option.label.substring(currentSearch.length, option.label.length)}</span>
+                    </li>
+                </span>)}
+            </ol>
+        }
     </div>
 }
+
+// export function DropDown({ options, callback }) {
+//     const [selected, setSelected] = useState("");
+//     const [expanded, setExpanded] = useState(false);
+
+//     function expand() {
+//         setExpanded(true);
+//     }
+
+//     function close() {
+//         setExpanded(false);
+//     }
+
+//     function select(event) {
+//         const value = event.target.textContent;
+//         callback(value);
+//         close();
+//         setSelected(value);
+//     }
+
+//     return (
+//         <div className="dropdown" tabIndex={0} onFocus={expand} onBlur={close} >
+//             <div>{selected}</div>
+//             {expanded ? (
+//                 <div className={"dropdown-options-list"}>
+//                     {options.map((O) => (
+//                         <div className={"dropdown-option"} onClick={select}>
+//                             {O}
+//                         </div>
+//                     ))}
+//                 </div>
+//             ) : null}
+//         </div>
+//     );
+// }
 
 export default MultiSelect;

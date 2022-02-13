@@ -4,7 +4,7 @@ import MainLayout from "../../layouts/MainLayout/MainLayout";
 import TextInput from "../../components/UI/FormInput/TextInput/TextInput";
 import PasswordInput from "../../components/Register/PasswordInput/PasswordInput";
 import Select from "../../components/UI/FormInput/Select/Select";
-import MultiSelect from "../../components/UI/FormInput/MultiSelect/MultiSelect";
+import MultiSelect, { DropDown } from "../../components/UI/FormInput/MultiSelect/MultiSelect";
 import Button from "../../components/UI/Button/Button";
 import useInput from "../../hooks/UseInput/UseInput";
 
@@ -24,10 +24,6 @@ function validateEmail(email: string) {
 }
 
 function validatePassword(password: string) {
-    return true
-}
-
-function validateMultiSelect(password: string) {
     return true
 }
 
@@ -79,9 +75,10 @@ const Register: FC<RegisterProps> = () => {
                 isValid={true} 
                 onChange={setExpertises} 
                 searchPromise={(search) => {
-                    return new Promise(resolve => resolve([{label: search, value: search.charCodeAt(0)}]))
+                    return new Promise(resolve => resolve([{label: "Tracking", value: "tracking"}]))
                 }}
             />
+            {/* <DropDown callback={() => {}} options={["a", "b"]}/> */}
         </MainLayout>
     )
 };
