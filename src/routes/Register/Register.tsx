@@ -1,15 +1,21 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 // import styles from './Register.module.scss';
 import MainLayout from "../../layouts/MainLayout/MainLayout";
 import TextInput from "../../components/UI/FormInput/TextInput/TextInput";
 import PasswordInput from "../../components/Register/PasswordInput/PasswordInput";
 import Select from "../../components/UI/FormInput/Select/Select";
+import MultiSelect from "../../components/UI/FormInput/MultiSelect/MultiSelect";
 import Button from "../../components/UI/Button/Button";
 import useInput from "../../hooks/UseInput/UseInput";
 
 interface RegisterProps {}
 
 const DUMMY_DEPARTMENTS = [{option_id: "1", option: "Department 1"}]
+
+// temporary (for testing):
+type LabelledList<T> = {label: string, value: T}[]
+const multiSelectChangeHandler = (value: LabelledList<string>) => {}
+// end of temp
 
 function validateEmail(email: string) {
   const re =
@@ -18,6 +24,10 @@ function validateEmail(email: string) {
 }
 
 function validatePassword(password: string) {
+    return true
+}
+
+function validateMultiSelect(password: string) {
     return true
 }
 
@@ -44,15 +54,15 @@ const Register: FC<RegisterProps> = () => {
         changeHandler: passwordChangeHandler,
         blurHandler: passwordBlurHandler
     } = useInput(validatePassword)
-
+    
     const {
         enteredValue: enteredRepeatedPassword,
         isInputValid: isInputRepeatedPasswordValid,
         changeHandler: repeatedPasswordChangeHandler,
         blurHandler: repeatedPasswordBlurHandler
     } = useInput(validateRepeatedPassword.bind(null, enteredPassword))
-
-
+    
+    let [expertises, setExpertises] = useState([{label: "1", value: "1"}, {label: "2", value: "2"}]);
 
     return (
         <MainLayout title="Register">
@@ -61,6 +71,8 @@ const Register: FC<RegisterProps> = () => {
             <TextInput value={enteredRepeatedPassword} isValid={isInputRepeatedPasswordValid} onChange={repeatedPasswordChangeHandler} onBlur={repeatedPasswordBlurHandler} icon="🔒️" type="password" id="password_r" label="Repeat Password" placeholder="Please provide your password again"/>
             <Select icon="👥" id="department" placeholder="Please select your department" label="Department" options={DUMMY_DEPARTMENTS}/>
             <Button icon="👑">Register</Button>
+            <p>For testing:</p>
+            <MultiSelect icon='💪' id='expertise' label='Fields of Expertise' default='' options={expertises} value={expertises} isValid={true} onChange={multiSelectChangeHandler} onBlur={{}} />
         </MainLayout>
     )
 };

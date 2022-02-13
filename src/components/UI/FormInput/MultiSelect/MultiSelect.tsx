@@ -1,5 +1,6 @@
 import React, {FormEventHandler, PropsWithChildren, useDebugValue, useState} from 'react';
 import styles from './MultiSelect.module.scss';
+import Label from "../Label/Label";
 
 type LabelledList<T> = {label: string, value: T}[]
 
@@ -12,6 +13,7 @@ interface MultiSelectProps<T> {
     isValid: boolean
     onChange: ((value: LabelledList<T>) => void)
     onBlur: FormEventHandler<HTMLInputElement>
+    icon?: React.ReactNode;
 }
 
 function MultiSelect<T>(
@@ -21,13 +23,16 @@ function MultiSelect<T>(
 
     return <div className={styles.MultiSelect}>
 
+        <Label htmlFor={props.id} icon={props.icon}>{props.label}</Label>
+
         <div className={styles.selectarea}>
-            {props.value.map(option => <span className={styles.selection}>
-                <p>{option.label}</p>
-                <button onClick={() => props.onChange(props.value.filter(x => x.value !== option.value))}>X</button>
-            </span>)}
+            {props.value.map((option, index) => 
+                <span className={styles.selection} key={index}>
+                    <p>{option.label}</p>
+                    <button onClick={() => props.onChange(props.value.filter(x => x.value !== option.value))}>X</button>
+                </span>)}
             
-            <span role="search" contentEditable>Text</span>
+            <span className={styles.search} role="search" contentEditable></span>
         </div>
 
         <ol className={styles.autocomplete}>

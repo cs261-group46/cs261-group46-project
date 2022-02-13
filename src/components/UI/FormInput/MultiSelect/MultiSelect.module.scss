@@ -12,19 +12,22 @@
     outline: 0 solid $sq_dark_gray;
     display: flex;
     align-items: center;
-    padding: 20px 15px;
+    // padding: 10px 15px;
+    padding: 10px 20px;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 5px;
+    background-color: #FFFFFF;
 
-    &:focus-visible {
+    &:focus-within {
       outline: 2px solid $sq_dark_gray;
       border-color: $sq_dark_gray;
     }
 
     .selection {
       padding: 5px;
-      background-color: #F7F7F7;
-      border: #AFAFAF 1px solid;
+      margin: 0 1px;
+      background-color: $sq_cream;
+      border: $sq_light_gray 1px solid;
       border-radius: 5px;
 
       p, button {
@@ -37,6 +40,13 @@
         border: none;
       }
     }
+
+    .search {
+      // width: 19px;
+      padding: 5px 10px;
+      border: none;
+      outline: none;
+    }
   }
 
   .autocomplete {
@@ -48,7 +58,5 @@
     outline: 0 solid $sq_dark_gray;
   }
 
-  .search {
-    padding: 5px;
-  }
+
 }
