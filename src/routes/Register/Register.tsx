@@ -72,7 +72,16 @@ const Register: FC<RegisterProps> = () => {
             <Select icon="👥" id="department" placeholder="Please select your department" label="Department" options={DUMMY_DEPARTMENTS}/>
             <Button icon="👑">Register</Button>
             <p>For testing:</p>
-            <MultiSelect icon='💪' id='expertise' label='Fields of Expertise' default={0} options={expertises} value={expertises} isValid={true} onChange={multiSelectChangeHandler} onBlur={{}} />
+            <MultiSelect icon='💪' id='expertise' label='Fields of Expertise'
+                default={0}
+                options={[{label: "1", value: 1}, {label: "2", value: 2}]} 
+                value={expertises} 
+                isValid={true} 
+                onChange={setExpertises} 
+                searchPromise={(search) => {
+                    return new Promise(resolve => resolve([{label: search, value: search.charCodeAt(0)}]))
+                }}
+                />
         </MainLayout>
     )
 };
