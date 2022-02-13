@@ -14,7 +14,7 @@ const DUMMY_DEPARTMENTS = [{option_id: "1", option: "Department 1"}]
 
 // temporary (for testing):
 type LabelledList<T> = {label: string, value: T}[]
-const multiSelectChangeHandler = (value: LabelledList<string>) => {}
+const multiSelectChangeHandler = (value: LabelledList<number>) => {}
 // end of temp
 
 function validateEmail(email: string) {
@@ -61,8 +61,8 @@ const Register: FC<RegisterProps> = () => {
         changeHandler: repeatedPasswordChangeHandler,
         blurHandler: repeatedPasswordBlurHandler
     } = useInput(validateRepeatedPassword.bind(null, enteredPassword))
-    
-    let [expertises, setExpertises] = useState([{label: "1", value: "1"}, {label: "2", value: "2"}]);
+
+    let [expertises, setExpertises] = useState([{label: "1", value: 1}, {label: "2", value: 2}]);
 
     return (
         <MainLayout title="Register">
@@ -72,7 +72,7 @@ const Register: FC<RegisterProps> = () => {
             <Select icon="👥" id="department" placeholder="Please select your department" label="Department" options={DUMMY_DEPARTMENTS}/>
             <Button icon="👑">Register</Button>
             <p>For testing:</p>
-            <MultiSelect icon='💪' id='expertise' label='Fields of Expertise' default='' options={expertises} value={expertises} isValid={true} onChange={multiSelectChangeHandler} onBlur={{}} />
+            <MultiSelect icon='💪' id='expertise' label='Fields of Expertise' default={0} options={expertises} value={expertises} isValid={true} onChange={multiSelectChangeHandler} onBlur={{}} />
         </MainLayout>
     )
 };
