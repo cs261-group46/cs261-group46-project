@@ -52,7 +52,9 @@ function MultiSelect<T>(
 
         <ol className={styles.autocomplete}>
             {props.options
+                // filters to stuff not currently in selected options
             .filter(option => !props.value.map(val => val.value).includes(option.value))
+                // filters to stuff only in search (if search is set)
             .filter(option => searchResults.length == 0 && !searchResults.map(val => val.value).includes(option.value))
             .map(option => <span className={styles.selection}>
                 <li className={styles.search} onClick={() => props.onChange(props.value.concat(option))}>{option.label}</li>

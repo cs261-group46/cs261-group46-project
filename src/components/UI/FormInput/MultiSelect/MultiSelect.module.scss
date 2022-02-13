@@ -4,8 +4,6 @@
   margin: 20px 0 40px;
   width: 100%;
   .selectarea {
-    border-radius: 10px;
-    border: 1px solid $sq_light_gray;
     position: relative;
     box-sizing: border-box;
     transition-duration: 0.05s;
@@ -52,11 +50,16 @@
   .autocomplete {
     border-radius: 10px;
     border: 1px solid $sq_light_gray;
-    position: relative;
+    position: absolute;
     box-sizing: border-box;
     transition-duration: 0.05s;
     outline: 0 solid $sq_dark_gray;
+
+
   }
 
+  .autocomplete:last-child {
+    background-color: red;
+  }
 
 }

@@ -81,7 +81,7 @@ const Register: FC<RegisterProps> = () => {
                 searchPromise={(search) => {
                     return new Promise(resolve => resolve([{label: search, value: search.charCodeAt(0)}]))
                 }}
-                />
+            />
         </MainLayout>
     )
 };
