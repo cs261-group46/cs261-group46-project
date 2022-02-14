@@ -5,7 +5,7 @@ import Select from './Select';
 
 describe('<Select />', () => {
   test('it should mount', () => {
-    render(<Select />);
+    render(<Select id={"test"} label={"test"} placeholder={"test"} options={[{option_id: "test", option: "test"}]}/>);
     
     const select = screen.getByTestId('Select');
 
