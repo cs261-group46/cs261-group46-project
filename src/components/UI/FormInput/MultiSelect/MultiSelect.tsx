@@ -53,6 +53,7 @@ function MultiSelect<T>(
             <span className={styles.search} role="search" contentEditable onInput={(event) => {
                 searchSubject.next((event.target as HTMLSpanElement).innerHTML);
                 setCurrentSearch((event.target as HTMLSpanElement).innerHTML);
+                setSearchResults([]);
                 }}></span>
             { currentSearch.length === 0 && props.value.length === 0 && <span className={styles.placeholder}>Search...</span> }
         </div>
