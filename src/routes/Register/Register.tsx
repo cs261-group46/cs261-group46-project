@@ -58,7 +58,7 @@ const Register: FC<RegisterProps> = () => {
         blurHandler: repeatedPasswordBlurHandler
     } = useInput(validateRepeatedPassword.bind(null, enteredPassword))
 
-    let [expertises, setExpertises] = useState([] as {label: string, value: string}[]);
+    let [expertises, setExpertises] = useState<{label: string, value: string}[]>([]);
 
     return (
         <MainLayout title="Register">
@@ -69,11 +69,9 @@ const Register: FC<RegisterProps> = () => {
             <Button icon="👑">Register</Button>
             <p>For testing:</p>
             <MultiSelect icon='💪' id='expertise' label='Fields of Expertise'
-                default={0}
-                options={[{label: "1", value: 1}, {label: "2", value: 2}]} 
                 value={expertises} 
                 isValid={true} 
-                onChange={setExpertises} 
+                onChange={setExpertises}
                 searchPromise={(search) => {
                     return new Promise(resolve => resolve([{label: "Tracking", value: "tracking"}]))
                 }}

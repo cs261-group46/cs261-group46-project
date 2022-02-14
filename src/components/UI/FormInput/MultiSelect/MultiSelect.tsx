@@ -8,7 +8,7 @@ type LabelledList<T> = {label: string, value: T}[]
 interface MultiSelectProps<T> {
     id: string
     label: string
-    default: T
+    default?: T
     value: LabelledList<T>
     isValid: boolean
     onChange: ((value: LabelledList<T>) => void)
