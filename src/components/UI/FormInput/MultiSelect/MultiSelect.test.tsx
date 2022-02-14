@@ -1,16 +1,32 @@
 import React, {useState} from 'react';
-import { render, screen } from '@testing-library/react';
+import {render, screen} from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import MultiSelect from './MultiSelect';
 
 describe('<MultiSelect />', () => {
-  test('it should mount', () => {
-    // const [options, setOptions] = useState<string[]>([]);
+  let [value, setValue] = useState<{label: string, value: number}[]>([]);
 
-    // render(<MultiSelect options={options} setOptions={setOptions}/>);
-    //
-    // const multiSelect = screen.getByTestId('MultiSelect');
-    //
-    // expect(multiSelect).toBeInTheDocument();
+  test('it should mount', () => {
+
+    render(
+        <MultiSelect
+            icon='💪'
+            id='expertise'
+            label='Fields of Expertise'
+            value={value}
+            isValid={true}
+            onChange={setValue}
+            searchPromise={(search) => {
+             return new Promise(resolve => resolve([
+               {label: "test1", value: 1},
+               {label: "test2", value: 2}
+             ]))
+            }}
+        />
+    );
+
+    const multiSelect = screen.getByTestId('MultiSelect');
+
+    expect(multiSelect).toBeInTheDocument();
   });
 });

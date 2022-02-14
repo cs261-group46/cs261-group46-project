@@ -1,4 +1,4 @@
-import React, {FormEventHandler, PropsWithChildren, useEffect, useState} from 'react';
+import React, {PropsWithChildren, useEffect, useState} from 'react';
 import styles from './MultiSelect.module.scss';
 import Label from "../Label/Label";
 import { debounceTime, Subject } from 'rxjs';
@@ -12,7 +12,7 @@ interface MultiSelectProps<T> {
     value: LabelledList<T>
     isValid: boolean
     onChange: ((value: LabelledList<T>) => void)
-    onBlur: FormEventHandler<HTMLInputElement>
+    // onBlur: FormEventHandler<HTMLInputElement>
     icon?: React.ReactNode
     searchPromise?: ((value: string) => Promise<LabelledList<T>>)
 }
