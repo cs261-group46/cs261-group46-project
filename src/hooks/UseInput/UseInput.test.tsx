@@ -3,12 +3,5 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import UseInput from './UseInput';
 
-describe('<UseInput />', () => {
-  test('it should mount', () => {
-    render(<UseInput />);
-    
-    const useInput = screen.getByTestId('UseInput');
-
-    expect(useInput).toBeInTheDocument();
-  });
-});
+// useInput is a hook and so isnt tested like a normal elemtn
+// TODO: useInput tests
