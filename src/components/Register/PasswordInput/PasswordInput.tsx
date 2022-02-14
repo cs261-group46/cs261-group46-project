@@ -14,10 +14,10 @@ const PasswordInput: FC<PasswordInputProps> = () => {
     }, [])
 
     return(
-        <>
+        <div data-testid="PasswordInput">
             <TextInput icon="🔒" className={styles.AvoidMargin} id="password" type="password" label="Password" placeholder="Please provide your password" onInput={inputHandler}/>
             <StrengthIndicator password={enteredPassword}/>
-        </>
+        </div>
     )
         }
 

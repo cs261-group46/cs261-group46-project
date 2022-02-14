@@ -9,9 +9,10 @@ interface IconProps {
 
 const Icon: FC<IconProps> = (props) => (
   <Twemoji noWrapper={true} options={{className: styles.Emoji}}>
-        <div className={props.className}>
-            {props.icon}
-        </div>
+    <div data-testid="Icon"/>
+    <div className={props.className}>
+        {props.icon}
+    </div>
   </Twemoji>
 );
 

@@ -1,5 +1,4 @@
 import React, { FC, Fragment} from 'react';
-import styles from './MainTemplate.module.scss';
 import Header from "../../components/UI/Header/Header";
 
 interface MainTemplateProps {
@@ -14,6 +13,7 @@ const MainLayout: FC<MainTemplateProps> = (props) => (
     <Fragment>
         <Header title={props.title} />
         {props.children}
+        <div data-testid="MainLayout"/>
     </Fragment>
 );
 

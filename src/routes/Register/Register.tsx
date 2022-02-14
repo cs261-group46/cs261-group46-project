@@ -19,6 +19,7 @@ const Register: FC<RegisterProps> = () => (
         <TextInput icon="🔒️" type="password" id="password_r" label="Repeat Password" placeholder="Please provide your password again"/>
         <Select icon="👥" id="department" placeholder="Please select your department" label="Department" options={DUMMY_DEPARTMENTS}/>
         <Button icon="👑">Register</Button>
+        <div data-testid="Register"/>
     </MainLayout>
 );
 
