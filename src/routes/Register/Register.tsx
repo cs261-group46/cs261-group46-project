@@ -76,7 +76,6 @@ const Register: FC<RegisterProps> = () => {
                     return new Promise(resolve => resolve([{label: "Tracking", value: "tracking"}]))
                 }}
             />
-            {/* <DropDown callback={() => {}} options={["a", "b"]}/> */}
         </MainLayout>
     )
 };
