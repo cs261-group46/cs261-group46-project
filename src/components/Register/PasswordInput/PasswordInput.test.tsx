@@ -5,7 +5,7 @@ import PasswordInput from './PasswordInput';
 
 describe('<PasswordInput />', () => {
   test('it should mount', () => {
-    render(<PasswordInput />);
+    render(<PasswordInput value={"value"} onChange={() => {}} onBlur={() => {}} isValid={true}/>);
     
     const passwordInput = screen.getByTestId('PasswordInput');
 
