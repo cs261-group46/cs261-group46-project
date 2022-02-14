@@ -4,18 +4,13 @@ import MainLayout from "../../layouts/MainLayout/MainLayout";
 import TextInput from "../../components/UI/FormInput/TextInput/TextInput";
 import PasswordInput from "../../components/Register/PasswordInput/PasswordInput";
 import Select from "../../components/UI/FormInput/Select/Select";
-import MultiSelect, { DropDown } from "../../components/UI/FormInput/MultiSelect/MultiSelect";
+import MultiSelect from "../../components/UI/FormInput/MultiSelect/MultiSelect";
 import Button from "../../components/UI/Button/Button";
 import useInput from "../../hooks/UseInput/UseInput";
 
 interface RegisterProps {}
 
 const DUMMY_DEPARTMENTS = [{option_id: "1", option: "Department 1"}]
-
-// temporary (for testing):
-type LabelledList<T> = {label: string, value: T}[]
-const multiSelectChangeHandler = (value: LabelledList<number>) => {}
-// end of temp
 
 function validateEmail(email: string) {
   const re =
@@ -73,7 +68,10 @@ const Register: FC<RegisterProps> = () => {
                 isValid={true} 
                 onChange={setExpertises}
                 searchPromise={(search) => {
-                    return new Promise(resolve => resolve([{label: "Tracking", value: "tracking"}]))
+                    return new Promise(resolve => resolve([
+                        {label: "Tracking", value: "tracking"},
+                        {label: "Training", value: "training"}
+                    ]))
                 }}
             />
         </MainLayout>

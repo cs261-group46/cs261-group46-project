@@ -1,7 +1,7 @@
-import React, {FormEventHandler, PropsWithChildren, useDebugValue, useEffect, useState} from 'react';
+import React, {FormEventHandler, PropsWithChildren, useEffect, useState} from 'react';
 import styles from './MultiSelect.module.scss';
 import Label from "../Label/Label";
-import { debounce, debounceTime, fromEvent, Observable, observable, Subject, subscribeOn } from 'rxjs';
+import { debounceTime, Subject } from 'rxjs';
 
 type LabelledList<T> = {label: string, value: T}[]
 
@@ -22,7 +22,7 @@ function MultiSelect<T>(
 ) {
     let [searchResults, setSearchResults] = useState<LabelledList<T>>([])
     let [currentSearch, setCurrentSearch] = useState("");
-    let [searchSubject, _] = useState(new Subject<string>());
+    let [searchSubject] = useState(new Subject<string>());
     let [focused, setFocused] = useState(false);
 
     useEffect(() => {
@@ -34,13 +34,15 @@ function MultiSelect<T>(
                 setSearchResults(result)
             }
         });
-    }, [])
+    }, [props, searchSubject])
 
-    return <div className={styles.MultiSelect} tabIndex={0} onFocus={(event) => setFocused(true)} onBlur={event => setFocused(false)}>
+    let possibleResults = searchResults.filter(searchResult => !props.value.map(labelled => labelled.value).includes(searchResult.value))
+
+    return <div className={styles.MultiSelect} tabIndex={0} onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}>
 
         <Label htmlFor={props.id} icon={props.icon}>{props.label}</Label>
 
-        <div className={`${styles.selectarea} ${focused && styles.focused}`}>
+        <div className={`${styles.selectarea} ${focused && styles.focused} ${focused && possibleResults.length > 0 && styles.focusedwithresults}`}>
             {props.value.map((option, index) => 
                 <span className={styles.selection} key={index}>
                     <p>{option.label}</p>
@@ -52,12 +54,12 @@ function MultiSelect<T>(
                 searchSubject.next((event.target as HTMLSpanElement).innerHTML);
                 setCurrentSearch((event.target as HTMLSpanElement).innerHTML);
                 }}></span>
-            { currentSearch.length === 0 && <span className={styles.placeholder}>Search...</span> }
+            { currentSearch.length === 0 && props.value.length === 0 && <span className={styles.placeholder}>Search...</span> }
         </div>
 
-        { focused &&
+        { focused && possibleResults.length > 0 &&
             <ol className={styles.autocomplete}>
-                {searchResults.map(option => <span className={styles.selection}>
+                {possibleResults.map(option => <span className={styles.selection}>
                     <li className={styles.autocompleteoption} onClick={() => {
                         props.onChange(props.value.concat(option));
                         }}><b>{currentSearch}</b><span>{option.label.substring(currentSearch.length, option.label.length)}</span>
