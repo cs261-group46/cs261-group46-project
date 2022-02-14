@@ -1,5 +1,6 @@
 import React, { FC, Fragment} from 'react';
 import Header from "../../components/UI/Header/Header";
+import Footer from "../../components/UI/Footer/Footer";
 
 interface MainTemplateProps {
     children: React.ReactNode
@@ -13,6 +14,7 @@ const MainLayout: FC<MainTemplateProps> = (props) => (
     <Fragment>
         <Header title={props.title} />
         {props.children}
+        <Footer/>
         <div data-testid="MainLayout"/>
     </Fragment>
 );

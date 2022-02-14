@@ -1,3 +1,5 @@
+@import "../../../variables";
+
 .Button {
   padding: 10px 20px;
   background-color: #EA596E;
@@ -6,11 +8,24 @@
   border-radius: 10px;
   align-items: center;
   display: flex;
-  height: 20px;
+  height: 40px;
   font-weight: bold;
   margin: 20px 0;
+  border: none;
+  box-sizing: border-box;
+  font-size: 15px;
+
+
+  &:hover, &:focus-visible {
+    outline: 3px solid $sq_dark_gray;
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
 
   .Icon {
+    transition-duration: 0.09s;
     height: 100%;
     margin-right: 20px;
   }

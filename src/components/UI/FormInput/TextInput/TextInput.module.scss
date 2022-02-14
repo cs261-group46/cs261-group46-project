@@ -10,6 +10,13 @@
     padding: 15px 20px;
     position: relative;
     box-sizing: border-box;
+    transition-duration: 0.05s;
+    outline: 0 solid $sq_dark_gray;
+
+    &:focus-visible, &:hover {
+      outline: 2px solid $sq_dark_gray;
+      border-color: $sq_dark_gray;
+    }
   }
 }
 

@@ -9,10 +9,10 @@ interface ButtonProps {
 
 const Button: FC<ButtonProps> = (props)  => {
 
-    return (<div className={styles.Button} data-testid="Button">
+    return (<button className={styles.Button} data-testid="Button">
         {props.icon && <Icon icon={props.icon} className={styles.Icon}/>}
         {props.children}
-    </div>)
+    </button>)
 };
 
 export default Button;
