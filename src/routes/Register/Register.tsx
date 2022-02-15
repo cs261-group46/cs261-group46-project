@@ -1,9 +1,10 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 // import styles from './Register.module.scss';
 import MainLayout from "../../layouts/MainLayout/MainLayout";
 import TextInput from "../../components/UI/FormInput/TextInput/TextInput";
 import PasswordInput from "../../components/Register/PasswordInput/PasswordInput";
 import Select from "../../components/UI/FormInput/Select/Select";
+import MultiSelect from "../../components/UI/FormInput/MultiSelect/MultiSelect";
 import Button from "../../components/UI/Button/Button";
 import useInput from "../../hooks/UseInput/UseInput";
 
@@ -65,7 +66,7 @@ const Register: FC<RegisterProps> = () => {
         changeHandler: passwordChangeHandler,
         blurHandler: passwordBlurHandler
     } = useInput(validatePassword)
-
+    
     const {
         enteredValue: enteredRepeatedPassword,
         isInputValid: isInputRepeatedPasswordValid,
@@ -73,7 +74,7 @@ const Register: FC<RegisterProps> = () => {
         blurHandler: repeatedPasswordBlurHandler
     } = useInput(validateRepeatedPassword.bind(null, enteredPassword))
 
-
+    let [expertises, setExpertises] = useState<{label: string, value: string}[]>([]);
 
     return (
         <MainLayout title="Register">
@@ -82,6 +83,18 @@ const Register: FC<RegisterProps> = () => {
             <TextInput value={enteredRepeatedPassword} isValid={isInputRepeatedPasswordValid} onChange={repeatedPasswordChangeHandler} onBlur={repeatedPasswordBlurHandler} icon="🔒️" type="password" id="password_r" label="Repeat Password" placeholder="Please provide your password again"/>
             <Select icon="👥" id="department" placeholder="Please select your department" label="Department" options={DUMMY_DEPARTMENTS}/>
             <Button icon="👑">Register</Button>
+            <p>For testing:</p>
+            <MultiSelect icon='💪' id='expertise' label='Fields of Expertise'
+                value={expertises} 
+                isValid={true} 
+                onChange={setExpertises}
+                searchPromise={(search) => {
+                    return new Promise(resolve => resolve([
+                        {label: "Tracking", value: "tracking"},
+                        {label: "Training", value: "training"}
+                    ]))
+                }}
+            />
         </MainLayout>
     )
 };
