@@ -5,7 +5,7 @@ import Icon from './Icon';
 
 describe('<Icon />', () => {
   test('it should mount', () => {
-    render(<Icon />);
+    render(<Icon icon={"#"}/>);
     
     const icon = screen.getByTestId('Icon');
 

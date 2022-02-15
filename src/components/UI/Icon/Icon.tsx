@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import styles from './Icon.module.scss';
-import Twemoji from "react-twemoji";
+import Twemoji from "react-twemoji-17";
 
 interface IconProps {
     icon: React.ReactNode;
@@ -9,9 +9,10 @@ interface IconProps {
 
 const Icon: FC<IconProps> = (props) => (
   <Twemoji noWrapper={true} options={{className: styles.Emoji}}>
-        <div className={props.className}>
-            {props.icon}
-        </div>
+    <div data-testid="Icon"/>
+    <div className={props.className}>
+        {props.icon}
+    </div>
   </Twemoji>
 );
 

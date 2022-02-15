@@ -1,6 +1,5 @@
-import React, {FC, FormEventHandler, useEffect, useState} from 'react';
+import React, {FC, FormEventHandler} from 'react';
 import styles from './TextInput.module.scss';
-import Twemoji from "react-twemoji";
 import Label from "../Label/Label";
 
 interface TextInputProps {
