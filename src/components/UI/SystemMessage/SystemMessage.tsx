@@ -9,7 +9,7 @@ interface SystemMessageProps {
     onClose: () => void
 }
 
-const SystemMessage: FC<SystemMessageProps> = (props) => {
+const SystemMessage: FC<SystemMessageProps> = () => {
 
   return (
       <div className={styles.SystemMessage} data-testid="SystemMessage">

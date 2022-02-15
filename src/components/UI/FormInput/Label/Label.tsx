@@ -8,7 +8,7 @@ interface LabelProps {
 }
 
 const Label: FC<LabelProps> = (props) => (
-  <div className={styles.Label}>
+  <div className={styles.Label} data-testid="Label">
       {props.icon && <Icon icon={props.icon} className={styles.Icon}/>}
       <label htmlFor={props.htmlFor}>{props.children}</label>
   </div>
