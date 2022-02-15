@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import styles from './StrengthIndicator.module.scss';
-import Twemoji from "react-twemoji";
+import Twemoji from "react-twemoji-17";
 
 interface StrengthIndicatorProps {
     password: string

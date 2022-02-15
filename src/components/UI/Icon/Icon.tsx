@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import styles from './Icon.module.scss';
-import Twemoji from "react-twemoji";
+import Twemoji from "react-twemoji-17";
 
 interface IconProps {
     icon: React.ReactNode;
