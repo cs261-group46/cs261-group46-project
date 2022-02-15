@@ -13,7 +13,7 @@ const DUMMY_DEPARTMENTS = [{option_id: "1", option: "Department 1"}]
 
 function validateEmail(email: string) {
   const re =
-    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(String(email).toLowerCase());
 }
 
@@ -24,7 +24,7 @@ function validatePassword(password: string) {
     const capitalLetters = /[A-Z]/
     const lowercaseLetters = /[a-z]/
     const numbers = /[0-9]/
-    const symbol = /-|_|\.|\,|\[|]|\(|\'|\)|\`|\@|!|\\|\/|\^|\*|\?|\||\$/
+    const symbol = /-|_|\.|,|\[|]|\(|'|\)|`|@|!|\\|\/|\^|\*|\?|\||\$/
 
     if (passwordLength < 10)
         return false
@@ -47,9 +47,9 @@ function validatePassword(password: string) {
 function validateRepeatedPassword(password: string, repeatedPassword:string) {
     return password === repeatedPassword;
 }
-function validateDepartment(department: string) {
-    return true
-}
+// function validateDepartment(department: string) {
+//     return true
+// }
 
 const Register: FC<RegisterProps> = () => {
     const {

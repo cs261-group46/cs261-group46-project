@@ -18,7 +18,7 @@ const calculateStrength : (string) => number = (password : string) => {
     const capitalLetters = /[A-Z]/
     const lowercaseLetters = /[a-z]/
     const numbers = /[0-9]/
-    const symbol = /-|_|\.|\,|\[|]|\(|\'|\)|\`|\@|!|\\|\/|\^|\*|\?|\||\$/
+    const symbol = /-|_|\.|,|\[|]|\(|'|\)|`|@|!|\\|\/|\^|\*|\?|\||\$/
 
     if (capitalLetters.test(String(password))){
         passwordRating++;
