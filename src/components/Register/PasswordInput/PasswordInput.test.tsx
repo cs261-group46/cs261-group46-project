@@ -6,8 +6,8 @@ import useInput from "../../../hooks/UseInput/UseInput";
 
 describe("<PasswordInput />", () => {
   test("it should mount", () => {
-    const { enteredValue, isValueValid, changeHandler, blurHandler } = useInput(
-      () => true
+    const { enteredValue, isValueValid, changeHandler, blurHandler } = useInput<string>(
+      () => true, ""
     );
 
     render(

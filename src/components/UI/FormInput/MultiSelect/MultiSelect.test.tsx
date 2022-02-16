@@ -16,6 +16,7 @@ describe('<MultiSelect />', () => {
             value={value}
             isValid={true}
             onChange={setValue}
+            onBlur={() => {}}
             searchPromise={(search) => {
              return new Promise(resolve => resolve([
                {label: "test1", value: 1},
