@@ -9,6 +9,7 @@ import Button from "../../components/UI/Button/Button";
 import useInput from "../../hooks/UseInput/UseInput";
 import { SelectOption, SelectOptions } from "../../components/UI/FormInput/Select/Select.d";
 import { MultiSelectOption, MultiSelectOptions, SearchPromise } from "../../components/UI/FormInput/MultiSelect/MultiSelect.d";
+import SystemMessage from "../../components/UI/SystemMessage/SystemMessage";
 
 interface RegisterProps {}
 
@@ -134,6 +135,10 @@ const Register: FC<RegisterProps> = () => {
   };
 
 
+  const closeHandler = () => {
+    
+  }
+
   return (
     <MainLayout title="Register">
       <TextInput
@@ -180,7 +185,6 @@ const Register: FC<RegisterProps> = () => {
 
       <p>For testing:</p>
 
-
       <MultiSelect
         id="expertise"
         label="Fields of Expertise"
@@ -190,6 +194,13 @@ const Register: FC<RegisterProps> = () => {
         onBlur={emailBlurHandler}
         icon="💪"
         searchPromise={searchPromise}
+      />
+
+      <SystemMessage
+        sort="inline"
+        type="warning"
+        description="This is a test description"
+        onClose={closeHandler}
       />
     </MainLayout>
 
