@@ -22,8 +22,9 @@ const Select: FC<SelectProps> = (props) => {
     </option>
   ));
 
-  const changeHandler = (event) => {
-    props.onChange(event.target.value);
+  const changeHandler:React.ChangeEventHandler<HTMLSelectElement> = (event) => {
+    // the pair can be reconstructed from id & value properties
+    props.onChange({id: event.target.id, label: event.target.value});
   };
   
   return (

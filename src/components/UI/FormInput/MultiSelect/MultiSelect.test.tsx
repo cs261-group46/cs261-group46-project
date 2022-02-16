@@ -7,7 +7,7 @@ import {MultiSelectOptions} from "./MultiSelect.d"
 describe('<MultiSelect />', () => {
   test('it should mount', () => {
     let value:MultiSelectOptions<string> = [{value: "test", label: "test"}]
-    const setValue = (newValue) => {value = newValue};
+    const setValue = (newValue: MultiSelectOptions<string>) => {value = newValue};
 
     render(
         <MultiSelect
@@ -18,7 +18,7 @@ describe('<MultiSelect />', () => {
             isValid={true}
             onChange={setValue}
             onBlur={() => {}}
-            searchPromise={(search) => {
+            searchPromise={(_search) => {
              return new Promise(resolve => resolve([
                {label: "test1", value: 1},
                {label: "test2", value: 2}
