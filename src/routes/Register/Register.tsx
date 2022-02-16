@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC } from "react";
 // import styles from './Register.module.scss';
 import MainLayout from "../../layouts/MainLayout/MainLayout";
 import TextInput from "../../components/UI/FormInput/TextInput/TextInput";
@@ -8,7 +8,7 @@ import MultiSelect from "../../components/UI/FormInput/MultiSelect/MultiSelect";
 import Button from "../../components/UI/Button/Button";
 import useInput from "../../hooks/UseInput/UseInput";
 import { SelectOption, SelectOptions } from "../../components/UI/FormInput/Select/Select.d";
-import { MultiSelectOption, MultiSelectOptions, SearchPromise } from "../../components/UI/FormInput/MultiSelect/MultiSelect.d";
+import { MultiSelectOptions, SearchPromise } from "../../components/UI/FormInput/MultiSelect/MultiSelect.d";
 
 interface RegisterProps {}
 
@@ -52,11 +52,11 @@ function validateRepeatedPassword(
     password === repeatedPassword
   );
 }
-function validateDepartment(department: SelectOption) {
+function validateDepartment(_department: SelectOption) {
   return true;
 }
 
-function validateExpertises(experises : MultiSelectOptions<string>) {
+function validateExpertises(_experises : MultiSelectOptions<string>) {
     return true;
 }
 
@@ -94,7 +94,6 @@ const Register: FC<RegisterProps> = () => {
     enteredValue: enteredExpertises,
     isInputValid: isInputExpertisesValid,
     changeHandler: expertisesChangeHandler,
-    blurHandler: expertisesBlurHandler,
   } = useInput<MultiSelectOptions<string>>(validateExpertises, []);
 
 
@@ -124,7 +123,7 @@ const Register: FC<RegisterProps> = () => {
   };
 
 
-  const searchPromise: SearchPromise = (search) => {
+  const searchPromise: SearchPromise = (_search) => {
     return new Promise((resolve) =>
       resolve([
         { label: "Tracking", value: "tracking" },
@@ -191,7 +190,9 @@ const Register: FC<RegisterProps> = () => {
         icon="💪"
         searchPromise={searchPromise}
       />
+      <div data-testid="Register"/>
     </MainLayout>
+
 
     //     id: string;
     //   label: string;

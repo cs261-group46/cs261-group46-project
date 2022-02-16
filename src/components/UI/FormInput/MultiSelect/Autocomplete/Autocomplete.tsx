@@ -1,4 +1,4 @@
-import React, { FC, PropsWithChildren } from "react";
+import React, { PropsWithChildren } from "react";
 import styles from "./Autocomplete.module.scss";
 import { MultiSelectOptions, AddSelectedHandler } from "../MultiSelect.d";
 
@@ -26,7 +26,7 @@ function Autocomplete<T>(props: PropsWithChildren<AutocompleteProps<T>>) {
     </span>
   ));
 
-  return <ol className={styles.Autocomplete}>{results}</ol>;
+  return <ol className={styles.Autocomplete} data-testid="Autocomplete">{results}</ol>;
 }
 
 export default Autocomplete;

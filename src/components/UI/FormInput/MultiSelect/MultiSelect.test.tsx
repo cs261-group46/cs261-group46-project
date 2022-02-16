@@ -1,12 +1,13 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {render, screen} from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import MultiSelect from './MultiSelect';
+import {MultiSelectOptions} from "./MultiSelect.d"
 
 describe('<MultiSelect />', () => {
-  let [value, setValue] = useState<{label: string, value: number}[]>([]);
-
   test('it should mount', () => {
+    let value:MultiSelectOptions<string> = [{value: "test", label: "test"}]
+    const setValue = (newValue) => {value = newValue};
 
     render(
         <MultiSelect

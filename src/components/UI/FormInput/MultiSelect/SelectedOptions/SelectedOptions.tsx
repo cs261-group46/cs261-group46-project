@@ -21,7 +21,7 @@ function SelectedOptions<T>(props: PropsWithChildren<SelectedOptionsProps<T>>) {
     </span>
   ));
 
-  return <>{selected}</>;
+  return <div data-testid="SelectedOptions">{selected}</div>;
 }
 
 export default SelectedOptions;
