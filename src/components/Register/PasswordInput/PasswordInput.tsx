@@ -7,7 +7,7 @@ interface PasswordInputProps {
     value: string | undefined
     isValid: boolean
     onChange: (input: string) => void
-    onBlur: FormEventHandler<HTMLInputElement>
+    onBlur: () => void
 }
 
 const PasswordInput: FC<PasswordInputProps> = (props) => {

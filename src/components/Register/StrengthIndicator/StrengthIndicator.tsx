@@ -1,6 +1,7 @@
 import React, { FC } from "react";
 import styles from "./StrengthIndicator.module.scss";
 import Twemoji from "react-twemoji-17";
+import Icon from "../../UI/Icon/Icon"
 
 interface StrengthIndicatorProps {
   password: string | undefined;
@@ -90,9 +91,11 @@ const StrengthIndicator: FC<StrengthIndicatorProps> = (props) => {
   return (
     <div className={styles.StrengthIndicator} data-testid="StrengthIndicator">
       <span>Strength:</span>
-      <Twemoji noWrapper={true} options={{ className: styles.Emoji }}>
-        <div className={styles.Icon}>{icon}</div>
-      </Twemoji>
+      <Icon
+        icon={icon}
+        className={styles.Icon}
+        options={{ className: styles.Emoji }}
+      />
       <div className={indicatorClasses.join(" ")} />
     </div>
   );

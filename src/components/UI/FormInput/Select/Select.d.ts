@@ -1,2 +1,3 @@
-export type option = { option_id: string; option_label: string };
-export type options = option[];
+export type SelectOption = { id: string; label?: string };
+export type SelectOptions = SelectOption[];
+

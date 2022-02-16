@@ -1,0 +1,44 @@
+@import "../../../../../variables";
+
+.Autocomplete {
+  width: 100%;
+  background-color: #fff;
+  border-radius: 10px;
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+  margin: 0;
+  border: 1px solid $sq_dark_gray;
+  outline: 2px solid $sq_dark_gray;
+  position: relative;
+  box-sizing: border-box;
+  transition-duration: 0.05s;
+
+  //   .SelectedOption {
+  //     padding: 5px;
+  //     padding-right: 0;
+  //     margin: 0 1px;
+  //     border: $sq_light_gray 1px solid;
+  //     border-radius: 5px;
+  //     background-color: #f7f7f7;
+
+  //     p,
+  //     button {
+  //       display: inline;
+  //       color: #393838;
+  //     }
+
+  //     button {
+  //       background-color: #f7f7f7;
+  //       border: none;
+  //     }
+  //   }
+
+  .AutoCompleteOption {
+    padding: 15px 20px;
+    cursor: pointer;
+    b {
+      font-weight: bold;
+      color: #ea596e;
+    }
+  }
+}

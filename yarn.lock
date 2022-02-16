@@ -4524,9 +4524,15 @@
   "version" "3.2.5"
 
 "follow-redirects@^1.0.0":
+<<<<<<< HEAD
   "integrity" "sha512-+hbxoLbFMbRKDwohX8GkTataGqO6Jb7jGwpAlwgy2bIz25XtRm7KEzJM76R1WiNT5SwZkX4Y75SwBolkpmE7iQ=="
   "resolved" "https://registry.npmjs.org/follow-redirects/-/follow-redirects-1.14.7.tgz"
   "version" "1.14.7"
+=======
+  "integrity" "sha512-1x0S9UVJHsQprFcEC/qnNzBLcIxsjAV905f/UkQxbclCsoTWlacCNOpQa/anodLl2uaEKFhfWOvM2Qg77+15zA=="
+  "resolved" "https://registry.npmjs.org/follow-redirects/-/follow-redirects-1.14.8.tgz"
+  "version" "1.14.8"
+>>>>>>> developpages
 
 "forever-agent@~0.6.1":
   "integrity" "sha1-+8cfDEGt6zf5bFd60e1C2P2sypE="
@@ -7800,7 +7806,11 @@
     "strip-ansi" "^6.0.1"
     "text-table" "^0.2.0"
 
+<<<<<<< HEAD
 "react-dom@*", "react-dom@^17.0.2", "react-dom@>=16.8":
+=======
+"react-dom@*", "react-dom@^16.4.2", "react-dom@^17.0.2", "react-dom@>=16.8":
+>>>>>>> developpages
   "integrity" "sha512-s4h96KtLDUQlsENhMn1ar8t2bEa+q/YAtj8pPPdIjPDGBDIVNsrD9aXNWqspUe6AzKCIG0C1HZZLqLV7qpOBGA=="
   "resolved" "https://registry.npmjs.org/react-dom/-/react-dom-17.0.2.tgz"
   "version" "17.0.2"
@@ -7917,16 +7927,26 @@
     "react-shallow-renderer" "^16.13.1"
     "scheduler" "^0.20.2"
 
+<<<<<<< HEAD
 "react-twemoji-17@^0.4.0":
   "integrity" "sha512-LDLT7HOPpNJLfoomSladvRKgJEU51eodXvgKR/JfltlBZaa6SBsakL+9hHORyZZrfDgno3eyDDkUBAZoAWCW0w=="
   "resolved" "https://registry.npmjs.org/react-twemoji-17/-/react-twemoji-17-0.4.0.tgz"
+=======
+"react-twemoji@^0.4.0":
+  "integrity" "sha512-KBEnNY1djhaMBF7iQI8+0BZqazzQO4HDtA3szpoffCgF57N2te2CX3525Z8auJeIGZAHR5HsJdcntHjj7vK9ZA=="
+  "resolved" "https://registry.npmjs.org/react-twemoji/-/react-twemoji-0.4.0.tgz"
+>>>>>>> developpages
   "version" "0.4.0"
   dependencies:
     "lodash.isequal" "^4.5.0"
     "prop-types" "^15.7.2"
     "twemoji" "13.1.0"
 
+<<<<<<< HEAD
 "react@*", "react@^16.0.0 || ^17.0.0", "react@^17.0.2", "react@>= 16", "react@>=16.8", "react@17.0.2":
+=======
+"react@*", "react@^16.0.0 || ^17.0.0", "react@^16.4.2", "react@^17.0.2", "react@>= 16", "react@>=16.8", "react@17.0.2":
+>>>>>>> developpages
   "integrity" "sha512-gnhPt75i/dq/z3/6q/0asP78D0u592D5L1pd7M8P+dck6Fu/jJeL6iVVK23fptSUZj8Vjf++7wXA8UNclGQcbA=="
   "resolved" "https://registry.npmjs.org/react/-/react-17.0.2.tgz"
   "version" "17.0.2"
@@ -8216,6 +8236,16 @@
   dependencies:
     "queue-microtask" "^1.2.2"
 
+<<<<<<< HEAD
+=======
+"rxjs@^7.5.4":
+  "integrity" "sha512-h5M3Hk78r6wAheJF0a5YahB1yRQKCsZ4MsGdZ5O9ETbVtjPcScGfrMmoOq7EBsCRzd4BDkvDJ7ogP8Sz5tTFiQ=="
+  "resolved" "https://registry.npmjs.org/rxjs/-/rxjs-7.5.4.tgz"
+  "version" "7.5.4"
+  dependencies:
+    "tslib" "^2.1.0"
+
+>>>>>>> developpages
 "safe-buffer@^5.0.1", "safe-buffer@^5.1.0", "safe-buffer@^5.1.2", "safe-buffer@>=5.1.0", "safe-buffer@~5.1.0", "safe-buffer@~5.1.1", "safe-buffer@5.1.2":
   "integrity" "sha512-Gd2UZBJDkXlY7GbJxfsE8/nvKkUEU1G38c1siN6QP6a9PT9MmHB8GnpscSmMJSoF8LOIrt8ud/wPtojys4G6+g=="
   "resolved" "https://registry.npmjs.org/safe-buffer/-/safe-buffer-5.1.2.tgz"
@@ -9155,7 +9185,11 @@
   "resolved" "https://registry.npmjs.org/tslib/-/tslib-1.14.1.tgz"
   "version" "1.14.1"
 
+<<<<<<< HEAD
 "tslib@^2.0.3":
+=======
+"tslib@^2.0.3", "tslib@^2.1.0":
+>>>>>>> developpages
   "integrity" "sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw=="
   "resolved" "https://registry.npmjs.org/tslib/-/tslib-2.3.1.tgz"
   "version" "2.3.1"

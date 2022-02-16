@@ -1,17 +1,18 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
+// import styles from './Register.module.scss';
 import MainLayout from "../../layouts/MainLayout/MainLayout";
 import TextInput from "../../components/UI/FormInput/TextInput/TextInput";
 import PasswordInput from "../../components/Register/PasswordInput/PasswordInput";
 import Select from "../../components/UI/FormInput/Select/Select";
+import MultiSelect from "../../components/UI/FormInput/MultiSelect/MultiSelect";
 import Button from "../../components/UI/Button/Button";
 import useInput from "../../hooks/UseInput/UseInput";
-import { option, options } from "../../components/UI/FormInput/Select/Select.d";
+import { SelectOption, SelectOptions } from "../../components/UI/FormInput/Select/Select.d";
+import { MultiSelectOption, MultiSelectOptions, SearchPromise } from "../../components/UI/FormInput/MultiSelect/MultiSelect.d";
 
 interface RegisterProps {}
 
-const DUMMY_DEPARTMENTS: options = [
-  { option_id: "1", option_label: "Department 1" },
-];
+const DUMMY_DEPARTMENTS : SelectOptions = [{ id: "1", label: "Department 1" }];
 
 function validateEmail(email: string) {
   const re =
@@ -51,8 +52,12 @@ function validateRepeatedPassword(
     password === repeatedPassword
   );
 }
-function validateDepartment(department: option) {
+function validateDepartment(department: SelectOption) {
   return true;
+}
+
+function validateExpertises(experises : MultiSelectOptions<string>) {
+    return true;
 }
 
 const Register: FC<RegisterProps> = () => {
@@ -61,21 +66,37 @@ const Register: FC<RegisterProps> = () => {
     isInputValid: isInputEmailValid,
     changeHandler: emailChangeHandler,
     blurHandler: emailBlurHandler,
-  } = useInput<string>(validateEmail);
+  } = useInput<string>(validateEmail, "");
 
   const {
     enteredValue: enteredPassword,
     isInputValid: isInputPasswordValid,
     changeHandler: passwordChangeHandler,
     blurHandler: passwordBlurHandler,
-  } = useInput<string>(validatePassword);
+  } = useInput<string>(validatePassword, "");
 
   const {
     enteredValue: enteredRepeatedPassword,
     isInputValid: isInputRepeatedPasswordValid,
     changeHandler: repeatedPasswordChangeHandler,
     blurHandler: repeatedPasswordBlurHandler,
-  } = useInput<string>(validateRepeatedPassword.bind(null, enteredPassword));
+  } = useInput<string>(validateRepeatedPassword.bind(null, enteredPassword), "");
+
+    const {
+    enteredValue: enteredDepartment,
+    isInputValid: isInputDepartmentValid,
+    changeHandler: departmentChangeHandler,
+    blurHandler: departmentBlurHandler,
+  } = useInput<SelectOption>(validateDepartment, {id: "0"});
+
+
+  const {
+    enteredValue: enteredExpertises,
+    isInputValid: isInputExpertisesValid,
+    changeHandler: expertisesChangeHandler,
+    blurHandler: expertisesBlurHandler,
+  } = useInput<MultiSelectOptions<string>>(validateExpertises, []);
+
 
   const sendRegstrationData = async () => {
     const body = {
@@ -102,12 +123,16 @@ const Register: FC<RegisterProps> = () => {
     }
   };
 
-  const {
-    enteredValue: enteredDepartment,
-    isInputValid: isInputDepartmentValid,
-    changeHandler: departmentChangeHandler,
-    blurHandler: departmentBlurHandler,
-  } = useInput<option>(validateDepartment);
+
+  const searchPromise: SearchPromise = (search) => {
+    return new Promise((resolve) =>
+      resolve([
+        { label: "Tracking", value: "tracking" },
+        { label: "Training", value: "training" },
+      ])
+    );
+  };
+
 
   return (
     <MainLayout title="Register">
@@ -152,7 +177,31 @@ const Register: FC<RegisterProps> = () => {
       <Button icon="👑" onClick={registrationHandler}>
         Register
       </Button>
+
+      <p>For testing:</p>
+
+
+      <MultiSelect
+        id="expertise"
+        label="Fields of Expertise"
+        value={enteredExpertises}
+        isValid={isInputExpertisesValid}
+        onChange={expertisesChangeHandler}
+        onBlur={emailBlurHandler}
+        icon="💪"
+        searchPromise={searchPromise}
+      />
     </MainLayout>
+
+    //     id: string;
+    //   label: string;
+    //   default?: T;
+    //   selected: Options<T>;
+    //   isValid: boolean;
+    //   onRemoveSelected: removeSelectedHandler<T>;
+    //   onAddSelected: addSelectedHandler<T>;
+    //   icon?: React.ReactNode;
+    //   searchPromise?: searchPromise;
   );
 };
 

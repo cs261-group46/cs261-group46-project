@@ -9,8 +9,8 @@ import { useState } from "react";
 //         reset: () => void
 //     } = (validate: (value: T) => boolean) => {
 
-function UseInput<T>(validate: (value: T) => boolean) {
-  const [enteredValue, updateEnteredValue] = useState<T>();
+function UseInput<T>(validate: (value: T) => boolean, initialValue: T) {
+  const [enteredValue, updateEnteredValue] = useState<T>(initialValue);
   const [isTouched, updateIsTouched] = useState(false);
 
   const isValueValid = enteredValue && validate(enteredValue);
@@ -25,7 +25,7 @@ function UseInput<T>(validate: (value: T) => boolean) {
   };
 
   const reset: () => void = () => {
-    updateEnteredValue(undefined);
+    updateEnteredValue(initialValue);
     updateIsTouched(false);
   };
 

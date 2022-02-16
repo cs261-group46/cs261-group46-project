@@ -5,7 +5,7 @@ import StrengthIndicator from './StrengthIndicator';
 
 describe('<StrengthIndicator />', () => {
   test('it should mount', () => {
-    render(<StrengthIndicator password={"password"}/>);
+    render(<StrengthIndicator password={"abcdefg"}/>);
 
     const strengthIndicator = screen.getByTestId('StrengthIndicator');
 
