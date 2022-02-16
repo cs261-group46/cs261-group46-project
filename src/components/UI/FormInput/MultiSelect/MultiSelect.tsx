@@ -1,10 +1,16 @@
-import React, { PropsWithChildren, useEffect, useRef, useState } from "react";
+import React, {
+  PropsWithChildren,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import styles from "./MultiSelect.module.scss";
 import Label from "../Label/Label";
 import { debounceTime, Subject } from "rxjs";
 import {
-  MultiSelectOptions,
   AddSelectedHandler,
+  MultiSelectOptions,
   RemoveSelectedHandler,
   SearchPromise,
 } from "./MultiSelect.d";
@@ -27,19 +33,19 @@ interface MultiSelectProps<T> {
 function MultiSelect<T>(props: PropsWithChildren<MultiSelectProps<T>>) {
   const [searchResults, setSearchResults] = useState<MultiSelectOptions<T>>([]);
   const [currentSearch, setCurrentSearch] = useState("");
-  const [searchSubject] = useState(new Subject<string>());
   const [focused, setFocused] = useState(false);
+  const searchSubject = useMemo(() => new Subject<string>(), []);
 
   const inputElement = useRef<HTMLSpanElement>(null);
 
   const { searchPromise } = props;
 
-  const removeExpertiseHandler = (toRemove) => {
-    const newExpertises = props.value.filter((x) => x.value !== toRemove);
+  const removeExpertiseHandler: RemoveSelectedHandler<T> = (selected) => {
+    const newExpertises = props.value.filter((x) => x.value !== selected);
     props.onChange(newExpertises);
   };
 
-  const addSelectedHandler = (selected) => {
+  const addSelectedHandler: AddSelectedHandler<T> = (selected) => {
     const newExpertises = props.value.concat(selected);
     props.onChange(newExpertises);
     setCurrentSearch("");
