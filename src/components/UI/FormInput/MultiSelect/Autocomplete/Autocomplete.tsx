@@ -13,7 +13,7 @@ function Autocomplete<T>(props: PropsWithChildren<AutocompleteProps<T>>) {
     <span key={index}>
       <li
         className={styles.AutoCompleteOption}
-        onClickCapture={props.onAddSelected.bind(null, option)}
+        onClick={props.onAddSelected.bind(null, option)}
       >
         <b>{props.currentSearch}</b>
         <span>

@@ -49,7 +49,7 @@ function MultiSelect<T>(props: PropsWithChildren<MultiSelectProps<T>>) {
         .includes(searchResult.value)
   );
 
-  const addSelectedHandler = (selected, event) => {
+  const addSelectedHandler: addSelectedHandler<T> = (selected) => {
     props.onAddSelected(selected);
     setCurrentSearch("");
     setSearchResults([]);
