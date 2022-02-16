@@ -10,15 +10,15 @@ const Dashboard: FC<DashboardProps> = () => (
     <MainLayout title={"Dashboard"}>
         <Title text={"Welcome back!"}/>
 
-        <Button icon={"👤"} onClick={() => {}}>Your Profile</Button>
+        <Button href={"/profile"} icon={"👤"} onClick={() => {}}><p style={{textDecoration: "none", display: "inline-block"}}>Your Profile</p></Button>
 
         <Button icon={"🔔"} onClick={() => {}}>All Notifications</Button>
 
-        <Button icon={"📅"} onClick={() => {}}>Upcoming Events</Button>
+        <Button href={"/workshops"} icon={"📅"} onClick={() => {}}>Upcoming Events</Button>
 
         <Button icon={"💬"} onClick={() => {}}>Messages</Button>
 
-        <Button icon={"⚙️"} onClick={() => {}}>Settings</Button>
+        <Button href={"/settings"} icon={"⚙️"} onClick={() => {}}>Settings</Button>
 
         <Button icon={"👋"} onClick={() => {}}>Logout</Button>
 
@@ -26,31 +26,31 @@ const Dashboard: FC<DashboardProps> = () => (
 
         <Button icon={"🔔"} onClick={() => {}}>Recent Notifications</Button>
 
-        <Button icon={"👨‍🏫"} onClick={() => {}}>Your Mentor</Button>
+        <Button href={"/learning/mentor"} icon={"👨‍🏫"} onClick={() => {}}>Your Mentor</Button>
 
-        <Button icon={"📈"} onClick={() => {}}>Plans of Action</Button>
+        <Button href={"/learning/plansofaction"} icon={"📈"} onClick={() => {}}>Plans of Action</Button>
 
-        <Button icon={"✏️"} onClick={() => {}}>Workshops</Button>
+        <Button href={"/workshops"} icon={"✏️"} onClick={() => {}}>Workshops</Button>
 
-        <Button icon={"👥"} onClick={() => {}}>Group Sessions</Button>
+        <Button href={"/workshops"} icon={"👥"} onClick={() => {}}>Group Sessions</Button>
 
-        <Button icon={"💡"} onClick={() => {}}>Your Interests</Button>
+        <Button href={"/learning/interests"} icon={"💡"} onClick={() => {}}>Your Interests</Button>
 
         <Title text={"Your Mentoring"}/>
 
         <Button icon={"🔔"} onClick={() => {}}>Recent Notifications</Button>
 
-        <Button icon={"🧑‍🎓"} onClick={() => {}}>Your Mentees</Button>
+        <Button href={"/mentoring/mentees"} icon={"🧑‍🎓"} onClick={() => {}}>Your Mentees</Button>
 
-        <Button icon={"💪"} onClick={() => {}}>Your Skills</Button>
+        <Button href={"/mentoring/skills"} icon={"💪"} onClick={() => {}}>Your Skills</Button>
 
         <Title text={"Your Expertise"}/>
 
         <Button icon={"🔔"} onClick={() => {}}>Recent Notifications</Button>
 
-        <Button icon={"✏"} onClick={() => {}}>Your Workshops</Button>
+        <Button href={"/workshops"} icon={"✏"} onClick={() => {}}>Your Workshops</Button>
 
-        <Button icon={"💪"} onClick={() => {}}>Your Fields of Expertise</Button>
+        <Button href={"/"} icon={"💪"} onClick={() => {}}>Your Fields of Expertise</Button>
 
         <div data-testid="Dashboard"/>
     </MainLayout>

@@ -9,6 +9,7 @@ interface ButtonProps {
   icon?: React.ReactNode;
   onClick?: () => void;
   buttonStyle?: ButtonStyle
+  href?: string
 }
 
 // utility function that just checks the type of input param
@@ -25,15 +26,20 @@ const Button: FC<ButtonProps> = (props) => {
   const styleName: ButtonStyle = props.buttonStyle !== undefined ? props.buttonStyle : "default"
   const style = mapStyleName(styleName)
 
+  const buttonElem =
+      <button
+          onClick={props.onClick}
+          className={`${style}`}
+          data-testid="Button"
+      >
+        {props.icon && <Icon icon={props.icon} className={styles.Icon} />}
+        {props.children}
+      </button>
+
   return (
-    <button
-      onClick={props.onClick}
-      className={`${styles.Button} ${style}`}
-      data-testid="Button"
-    >
-      {props.icon && <Icon icon={props.icon} className={styles.Icon} />}
-      {props.children}
-    </button>
+      props.href
+          ? <a href={props.href} className={styles.Button}>{buttonElem}</a> // if link button
+          : <div className={styles.Button}>{buttonElem}</div>
   );
 };
 
