@@ -26,49 +26,59 @@ const Dashboard: FC<DashboardProps> = () => (
 
         {/* if in this branch */}
         {false ? <Fragment>
-            <Button icon={"🔔"} onClick={() => {}}>Recent Notifications</Button>
+                <Button icon={"🔔"} onClick={() => {}}>Recent Notifications</Button>
 
-            <Button href={"/learning/mentor"} icon={"👨‍🏫"} onClick={() => {}}>Your Mentor</Button>
+                <Button href={"/learning/mentor"} icon={"👨‍🏫"} onClick={() => {}}>Your Mentor</Button>
 
-            <Button href={"/learning/plansofaction"} icon={"📈"} onClick={() => {}}>Plans of Action</Button>
+                <Button href={"/learning/plansofaction"} icon={"📈"} onClick={() => {}}>Plans of Action</Button>
 
-            <Button href={"/workshops"} icon={"✏️"} onClick={() => {}}>Workshops</Button>
+                <Button href={"/workshops"} icon={"✏️"} onClick={() => {}}>Workshops</Button>
 
-            <Button href={"/workshops"} icon={"👥"} onClick={() => {}}>Group Sessions</Button>
+                <Button href={"/workshops"} icon={"👥"} onClick={() => {}}>Group Sessions</Button>
 
-            <Button href={"/learning/interests"} icon={"💡"} onClick={() => {}}>Your Interests</Button>
-        </Fragment>
-        // else if not
-        : <Fragment>
-            <Title text="You're not currently a mentee!"/>
-            <Button href="learning/onboarding" buttonStyle='primary'>Sign up!</Button>
-        </Fragment>
+                <Button href={"/learning/interests"} icon={"💡"} onClick={() => {}}>Your Interests</Button>
+            </Fragment>
+            // else if not
+            : <div className={styles.signup}>
+                <Title text="You're not currently a mentee!"/>
+                <Button href="learning/onboarding" buttonStyle='primary'>Sign up!</Button>
+            </div>
         }
 
         <Title text={"Your Mentoring"}/>
 
         {/* if in this branch */}
         {false ? <Fragment>
-            <Button icon={"🔔"} onClick={() => {}}>Recent Notifications</Button>
+                <Button icon={"🔔"} onClick={() => {}}>Recent Notifications</Button>
 
-            <Button href={"/mentoring/mentees"} icon={"🧑‍🎓"} onClick={() => {}}>Your Mentees</Button>
+                <Button href={"/mentoring/mentees"} icon={"🧑‍🎓"} onClick={() => {}}>Your Mentees</Button>
 
-            <Button href={"/mentoring/skills"} icon={"💪"} onClick={() => {}}>Your Skills</Button>
-        </Fragment>
-        // else if not
-        : <Fragment>
-            <Title text="You're not currently a mentor!"/>
-            <Button href="learning/onboarding" buttonStyle='primary'>Sign up!</Button>
-        </Fragment>
+                <Button href={"/mentoring/skills"} icon={"💪"} onClick={() => {}}>Your Skills</Button>
+            </Fragment>
+            // else if not
+            : <div className={styles.signup}>
+                <Title text="You're not currently a mentor!"/>
+                <Button href="mentoring/onboarding" buttonStyle='primary'>Sign up!</Button>
+            </div>
         }
 
         <Title text={"Your Expertise"}/>
 
-        <Button icon={"🔔"} onClick={() => {}}>Recent Notifications</Button>
+        {/* if in this branch */}
+        {false ? <Fragment>
+                <Button icon={"🔔"} onClick={() => {}}>Recent Notifications</Button>
 
-        <Button href={"/workshops"} icon={"✏"} onClick={() => {}}>Your Workshops</Button>
+                <Button href={"/workshops"} icon={"✏"} onClick={() => {}}>Your Workshops</Button>
 
-        <Button href={"/"} icon={"💪"} onClick={() => {}}>Your Fields of Expertise</Button>
+                <Button href={"/experts/skills"} icon={"💪"} onClick={() => {}}>Your Fields of Expertise</Button>
+            </Fragment>
+            // else if not
+            : <div className={styles.signup}>
+                <Title text="You're not currently an expert!"/>
+                <Button href="experts/onboarding" buttonStyle='primary'>Sign up!</Button>
+            </div>
+        }
+
 
         <div data-testid="Dashboard"/>
     </MainLayout>
