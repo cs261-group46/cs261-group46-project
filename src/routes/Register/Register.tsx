@@ -1,15 +1,17 @@
 import React, { FC } from "react";
-// import styles from './Register.module.scss';
 import MainLayout from "../../layouts/MainLayout/MainLayout";
 import TextInput from "../../components/UI/FormInput/TextInput/TextInput";
 import PasswordInput from "../../components/Register/PasswordInput/PasswordInput";
 import Select from "../../components/UI/FormInput/Select/Select";
 import Button from "../../components/UI/Button/Button";
 import useInput from "../../hooks/UseInput/UseInput";
+import { option, options } from "../../components/UI/FormInput/Select/Select.d";
 
 interface RegisterProps {}
 
-const DUMMY_DEPARTMENTS = [{ option_id: "1", option: "Department 1" }];
+const DUMMY_DEPARTMENTS: options = [
+  { option_id: "1", option_label: "Department 1" },
+];
 
 function validateEmail(email: string) {
   const re =
@@ -39,12 +41,19 @@ function validatePassword(password: string) {
   return passwordRating >= 3;
 }
 
-function validateRepeatedPassword(password: string, repeatedPassword: string) {
-  return password === repeatedPassword;
+function validateRepeatedPassword(
+  password: string | undefined,
+  repeatedPassword: string | undefined
+): boolean {
+  return (
+    password !== undefined &&
+    repeatedPassword !== undefined &&
+    password === repeatedPassword
+  );
 }
-// function validateDepartment(department: string) {
-//     return true
-// }
+function validateDepartment(department: option) {
+  return true;
+}
 
 const Register: FC<RegisterProps> = () => {
   const {
@@ -52,21 +61,21 @@ const Register: FC<RegisterProps> = () => {
     isInputValid: isInputEmailValid,
     changeHandler: emailChangeHandler,
     blurHandler: emailBlurHandler,
-  } = useInput(validateEmail);
+  } = useInput<string>(validateEmail);
 
   const {
     enteredValue: enteredPassword,
     isInputValid: isInputPasswordValid,
     changeHandler: passwordChangeHandler,
     blurHandler: passwordBlurHandler,
-  } = useInput(validatePassword);
+  } = useInput<string>(validatePassword);
 
   const {
     enteredValue: enteredRepeatedPassword,
     isInputValid: isInputRepeatedPasswordValid,
     changeHandler: repeatedPasswordChangeHandler,
     blurHandler: repeatedPasswordBlurHandler,
-  } = useInput(validateRepeatedPassword.bind(null, enteredPassword));
+  } = useInput<string>(validateRepeatedPassword.bind(null, enteredPassword));
 
   const sendRegstrationData = async () => {
     const body = {
@@ -92,6 +101,13 @@ const Register: FC<RegisterProps> = () => {
       sendRegstrationData();
     }
   };
+
+  const {
+    enteredValue: enteredDepartment,
+    isInputValid: isInputDepartmentValid,
+    changeHandler: departmentChangeHandler,
+    blurHandler: departmentBlurHandler,
+  } = useInput<option>(validateDepartment);
 
   return (
     <MainLayout title="Register">
@@ -123,6 +139,10 @@ const Register: FC<RegisterProps> = () => {
         placeholder="Please provide your password again"
       />
       <Select
+        value={enteredDepartment}
+        isValid={isInputDepartmentValid}
+        onChange={departmentChangeHandler}
+        onBlur={departmentBlurHandler}
         icon="👥"
         id="department"
         placeholder="Please select your department"
@@ -132,7 +152,6 @@ const Register: FC<RegisterProps> = () => {
       <Button icon="👑" onClick={registrationHandler}>
         Register
       </Button>
-      {/* <div data-testid="Register"/> */}
     </MainLayout>
   );
 };

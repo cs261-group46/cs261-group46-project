@@ -1,11 +1,11 @@
-import React, { FC, MouseEventHandler } from "react";
+import React, { FC } from "react";
 import styles from "./Button.module.scss";
 import Icon from "../Icon/Icon";
 
 interface ButtonProps {
   children: React.ReactNode;
-  onClick: MouseEventHandler<HTMLButtonElement>;
   icon?: React.ReactNode;
+  onClick: () => void;
 }
 
 const Button: FC<ButtonProps> = (props) => {

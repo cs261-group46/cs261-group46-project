@@ -4,9 +4,9 @@ import TextInput from "../../UI/FormInput/TextInput/TextInput";
 import StrengthIndicator from "../StrengthIndicator/StrengthIndicator";
 
 interface PasswordInputProps {
-    value: string
+    value: string | undefined
     isValid: boolean
-    onChange: FormEventHandler<HTMLInputElement>
+    onChange: (input: string) => void
     onBlur: FormEventHandler<HTMLInputElement>
 }
 
