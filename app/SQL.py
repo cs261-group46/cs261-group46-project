@@ -99,3 +99,5 @@ def is_valid_input(*args) -> bool:
             if not is_valid_input(arg):
                 return False
         return True
+
+

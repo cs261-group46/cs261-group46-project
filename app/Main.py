@@ -84,7 +84,7 @@ def api_user_register():
     print(dict(request.args))
     print(dict(request.form))
     print(dict(request.get_json()))
-    data_dict = dict()  # Not yet sure where the data will be located. You can try to use one of the above
+    data_dict = dict(request.get_json())  # Not yet sure where the data will be located. You can try to use one of the above
 
     state = Users.register(data_dict.get("email"),
                            data_dict.get("password"),
@@ -98,7 +98,7 @@ def api_user_register():
         return user.get_api_return_data(start_dict={"successful": True})
     else:
         error = state[1]
-        return {"successful": False, "error": error}
+        return {"successful": False}
 
 
 @app.route("/api/user/login", methods=["POST"])
@@ -106,10 +106,10 @@ def api_user_login():
     print(dict(request.args))
     print(dict(request.form))
     print(dict(request.get_json()))
-    data_dict = dict()  # Not yet sure where the data will be located. You can try to use one of the above
+    data_dict = dict(request.get_json())  # Not yet sure where the data will be located. You can try to use one of the above
 
     if login_token_key_str in session:
-        return {"successful": False, "error": "User already loged in"}
+        return {"successful": False}
     state = Users.login(data_dict.get("email"), data_dict.get("password"))
     if state[0]:
         user, login_token = state[1], state[2]
@@ -117,7 +117,7 @@ def api_user_login():
         return user.get_api_return_data(start_dict={"successful": True})
     else:
         error = state[1]
-        return {"successful": False, "error": error}
+        return {"successful": False}
 
 
 @app.route("/api/user/logout", methods=["POST"])
@@ -128,9 +128,14 @@ def api_user_logout():
             session.pop(login_token_key_str)
             return {"successful": True}
         else:
-            return {"successful": False, "error": "User not found"}
+            return {"successful": False}
     else:
-        return {"successful": False, "error": "User not logged in"}
+        return {"successful": False}
+
+
+@app.route("/api/departments/get", methods=["GET"])
+def api_departments_get():
+    return Users.get_all_departments()
 
 
 @app.errorhandler(404)
