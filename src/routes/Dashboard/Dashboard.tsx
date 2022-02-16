@@ -2,12 +2,13 @@ import React, { FC } from 'react';
 import styles from './Dashboard.module.scss';
 import MainLayout from "../../layouts/MainLayout/MainLayout";
 import Button from "../../components/UI/Button/Button";
+import Title from '../../components/UI/Title/Title';
 
 interface DashboardProps {}
 
 const Dashboard: FC<DashboardProps> = () => (
     <MainLayout title={"Dashboard"}>
-        <h1>Welcome back!</h1>
+        <Title text={"Welcome back!"}/>
 
         <Button icon={"👤"} onClick={() => {}}>Your Profile</Button>
 
@@ -21,7 +22,7 @@ const Dashboard: FC<DashboardProps> = () => (
 
         <Button icon={"👋"} onClick={() => {}}>Logout</Button>
 
-        <h1>Your Learning</h1>
+        <Title text={"Your Learning"}/>
 
         <Button icon={"🔔"} onClick={() => {}}>Recent Notifications</Button>
 
@@ -35,7 +36,7 @@ const Dashboard: FC<DashboardProps> = () => (
 
         <Button icon={"💡"} onClick={() => {}}>Your Interests</Button>
 
-        <h1>Your Mentoring</h1>
+        <Title text={"Your Mentoring"}/>
 
         <Button icon={"🔔"} onClick={() => {}}>Recent Notifications</Button>
 
@@ -43,7 +44,7 @@ const Dashboard: FC<DashboardProps> = () => (
 
         <Button icon={"💪"} onClick={() => {}}>Your Skills</Button>
 
-        <h1>Your Expertise</h1>
+        <Title text={"Your Expertise"}/>
 
         <Button icon={"🔔"} onClick={() => {}}>Recent Notifications</Button>
 
