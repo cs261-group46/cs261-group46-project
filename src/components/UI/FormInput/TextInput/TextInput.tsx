@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, {ChangeEventHandler, FC} from "react";
 import styles from "./TextInput.module.scss";
 import Label from "../Label/Label";
 
@@ -16,8 +16,8 @@ interface TextInputProps {
 }
 
 const TextInput: FC<TextInputProps> = (props) => {
-  const changeHandler = (event) => {
-    const target = event.target as HTMLInputElement;
+  const changeHandler: ChangeEventHandler<HTMLInputElement> = (event) => {
+    const target = event.target;
     if (target) {
       props.onChange(target.value);
     }
