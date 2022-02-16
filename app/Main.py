@@ -78,7 +78,7 @@ def api_get_current_time():
 def api_user_register():
     print(dict(request.args))
     print(dict(request.form))
-    return "Unknown data Location, please tell Thibault how you want the data to look"
+    return {"message":"Unknown data Location, please tell Thibault how you want the data to look"}
 
 @app.route("/api/user/login")
 def api_user_login():
