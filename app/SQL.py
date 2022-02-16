@@ -80,6 +80,8 @@ def load_defaults(db: conn, schema: str):
 
 def is_valid_input(*args) -> bool:
     def validate(a):
+        if a is None:
+            return False
         if "'" in a:
             return False
         return True
