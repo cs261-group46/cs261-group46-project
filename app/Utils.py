@@ -1,4 +1,4 @@
-import random
+import secrets
 
 chars = []
 for i in range(26):
@@ -8,8 +8,11 @@ for i in range(26):
 for i in range(10):
     chars.append(chr(ord("0")+i))
 
+
 def random_string(length: int) -> str:
+
     s = ""
     for i in range(length):
-        s += chars[random.randint(0, len(chars)-1)]
+        s += secrets.choice(chars)
     return s
+

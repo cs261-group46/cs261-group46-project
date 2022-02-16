@@ -33,14 +33,17 @@ except Exception as _:
 environ = os.environ
 secret_key = environ.get('SECRET_KEY')
 peper = environ.get('PEPER')
-if peper is None: peper = "B1a5KEbbMThr2Klsat2XUyZWXegayfq9"
-if secret_key == None: secret_key = "va_tLgio5_XvHQ1MTXqn_geISuIBxkctGw3Fmz7cwutYAxq0Xl7twJQAXl£XShE3T8JjWPQCXbSgTXdoV39VMmiSt9ybQ"
+if peper is None:
+    peper = "B1a5KEbbMThr2Klsat2XUyZWXegayfq9"
+if secret_key is None:
+    secret_key = "va_tLgio5_XvHQ1MTXqn_geISuIBxkctGw3Fmz7cwutYAxq0Xl7twJQAXl£XShE3T8JjWPQCXbSgTXdoV39VMmiSt9ybQ"
 
 ##########################
 # Config Options/Loading #
 ##########################
 
 sep = os.path.sep
+login_token_key_str = "login_token"
 
 Config.load_defaults()
 
@@ -70,27 +73,70 @@ app.config["SECRET_KEY"] = secret_key
 # Route setup #
 ###############
 
+
 @app.route("/api/helloworld", methods=["GET"])
 def api_get_current_time():
     return {"helloworld": "This is working"}
 
-@app.route("/api/user/register")
+
+@app.route("/api/user/register", methods=["POST"])
 def api_user_register():
     print(dict(request.args))
     print(dict(request.form))
-    return {"message":"Unknown data Location, please tell Thibault how you want the data to look"}
+    print(dict(request.get_json()))
+    data_dict = dict(request.get_json())  # Not yet sure where the data will be located. You can try to use one of the above
 
-@app.route("/api/user/login")
+    state = Users.register(data_dict.get("email"),
+                           data_dict.get("password"),
+                           data_dict.get("password_repeat"),
+                           data_dict.get("first_name"),
+                           data_dict.get("last_name"),
+                           data_dict.get("department"))
+    if state[0]:
+        user, login_token = state[1], state[2]
+        session[login_token_key_str] = login_token
+        return user.get_api_return_data(start_dict={"successful": True})
+    else:
+        error = state[1]
+        return {"successful": False}
+
+
+@app.route("/api/user/login", methods=["POST"])
 def api_user_login():
     print(dict(request.args))
     print(dict(request.form))
-    return "Unknown data Location, please tell Thibault how you want the data to look"
+    print(dict(request.get_json()))
+    data_dict = dict(request.get_json())  # Not yet sure where the data will be located. You can try to use one of the above
 
-@app.route("/api/user/logout")
+    if login_token_key_str in session:
+        return {"successful": False}
+    state = Users.login(data_dict.get("email"), data_dict.get("password"))
+    if state[0]:
+        user, login_token = state[1], state[2]
+        session[login_token_key_str] = login_token
+        return user.get_api_return_data(start_dict={"successful": True})
+    else:
+        error = state[1]
+        return {"successful": False}
+
+
+@app.route("/api/user/logout", methods=["POST"])
 def api_user_logout():
-    print(dict(request.args))
-    print(dict(request.form))
-    return "Unknown data Location, please tell Thibault how you want the data to look"
+    if login_token_key_str in session.keys():
+        state = Users.logout(session.get(login_token_key_str))
+        if state:
+            session.pop(login_token_key_str)
+            return {"successful": True}
+        else:
+            return {"successful": False}
+    else:
+        return {"successful": False}
+
+
+@app.route("/api/departments/get", methods=["GET"])
+def api_departments_get():
+    return Users.get_all_departments()
+
 
 @app.errorhandler(404)
 def index(error):
@@ -99,8 +145,15 @@ def index(error):
     return file_contents
 
 
+@app.before_request
+def execute_before_requests():
+    if login_token_key_str in session.keys():
+        login_token = session.get(login_token_key_str)
+        user = Users.GetUserBy.login_token(login_token)  # Refresh auth token
+
+
 if __name__ == "__main__":
-    app.run(debug=False) # I have disabled the flask dev server, just change this to True if you want it back
+    app.run(debug=False)  # I have disabled the flask dev server, just change this to True if you want it back
     print("Done")
 
 

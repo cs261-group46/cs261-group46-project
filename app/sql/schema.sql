@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS USERS (
     userID serial,
     unique_user_id varchar(36),
     email varchar(128),
-    hashedPassword varchar(128),
+    hashedPassword text,
     salt varchar(16),
     firstName varchar(128),
     lastName varchar(128),

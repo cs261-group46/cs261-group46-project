@@ -2,6 +2,7 @@ from itsdangerous.url_safe import URLSafeTimedSerializer as TimedSerializer
 from itsdangerous.url_safe import URLSafeSerializer as Serializer
 import hashlib
 import uuid
+import hmac
 
 secret_key: str = None
 
@@ -13,7 +14,8 @@ def hash_password(password, username, salt, peper):
 
 def check_password(username, salt, peper, attempted_password, actual_password):
     hash_attempt = hash_password(attempted_password, username, salt, peper)
-    return hash_attempt == actual_password
+    equals = hmac.compare_digest(hash_attempt, actual_password)
+    return equals  # hash_attempt == actual_password
 
 
 def hash_string(text: str) -> str:

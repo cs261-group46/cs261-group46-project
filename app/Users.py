@@ -87,6 +87,16 @@ class User:
         self.departmentID: int = None
         self.groupID: int = None
 
+    def get_api_return_data(self, start_dict=None):
+        r_dict = {}
+        if not (start_dict is None or not isinstance(start_dict, dict)):
+            for key, value in start_dict.items():
+                r_dict[key]=value
+        r_dict["uuid"] = self.unique_user_id
+        r_dict["first_name"] = self.first_name
+        r_dict["last_name"] = self.last_name
+        return r_dict
+
     def __eq__(self, other):
         if isinstance(other, User):
             return self.database_id == other.database_id
@@ -172,3 +182,14 @@ def get_available_login_token():
         if data is None or len(data) == 0:
             break
     return login_token
+
+
+def get_all_departments():
+    statement = f"SELECT * FROM DEPARTMENTS;"
+    cursor = db.cursor()
+    cursor.execute(statement)
+    data = cursor.fetchall()
+    r_data = {}
+    for row in data:
+        r_data[row[0]] = row[1]
+    return r_data
