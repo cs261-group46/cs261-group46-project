@@ -3,7 +3,7 @@
 .MultiSelect {
   margin: 20px 0 40px;
   width: 100%;
-  .selectarea {
+  .selectArea {
     position: relative;
     box-sizing: border-box;
     transition-duration: 0.05s;
@@ -15,28 +15,10 @@
     padding: 10px 20px;
     flex-wrap: wrap;
     gap: 5px;
-    background-color: #FFFFFF;
+    background-color: #ffffff;
 
-    .selection {
-      padding: 5px;
-      padding-right: 0;
-      margin: 0 1px;
-      border: $sq_light_gray 1px solid;
-      border-radius: 5px;
-      background-color: #F7F7F7;
-
-      p, button {
-        display: inline;
-        color: #393838;
-      }
-
-      button {
-        background-color: #F7F7F7;
-        border: none;
-      }
-    }
-
-    .search, .placeholder {
+    .search,
+    .placeholder {
       padding: 5px 10px 5px 0;
       border: none;
       outline: none;
@@ -44,6 +26,8 @@
 
     .search {
       z-index: 2;
+      flex: 1;
+      max-width: 100%;
     }
 
     .placeholder {
@@ -58,33 +42,8 @@
     border-color: $sq_dark_gray;
   }
 
-  .focusedwithresults {
+  .focusedWithResults {
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
   }
-
-  .autocomplete {
-    width: 100%;
-    background-color: #fff;
-    border-radius: 10px;
-    border-top-right-radius: 0;
-    border-top-left-radius: 0;
-    margin: 0;
-    border: 1px solid $sq_dark_gray;
-    outline: 2px solid $sq_dark_gray;
-    position: absolute;
-    box-sizing: border-box;
-    transition-duration: 0.05s;
-
-    .autocompleteoption {
-      padding: 15px 20px;
-      cursor: pointer;
-
-      b {
-        font-weight: bold;
-        color: #EA596E
-      }
-    }
-  }
-
 }

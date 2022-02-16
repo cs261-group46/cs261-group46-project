@@ -1,109 +1,132 @@
-import React, {PropsWithChildren, useEffect, useState} from 'react';
-import styles from './MultiSelect.module.scss';
+import React, { PropsWithChildren, useEffect, useRef, useState } from "react";
+import styles from "./MultiSelect.module.scss";
 import Label from "../Label/Label";
-import { debounceTime, Subject } from 'rxjs';
-
-type LabelledList<T> = {label: string, value: T}[]
+import { debounceTime, Subject } from "rxjs";
+import {
+  Options,
+  addSelectedHandler,
+  removeSelectedHandler,
+  searchPromise,
+} from "./MultiSelect.d";
+import SelectedOptions from "./SelectedOptions/SelectedOptions";
+import Autocomplete from "./Autocomplete/Autocomplete";
 
 interface MultiSelectProps<T> {
-    id: string
-    label: string
-    default?: T
-    value: LabelledList<T>
-    isValid: boolean
-    onChange: ((value: LabelledList<T>) => void)
-    // onBlur: FormEventHandler<HTMLInputElement>
-    icon?: React.ReactNode
-    searchPromise?: ((value: string) => Promise<LabelledList<T>>)
+  id: string;
+  label: string;
+  default?: T;
+  selected: Options<T>;
+  isValid: boolean;
+  onRemoveSelected: removeSelectedHandler<T>;
+  onAddSelected: addSelectedHandler<T>;
+  icon?: React.ReactNode;
+  searchPromise?: searchPromise;
 }
 
-function MultiSelect<T>(
-    props: PropsWithChildren<MultiSelectProps<T>>
-) {
-    let [searchResults, setSearchResults] = useState<LabelledList<T>>([])
-    let [currentSearch, setCurrentSearch] = useState("");
-    let [searchSubject] = useState(new Subject<string>());
-    let [focused, setFocused] = useState(false);
+function MultiSelect<T>(props: PropsWithChildren<MultiSelectProps<T>>) {
+  const [searchResults, setSearchResults] = useState<Options<T>>([]);
+  const [currentSearch, setCurrentSearch] = useState("");
+  const [searchSubject] = useState(new Subject<string>());
+  const [focused, setFocused] = useState(false);
 
-    useEffect(() => {
-        searchSubject.pipe(
-            debounceTime(300)
-        ).subscribe(async debounced => {
-            if (props.searchPromise) {
-                const result = await props.searchPromise(debounced)
-                setSearchResults(result)
-            }
-        });
-    }, [props, searchSubject])
+  const inputElement = useRef<HTMLSpanElement>(null);
 
-    let possibleResults = searchResults.filter(searchResult => !props.value.map(labelled => labelled.value).includes(searchResult.value))
+  const { searchPromise } = props;
 
-    return <div className={styles.MultiSelect} tabIndex={0} onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}>
+  useEffect(() => {
+    searchSubject.pipe(debounceTime(300)).subscribe(async (debounced) => {
+      if (searchPromise) {
+        const result = await searchPromise(debounced);
+        setSearchResults(result);
+      }
+    });
+  }, [searchPromise, searchSubject]);
 
-        <Label htmlFor={props.id} icon={props.icon}>{props.label}</Label>
+  const possibleResults = searchResults.filter(
+    (searchResult) =>
+      !props.selected
+        .map((labelled) => labelled.value)
+        .includes(searchResult.value)
+  );
 
-        <div className={`${styles.selectarea} ${focused && styles.focused} ${focused && possibleResults.length > 0 && styles.focusedwithresults}`}>
-            {props.value.map((option, index) => 
-                <span className={styles.selection} key={index}>
-                    <p>{option.label}</p>
-                    <button onClick={() => props.onChange(props.value.filter(x => x.value !== option.value))}>X</button>
-                </span>)}
-            
-            {/* <input type="text" className={styles.search} onChange={(event) => searchSubject.next((event.target as HTMLInputElement).value)}/> */}
-            <span className={styles.search} role="search" contentEditable onInput={(event) => {
-                searchSubject.next((event.target as HTMLSpanElement).innerHTML);
-                setCurrentSearch((event.target as HTMLSpanElement).innerHTML);
-                setSearchResults([]);
-                }}></span>
-            { currentSearch.length === 0 && props.value.length === 0 && <span className={styles.placeholder}>Search...</span> }
-        </div>
+  const addSelectedHandler = (selected, event) => {
+    props.onAddSelected(selected);
+    setCurrentSearch("");
+    setSearchResults([]);
+    const inputEl: HTMLSpanElement | null = inputElement.current;
+    if (inputEl) inputEl.innerText = "";
+  };
 
-        { focused && possibleResults.length > 0 &&
-            <ol className={styles.autocomplete}>
-                {possibleResults.map(option => <span className={styles.selection}>
-                    <li className={styles.autocompleteoption} onClick={() => {
-                        props.onChange(props.value.concat(option));
-                        }}><b>{currentSearch}</b><span>{option.label.substring(currentSearch.length, option.label.length)}</span>
-                    </li>
-                </span>)}
-            </ol>
-        }
+  const inputHandler = () => {
+    const inputEl: HTMLSpanElement | null = inputElement.current;
+    if (inputEl) {
+      searchSubject.next(inputEl.innerText);
+      setCurrentSearch(inputEl.innerText);
+      setSearchResults([]);
+    }
+  };
+
+  const blurHandler = (event) => {
+    if (!event.currentTarget.contains(event.relatedTarget)) {
+      setFocused(false);
+    }
+  };
+
+  const focusHandler = (event) => {
+    if (
+      event.currentTarget === event.target ||
+      !event.currentTarget.contains(event.relatedTarget)
+    ) {
+      const inputEl: HTMLSpanElement | null = inputElement.current;
+      if (inputEl) {
+        console.log(inputEl);
+        inputEl.focus();
+      }
+      setFocused(true);
+    }
+  };
+
+  return (
+    <div
+      className={styles.MultiSelect}
+      tabIndex={0}
+      onFocus={focusHandler}
+      onBlur={blurHandler}
+    >
+      <Label htmlFor={props.id} icon={props.icon}>
+        {props.label}
+      </Label>
+
+      <div
+        className={`${styles.selectArea} ${focused && styles.focused} ${
+          focused && possibleResults.length > 0 && styles.focusedWithResults
+        }`}
+      >
+        <SelectedOptions
+          selected={props.selected}
+          onRemoveSelected={props.onRemoveSelected}
+        />
+
+        <span
+          className={styles.search}
+          role="search"
+          ref={inputElement}
+          contentEditable
+          onInput={inputHandler}
+        ></span>
+        {currentSearch.length === 0 && props.selected.length === 0 && (
+          <span className={styles.placeholder}>Search...</span>
+        )}
+      </div>
+      {focused && possibleResults.length > 0 && (
+        <Autocomplete
+          possibleResults={possibleResults}
+          currentSearch={currentSearch}
+          onAddSelected={addSelectedHandler}
+        />
+      )}
     </div>
+  );
 }
-
-// export function DropDown({ options, callback }) {
-//     const [selected, setSelected] = useState("");
-//     const [expanded, setExpanded] = useState(false);
-
-//     function expand() {
-//         setExpanded(true);
-//     }
-
-//     function close() {
-//         setExpanded(false);
-//     }
-
-//     function select(event) {
-//         const value = event.target.textContent;
-//         callback(value);
-//         close();
-//         setSelected(value);
-//     }
-
-//     return (
-//         <div className="dropdown" tabIndex={0} onFocus={expand} onBlur={close} >
-//             <div>{selected}</div>
-//             {expanded ? (
-//                 <div className={"dropdown-options-list"}>
-//                     {options.map((O) => (
-//                         <div className={"dropdown-option"} onClick={select}>
-//                             {O}
-//                         </div>
-//                     ))}
-//                 </div>
-//             ) : null}
-//         </div>
-//     );
-// }
 
 export default MultiSelect;
