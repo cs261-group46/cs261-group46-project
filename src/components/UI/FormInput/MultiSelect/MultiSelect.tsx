@@ -1,4 +1,5 @@
 import React, {
+  FocusEventHandler,
   PropsWithChildren,
   useEffect,
   useMemo,
@@ -79,14 +80,14 @@ function MultiSelect<T>(props: PropsWithChildren<MultiSelectProps<T>>) {
     }
   };
 
-  const blurHandler = (event) => {
+  const blurHandler: FocusEventHandler<HTMLDivElement> = (event) => {
     props.onBlur();
     if (!event.currentTarget.contains(event.relatedTarget)) {
       setFocused(false);
     }
   };
 
-  const focusHandler = (event) => {
+  const focusHandler: FocusEventHandler<HTMLDivElement> = (event) => {
     if (
       event.currentTarget === event.target ||
       !event.currentTarget.contains(event.relatedTarget)
