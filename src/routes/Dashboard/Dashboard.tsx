@@ -15,70 +15,61 @@ const Dashboard: FC<DashboardProps> = () => {
     <MainLayout title={"Dashboard"}>
       <Title text={"Welcome back!"} />
 
-      <Button icon={"👤"} href={"/profile"} onClick={() => {}}>
+      <Button icon={"👤"} href={"/profile"}>
         <p style={{ textDecoration: "none", display: "inline-block" }}>
           Your Profile
         </p>
       </Button>
 
-      <Button icon={"🔔"} onClick={() => {}}>
+      <Button icon={"🔔"} href={"/notifications"}>
         All Notifications
       </Button>
 
-      <Button icon={"📅"} href={"/workshops"} onClick={() => {}}>
+      <Button icon={"📅"} href={"/calendar"}>
         Upcoming Events
       </Button>
 
-      <Button icon={"💬"} onClick={() => {}}>
+      <Button icon={"💬"} href={"/calendar"}>
         Messages
       </Button>
 
-      <Button icon={"⚙️"} href={"/settings"} onClick={() => {}}>
+      <Button icon={"⚙️"} href={"/settings"}>
         Settings
       </Button>
 
-      <Button icon={"👋"} onClick={() => {}}>
-        Logout
-      </Button>
+      <Button icon={"👋"}>Logout</Button>
 
       <Title text={"Your Learning"} />
 
       {!isMentee && (
-        <Button
-          href={"/learn/become-mentee"}
-          buttonStyle="primary"
-          icon={"👨‍🏫"}
-          onClick={() => {}}
-        >
+        <Button href={"/learn/become-mentee"} buttonStyle="primary" icon={"👨‍🏫"}>
           Get a mentor
         </Button>
       )}
 
-      <Button icon={"🔔"} onClick={() => {}}>
-        Recent Notifications
-      </Button>
+      <Button icon={"🔔"}>Recent Notifications</Button>
 
       {isMentee && (
-        <Button href={"/learn/your-mentor"} icon={"👨‍🏫"} onClick={() => {}}>
+        <Button href={"/learn/your-mentor"} icon={"👨‍🏫"}>
           Your Mentor
         </Button>
       )}
 
       {isMentee && (
-        <Button href={"/learn/plans-of-action"} icon={"📈"} onClick={() => {}}>
+        <Button href={"/learn/plans-of-action"} icon={"📈"}>
           Plans of Action
         </Button>
       )}
 
-      <Button href={"/learn/workshops"} icon={"✏️"} onClick={() => {}}>
+      <Button href={"/learn/workshops"} icon={"✏️"}>
         Workshops
       </Button>
 
-      <Button href={"/learn/group-sessions"} icon={"👥"} onClick={() => {}}>
+      <Button href={"/learn/group-sessions"} icon={"👥"}>
         Group Sessions
       </Button>
 
-      <Button href={"/learn/interests"} icon={"💡"} onClick={() => {}}>
+      <Button href={"/learn/interests"} icon={"💡"}>
         Your Interests
       </Button>
 
@@ -89,26 +80,21 @@ const Dashboard: FC<DashboardProps> = () => {
           href={"/mentor/become-mentor"}
           buttonStyle="primary"
           icon={"👨‍🏫"}
-          onClick={() => {}}
         >
           Become a Mentor
         </Button>
       )}
 
-      {isMentor && (
-        <Button icon={"🔔"} onClick={() => {}}>
-          Recent Notifications
-        </Button>
-      )}
+      {isMentor && <Button icon={"🔔"}>Recent Notifications</Button>}
 
       {isMentor && (
-        <Button href={"/mentor/your-mentees"} icon={"🧑‍🎓"} onClick={() => {}}>
+        <Button href={"/mentor/your-mentees"} icon={"🧑‍🎓"}>
           Your Mentees
         </Button>
       )}
 
       {isMentor && (
-        <Button href={"/mentor/skills"} icon={"💪"} onClick={() => {}}>
+        <Button href={"/mentor/skills"} icon={"💪"}>
           Your Skills
         </Button>
       )}
@@ -120,25 +106,20 @@ const Dashboard: FC<DashboardProps> = () => {
           href={"/expert/become-expert"}
           buttonStyle="primary"
           icon={"👨‍🏫"}
-          onClick={() => {}}
         >
           Become an Expert
         </Button>
       )}
 
-      {isExpert && (
-        <Button icon={"🔔"} onClick={() => {}}>
-          Recent Notifications
-        </Button>
-      )}
+      {isExpert && <Button icon={"🔔"}>Recent Notifications</Button>}
 
       {isExpert && (
-        <Button href={"/expert/workshops"} icon={"✏"} onClick={() => {}}>
+        <Button href={"/expert/workshops"} icon={"✏"}>
           Your Workshops
         </Button>
       )}
       {isExpert && (
-        <Button href={"/expert/skills"} icon={"💪"} onClick={() => {}}>
+        <Button href={"/expert/skills"} icon={"💪"}>
           Your Fields of Expertise
         </Button>
       )}

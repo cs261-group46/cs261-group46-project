@@ -3,11 +3,11 @@
 .Button {
   width: min-content;
   height: 40px;
-  font-weight: bold;
   margin: 20px 0;
   text-decoration: none;
   width: max-content;
   button {
+    font-weight: bold;
     display: flex;
     align-items: center;
     font-size: 15px;

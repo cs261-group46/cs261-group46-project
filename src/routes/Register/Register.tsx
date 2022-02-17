@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from "react";
+import React, { FC, useEffect, useState } from "react";
 import MainLayout from "../../layouts/MainLayout/MainLayout";
 import TextInput from "../../components/UI/FormInput/TextInput/TextInput";
 import PasswordInput from "../../components/Register/PasswordInput/PasswordInput";
@@ -14,6 +14,7 @@ import {
   MultiSelectOptions,
   SearchPromise,
 } from "../../components/UI/FormInput/MultiSelect/MultiSelect.d";
+import { useNavigate } from "react-router-dom";
 
 interface RegisterProps {}
 
@@ -27,24 +28,25 @@ function validateEmail(email: string) {
 
 function validatePassword(password: string) {
   let passwordRating = 0;
-
   const passwordLength = password.length;
   const capitalLetters = /[A-Z]/;
   const lowercaseLetters = /[a-z]/;
   const numbers = /[0-9]/;
   const symbol = /-|_|\.|,|\[|]|\(|'|\)|`|@|!|\\|\/|\^|\*|\?|\||\$/;
-
   if (passwordLength < 10) return false;
-
   if (capitalLetters.test(password)) passwordRating++;
-
   if (lowercaseLetters.test(password)) passwordRating++;
-
   if (numbers.test(password)) passwordRating++;
-
   if (symbol.test(password)) passwordRating++;
-
   return passwordRating >= 3;
+}
+
+function validateName(name: string) {
+  return name.length > 0 && name.length <= 20;
+}
+
+function validateSurname(surname: string) {
+  return surname.length > 0 && surname.length <= 20;
 }
 
 function validateRepeatedPassword(
@@ -61,24 +63,20 @@ function validateDepartment(_department: SelectOption) {
   return true;
 }
 
-function validateExpertises(_experises: MultiSelectOptions<string>) {
-  return true;
-}
-
 const Register: FC<RegisterProps> = () => {
   const {
     enteredValue: enteredFirstName,
     isInputValid: isInputFirstNameValid,
     changeHandler: firstNameChangeHandler,
     blurHandler: firstNameBlurHandler,
-  } = useInput<string>(validateEmail, "");
+  } = useInput<string>(validateName, "");
 
   const {
     enteredValue: enteredLastName,
     isInputValid: isInputLastNameValid,
     changeHandler: lastNameChangeHandler,
     blurHandler: lastNameBlurHandler,
-  } = useInput<string>(validateEmail, "");
+  } = useInput<string>(validateSurname, "");
 
   const {
     enteredValue: enteredEmail,
@@ -111,13 +109,7 @@ const Register: FC<RegisterProps> = () => {
     blurHandler: departmentBlurHandler,
   } = useInput<SelectOption>(validateDepartment, { id: "0" });
 
-  const {
-    enteredValue: enteredExpertises,
-    isInputValid: isInputExpertisesValid,
-    changeHandler: expertisesChangeHandler,
-  } = useInput<MultiSelectOptions<string>>(validateExpertises, []);
-
-  const sendRegstrationData = async () => {
+  const sendRegistrationData = async () => {
     const body = {
       email: enteredEmail,
       password: enteredPassword,
@@ -139,9 +131,20 @@ const Register: FC<RegisterProps> = () => {
 
     console.log(returnedData);
   };
+
+  let navigate = useNavigate();
+
   const registrationHandler = () => {
-    if (isInputEmailValid && isInputPasswordValid && enteredRepeatedPassword) {
-      sendRegstrationData();
+    if (
+      isInputFirstNameValid &&
+      isInputLastNameValid &&
+      isInputEmailValid &&
+      isInputPasswordValid &&
+      enteredRepeatedPassword &&
+      isInputDepartmentValid
+    ) {
+      sendRegistrationData();
+      navigate("/dashboard");
     }
   };
 
@@ -158,16 +161,19 @@ const Register: FC<RegisterProps> = () => {
     fetchDepartment();
   }, []);
 
+  const [departments, setDepartments] = useState<SelectOptions>([]);
+
   const fetchDepartment = async () => {
     const departments = await fetch("/api/departments");
     const body = await departments.json();
+    setDepartments([]);
     console.log(body);
   };
 
   return (
     <MainLayout title="Register">
       <TextInput
-        icon="✉️"
+        icon="1️⃣"
         value={enteredFirstName}
         isValid={isInputFirstNameValid}
         onChange={firstNameChangeHandler}
@@ -178,7 +184,7 @@ const Register: FC<RegisterProps> = () => {
       />
 
       <TextInput
-        icon="✉️"
+        icon="2️⃣"
         value={enteredLastName}
         isValid={isInputLastNameValid}
         onChange={lastNameChangeHandler}
@@ -224,7 +230,7 @@ const Register: FC<RegisterProps> = () => {
         id="department"
         placeholder="Please select your department"
         label="Department"
-        options={DUMMY_DEPARTMENTS}
+        options={departments}
       />
       <Button icon="👑" onClick={registrationHandler} buttonStyle={"primary"}>
         Register
