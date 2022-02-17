@@ -67,6 +67,20 @@ function validateExpertises(_experises: MultiSelectOptions<string>) {
 
 const Register: FC<RegisterProps> = () => {
   const {
+    enteredValue: enteredFirstName,
+    isInputValid: isInputFirstNameValid,
+    changeHandler: firstNameChangeHandler,
+    blurHandler: firstNameBlurHandler,
+  } = useInput<string>(validateEmail, "");
+
+  const {
+    enteredValue: enteredLastName,
+    isInputValid: isInputLastNameValid,
+    changeHandler: lastNameChangeHandler,
+    blurHandler: lastNameBlurHandler,
+  } = useInput<string>(validateEmail, "");
+
+  const {
     enteredValue: enteredEmail,
     isInputValid: isInputEmailValid,
     changeHandler: emailChangeHandler,
@@ -107,7 +121,10 @@ const Register: FC<RegisterProps> = () => {
     const body = {
       email: enteredEmail,
       password: enteredPassword,
-      department: "test",
+      password_repeat: enteredRepeatedPassword,
+      first_name: enteredFirstName,
+      last_name: enteredLastName,
+      department: enteredDepartment,
     };
 
     const response = await fetch("/api/user/register", {
@@ -151,6 +168,28 @@ const Register: FC<RegisterProps> = () => {
     <MainLayout title="Register">
       <TextInput
         icon="✉️"
+        value={enteredFirstName}
+        isValid={isInputFirstNameValid}
+        onChange={firstNameChangeHandler}
+        onBlur={firstNameBlurHandler}
+        id="firstname"
+        label="First Name"
+        placeholder="Please provide your first name"
+      />
+
+      <TextInput
+        icon="✉️"
+        value={enteredLastName}
+        isValid={isInputLastNameValid}
+        onChange={lastNameChangeHandler}
+        onBlur={lastNameBlurHandler}
+        id="lastname"
+        label="Last Name"
+        placeholder="Please provide your last name"
+      />
+
+      <TextInput
+        icon="✉️"
         value={enteredEmail}
         isValid={isInputEmailValid}
         onChange={emailChangeHandler}
@@ -190,19 +229,6 @@ const Register: FC<RegisterProps> = () => {
       <Button icon="👑" onClick={registrationHandler} buttonStyle={"primary"}>
         Register
       </Button>
-
-      <p>For testing:</p>
-
-      <MultiSelect
-        id="expertise"
-        label="Fields of Expertise"
-        value={enteredExpertises}
-        isValid={isInputExpertisesValid}
-        onChange={expertisesChangeHandler}
-        onBlur={emailBlurHandler}
-        icon="💪"
-        searchPromise={searchPromise}
-      />
     </MainLayout>
   );
 };

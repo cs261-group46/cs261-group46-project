@@ -1,87 +1,151 @@
-import React, { FC, Fragment } from 'react';
-import styles from './Dashboard.module.scss';
+import React, { FC, Fragment } from "react";
+import styles from "./Dashboard.module.scss";
 import MainLayout from "../../layouts/MainLayout/MainLayout";
 import Button from "../../components/UI/Button/Button";
-import Title from '../../components/UI/Title/Title';
+import Title from "../../components/UI/Title/Title";
 
 interface DashboardProps {}
 
-const Dashboard: FC<DashboardProps> = () => (
+const Dashboard: FC<DashboardProps> = () => {
+  const isMentor = false;
+  const isMentee = false;
+  const isExpert = false;
+
+  return (
     <MainLayout title={"Dashboard"}>
-        <Title text={"Welcome back!"}/>
+      <Title text={"Welcome back!"} />
 
-        <Button href={"/profile"} icon={"👤"} onClick={() => {}}><p style={{textDecoration: "none", display: "inline-block"}}>Your Profile</p></Button>
+      <Button icon={"👤"} href={"/profile"} onClick={() => {}}>
+        <p style={{ textDecoration: "none", display: "inline-block" }}>
+          Your Profile
+        </p>
+      </Button>
 
-        <Button icon={"🔔"} onClick={() => {}}>All Notifications</Button>
+      <Button icon={"🔔"} onClick={() => {}}>
+        All Notifications
+      </Button>
 
-        <Button href={"/workshops"} icon={"📅"} onClick={() => {}}>Upcoming Events</Button>
+      <Button icon={"📅"} href={"/workshops"} onClick={() => {}}>
+        Upcoming Events
+      </Button>
 
-        <Button icon={"💬"} onClick={() => {}}>Messages</Button>
+      <Button icon={"💬"} onClick={() => {}}>
+        Messages
+      </Button>
 
-        <Button href={"/settings"} icon={"⚙️"} onClick={() => {}}>Settings</Button>
+      <Button icon={"⚙️"} href={"/settings"} onClick={() => {}}>
+        Settings
+      </Button>
 
-        <Button icon={"👋"} onClick={() => {}}>Logout</Button>
+      <Button icon={"👋"} onClick={() => {}}>
+        Logout
+      </Button>
 
-        <Title text={"Your Learning"}/>
+      <Title text={"Your Learning"} />
 
-        {/* if in this branch */}
-        {false ? <Fragment>
-                <Button icon={"🔔"} onClick={() => {}}>Recent Notifications</Button>
+      {!isMentee && (
+        <Button
+          href={"/learn/become-mentee"}
+          buttonStyle="primary"
+          icon={"👨‍🏫"}
+          onClick={() => {}}
+        >
+          Get a mentor
+        </Button>
+      )}
 
-                <Button href={"/learning/mentor"} icon={"👨‍🏫"} onClick={() => {}}>Your Mentor</Button>
+      <Button icon={"🔔"} onClick={() => {}}>
+        Recent Notifications
+      </Button>
 
-                <Button href={"/learning/plansofaction"} icon={"📈"} onClick={() => {}}>Plans of Action</Button>
+      {isMentee && (
+        <Button href={"/learn/your-mentor"} icon={"👨‍🏫"} onClick={() => {}}>
+          Your Mentor
+        </Button>
+      )}
 
-                <Button href={"/workshops"} icon={"✏️"} onClick={() => {}}>Workshops</Button>
+      {isMentee && (
+        <Button href={"/learn/plans-of-action"} icon={"📈"} onClick={() => {}}>
+          Plans of Action
+        </Button>
+      )}
 
-                <Button href={"/workshops"} icon={"👥"} onClick={() => {}}>Group Sessions</Button>
+      <Button href={"/learn/workshops"} icon={"✏️"} onClick={() => {}}>
+        Workshops
+      </Button>
 
-                <Button href={"/learning/interests"} icon={"💡"} onClick={() => {}}>Your Interests</Button>
-            </Fragment>
-            // else if not
-            : <div className={styles.signup}>
-                <Title text="You're not currently a mentee!"/>
-                <Button href="learning/onboarding" buttonStyle='primary'>Sign up!</Button>
-            </div>
-        }
+      <Button href={"/learn/group-sessions"} icon={"👥"} onClick={() => {}}>
+        Group Sessions
+      </Button>
 
-        <Title text={"Your Mentoring"}/>
+      <Button href={"/learn/interests"} icon={"💡"} onClick={() => {}}>
+        Your Interests
+      </Button>
 
-        {/* if in this branch */}
-        {false ? <Fragment>
-                <Button icon={"🔔"} onClick={() => {}}>Recent Notifications</Button>
+      <Title text={"Your Mentoring"} />
 
-                <Button href={"/mentoring/mentees"} icon={"🧑‍🎓"} onClick={() => {}}>Your Mentees</Button>
+      {!isMentor && (
+        <Button
+          href={"/mentor/become-mentor"}
+          buttonStyle="primary"
+          icon={"👨‍🏫"}
+          onClick={() => {}}
+        >
+          Become a Mentor
+        </Button>
+      )}
 
-                <Button href={"/mentoring/skills"} icon={"💪"} onClick={() => {}}>Your Skills</Button>
-            </Fragment>
-            // else if not
-            : <div className={styles.signup}>
-                <Title text="You're not currently a mentor!"/>
-                <Button href="mentoring/onboarding" buttonStyle='primary'>Sign up!</Button>
-            </div>
-        }
+      {isMentor && (
+        <Button icon={"🔔"} onClick={() => {}}>
+          Recent Notifications
+        </Button>
+      )}
 
-        <Title text={"Your Expertise"}/>
+      {isMentor && (
+        <Button href={"/mentor/your-mentees"} icon={"🧑‍🎓"} onClick={() => {}}>
+          Your Mentees
+        </Button>
+      )}
 
-        {/* if in this branch */}
-        {false ? <Fragment>
-                <Button icon={"🔔"} onClick={() => {}}>Recent Notifications</Button>
+      {isMentor && (
+        <Button href={"/mentor/skills"} icon={"💪"} onClick={() => {}}>
+          Your Skills
+        </Button>
+      )}
 
-                <Button href={"/workshops"} icon={"✏"} onClick={() => {}}>Your Workshops</Button>
+      <Title text={"Your Expertise"} />
 
-                <Button href={"/experts/skills"} icon={"💪"} onClick={() => {}}>Your Fields of Expertise</Button>
-            </Fragment>
-            // else if not
-            : <div className={styles.signup}>
-                <Title text="You're not currently an expert!"/>
-                <Button href="experts/onboarding" buttonStyle='primary'>Sign up!</Button>
-            </div>
-        }
+      {!isMentor && (
+        <Button
+          href={"/expert/become-expert"}
+          buttonStyle="primary"
+          icon={"👨‍🏫"}
+          onClick={() => {}}
+        >
+          Become an Expert
+        </Button>
+      )}
 
+      {isExpert && (
+        <Button icon={"🔔"} onClick={() => {}}>
+          Recent Notifications
+        </Button>
+      )}
 
-        <div data-testid="Dashboard"/>
+      {isExpert && (
+        <Button href={"/expert/workshops"} icon={"✏"} onClick={() => {}}>
+          Your Workshops
+        </Button>
+      )}
+      {isExpert && (
+        <Button href={"/expert/skills"} icon={"💪"} onClick={() => {}}>
+          Your Fields of Expertise
+        </Button>
+      )}
+
+      <div data-testid="Dashboard" />
     </MainLayout>
-);
+  );
+};
 
 export default Dashboard;
