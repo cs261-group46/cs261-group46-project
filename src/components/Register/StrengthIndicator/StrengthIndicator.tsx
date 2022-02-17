@@ -1,6 +1,5 @@
 import React, { FC } from "react";
 import styles from "./StrengthIndicator.module.scss";
-import Twemoji from "react-twemoji-17";
 import Icon from "../../UI/Icon/Icon"
 
 interface StrengthIndicatorProps {

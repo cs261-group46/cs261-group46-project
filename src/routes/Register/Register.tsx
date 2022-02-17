@@ -1,5 +1,4 @@
-import React, { FC, useState } from "react";
-// import styles from './Register.module.scss';
+import React, { FC, useEffect } from "react";
 import MainLayout from "../../layouts/MainLayout/MainLayout";
 import TextInput from "../../components/UI/FormInput/TextInput/TextInput";
 import PasswordInput from "../../components/Register/PasswordInput/PasswordInput";
@@ -7,13 +6,18 @@ import Select from "../../components/UI/FormInput/Select/Select";
 import MultiSelect from "../../components/UI/FormInput/MultiSelect/MultiSelect";
 import Button from "../../components/UI/Button/Button";
 import useInput from "../../hooks/UseInput/UseInput";
-import { SelectOption, SelectOptions } from "../../components/UI/FormInput/Select/Select.d";
-import { MultiSelectOption, MultiSelectOptions, SearchPromise } from "../../components/UI/FormInput/MultiSelect/MultiSelect.d";
-import SystemMessage from "../../components/UI/SystemMessage/SystemMessage";
+import {
+  SelectOption,
+  SelectOptions,
+} from "../../components/UI/FormInput/Select/Select.d";
+import {
+  MultiSelectOptions,
+  SearchPromise,
+} from "../../components/UI/FormInput/MultiSelect/MultiSelect.d";
 
 interface RegisterProps {}
 
-const DUMMY_DEPARTMENTS : SelectOptions = [{ id: "1", label: "Department 1" }];
+const DUMMY_DEPARTMENTS: SelectOptions = [{ id: "1", label: "Department 1" }];
 
 function validateEmail(email: string) {
   const re =
@@ -53,12 +57,12 @@ function validateRepeatedPassword(
     password === repeatedPassword
   );
 }
-function validateDepartment(department: SelectOption) {
+function validateDepartment(_department: SelectOption) {
   return true;
 }
 
-function validateExpertises(experises : MultiSelectOptions<string>) {
-    return true;
+function validateExpertises(_experises: MultiSelectOptions<string>) {
+  return true;
 }
 
 const Register: FC<RegisterProps> = () => {
@@ -81,23 +85,23 @@ const Register: FC<RegisterProps> = () => {
     isInputValid: isInputRepeatedPasswordValid,
     changeHandler: repeatedPasswordChangeHandler,
     blurHandler: repeatedPasswordBlurHandler,
-  } = useInput<string>(validateRepeatedPassword.bind(null, enteredPassword), "");
+  } = useInput<string>(
+    validateRepeatedPassword.bind(null, enteredPassword),
+    ""
+  );
 
-    const {
+  const {
     enteredValue: enteredDepartment,
     isInputValid: isInputDepartmentValid,
     changeHandler: departmentChangeHandler,
     blurHandler: departmentBlurHandler,
-  } = useInput<SelectOption>(validateDepartment, {id: "0"});
-
+  } = useInput<SelectOption>(validateDepartment, { id: "0" });
 
   const {
     enteredValue: enteredExpertises,
     isInputValid: isInputExpertisesValid,
     changeHandler: expertisesChangeHandler,
-    blurHandler: expertisesBlurHandler,
   } = useInput<MultiSelectOptions<string>>(validateExpertises, []);
-
 
   const sendRegstrationData = async () => {
     const body = {
@@ -124,8 +128,7 @@ const Register: FC<RegisterProps> = () => {
     }
   };
 
-
-  const searchPromise: SearchPromise = (search) => {
+  const searchPromise: SearchPromise = (_search) => {
     return new Promise((resolve) =>
       resolve([
         { label: "Tracking", value: "tracking" },
@@ -134,10 +137,15 @@ const Register: FC<RegisterProps> = () => {
     );
   };
 
+  useEffect(() => {
+    fetchDepartment();
+  }, []);
 
-  const closeHandler = () => {
-    
-  }
+  const fetchDepartment = async () => {
+    const departments = await fetch("/api/departments");
+    const body = await departments.json();
+    console.log(body);
+  };
 
   return (
     <MainLayout title="Register">
@@ -195,24 +203,7 @@ const Register: FC<RegisterProps> = () => {
         icon="💪"
         searchPromise={searchPromise}
       />
-
-      <SystemMessage
-        sort="inline"
-        type="warning"
-        description="This is a test description"
-        onClose={closeHandler}
-      />
     </MainLayout>
-
-    //     id: string;
-    //   label: string;
-    //   default?: T;
-    //   selected: Options<T>;
-    //   isValid: boolean;
-    //   onRemoveSelected: removeSelectedHandler<T>;
-    //   onAddSelected: addSelectedHandler<T>;
-    //   icon?: React.ReactNode;
-    //   searchPromise?: searchPromise;
   );
 };
 

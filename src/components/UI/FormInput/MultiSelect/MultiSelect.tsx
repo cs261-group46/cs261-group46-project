@@ -106,6 +106,7 @@ function MultiSelect<T>(props: PropsWithChildren<MultiSelectProps<T>>) {
       tabIndex={0}
       onFocus={focusHandler}
       onBlur={blurHandler}
+      data-testid="MultiSelect"
     >
       <Label htmlFor={props.id} icon={props.icon}>
         {props.label}

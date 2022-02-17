@@ -5,7 +5,7 @@ import SelectedOptions from './SelectedOptions';
 
 describe('<SelectedOptions />', () => {
   test('it should mount', () => {
-    render(<SelectedOptions />);
+    render(<SelectedOptions selected={[]} onRemoveSelected={() => {}}/>);
     
     const selectedOptions = screen.getByTestId('SelectedOptions');
 

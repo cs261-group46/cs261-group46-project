@@ -5,7 +5,7 @@ import Icon from "../Icon/Icon";
 interface ButtonProps {
   children: React.ReactNode;
   icon?: React.ReactNode;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 const Button: FC<ButtonProps> = (props) => {

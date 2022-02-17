@@ -5,7 +5,7 @@ import Autocomplete from './Autocomplete';
 
 describe('<Autocomplete />', () => {
   test('it should mount', () => {
-    render(<Autocomplete />);
+    render(<Autocomplete possibleResults={[]} currentSearch={""} onAddSelected={() => {}}/>);
     
     const autocomplete = screen.getByTestId('Autocomplete');
 

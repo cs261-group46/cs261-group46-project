@@ -13,7 +13,7 @@ const Icon: FC<IconProps> = (props) => (
     noWrapper={true}
     options={{ className: styles.Emoji, ...props.options }}
   >
-    <div className={props.className}>{props.icon}</div>
+    <div data-testid="Icon" className={props.className}>{props.icon}</div>
   </Twemoji>
 );
 
