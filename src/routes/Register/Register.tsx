@@ -187,7 +187,7 @@ const Register: FC<RegisterProps> = () => {
         label="Department"
         options={DUMMY_DEPARTMENTS}
       />
-      <Button icon="👑" onClick={registrationHandler}>
+      <Button icon="👑" onClick={registrationHandler} buttonStyle={"primary"}>
         Register
       </Button>
 
