@@ -1,7 +1,7 @@
 ###################################
 # CS261 Group Project - Group 46  #
 #                                 #
-# 19/01/2021 - XX/XX/XXXX         #
+# 19/01/2022 - XX/XX/XXXX         #
 # Version: 0.1                    #
 #                                 #
 # Pip install:                    #
@@ -17,66 +17,143 @@
 # Imports #
 ###########
 
-from flask import Flask, request, session, redirect, url_for, send_file, render_template
+from flask import Flask, request, session, redirect, url_for, send_file
 from flask_mail import Mail, Message
 import os
 try:
-    import app.Config     as config
-    import app.SQL        as sql
-except Exception as e:
-    import Config     as config
-    import SQL        as sql
+    # import app.Config as config
+    import app.config.Config as Config
+    import app.SQL as SQL
+    import app.Users as Users
+except Exception as _:
+    import config.Config as Config
+    import SQL as SQL
+    import Users as Users
+
+environ = os.environ
+secret_key = environ.get('SECRET_KEY')
+peper = environ.get('PEPER')
+if peper is None:
+    peper = "B1a5KEbbMThr2Klsat2XUyZWXegayfq9"
+if secret_key is None:
+    secret_key = "va_tLgio5_XvHQ1MTXqn_geISuIBxkctGw3Fmz7cwutYAxq0Xl7twJQAXl£XShE3T8JjWPQCXbSgTXdoV39VMmiSt9ybQ"
 
 ##########################
 # Config Options/Loading #
 ##########################
 
-config.config_path = "app" + config.sep + "config"
-config.save_default("sql", {"connection": {"host": "localhost", "port": "5432", "database": "cs261", "user": "user", "password": ""}, "sql_files": ["schema.sql"]})
-config.save_default("email", {"email_server":{"host": "", "port": 0, "use_tls": False, "username": "", "password": ""}, "use_email_notifications": False})
-sql_config = config.load_config("sql")
-db = sql.create_connection(sql_config["connection"])
+sep = os.path.sep
+login_token_key_str = "login_token"
+
+Config.load_defaults()
+
+
+sql_config = Config.load_config("sql")
+db = SQL.create_connection(sql_config["connection"])
+
 for sql_file in sql_config["sql_files"]:
-    sql.load_defaults(db, config.read_file("app"+config.sep+"sql"+config.sep+sql_file))
+    SQL.load_defaults(db, Config.read_file("sql" + sep + sql_file))
+
+###############################
+# Loading variables to python #
+###############################
+Users.SQL = SQL
+Users.db = db
+Users.peper = peper
+Users.PasswordHashing.secret_key = secret_key
 
 #############
 # App setup #
 #############
 
 app = Flask(__name__, static_folder="../build/static/", static_url_path="/static")
-app.config["SECRET_KEY"] = "va_tLgio5_XvHQ1MTXqn_geISuIBxkctGw3Fmz7cwutYAxq0Xl7twJQAXl£XShE3T8JjWPQCXbSgTXdoV39VMmiSt9ybQ+WIg!i-iHFe+!Bsv!LGN-DvtxVq!dvwHxP9BZ1mo!NTbK£8dzb3£AalqJkQ%W55L+pntywMnz&q6*5yAz02X47f864&KqM+&U=QlbBfYdPe"
+app.config["SECRET_KEY"] = secret_key
 
+###############
+# Route setup #
+###############
 
-@app.route('/')
-def index():
-    with open(os.path.abspath(f"{app.static_folder}/../index.html"), "r") as file:
-        file_contents = file.read()
-    return file_contents
 
 @app.route("/api/helloworld", methods=["GET"])
 def api_get_current_time():
     return {"helloworld": "This is working"}
 
 
-@app.route("/login")
-def route_login():
-    session["test"] = True
-    return render_template("Login.html")
+@app.route("/api/user/register", methods=["POST"])
+def api_user_register():
+    print(dict(request.args))
+    print(dict(request.form))
+    print(dict(request.get_json()))
+    data_dict = dict(request.get_json())  # Not yet sure where the data will be located. You can try to use one of the above
 
-
-@app.route("/logout")
-def route_logout():
-    if "test" in session.keys():
-        print(session["test"])
+    state = Users.register(data_dict.get("email"),
+                           data_dict.get("password"),
+                           data_dict.get("password_repeat"),
+                           data_dict.get("first_name"),
+                           data_dict.get("last_name"),
+                           data_dict.get("department"))
+    if state[0]:
+        user, login_token = state[1], state[2]
+        session[login_token_key_str] = login_token
+        return user.get_api_return_data(start_dict={"successful": True})
     else:
-        print("Not Found")
-    session["test"] = False
-    return render_template("Login.html")
+        error = state[1]
+        return {"successful": False}
+
+
+@app.route("/api/user/login", methods=["POST"])
+def api_user_login():
+    print(dict(request.args))
+    print(dict(request.form))
+    print(dict(request.get_json()))
+    data_dict = dict(request.get_json())  # Not yet sure where the data will be located. You can try to use one of the above
+
+    if login_token_key_str in session:
+        return {"successful": False}
+    state = Users.login(data_dict.get("email"), data_dict.get("password"))
+    if state[0]:
+        user, login_token = state[1], state[2]
+        session[login_token_key_str] = login_token
+        return user.get_api_return_data(start_dict={"successful": True})
+    else:
+        error = state[1]
+        return {"successful": False}
+
+
+@app.route("/api/user/logout", methods=["POST"])
+def api_user_logout():
+    if login_token_key_str in session.keys():
+        state = Users.logout(session.get(login_token_key_str))
+        if state:
+            session.pop(login_token_key_str)
+            return {"successful": True}
+        else:
+            return {"successful": False}
+    else:
+        return {"successful": False}
+
+
+@app.route("/api/departments/get", methods=["GET"])
+def api_departments_get():
+    return Users.get_all_departments()
+
+
+@app.errorhandler(404)
+def index(error):
+    with open(os.path.abspath(f"{app.static_folder}/../index.html"), "r") as file:
+        file_contents = file.read()
+    return file_contents
+
+
+@app.before_request
+def execute_before_requests():
+    if login_token_key_str in session.keys():
+        login_token = session.get(login_token_key_str)
+        user = Users.GetUserBy.login_token(login_token)  # Refresh auth token
 
 
 if __name__ == "__main__":
-    print(app.static_folder)
-    print((app.static_folder))
-    app.run()
+    app.run(debug=False)  # I have disabled the flask dev server, just change this to True if you want it back
+    print("Done")
 
 

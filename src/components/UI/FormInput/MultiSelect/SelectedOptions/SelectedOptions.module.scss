@@ -1,0 +1,21 @@
+@import "../../../../../variables";
+
+.SelectedOption {
+  padding: 3px 5px;
+  padding-right: 0;
+  margin: 0 1px;
+  border: $sq_light_gray 1px solid;
+  border-radius: 5px;
+  background-color: #f7f7f7;
+
+  p,
+  button {
+    display: inline;
+    color: #393838;
+  }
+
+  button {
+    background-color: #f7f7f7;
+    border: none;
+  }
+}

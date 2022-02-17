@@ -1,0 +1,25 @@
+@import "../../../../variables";
+
+.Select {
+  select{
+    width: 100%;
+    height: 40px;
+    border-radius: 10px;
+    border: 1px solid $sq_light_gray;
+    padding: 10px 20px;
+    position: relative;
+    box-sizing: border-box;
+    background-color: white;
+    transition-duration: 0.05s;
+    outline: 0 solid $sq_dark_gray;
+
+    option {
+      border-radius: 20px;
+    }
+
+    &:focus-visible, &:hover {
+      outline: 2px solid $sq_dark_gray;
+      border-color: $sq_dark_gray;
+    }
+  }
+}

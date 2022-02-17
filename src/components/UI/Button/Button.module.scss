@@ -1,0 +1,43 @@
+@import "../../../variables";
+
+.Button {
+  width: min-content;
+  height: 40px;
+  font-weight: bold;
+  margin: 20px 0;
+  text-decoration: none;
+
+  button {
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+    box-sizing: border-box;
+    height: 40px;
+    color: white;
+    border-radius: 10px;
+    padding: 10px 20px;
+    border: none;
+
+    &:hover, &:focus-visible {
+      outline: 3px solid $sq_dark_gray;
+    }
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  button.primary {
+    background-color: #EA596E;
+  }
+
+  button.default {
+    background-color: #393838;
+  }
+
+  .Icon {
+    transition-duration: 0.09s;
+    height: 100%;
+    margin-right: 20px;
+  }
+}

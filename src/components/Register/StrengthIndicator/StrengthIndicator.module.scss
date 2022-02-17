@@ -1,0 +1,58 @@
+@import "../../../_variables.scss";
+
+.StrengthIndicator {
+  display: flex;
+  font-size: 15px;
+  font-weight: bold;
+  height: 20px;
+  margin: 10px 0 40px;
+
+  span {
+    align-self: center;
+  }
+
+  .Icon {
+    height: 100%;
+    margin: 0 10px;
+    .Emoji {
+      height: 100%;
+    }
+  }
+
+  .Indicator {
+    height: 3px;
+    background-color: $sq_dark_gray;
+    width: 100%;
+    align-self: center;
+    border-radius: 5px;
+
+    &::before{
+      border-radius: 5px;
+      content: '';
+      display: block;
+      height: 3px;
+    }
+
+    &.s0::before{
+      width: 0;
+      background-color: $sq_red;
+    }
+
+    &.s25::before{
+      width: 25%;
+      background-color: $sq_red;
+    }
+    &.s50::before{
+      width: 50%;
+      background-color: $sq_orange;
+    }
+    &.s75::before{
+      width: 75%;
+      background-color: $sq_orange;
+    }
+    &.s100::before{
+      width: 100%;
+      background-color: $sq_green;
+    }
+  }
+}
