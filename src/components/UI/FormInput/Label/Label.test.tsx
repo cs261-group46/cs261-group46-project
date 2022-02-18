@@ -5,7 +5,7 @@ import Label from './Label';
 
 describe('<Label />', () => {
   test('it should mount', () => {
-    render(<Label htmlFor={"test"}/>);
+    render(<Label htmlFor={"nothing"}/>);
 
     const label = screen.getByTestId('Label');
 

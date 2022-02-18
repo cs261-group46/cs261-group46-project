@@ -1,27 +1,39 @@
 @import "../../../variables";
 
 .Button {
-  padding: 10px 20px;
-  background-color: #EA596E;
-  color: white;
   width: min-content;
-  border-radius: 10px;
-  align-items: center;
-  display: flex;
   height: 40px;
-  font-weight: bold;
   margin: 20px 0;
-  border: none;
-  box-sizing: border-box;
-  font-size: 15px;
+  text-decoration: none;
+  width: max-content;
+  button {
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+    box-sizing: border-box;
+    height: 40px;
+    color: white;
+    border-radius: 10px;
+    padding: 10px 20px;
+    border: none;
 
+    &:hover,
+    &:focus-visible {
+      outline: 3px solid $sq_dark_gray;
+    }
 
-  &:hover, &:focus-visible {
-    outline: 3px solid $sq_dark_gray;
+    &:hover {
+      cursor: pointer;
+    }
   }
 
-  &:hover {
-    cursor: pointer;
+  button.primary {
+    background-color: #ea596e;
+  }
+
+  button.default {
+    background-color: #393838;
   }
 
   .Icon {

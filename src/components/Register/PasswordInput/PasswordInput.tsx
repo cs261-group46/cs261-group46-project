@@ -1,13 +1,13 @@
-import React, {FC, FormEventHandler} from 'react';
+import React, {FC} from 'react';
 import styles from './PasswordInput.module.scss';
 import TextInput from "../../UI/FormInput/TextInput/TextInput";
 import StrengthIndicator from "../StrengthIndicator/StrengthIndicator";
 
 interface PasswordInputProps {
-    value: string
+    value: string | undefined
     isValid: boolean
-    onChange: FormEventHandler<HTMLInputElement>
-    onBlur: FormEventHandler<HTMLInputElement>
+    onChange: (input: string) => void
+    onBlur: () => void
 }
 
 const PasswordInput: FC<PasswordInputProps> = (props) => {
