@@ -3,17 +3,12 @@ import MainLayout from "../../layouts/MainLayout/MainLayout";
 import TextInput from "../../components/UI/FormInput/TextInput/TextInput";
 import PasswordInput from "../../components/Register/PasswordInput/PasswordInput";
 import Select from "../../components/UI/FormInput/Select/Select";
-import MultiSelect from "../../components/UI/FormInput/MultiSelect/MultiSelect";
 import Button from "../../components/UI/Button/Button";
 import useInput from "../../hooks/UseInput/UseInput";
 import {
   SelectOption,
   SelectOptions,
 } from "../../components/UI/FormInput/Select/Select.d";
-import {
-  MultiSelectOptions,
-  SearchPromise,
-} from "../../components/UI/FormInput/MultiSelect/MultiSelect.d";
 import { useNavigate } from "react-router-dom";
 
 interface RegisterProps {}
@@ -148,20 +143,11 @@ const Register: FC<RegisterProps> = () => {
     }
   };
 
-  const searchPromise: SearchPromise = (_search) => {
-    return new Promise((resolve) =>
-      resolve([
-        { label: "Tracking", value: "tracking" },
-        { label: "Training", value: "training" },
-      ])
-    );
-  };
-
   useEffect(() => {
     fetchDepartment();
   }, []);
 
-  const [departments, setDepartments] = useState<SelectOptions>([]);
+  const [departments, setDepartments] = useState<SelectOptions>(DUMMY_DEPARTMENTS);
 
   const fetchDepartment = async () => {
     const departments = await fetch("/api/departments");
@@ -235,6 +221,7 @@ const Register: FC<RegisterProps> = () => {
       <Button icon="👑" onClick={registrationHandler} buttonStyle={"primary"}>
         Register
       </Button>
+      <div data-testid="Register"/>
     </MainLayout>
   );
 };
