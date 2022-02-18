@@ -221,6 +221,7 @@ const Register: FC<RegisterProps> = () => {
       <Button icon="👑" onClick={registrationHandler} buttonStyle={"primary"}>
         Register
       </Button>
+      <div data-testid="Register"/>
     </MainLayout>
   );
 };
