@@ -41,6 +41,7 @@ const Setup: FC<SetupProps> = () => {
         icon="💪"
         searchPromise={searchPromise}
       />
+      <div data-testid="Setup"/>
     </MainLayout>
   );
 };
