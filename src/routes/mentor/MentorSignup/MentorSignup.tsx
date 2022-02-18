@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import styles from './MentorSignup.module.scss';
+// import styles from './MentorSignup.module.scss';
 import MainLayout from "../../../layouts/MainLayout/MainLayout";
 import MultiSelect from "../../../components/UI/FormInput/MultiSelect/MultiSelect";
 import {MultiSelectOptions} from "../../../components/UI/FormInput/MultiSelect/MultiSelect.d"
