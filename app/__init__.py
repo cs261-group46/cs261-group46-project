@@ -18,16 +18,18 @@
 ###########
 
 from flask import Flask, request, session, redirect, url_for, send_file
-from flask_mail import Mail, Message
 import os
 import app.environ as environ
 import app.FileManager as FileManager
 import app.config as Config
 import app.SQL as SQL
 import app.user as Users
+import app.departments as Departments
+import app.subjects as Subjects
+from app.email import EMail as Mail
 
 peper = environ.get('PEPER')
-
+name = "SkillQuest"
 
 ##########################
 # Config Options/Loading #
@@ -36,7 +38,8 @@ peper = environ.get('PEPER')
 login_token_key_str = "login_token"
 
 
-sql_config = Config.load_config("sql")
+sql_config   = Config.load_config("sql")
+email_config = Config.load_config("email")
 db = SQL.open_connection(sql_config["connection"])
 
 for sql_file in sql_config["sql_files"]:
@@ -48,7 +51,12 @@ for sql_file in sql_config["sql_files"]:
 
 app = Flask(__name__, static_folder="../build/static/", static_url_path="/static")
 app.config["SECRET_KEY"] = environ.get('SECRET_KEY')
+if email_config["enabled"]:
+    for key, value in email_config["email_server"].items():
+        app.config[f"MAIL_{key.upper()}"] = value
 
+    Mail.main(True, app, email_config["sender"])
+    Mail.debug = True
 
 ###############
 # Route setup #
@@ -67,7 +75,7 @@ def execute_before_requests():
     if login_token_key_str in session.keys():
         login_token = session.get(login_token_key_str)
         if not (login_token is None):
-            user = Users.GetUserBy.login_token(db, login_token)  # Refresh auth token
+            Users.GetUserBy.login_token(db, login_token)  # Refresh auth token
 
 
 from app.api.routes import blueprint as api_module

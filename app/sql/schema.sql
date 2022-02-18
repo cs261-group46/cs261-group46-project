@@ -64,6 +64,8 @@ CREATE TABLE IF NOT EXISTS MENTORS (
     foreign key (subjectID) references SUBJECTS(subjectID)
 );
 
+CREATE OR REPLACE VIEW view_MENTORS AS SELECT me.mentorID, me.userID, me.subjectID, us.unique_user_id, us.email, us.firstName, us.lastName, us.accountCreationDate, us.verified, us.currentDepartment, us.groupID FROM mentors me JOIN users us ON us.userID=me.userID;
+
 CREATE TABLE IF NOT EXISTS MENTEES (
     menteeID serial,
     userID integer,
@@ -72,6 +74,9 @@ CREATE TABLE IF NOT EXISTS MENTEES (
     foreign key (userID) references USERS(userID),
     foreign key (subjectID) references SUBJECTS(subjectID)
 );
+
+CREATE OR REPLACE VIEW view_MENTEES AS SELECT me.menteeID, me.userID, me.subjectID, us.unique_user_id, us.email, us.firstName, us.lastName, us.accountCreationDate, us.verified, us.currentDepartment, us.groupID FROM mentees me JOIN users us ON us.userID=me.userID;
+
 
 CREATE TABLE IF NOT EXISTS MENTOR_MENTEE_RELATION (
     relationID serial,

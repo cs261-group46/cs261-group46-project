@@ -5,7 +5,7 @@ from app import db, login_token_key_str, Users
 blueprint = Blueprint("api_users", __name__, url_prefix="/user")
 
 @blueprint.route("/register", methods=["POST"])
-def api_user_register():
+def register():
     data_dict = dict(request.get_json())
 
     state = Users.register(db,
@@ -25,7 +25,7 @@ def api_user_register():
 
 
 @blueprint.route("/login", methods=["POST"])
-def api_user_login():
+def login():
     data_dict = dict(request.get_json())
 
     if login_token_key_str in session:
@@ -41,7 +41,7 @@ def api_user_login():
 
 
 @blueprint.route("/logout", methods=["POST"])
-def api_user_logout():
+def logout():
     if login_token_key_str in session.keys():
         state = Users.logout(db, session.get(login_token_key_str))
         if state:
@@ -51,4 +51,13 @@ def api_user_logout():
             return {"successful": False}
     else:
         return {"successful": False}
+
+
+@blueprint.route("/", methods=["GET"])
+def get():
+    if login_token_key_str in session.keys():
+        user = Users.GetBy.login_token(db, session.get(login_token_key_str))
+        if user.isLoaded():
+            return user.get_api_return_data()
+        return {}
 

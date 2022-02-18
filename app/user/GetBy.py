@@ -9,7 +9,7 @@ def email(db, address: str):
         user = get_user_by_sql_statement(db, f"SELECT * FROM USERS WHERE email='{address}';")
         if not (user is None):
             return user
-    return False
+    return Users.DummyUser()
 
 
 def uuid(db, id: i_uuid.UUID):
@@ -18,22 +18,23 @@ def uuid(db, id: i_uuid.UUID):
         user = get_user_by_sql_statement(db, f"SELECT * FROM USERS WHERE unique_user_id='{id}';")
         if not (user is None):
             return user
-    return False
+    return Users.DummyUser()
 
 
 def login_token(db, login_token: str):
     if SQL.is_valid_input(login_token):
         user = get_user_by_sql_statement(db, f"SELECT * FROM USERS WHERE userID=get_user_id_from_token('{login_token}');")
-        if not (user is None):
+        if not user.isDummy():
             return user
-    return False
+    return Users.DummyUser()
+
 
 def get_user_by_sql_statement(db: SQL.conn, statement):
     cursor = db.cursor()
     cursor.execute(statement)
     data = cursor.fetchall()
     if len(data) == 0:
-        return None
+        return Users.DummyUser()
     user = Users.User()
     user.database_id = data[0][0]
     user.unique_user_id = i_uuid.UUID(data[0][1])

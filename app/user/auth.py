@@ -1,24 +1,23 @@
 from app.user import *
 import app.environ as environ
+import app.utils as Utils
+import app.departments as departments
 
-peper = environ.get("PEPER")
 
-
-def register(db, email: str, password: str, password_repeat: str, first_name: str, last_name: str, department: str):
+def register(db, email: str, password: str, password_repeat: str, first_name: str, last_name: str, department: str) -> tuple:
     if SQL.is_valid_input(email, first_name, last_name, department):
         if Utils.is_password_allowed(password, password_repeat):
-            if GetUserBy.email(db, email) == False:
-                departmentData = does_department_exist(db, department)
-                if not (departmentData == False):
+            if GetUserBy.email(db, email).isDummy():
+                departmentData = departments.get_if_exists(db, department)
+                if not (departmentData is False):
                     user_salt = Utils.random_string(16)
-                    hashed_password = Utils.hash_password(password, first_name + " " + last_name, user_salt, peper)
-                    id = get_available_random_uuid(db) # Still need to verify unocupied
+                    hashed_password = Utils.hash_password(password, first_name + " " + last_name, user_salt, environ.get("PEPER"))
+                    id = get_available_random_uuid(db)  # Still need to verify unocupied
                     statement = f"INSERT INTO USERS(unique_user_id, email, hashedPassword, salt, firstName, lastName, currentDepartment) " \
                                 f"VALUES ('{id}', '{email}', '{hashed_password}', '{user_salt}', '{first_name}', '{last_name}', {departmentData[0]});"
                     cursor = db.cursor()
                     cursor.execute(statement)
                     return login(db, email, password)
-                    # return True, "user registered"
                 else:
                     return False, "invalid department"
             else:
@@ -32,11 +31,11 @@ def register(db, email: str, password: str, password_repeat: str, first_name: st
 def login(db, email: str, password: str) -> tuple:
     if SQL.is_valid_input(email):
         user = GetUserBy.email(db, email)
-        if user == False:
+        if user is False:
             return False, "user not found"
         else:
-            if Utils.check_password(user.first_name + " " + user.last_name, user.salt, peper, password, user.hashed_password):
-                login_token = get_available_login_token()
+            if Utils.check_password(user.first_name + " " + user.last_name, user.salt, environ.get("PEPER"), password, user.hashed_password):
+                login_token = get_available_login_token(db)
                 statement = f"INSERT INTO USER_LOGIN_TOKENS(userID, loginToken) VALUES ({user.database_id}, '{login_token}');"
                 cursor = db.cursor()
                 cursor.execute(statement)
@@ -49,7 +48,7 @@ def login(db, email: str, password: str) -> tuple:
 
 def logout(db, login_token: str):
     user = GetUserBy.login_token(db, login_token)
-    if user != False:
+    if user.isLoaded():
         print(f"Logging out {repr(user)}")
         cursor = db.cursor()
         cursor.execute(f"DELETE FROM USER_LOGIN_TOKENS WHERE loginToken='{login_token}';")
@@ -60,7 +59,7 @@ def logout(db, login_token: str):
 def get_available_random_uuid(db):
     while True:
         id = uuid.uuid4()
-        if GetUserBy.uuid(db, id) == False:
+        if GetUserBy.uuid(db, id).isDummy():
             break
     return id
 
