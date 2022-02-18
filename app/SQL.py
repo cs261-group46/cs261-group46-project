@@ -3,6 +3,14 @@ import psycopg2 as sql
 conn = sql._psycopg.connection
 
 
+def open_connection(loaded_config: dict) -> conn:
+    print("Opening SQL connection")
+    c = create_connection(loaded_config)
+    if c is None:
+        raise sql.Error("Failed to connect to database")
+    return c
+
+
 def create_connection(loaded_config: dict) -> conn:
     print(loaded_config)
 
@@ -36,6 +44,11 @@ def create_connection(loaded_config: dict) -> conn:
         else:
             print(f"Created Database {loaded_config['database']}, reconnecting")
             return connect()
+
+
+def load_defaults_2(db: conn, schema: str):
+    cursor = db.cursor()
+    cursor.execute(schema)
 
 
 def load_defaults(db: conn, schema: str):
@@ -77,6 +90,7 @@ def load_defaults(db: conn, schema: str):
         # print(statement)
         cursor.execute(statement)
     # cursor.execute(schema)
+
 
 def is_valid_input(*args) -> bool:
     def validate(a):
