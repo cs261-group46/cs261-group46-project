@@ -38,7 +38,7 @@ def sql_statement(db: SQL.conn, statement):
 
     databaseID, uuid, email, hashed_password, salt, first_name, last_name, account_creation_date, verified, departmentID, groupID = data[0]
 
-    user = Users.User(id=databaseID, uuid=uuid, email=email,
+    user = Users.User(id=databaseID, uuid=UUID(uuid), email=email,
                       hashed_password=hashed_password, salt=salt,
                       first_name=first_name, last_name=last_name,
                       account_creation_date=account_creation_date, verified=verified,

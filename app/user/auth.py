@@ -17,14 +17,16 @@ def register(db, email: str, password: str, password_repeat: str, first_name: st
         return False, "email already used"
 
     departmentData = Departments.GetBy.exists(db, department)
-    if departmentData is False:
+    if departmentData is False or departmentData is None:
         return False, "invalid department"
+    else:
+        print(departmentData)
 
     user_salt = Utils.random_string(16)
     hashed_password = Utils.hash_password(password, first_name + " " + last_name, user_salt, environ.get("PEPER"))
     id = get_available_random_uuid(db)  # Still need to verify unocupied
-    statement = f"INSERT INTO USERS(unique_user_id, email, hashedPassword, salt, firstName, lastName, currentDepartment) " \
-                f"VALUES ('{id}', '{email}', '{hashed_password}', '{user_salt}', '{first_name}', '{last_name}', {departmentData[0]});"
+    statement = f"INSERT INTO USERS(unique_user_id, email, hashedPassword, salt, firstName, lastName, departmentId) " \
+                f"VALUES ('{id}', '{email}', '{hashed_password}', '{user_salt}', '{first_name}', '{last_name}', {departmentData[1].id});"
     cursor = db.cursor()
     cursor.execute(statement)
 
@@ -45,7 +47,7 @@ def login(db, email: str, password: str) -> tuple:
         return False, "invalid password"
 
     login_token = get_available_login_token(db)
-    statement = f"INSERT INTO USER_LOGIN_TOKENS(userID, loginToken) VALUES ({user.id}, '{login_token}');"
+    statement = f"INSERT INTO USER_LOGIN_TOKENS(userID, token) VALUES ({user.id}, '{login_token}');"
     cursor = db.cursor()
     cursor.execute(statement)
     return True, user, login_token
@@ -58,7 +60,7 @@ def logout(db, login_token: str):
 
     print(f"Logging out {repr(user)}")
     cursor = db.cursor()
-    cursor.execute(f"DELETE FROM USER_LOGIN_TOKENS WHERE loginToken='{login_token}';")
+    cursor.execute(f"DELETE FROM USER_LOGIN_TOKENS WHERE token='{login_token}';")
     return True
 
 
@@ -74,7 +76,7 @@ def get_available_login_token(db):
     while True:
         login_token = Utils.random_string(128)
         cursor = db.cursor()
-        cursor.execute(f"SELECT * FROM USER_LOGIN_TOKENS WHERE loginToken='{login_token}';")
+        cursor.execute(f"SELECT * FROM USER_LOGIN_TOKENS WHERE token='{login_token}';")
         data = cursor.fetchall()
         if data is None or len(data) == 0:
             break

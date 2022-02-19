@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS USER_LOGIN_TOKENS (
     loginDate timestamp default current_timestamp(0),
     loginTimeout timestamp default add_minutes_to_timestamp_with_timezone(current_timestamp(0), 60),
     primary key (id),
-    foreign key (userID) references USERS(id)
+    foreign key (userID) references USERS(id) ON DELETE CASCADE
 );
 
 CREATE OR REPLACE FUNCTION get_user_id_from_token(login_token varchar(128))

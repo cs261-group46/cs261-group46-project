@@ -29,5 +29,5 @@ yarn-error.log*
 /app/static/react
 /app/templates/react
 /app/config/sql.json
-# /app/config/email.json
+/app/config/email_local.json
 

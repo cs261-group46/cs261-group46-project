@@ -60,8 +60,8 @@ if email_config["enabled"]:
     for key, value in email_config["email_server"].items():
         app.config[f"MAIL_{key.upper()}"] = value
 
-    Mail.main(True, app, email_config["sender"])
-    Mail.debug = True
+Mail.main(email_config["enabled"], app, email_config["sender"])
+Mail.debug = True
 
 ###############
 # Route setup #
@@ -81,6 +81,12 @@ def execute_before_requests():
         login_token = session.get(login_token_key_str)
         if not (login_token is None):
             Users.GetBy.login_token(db, login_token)  # Refresh auth token
+
+
+@app.after_request
+def execute_after_requests(response):
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    return response
 
 
 from app.routes import APIRoute

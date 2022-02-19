@@ -13,22 +13,8 @@ class User:
                  account_creation_date=None, verified=None,
                  hashed_password=None, salt=None,
                  departmentID=None, groupID=None):
-        if not (isinstance(id, int) and
-                isinstance(email, str) and
-                isinstance(first_name, str) and
-                isinstance(last_name, str) and
-                isinstance(account_creation_date, datetime.datetime) and
-                isinstance(verified, bool) and
-                isinstance(hashed_password, str) and
-                isinstance(salt, str) and
-                isinstance(departmentID, int) and
-                isinstance(groupID, int)):
-            raise TypeError()
         self.id: int = id
-        if isinstance(uuid, UUID):
-            self.uuid: UUID = uuid
-        else:
-            self.uuid: UUID = UUID(uuid)
+        self.uuid: UUID = uuid
         self.email: str = email
         self.first_name: str = first_name
         self.last_name: str = last_name
@@ -65,7 +51,10 @@ class User:
 
     def send_verify_email(self):
         validation_token = Utils.create_validation_token(environ.get("SECRET_KEY"), self.email)
-        MailRegister.VERIFY.send([self.email], )
+        MailRegister.VERIFY.send([self.email],
+                                 user=self,
+                                 password_reset_redirect_link="/reset_password",
+                                 verify_url=f"/verification/register/{validation_token}")
 
 
 class DummyUser(User):
