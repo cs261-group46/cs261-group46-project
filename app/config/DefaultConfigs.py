@@ -10,13 +10,15 @@ configs_to_load = {"sql":
                             ["schema.sql"]
                         },
                    "email":
-                       {"server":
-                            {"host": "",
-                             "port": 0,
-                             "use_tls": False,
-                             "username": "",
-                             "password": ""
-                             },
-                        "use_email_notifications": False
-                        }
+                       {"email_server":
+                               {"server": "",
+                                "port": 0,
+                                "use_tls": False,
+                                "username": "",
+                                "password": ""
+                                },
+                        "use_email_notifications": False,
+                        "enabled": False,
+                        "sender": ""
+                       }
                    }

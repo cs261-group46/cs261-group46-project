@@ -24,12 +24,10 @@ import app.FileManager as FileManager
 import app.config as Config
 import app.SQL as SQL
 import app.user as Users
-import app.departments as Departments
-import app.subjects as Subjects
 from app.email import EMail as Mail
 
 peper = environ.get('PEPER')
-name = "SkillQuest"
+name = environ.get('NAME')
 
 ##########################
 # Config Options/Loading #
@@ -43,7 +41,8 @@ email_config = Config.load_config("email")
 db = SQL.open_connection(sql_config["connection"])
 
 for sql_file in sql_config["sql_files"]:
-    SQL.load_defaults(db, FileManager.read_file("sql", sql_file))
+    print(f"Loading SQL file {sql_file}")
+    SQL.load_defaults_2(db, FileManager.read_file("sql", sql_file))
 
 #############
 # App setup #
@@ -75,7 +74,7 @@ def execute_before_requests():
     if login_token_key_str in session.keys():
         login_token = session.get(login_token_key_str)
         if not (login_token is None):
-            Users.GetUserBy.login_token(db, login_token)  # Refresh auth token
+            Users.GetBy.login_token(db, login_token)  # Refresh auth token
 
 
 from app.api.routes import blueprint as api_module

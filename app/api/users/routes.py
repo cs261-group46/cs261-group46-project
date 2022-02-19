@@ -4,6 +4,7 @@ from app import db, login_token_key_str, Users
 
 blueprint = Blueprint("api_users", __name__, url_prefix="/user")
 
+
 @blueprint.route("/register", methods=["POST"])
 def register():
     data_dict = dict(request.get_json())

@@ -1,5 +1,8 @@
 from flask import Blueprint, request, session
-from app import db, login_token_key_str, Users
+from app import db, login_token_key_str  # , Users
+import app.user as Users
+import app.user.mentor as Mentors
+import app.user.mentee as Mentees
 import app.utils as Utils
 
 
