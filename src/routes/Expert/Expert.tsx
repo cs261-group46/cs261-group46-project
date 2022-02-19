@@ -4,7 +4,6 @@ import Button from "../../components/UI/Button/Button";
 import styles from './Expert.module.scss';
 import MultiSelect from "../../components/UI/FormInput/MultiSelect/MultiSelect";
 import useInput from "../../hooks/UseInput/UseInput";
-import { SelectOption, SelectOptions } from "../../components/UI/FormInput/Select/Select.d";
 import { MultiSelectOptions, SearchPromise } from "../../components/UI/FormInput/MultiSelect/MultiSelect.d";
 
 function Expert() {

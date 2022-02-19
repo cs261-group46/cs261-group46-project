@@ -9,11 +9,8 @@ import {
   SelectOption,
   SelectOptions,
 } from "../../components/UI/FormInput/Select/Select.d";
-import { useNavigate } from "react-router-dom";
 
 interface RegisterProps {}
-
-const DUMMY_DEPARTMENTS: SelectOptions = [{ id: "1", label: "Department 1" }];
 
 function validateEmail(email: string) {
   const re =

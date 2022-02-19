@@ -1,4 +1,4 @@
-import React, {FC, PropsWithChildren} from "react";
+import React, {PropsWithChildren} from "react";
 import styles from "./Select.module.scss";
 import Label from "../Label/Label";
 import textInputStyles from "../TextInput/TextInput.module.scss";
