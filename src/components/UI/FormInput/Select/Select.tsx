@@ -1,21 +1,21 @@
-import React, { FC } from "react";
+import React, {FC, PropsWithChildren} from "react";
 import styles from "./Select.module.scss";
 import Label from "../Label/Label";
 import textInputStyles from "../TextInput/TextInput.module.scss";
 import { SelectOptions, SelectOption } from "./Select.d";
-interface SelectProps {
+interface SelectProps<T> {
   id: string;
   icon?: React.ReactNode;
   label: string;
   placeholder: string;
   options: SelectOptions;
-  value: SelectOption | undefined;
+  value: SelectOption<T> | undefined;
   isValid: boolean;
-  onChange: (input: SelectOption) => void;
+  onChange: (input: SelectOption<T>) => void;
   onBlur: () => void;
 }
 
-const Select: FC<SelectProps> = (props) => {
+function Select<T>(props: PropsWithChildren<SelectProps<T>>) {
   console.log(props.options);
 
   const options = props.options.map(({ id, label }) => (
@@ -28,7 +28,7 @@ const Select: FC<SelectProps> = (props) => {
     event
   ) => {
     // the pair can be reconstructed from id & value properties
-    props.onChange({ id: event.target.id, label: event.target.value });
+    props.onChange(props.options[event.target.selectedIndex]);
   };
 
   return (
@@ -42,7 +42,7 @@ const Select: FC<SelectProps> = (props) => {
       <select
         name={props.id}
         id={props.id}
-        defaultValue={(props.value && props.value.id) || 0}
+        defaultValue={0}
         onChange={changeHandler}
         onBlur={props.onBlur}
       >

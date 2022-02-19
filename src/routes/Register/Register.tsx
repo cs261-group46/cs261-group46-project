@@ -54,7 +54,7 @@ function validateRepeatedPassword(
     password === repeatedPassword
   );
 }
-function validateDepartment(_department: SelectOption) {
+function validateDepartment(_department: SelectOption<number>) {
   return true;
 }
 
@@ -102,7 +102,7 @@ const Register: FC<RegisterProps> = () => {
     isInputValid: isInputDepartmentValid,
     changeHandler: departmentChangeHandler,
     blurHandler: departmentBlurHandler,
-  } = useInput<SelectOption>(validateDepartment, { id: "0" });
+  } = useInput<SelectOption<number>>(validateDepartment, { id: -1 });
 
   const sendRegistrationData = async () => {
     const body = {
@@ -129,12 +129,15 @@ const Register: FC<RegisterProps> = () => {
   };
 
   const registrationHandler = () => {
+    console.log(isInputPasswordValid)
+
+
     if (
       isInputFirstNameValid &&
       isInputLastNameValid &&
       isInputEmailValid &&
       isInputPasswordValid &&
-      enteredRepeatedPassword &&
+      isInputRepeatedPasswordValid &&
       isInputDepartmentValid
     ) {
       sendRegistrationData();
