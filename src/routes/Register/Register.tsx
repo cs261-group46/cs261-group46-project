@@ -145,20 +145,16 @@ const Register: FC<RegisterProps> = () => {
     fetchDepartments();
   }, []);
 
-  const [departments, setDepartments] =
-    useState<SelectOptions>(DUMMY_DEPARTMENTS);
+  const [departments, setDepartments] = useState<SelectOptions>([]);
 
   const fetchDepartments = async () => {
-    const departments = await fetch("/api/departments", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      }
-    });
-    const body = await departments.json();
-    setDepartments([]);
-    console.log("departments: ", body);
+    console.log("sending");
+
+    const dep = await fetch("/api/departments");
+    const body = await dep.json();
+    console.log(body.result);
+
+    setDepartments(body.result);
   };
 
   return (

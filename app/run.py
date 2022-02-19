@@ -1,4 +1,4 @@
-from app import app
+from __init__ import app
 
 if __name__ == "__main__":
 
@@ -11,5 +11,5 @@ if __name__ == "__main__":
     #
     #     raise Exception("END")
 
-    app.run(debug=False)
+    app.run(debug=True)
 

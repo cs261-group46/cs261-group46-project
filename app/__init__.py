@@ -17,7 +17,7 @@
 # Imports #
 ###########
 
-from flask import Flask, request, session, redirect, url_for, send_file
+from flask import Flask, request, session, redirect, url_for, send_file, jsonify
 import os
 import app.environ as environ
 import app.FileManager as FileManager
