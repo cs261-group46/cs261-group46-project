@@ -9,12 +9,14 @@ def name(db: SQL.conn, department_name: str):
             return department[0]
     return None
 
+
 def databaseID(db: SQL.conn, department_id: int):
     if SQL.is_valid_input(department_id):
         department = sql_statement(db, f"SELECT * FROM DEPARTMENTS WHERE id={department_id};")
         if department is not None:
             return department[0]
     return None
+
 
 def exists(db: SQL.conn, department):
     if isinstance(department, str):
@@ -24,10 +26,12 @@ def exists(db: SQL.conn, department):
     else:
         raise Exception("Invalid data type")
 
+
 def nameExists(db: SQL.conn, department_name: str):
     if (d := name(db, department_name)) is None:
         return False, None
     return True, d
+
 
 def idExists(db: SQL.conn, department_id: int):
     if (d := databaseID(db, department_id)) is None:

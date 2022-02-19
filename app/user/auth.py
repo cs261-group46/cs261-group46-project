@@ -16,17 +16,15 @@ def register(db, email: str, password: str, password_repeat: str, first_name: st
     if GetBy.email(db, email).isLoaded():
         return False, "email already used"
 
-    departmentData = Departments.GetBy.exists(db, department)
+    departmentData: Departments.Department = Departments.GetBy.exists(db, department)
     if departmentData is False or departmentData is None:
         return False, "invalid department"
-    else:
-        print(departmentData)
 
     user_salt = Utils.random_string(16)
     hashed_password = Utils.hash_password(password, first_name + " " + last_name, user_salt, environ.get("PEPER"))
     id = get_available_random_uuid(db)  # Still need to verify unocupied
     statement = f"INSERT INTO USERS(unique_user_id, email, hashedPassword, salt, firstName, lastName, departmentId) " \
-                f"VALUES ('{id}', '{email}', '{hashed_password}', '{user_salt}', '{first_name}', '{last_name}', {departmentData[1].id});"
+                f"VALUES ('{id}', '{email}', '{hashed_password}', '{user_salt}', '{first_name}', '{last_name}', {departmentData.id});"
     cursor = db.cursor()
     cursor.execute(statement)
 

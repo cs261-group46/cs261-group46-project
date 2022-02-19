@@ -15,7 +15,7 @@ def register():
                            data_dict.get("password_repeat"),
                            data_dict.get("first_name"),
                            data_dict.get("last_name"),
-                           data_dict.get("department"))
+                           data_dict.get("department").get("id"))
     if state[0]:
         user, login_token = state[1], state[2]
         session[login_token_key_str] = login_token

@@ -105,15 +105,16 @@ def is_valid_input(*args) -> bool:
     def validate(a):
         if a is None:
             return False
-        if "'" in a:
-            return False
+        if hasattr(a, "__iter__"):
+            if "'" in a or '"' in a:
+                return False
         return True
 
     if len(args) == 1:
         if isinstance(args[0], str):
             return validate(args[0])
         else:
-            for sa in args[0]:
+            for sa in args:
                 if not validate(sa):
                     return False
             return True

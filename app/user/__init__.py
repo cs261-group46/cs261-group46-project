@@ -29,7 +29,7 @@ class User:
         r_dict = {}
         if not (start_dict is None or not isinstance(start_dict, dict)):
             for key, value in start_dict.items():
-                r_dict[key]=value
+                r_dict[key] = value
         r_dict["uuid"] = self.uuid
         r_dict["first_name"] = self.first_name
         r_dict["last_name"] = self.last_name
