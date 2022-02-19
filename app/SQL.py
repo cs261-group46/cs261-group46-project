@@ -1,4 +1,5 @@
 import psycopg2 as sql
+import app.file_manager as FileManager
 
 conn = sql._psycopg.connection
 
@@ -44,6 +45,14 @@ def create_connection(loaded_config: dict) -> conn:
         else:
             print(f"Created Database {loaded_config['database']}, reconnecting")
             return connect()
+
+
+def load_defaults_3(db: conn, schemas: list[str], reset=False):
+    if reset:
+        drop_all_tables_schema = FileManager.read_file("sql", "drop_all_tables.sql")
+        load_defaults_2(db, drop_all_tables_schema)
+    for schema in schemas:
+        load_defaults_2(db, schema)
 
 
 def load_defaults_2(db: conn, schema: str):

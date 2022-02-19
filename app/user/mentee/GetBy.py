@@ -1,22 +1,22 @@
 import app.user as Users
 import app.SQL as SQL
-import uuid as i_uuid
+from uuid import UUID
 import app.user.mentee as Mentees
 
 
 def user(db, user: Users.User) -> list:
-    db_id = str(user.database_id)
+    db_id = str(user.id)
     if SQL.is_valid_input(db_id):
-        mentees = get_by_sql_statement(db, f"SELECT * FROM view_MENTEES WHERE userID='{db_id}';")
+        mentees = sql_statement(db, f"SELECT * FROM view_MENTEES WHERE userID='{db_id}';")
         if not (mentees is None):
             return mentees
     return []
 
 
-def uuid(db, uuid: i_uuid.UUID) -> list:
+def uuid(db, uuid: UUID) -> list:
     id = str(uuid)
     if SQL.is_valid_input(id):
-        mentees = get_by_sql_statement(db, f"SELECT * FROM view_MENTEES WHERE userID=(SELECT id FROM USERS WHERE unique_user_id='{id}');")
+        mentees = sql_statement(db, f"SELECT * FROM view_MENTEES WHERE userID=(SELECT id FROM USERS WHERE unique_user_id='{id}');")
         if not (mentees is None):
             return mentees
     return []
@@ -24,13 +24,13 @@ def uuid(db, uuid: i_uuid.UUID) -> list:
 
 def login_token(db, login_token: str):
     if SQL.is_valid_input(login_token):
-        mentees = get_by_sql_statement(db, f"SELECT * FROM view_MENTEES WHERE userID=get_user_id_from_token('{login_token}');")
+        mentees = sql_statement(db, f"SELECT * FROM view_MENTEES WHERE userID=get_user_id_from_token('{login_token}');")
         if not (mentees is None):
             return mentees
     return []
 
 
-def get_by_sql_statement(db: SQL.conn, statement):
+def sql_statement(db: SQL.conn, statement):
     cursor = db.cursor()
     cursor.execute(statement)
     data = cursor.fetchall()
@@ -44,7 +44,7 @@ def get_by_sql_statement(db: SQL.conn, statement):
         mentee.usedID = mentee.user.database_id = row[1]
         mentee.topicID = row[2]
 
-        mentee.user.unique_user_id = i_uuid.UUID(row[3])
+        mentee.user.unique_user_id = UUID(row[3])
         mentee.user.email = row[4]
         mentee.user.first_name = row[5]
         mentee.user.last_name = row[6]

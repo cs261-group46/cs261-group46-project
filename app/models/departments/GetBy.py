@@ -2,9 +2,9 @@ from app.models.departments import Department
 import app.SQL as SQL
 
 
-def name(db: SQL.conn, name: str):
+def name(db: SQL.conn, department_name: str):
     if SQL.is_valid_input(name):
-        department = sql_statement(db, f"SELECT * FROM DEPARTMENTS WHERE name='{name}';")
+        department = sql_statement(db, f"SELECT * FROM DEPARTMENTS WHERE name='{department_name}';")
         if department is not None:
             return department[0]
     return None

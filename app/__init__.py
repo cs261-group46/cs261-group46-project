@@ -17,14 +17,14 @@
 # Imports #
 ###########
 
-from flask import Flask, request, session, redirect, url_for, send_file, jsonify
+from flask import Flask, request, session, redirect, url_for, send_file
 import os
 import app.environ as environ
-import app.FileManager as FileManager
+import app.file_manager as FileManager
 import app.config as Config
 import app.SQL as SQL
 import app.user as Users
-from app.ouremail import EMail as Mail
+from app.email import EMail as Mail
 
 peper = environ.get('PEPER')
 name = environ.get('NAME')
@@ -35,15 +35,15 @@ name = environ.get('NAME')
 
 login_token_key_str = "login_token"
 
+# ALL THE FOLLOWING HAS WORKED FOR SEVERAL WEEKS, DON'T BREAK IT
 
 sql_config   = Config.load_config("sql")
-email_config = Config.load_config("ouremail")
-print(sql_config["connection"])
+email_config = Config.load_config("email")
 db = SQL.open_connection(sql_config["connection"])
 
-# for sql_file in sql_config["sql_files"]:
-#     print(f"Loading SQL file {sql_file}")
-#     SQL.load_defaults_2(db, FileManager.read_file("sql", sql_file))
+schemas: list[str] = [file_manager.read_file("sql", sql_file) for sql_file in sql_config["sql_files"]]
+SQL.load_defaults_3(db, schemas, reset=False)
+
 
 #############
 # App setup #

@@ -1,7 +1,5 @@
 from flask import Blueprint, request, session
 from app import db, login_token_key_str
-import app.user as Users
-import app.utils as Utils
 from app.models import Topics
 
 
@@ -14,5 +12,4 @@ def get():
         topics = Topics.GetBy.all(db)
     else:
         topics = Topics.GetBy.startswith(db, request.args.get("startwith"))
-
     return {"result": [{"id":topic.id, "label": topic.name} for topic in topics]}

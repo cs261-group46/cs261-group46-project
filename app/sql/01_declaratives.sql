@@ -25,15 +25,14 @@ CREATE OR REPLACE FUNCTION add_minutes_to_timestamp_with_timezone(t TIMESTAMP WI
     $$;
 
 
-DROP TABLE DEPARTMENTS cascade;
-CREATE TABLE DEPARTMENTS (
+CREATE TABLE IF NOT EXISTS DEPARTMENTS (
     id serial,
     name varchar(128),
     primary key (id)
 );
 
-DROP TABLE TOPICS cascade;
-CREATE TABLE TOPICS (
+
+CREATE TABLE IF NOT EXISTS TOPICS (
     id serial,
     name varchar(128),
     primary key (id)

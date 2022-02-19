@@ -1,11 +1,9 @@
-DROP TABLE PERMISSION_GROUPS cascade;
 CREATE TABLE PERMISSION_GROUPS (
     id serial,
     name varchar(32),
     primary key (id)
 );
 
-DROP TABLE PERMISSION_GROUP_PERMISSIONS cascade;
 CREATE TABLE PERMISSION_GROUP_PERMISSIONS (
     groupID serial,
     groupPermission text,
@@ -14,7 +12,7 @@ CREATE TABLE PERMISSION_GROUP_PERMISSIONS (
     foreign key (groupID) references PERMISSION_GROUPS(id)
 );
 
-DROP TABLE PERMISSION_GROUP_INHERITANCES cascade;
+
 CREATE TABLE PERMISSION_GROUP_INHERITANCES (
     groupID serial,
     inheritedGroupID integer,

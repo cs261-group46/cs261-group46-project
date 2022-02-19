@@ -16,7 +16,7 @@ configs_to_load = {
             "06_user_login_tokens.sql"
         ]
     },
-    "ouremail": {
+    "email": {
         "email_server": {
             "server": "",
             "port": 0,

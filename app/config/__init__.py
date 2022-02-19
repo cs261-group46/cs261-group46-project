@@ -1,5 +1,5 @@
 import app.config.DefaultConfigs
-import app.FileManager as FileManager
+import app.file_manager as FileManager
 
 import json, os
 
@@ -12,9 +12,9 @@ def load_config(file_name: str) -> dict:
         file_name += ".json"
 
     if not os.path.isabs(file_name):
-        file_name = os.path.join(FileManager.get_project_root(), config_path, file_name)
+        file_name = os.path.join(file_manager.get_project_root(), config_path, file_name)
 
-    return json.loads(FileManager.read_file(file_name))
+    return json.loads(file_manager.read_file(file_name))
 
 
 def save_default(file_name: str, data: dict):
@@ -22,7 +22,7 @@ def save_default(file_name: str, data: dict):
         file_name += ".json"
 
     if not os.path.isabs(file_name):
-        file_name = os.path.join(FileManager.get_project_root(), config_path, file_name)
+        file_name = os.path.join(file_manager.get_project_root(), config_path, file_name)
 
     if not os.path.exists(file_name):
         with open(file_name, "w") as file:
@@ -32,7 +32,7 @@ def save_default(file_name: str, data: dict):
 def load_defaults():
     configs = DefaultConfigs.configs_to_load
 
-    if not os.path.exists(os.path.join(FileManager.get_project_root(), config_path)):
+    if not os.path.exists(os.path.join(file_manager.get_project_root(), config_path)):
         os.mkdir()
 
     for file_name, j in configs.items():

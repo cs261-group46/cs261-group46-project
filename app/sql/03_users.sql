@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS USERS (
-    id varchar(36),
+    id serial,
+    unique_user_id varchar(36),
     email varchar(128),
     hashedPassword text,
     salt varchar(16),
@@ -7,10 +8,10 @@ CREATE TABLE IF NOT EXISTS USERS (
     lastName varchar(128),
     accountCreationDate timestamp default current_timestamp(0),
     verified bool default false,
-    department integer,
+    departmentID integer,
     groupID integer,
     primary key (id),
-    foreign key (department) references DEPARTMENTS(id),
+    foreign key (departmentID) references DEPARTMENTS(id),
     foreign key (groupID) references PERMISSION_GROUPS(id)
 );
 

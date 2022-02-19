@@ -1,13 +1,12 @@
 {
-  "email_server":
-  {
-    "server": "",
+  "email_server": {
+    "password": "",
     "port": 0,
+    "server": "",
     "use_tls": false,
-    "username": "",
-    "password": ""
+    "username": ""
   },
-  "use_email_notifications":false,
   "enabled": false,
-  "sender": ""
+  "sender": "",
+  "use_email_notifications": false
 }

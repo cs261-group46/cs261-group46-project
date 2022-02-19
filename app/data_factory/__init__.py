@@ -21,26 +21,28 @@ def register_users_amount(user_count, departments):
     users = []
     for i in range(user_count):
         #db, email: str, password: str, password_repeat: str, first_name: str, last_name: str, department, send_mail=True
-        v, u, l = a.Users.register(db, f"{Utils.random_string(8)}.{Utils.random_string(8)}@test.randomnot", "test", "test", Utils.random_string(8), Utils.random_string(8), secrets.choice(departments))
+        v, u, l = app.Users.register(db, f"{Utils.random_string(8)}.{Utils.random_string(8)}@test.randomnot", "test", "test", Utils.random_string(8), Utils.random_string(8), secrets.choice(departments))
         users.append(u)
     return users
 
 def register_mentors(users, topics, topic_range):
-    ma = topic_range[0]
-    mb = topic_range[1]
+    a = topic_range[0]
+    b = topic_range[1]
     mentors = []
     for user in users:
         t = []
-        for i in range(random.randint(ma, mb+1)):
-            found = False
+        for i in range(random.randint(a, b+1)):
+            found, s = False, None
             while not found:
                 s = secrets.choice(topics)
                 if s not in t:
                     found = True
-            t.append(s)
+            if s is not None:
+                t.append(s)
 
-        v, m = a.Users.Mentors.register(db, user, Utils.random_string(8), t)
+        v, m = app.Users.Mentors.register(db, user, Utils.random_string(8), t)
         mentors.append(m)
+
 
 def clear_data(tables):
     cursor = db.cursor()

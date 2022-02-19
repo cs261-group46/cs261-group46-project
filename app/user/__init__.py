@@ -1,9 +1,8 @@
 import datetime
-from uuid import UUID, uuid4
-
+from uuid import UUID
 from app.user.auth import register, login, logout
 import app.user.GetBy as GetBy
-import app.SQL as SQL
+
 
 class User:
     """This is just a data class"""
@@ -12,8 +11,22 @@ class User:
                  account_creation_date=None, verified=None,
                  hashed_password=None, salt=None,
                  departmentID=None, groupID=None):
+        if not (isinstance(id, int) and
+                isinstance(email, str) and
+                isinstance(first_name, str) and
+                isinstance(last_name, str) and
+                isinstance(account_creation_date, datetime.datetime) and
+                isinstance(verified, bool) and
+                isinstance(hashed_password, str) and
+                isinstance(salt, str) and
+                isinstance(departmentID, int) and
+                isinstance(groupID, int)):
+            raise TypeError()
         self.id: int = id
-        self.uuid: UUID = uuid
+        if isinstance(uuid, UUID):
+            self.uuid: UUID = uuid
+        else:
+            self.uuid: UUID = UUID(uuid)
         self.email: str = email
         self.first_name: str = first_name
         self.last_name: str = last_name
@@ -59,6 +72,7 @@ class DummyUser(User):
 
     def isDummy(self):
         return True
+
 
 import app.user.mentor as Mentors
 import app.user.mentee as Mentees

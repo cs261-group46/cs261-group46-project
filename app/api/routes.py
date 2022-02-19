@@ -1,13 +1,12 @@
-from flask import Blueprint, request, session, jsonify
-from app import db, login_token_key_str, Users
+from flask import Blueprint, request, session
 
 blueprint = Blueprint("api", __name__, url_prefix="/api")
 
-from app.api.users.routes import blueprint as api_users_module
-from app.api.mentors.routes import blueprint as api_mentors_module
-from app.api.mentees.routes import blueprint as api_mentees_module
+from app.api.users.routes       import blueprint as api_users_module
+from app.api.mentors.routes     import blueprint as api_mentors_module
+from app.api.mentees.routes     import blueprint as api_mentees_module
 from app.api.departments.routes import blueprint as api_department_module
-from app.api.topics.routes import blueprint as api_topics_module
+from app.api.topics.routes      import blueprint as api_topics_module
 
 
 blueprint.register_blueprint(api_users_module)

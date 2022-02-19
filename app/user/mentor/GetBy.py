@@ -2,7 +2,8 @@ import app.user as Users
 import app.SQL as SQL
 from uuid import UUID
 import app.user.mentor as Mentors
-from app.models import Topics, ConcurrentContext
+from app.models import Topics
+from app.utils import ConcurrentContext
 
 
 def user(db, user: Users.User) -> Mentors.Mentor:
@@ -12,6 +13,7 @@ def user(db, user: Users.User) -> Mentors.Mentor:
         if not (mentor is None):
             return mentor[0]
     return None
+
 
 def user2(db, user: Users.User) -> Mentors.Mentor:
     db_id = str(user.id)

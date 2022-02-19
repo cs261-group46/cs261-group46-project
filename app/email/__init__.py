@@ -43,4 +43,4 @@ class EMail:
         EMail.sender = sender
 
 
-import app.ouremail.register as register
+import app.email.register as register

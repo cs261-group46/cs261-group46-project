@@ -9,16 +9,19 @@ class ConcurrentContext:
                 return self.objects[objectType][id]
         return None
 
-
-    def new(self, cls, *args, id=None, **kwargs):
-        if not isinstance(cls, type):
-            raise Exception("Error at type")
+    def new(self, cls, *args, **kwargs):
+        if "id" in kwargs.keys():
+            id = kwargs["id"]
+        else:
+            raise Exception("Concurrent context needs ids (dynamic PK finding not implemented)")
         c = self.get(cls, id)
         if c is not None:
             return c
 
-        obj = super(type(cls), cls).__new__(cls, *args, id=id, **kwargs)
-        obj.__init__(*args, id=id, **kwargs)
+        # obj = super(type(cls), cls).__new__(cls, *args, id=id, **kwargs)
+        # obj.__init__(*args, id=id, **kwargs)
+        # The Above was absolute overkill. it worked, but was not needed, and was like building an object with type()
+        obj = cls(*args, **kwargs)
 
         if cls not in self.objects.keys():
             self.objects[cls] = {}
