@@ -1,6 +1,5 @@
 import React from 'react';
 import MainLayout from "../../layouts/MainLayout/MainLayout";
-import Button from "../../components/UI/Button/Button";
 import styles from './VerifyRegister.module.scss';
 
 function VerifyRegister() {

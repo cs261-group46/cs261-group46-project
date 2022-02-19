@@ -1,18 +1,19 @@
-import React, { FC } from "react";
-// import styles from './Register.module.scss';
+import React, { FC, useEffect, useState } from "react";
 import MainLayout from "../../layouts/MainLayout/MainLayout";
 import TextInput from "../../components/UI/FormInput/TextInput/TextInput";
 import PasswordInput from "../../components/Register/PasswordInput/PasswordInput";
 import Select from "../../components/UI/FormInput/Select/Select";
-import MultiSelect from "../../components/UI/FormInput/MultiSelect/MultiSelect";
 import Button from "../../components/UI/Button/Button";
 import useInput from "../../hooks/UseInput/UseInput";
-import { SelectOption, SelectOptions } from "../../components/UI/FormInput/Select/Select.d";
-import { MultiSelectOptions, SearchPromise } from "../../components/UI/FormInput/MultiSelect/MultiSelect.d";
+import {
+  SelectOption,
+  SelectOptions,
+} from "../../components/UI/FormInput/Select/Select.d";
+import { useNavigate } from "react-router-dom";
 
 interface RegisterProps {}
 
-const DUMMY_DEPARTMENTS : SelectOptions = [{ id: "1", label: "Department 1" }];
+const DUMMY_DEPARTMENTS: SelectOptions = [{ id: "1", label: "Department 1" }];
 
 function validateEmail(email: string) {
   const re =
@@ -22,24 +23,25 @@ function validateEmail(email: string) {
 
 function validatePassword(password: string) {
   let passwordRating = 0;
-
   const passwordLength = password.length;
   const capitalLetters = /[A-Z]/;
   const lowercaseLetters = /[a-z]/;
   const numbers = /[0-9]/;
   const symbol = /-|_|\.|,|\[|]|\(|'|\)|`|@|!|\\|\/|\^|\*|\?|\||\$/;
-
   if (passwordLength < 10) return false;
-
   if (capitalLetters.test(password)) passwordRating++;
-
   if (lowercaseLetters.test(password)) passwordRating++;
-
   if (numbers.test(password)) passwordRating++;
-
   if (symbol.test(password)) passwordRating++;
-
   return passwordRating >= 3;
+}
+
+function validateName(name: string) {
+  return name.length > 0 && name.length <= 20;
+}
+
+function validateSurname(surname: string) {
+  return surname.length > 0 && surname.length <= 20;
 }
 
 function validateRepeatedPassword(
@@ -56,11 +58,21 @@ function validateDepartment(_department: SelectOption) {
   return true;
 }
 
-function validateExpertises(_experises : MultiSelectOptions<string>) {
-    return true;
-}
-
 const Register: FC<RegisterProps> = () => {
+  const {
+    enteredValue: enteredFirstName,
+    isInputValid: isInputFirstNameValid,
+    changeHandler: firstNameChangeHandler,
+    blurHandler: firstNameBlurHandler,
+  } = useInput<string>(validateName, "");
+
+  const {
+    enteredValue: enteredLastName,
+    isInputValid: isInputLastNameValid,
+    changeHandler: lastNameChangeHandler,
+    blurHandler: lastNameBlurHandler,
+  } = useInput<string>(validateSurname, "");
+
   const {
     enteredValue: enteredEmail,
     isInputValid: isInputEmailValid,
@@ -80,28 +92,26 @@ const Register: FC<RegisterProps> = () => {
     isInputValid: isInputRepeatedPasswordValid,
     changeHandler: repeatedPasswordChangeHandler,
     blurHandler: repeatedPasswordBlurHandler,
-  } = useInput<string>(validateRepeatedPassword.bind(null, enteredPassword), "");
+  } = useInput<string>(
+    validateRepeatedPassword.bind(null, enteredPassword),
+    ""
+  );
 
-    const {
+  const {
     enteredValue: enteredDepartment,
     isInputValid: isInputDepartmentValid,
     changeHandler: departmentChangeHandler,
     blurHandler: departmentBlurHandler,
-  } = useInput<SelectOption>(validateDepartment, {id: "0"});
+  } = useInput<SelectOption>(validateDepartment, { id: "0" });
 
-
-  const {
-    enteredValue: enteredExpertises,
-    isInputValid: isInputExpertisesValid,
-    changeHandler: expertisesChangeHandler,
-  } = useInput<MultiSelectOptions<string>>(validateExpertises, []);
-
-
-  const sendRegstrationData = async () => {
+  const sendRegistrationData = async () => {
     const body = {
       email: enteredEmail,
       password: enteredPassword,
-      department: "test",
+      password_repeat: enteredRepeatedPassword,
+      first_name: enteredFirstName,
+      last_name: enteredLastName,
+      department: enteredDepartment,
     };
 
     const response = await fetch("/api/user/register", {
@@ -116,25 +126,57 @@ const Register: FC<RegisterProps> = () => {
 
     console.log(returnedData);
   };
+
   const registrationHandler = () => {
-    if (isInputEmailValid && isInputPasswordValid && enteredRepeatedPassword) {
-      sendRegstrationData();
+    if (
+      isInputFirstNameValid &&
+      isInputLastNameValid &&
+      isInputEmailValid &&
+      isInputPasswordValid &&
+      enteredRepeatedPassword &&
+      isInputDepartmentValid
+    ) {
+      sendRegistrationData();
     }
   };
 
+  useEffect(() => {
+    fetchDepartment();
+  }, []);
 
-  const searchPromise: SearchPromise = (_search) => {
-    return new Promise((resolve) =>
-      resolve([
-        { label: "Tracking", value: "tracking" },
-        { label: "Training", value: "training" },
-      ])
-    );
+  const [departments, setDepartments] = useState<SelectOptions>(DUMMY_DEPARTMENTS);
+
+  const fetchDepartment = async () => {
+    const departments = await fetch("/api/departments");
+    const body = await departments.json();
+    setDepartments([]);
+    console.log(body);
   };
-
 
   return (
     <MainLayout title="Register">
+      <TextInput
+        icon="1️⃣"
+        value={enteredFirstName}
+        isValid={isInputFirstNameValid}
+        onChange={firstNameChangeHandler}
+        onBlur={firstNameBlurHandler}
+        id="firstname"
+        label="First Name"
+        placeholder="Please provide your first name"
+      />
+
+      <TextInput
+        icon="2️⃣"
+        value={enteredLastName}
+        isValid={isInputLastNameValid}
+        onChange={lastNameChangeHandler}
+        onBlur={lastNameBlurHandler}
+        id="lastname"
+        label="Last Name"
+        placeholder="Please provide your last name"
+      />
+
       <TextInput
         icon="✉️"
         value={enteredEmail}
@@ -171,38 +213,13 @@ const Register: FC<RegisterProps> = () => {
         id="department"
         placeholder="Please select your department"
         label="Department"
-        options={DUMMY_DEPARTMENTS}
+        options={departments}
       />
       <Button icon="👑" onClick={registrationHandler} buttonStyle={"primary"}>
         Register
       </Button>
-
-      <p>For testing:</p>
-
-
-      <MultiSelect
-        id="expertise"
-        label="Fields of Expertise"
-        value={enteredExpertises}
-        isValid={isInputExpertisesValid}
-        onChange={expertisesChangeHandler}
-        onBlur={emailBlurHandler}
-        icon="💪"
-        searchPromise={searchPromise}
-      />
       <div data-testid="Register"/>
     </MainLayout>
-
-
-    //     id: string;
-    //   label: string;
-    //   default?: T;
-    //   selected: Options<T>;
-    //   isValid: boolean;
-    //   onRemoveSelected: removeSelectedHandler<T>;
-    //   onAddSelected: addSelectedHandler<T>;
-    //   icon?: React.ReactNode;
-    //   searchPromise?: searchPromise;
   );
 };
 

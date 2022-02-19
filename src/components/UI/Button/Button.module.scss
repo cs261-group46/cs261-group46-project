@@ -3,11 +3,11 @@
 .Button {
   width: min-content;
   height: 40px;
-  font-weight: bold;
   margin: 20px 0;
   text-decoration: none;
-
+  width: max-content;
   button {
+    font-weight: bold;
     display: flex;
     align-items: center;
     font-size: 15px;
@@ -18,7 +18,8 @@
     padding: 10px 20px;
     border: none;
 
-    &:hover, &:focus-visible {
+    &:hover,
+    &:focus-visible {
       outline: 3px solid $sq_dark_gray;
     }
 
@@ -28,7 +29,7 @@
   }
 
   button.primary {
-    background-color: #EA596E;
+    background-color: #ea596e;
   }
 
   button.default {

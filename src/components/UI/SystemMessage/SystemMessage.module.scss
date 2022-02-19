@@ -1,1 +1,9 @@
-.SystemMessage {}
+@import "../../../_variables.scss";
+
+.SystemMessage {
+  border: 2px solid $sq_red;
+  padding: 10px 20px;
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 10px;
+}

@@ -1,12 +1,14 @@
-import React, { FC } from 'react';
-import styles from './Title.module.scss';
+import React, { FC } from "react";
+import styles from "./Title.module.scss";
 
 interface TitleProps {
-    text: string
+  text: string;
 }
 
 const Title: FC<TitleProps> = (props) => (
-    <p className={styles.Title} data-testid="Title">{props.text}</p>
+  <h2 className={styles.Title} data-testid="Title">
+    {props.text}
+  </h2>
 );
 
 export default Title;

@@ -16,17 +16,21 @@ interface SelectProps {
 }
 
 const Select: FC<SelectProps> = (props) => {
+  console.log(props.options);
+
   const options = props.options.map(({ id, label }) => (
     <option key={id} value={label}>
       {label}
     </option>
   ));
 
-  const changeHandler:React.ChangeEventHandler<HTMLSelectElement> = (event) => {
+  const changeHandler: React.ChangeEventHandler<HTMLSelectElement> = (
+    event
+  ) => {
     // the pair can be reconstructed from id & value properties
-    props.onChange({id: event.target.id, label: event.target.value});
+    props.onChange({ id: event.target.id, label: event.target.value });
   };
-  
+
   return (
     <div
       className={`${styles.Select} ${textInputStyles.TextInput}`}
