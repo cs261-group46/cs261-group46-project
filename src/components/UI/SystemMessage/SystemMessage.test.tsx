@@ -5,7 +5,7 @@ import SystemMessage from './SystemMessage';
 
 describe('<SystemMessage />', () => {
   test('it should mount', () => {
-    render(<SystemMessage sort={"popup"} description={"test description"} type={"alert"} visible={true}/>);
+    render(<SystemMessage sort={"inline"} description={"test description"} type={"alert"} visible={true}/>);
     
     const systemMessage = screen.getByTestId('SystemMessage');
 
