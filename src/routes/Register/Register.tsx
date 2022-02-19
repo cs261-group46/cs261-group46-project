@@ -132,8 +132,6 @@ const Register: FC<RegisterProps> = () => {
     console.log(returnedData);
   };
 
-  let navigate = useNavigate();
-
   const registrationHandler = () => {
     if (
       isInputFirstNameValid &&
@@ -144,7 +142,6 @@ const Register: FC<RegisterProps> = () => {
       isInputDepartmentValid
     ) {
       sendRegistrationData();
-      navigate("/dashboard");
     }
   };
 
