@@ -16,7 +16,7 @@ def user(db, user: Users.User) -> list:
 def uuid(db, uuid: i_uuid.UUID) -> list:
     id = str(uuid)
     if SQL.is_valid_input(id):
-        mentees = get_by_sql_statement(db, f"SELECT * FROM view_MENTEES WHERE userID=(SELECT userID FROM USERS WHERE unique_user_id='{id}');")
+        mentees = get_by_sql_statement(db, f"SELECT * FROM view_MENTEES WHERE userID=(SELECT id FROM USERS WHERE unique_user_id='{id}');")
         if not (mentees is None):
             return mentees
     return []
@@ -42,7 +42,7 @@ def get_by_sql_statement(db: SQL.conn, statement):
         mentee.user = Users.User()
         mentee.databaseID = row[0]
         mentee.usedID = mentee.user.database_id = row[1]
-        mentee.subjectID = row[2]
+        mentee.topicID = row[2]
 
         mentee.user.unique_user_id = i_uuid.UUID(row[3])
         mentee.user.email = row[4]

@@ -36,8 +36,8 @@ def get_user_by_sql_statement(db: SQL.conn, statement):
     if len(data) == 0:
         return Users.DummyUser()
     user = Users.User()
-    user.database_id = data[0][0]
-    user.unique_user_id = i_uuid.UUID(data[0][1])
+    user.id = data[0][0]
+    user.uuid = i_uuid.UUID(data[0][1])
     user.email = data[0][2]
     user.hashed_password = data[0][3]
     user.salt = data[0][4]

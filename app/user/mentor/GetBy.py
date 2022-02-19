@@ -1,36 +1,45 @@
 import app.user as Users
 import app.SQL as SQL
-import uuid as i_uuid
+from uuid import UUID
 import app.user.mentor as Mentors
+from app.models import Topics, ConcurrentContext
 
 
-def user(db, user: Users.User) -> list:
-    db_id = str(user.database_id)
+def user(db, user: Users.User) -> Mentors.Mentor:
+    db_id = str(user.id)
     if SQL.is_valid_input(db_id):
-        mentors = get_by_sql_statement(db, f"SELECT * FROM view_MENTORS WHERE userID='{db_id}';")
-        if not (mentors is None):
-            return mentors
-    return []
+        mentor = sql_statement(db, f"SELECT * FROM view_MENTORS WHERE userID='{db_id}';")
+        if not (mentor is None):
+            return mentor[0]
+    return None
+
+def user2(db, user: Users.User) -> Mentors.Mentor:
+    db_id = str(user.id)
+    if SQL.is_valid_input(db_id):
+        mentor = sql_statement_2(db, f"SELECT * FROM view_MENTOR_TOPICS WHERE userID='{db_id}';")
+        if not (mentor is None):
+            return mentor[0]
+    return None
 
 
-def uuid(db, uuid: i_uuid.UUID) -> list:
+def uuid(db, uuid: UUID):
     id = str(uuid)
     if SQL.is_valid_input(id):
-        mentors = get_by_sql_statement(db, f"SELECT * FROM view_MENTORS WHERE userID=(SELECT userID FROM USERS WHERE unique_user_id='{id}');")
-        if not (mentors is None):
-            return mentors
-    return []
+        mentor = sql_statement(db, f"SELECT * FROM view_MENTORS WHERE userID=(SELECT id FROM USERS WHERE unique_user_id='{id}');")
+        if not (mentor is None):
+            return mentor[0]
+    return None
 
 
 def login_token(db, login_token: str):
     if SQL.is_valid_input(login_token):
-        mentors = get_by_sql_statement(db, f"SELECT * FROM view_MENTORS WHERE userID=get_user_id_from_token('{login_token}');")
-        if not (mentors is None):
-            return mentors
-    return []
+        mentor = sql_statement(db, f"SELECT * FROM view_MENTORS WHERE userID=get_user_id_from_token('{login_token}');")
+        if not (mentor is None):
+            return mentor[0]
+    return None
 
 
-def get_by_sql_statement(db: SQL.conn, statement):
+def sql_statement(db: SQL.conn, statement):
     cursor = db.cursor()
     cursor.execute(statement)
     data = cursor.fetchall()
@@ -38,22 +47,34 @@ def get_by_sql_statement(db: SQL.conn, statement):
         return None
     mentors = []
     for row in data:
-        mentor = Mentors.Mentor()
-        mentor.user = Users.User()
+        mentorID, userID, about, uuid, email, first_name, last_name, accountCreationDate, verified, currentDepartment, groupID = row
 
-        mentor.databaseID = row[0]
-        mentor.userID = mentor.user.database_id = row[1]
-        mentor.subjectID = row[2]
+        # topic = Topics.Topic(context=concurrentContext, id=topicID, name=name)
 
-        mentor.user.unique_user_id = i_uuid.UUID(row[3])
-        mentor.user.email = row[4]
-        mentor.user.first_name = row[5]
-        mentor.user.last_name = row[6]
-        mentor.user.account_creation_date = row[7]
-        mentor.user.verified = row[8]
-        mentor.user.departmentID = row[9]
-        mentor.user.groupID = row[10]
+        user = Users.User(id=userID, uuid=uuid, email=email, first_name=first_name, last_name=last_name,
+                          account_creation_date=accountCreationDate, verified=verified,
+                          departmentID=currentDepartment, groupID=groupID)
 
-        mentors.append(mentor)
-
+        mentors.append(Mentors.Mentor(id=mentorID, user=user, about=about))
     return mentors
+
+
+def sql_statement_2(db: SQL.conn, statement):
+    cursor = db.cursor()
+    cursor.execute(statement)
+    data = cursor.fetchall()
+    if len(data) == 0:
+        return None
+
+    context = ConcurrentContext()
+    for row in data:
+        mentorID, userID, about, mentorTopicID, topicID, name, uuid, email, first_name, last_name, accountCreationDate, verified, currentDepartment, groupID = row
+
+        topic: Topics.Topic = context.new(Topics.Topic, id=topicID, name=name)
+        # topic = Topics.Topic(context=concurrentContext, id=topicID, name=name)
+
+        user: Users.User = context.new(Users.User, id=userID, uuid=uuid, email=email, first_name=first_name, last_name=last_name, account_creation_date=accountCreationDate, verified=verified, departmentID=currentDepartment, groupID=groupID)
+        mentor: Mentors.Mentor = context.new(Mentors.Mentor, id=mentorID, user=user, about=about)
+        mentor_topic: Mentors.MentorTopic = context.new(Mentors.MentorTopic, id=topicID, mentor=mentor, topic=topic)
+    context_mentors: dict = context.objects[Mentors.Mentor]
+    return list(context_mentors.values())

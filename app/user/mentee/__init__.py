@@ -5,10 +5,10 @@ import app.user as Users
 
 class Mentee:
     def __init__(self):
-        self.databaseID: int
-        self.userID: int
+        self.databaseID: int = None
+        self.userID: int = None
         self.user: Users.User
-        self.subjectID: int
+        self.topicID: int = None
 
     def get_api_return_data(self, start_dict=None):
         r_dict = {}
@@ -16,7 +16,7 @@ class Mentee:
             for key, value in start_dict.items():
                 r_dict[key]=value
         r_dict["id"] = self.databaseID
-        r_dict["subjectID"] = self.subjectID
+        r_dict["topicID"] = self.topicID
         return r_dict
 
     def isDummy(self):
