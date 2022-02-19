@@ -1,5 +1,5 @@
 import psycopg2 as sql
-import app.file_manager as FileManager
+import app.filemanager as FileManager
 
 conn = sql._psycopg.connection
 

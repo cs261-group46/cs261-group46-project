@@ -1,10 +1,10 @@
-CREATE TABLE PERMISSION_GROUPS (
+CREATE TABLE IF NOT EXISTS PERMISSION_GROUPS (
     id serial,
     name varchar(32),
     primary key (id)
 );
 
-CREATE TABLE PERMISSION_GROUP_PERMISSIONS (
+CREATE TABLE IF NOT EXISTS PERMISSION_GROUP_PERMISSIONS (
     groupID serial,
     groupPermission text,
     permissionValue bool,
@@ -13,7 +13,7 @@ CREATE TABLE PERMISSION_GROUP_PERMISSIONS (
 );
 
 
-CREATE TABLE PERMISSION_GROUP_INHERITANCES (
+CREATE TABLE IF NOT EXISTS PERMISSION_GROUP_INHERITANCES (
     groupID serial,
     inheritedGroupID integer,
     primary key (groupID, inheritedGroupID),

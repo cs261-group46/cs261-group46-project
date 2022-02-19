@@ -2,6 +2,8 @@ import datetime
 from uuid import UUID
 from app.user.auth import register, login, logout
 import app.user.GetBy as GetBy
+import app.utils as Utils
+import app.environ as environ
 
 
 class User:
@@ -61,6 +63,10 @@ class User:
     def isLoaded(self):
         return not self.isDummy()
 
+    def send_verify_email(self):
+        validation_token = Utils.create_validation_token(environ.get("SECRET_KEY"), self.email)
+        MailRegister.VERIFY.send([self.email], )
+
 
 class DummyUser(User):
     dummyUser = None
@@ -76,3 +82,4 @@ class DummyUser(User):
 
 import app.user.mentor as Mentors
 import app.user.mentee as Mentees
+from app import Mail, MailRegister

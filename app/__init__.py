@@ -20,11 +20,12 @@
 from flask import Flask, request, session, redirect, url_for, send_file
 import os
 import app.environ as environ
-import app.file_manager as FileManager
+import app.filemanager as FileManager
 import app.config as Config
 import app.SQL as SQL
+from app.email import EMail as Mail, register as MailRegister
 import app.user as Users
-from app.email import EMail as Mail
+
 
 peper = environ.get('PEPER')
 name = environ.get('NAME')
@@ -41,9 +42,12 @@ sql_config   = Config.load_config("sql")
 email_config = Config.load_config("email")
 db = SQL.open_connection(sql_config["connection"])
 
-schemas: list[str] = [file_manager.read_file("sql", sql_file) for sql_file in sql_config["sql_files"]]
+schemas: list[str] = [filemanager.read_file("sql", sql_file) for sql_file in sql_config["sql_files"]]
 SQL.load_defaults_3(db, schemas, reset=False)
 
+load_factories = False
+if load_factories:
+    SQL.load_defaults_3(db, [filemanager.read_file("sql/factories", sql_file) for sql_file in ["departments_factory.sql", "topics_factory.sql"]])
 
 #############
 # App setup #
@@ -79,9 +83,9 @@ def execute_before_requests():
             Users.GetBy.login_token(db, login_token)  # Refresh auth token
 
 
-from app.api.routes import blueprint as api_module
+from app.routes import APIRoute
 
-app.register_blueprint(api_module)
+app.register_blueprint(APIRoute.routes.blueprint)
 
 
 

@@ -1,4 +1,4 @@
-CREATE TABLE NOTIFICATION_TYPE (
+CREATE TABLE IF NOT EXISTS NOTIFICATION_TYPE (
     id serial,
     name varchar(128),
     primary key (id)

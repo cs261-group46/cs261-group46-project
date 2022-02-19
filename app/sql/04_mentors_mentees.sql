@@ -43,9 +43,8 @@ CREATE TABLE IF NOT EXISTS MENTOR_MENTEE_RELATION (
     weight float,
     primary key (id),
     foreign key (mentorTopicID) references MENTOR_TOPICS(id),
-    foreign key (menteeTopicID) references MENTEE_TOPICS(id),
-    foreign key (menteeID) references MENTEES(id)
-}
+    foreign key (menteeTopicID) references MENTEE_TOPICS(id)
+);
 
 CREATE OR REPLACE VIEW view_MENTORS AS
     SELECT
@@ -58,7 +57,7 @@ CREATE OR REPLACE VIEW view_MENTORS AS
         us.lastName,
         us.accountCreationDate,
         us.verified,
-        us.currentDepartment,
+        us.departmentID,
         us.groupID
     FROM mentors mo JOIN users us ON us.id=mo.userID;
 
@@ -68,7 +67,7 @@ CREATE OR REPLACE VIEW view_MENTOR_TOPICS_WITH_TOPIC_NAMES AS
         MENTOR_TOPICS.mentorID,
         MENTOR_TOPICS.priority,
         TOPICS.id as topicID,
-        TOPICS.name as topicName,
+        TOPICS.name as topicName
     FROM MENTOR_TOPICS JOIN TOPICS ON TOPICS.id=MENTOR_TOPICS.topicID;
 
 CREATE OR REPLACE VIEW view_MENTOR_TOPICS AS
@@ -85,7 +84,7 @@ CREATE OR REPLACE VIEW view_MENTOR_TOPICS AS
         us.lastName,
         us.accountCreationDate,
         us.verified,
-        us.currentDepartment,
+        us.departmentID,
         us.groupID
     FROM mentors mo JOIN users us ON us.id=mo.userID JOIN MENTOR_TOPICS mt ON mt.mentorID=mo.id JOIN topics top ON top.id=mt.topicID;
 
@@ -99,5 +98,6 @@ CREATE OR REPLACE VIEW view_MENTEES AS
         us.lastName,
         us.accountCreationDate,
         us.verified,
-        us.currentDepartment,
-        us.groupID FROM mentees me JOIN users us ON us.id=me.userID;
+        us.departmentID,
+        us.groupID
+    FROM MENTEES me JOIN users us ON us.id=me.userID;

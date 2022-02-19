@@ -28,7 +28,7 @@ class EMail:
 
     def send(self, recipients: list, **kwargs):
         msg = self.prepare(recipients, **kwargs)
-        if EMail.debug:
+        if (not EMail.enabled) or EMail.debug:
             print(f"Sending {self!r} to {recipients} with arguments {kwargs}")
         else:
             EMail.app_mail.send(msg)
@@ -43,4 +43,4 @@ class EMail:
         EMail.sender = sender
 
 
-import app.email.register as register
+import app.email.register as Register

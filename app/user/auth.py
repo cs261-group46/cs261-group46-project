@@ -1,11 +1,14 @@
-from app.user import GetBy, uuid4
-import app.environ as environ
+from uuid import uuid4
+
 import app.utils as Utils
-from app.models import Departments
+import app.environ as environ
 import app.SQL as SQL
 
+from app.user import GetBy
+from app.models import Departments
 
-def register(db, email: str, password: str, password_repeat: str, first_name: str, last_name: str, department, send_mail=True) -> tuple:
+
+def register(db, email: str, password: str, password_repeat: str, first_name: str, last_name: str, department) -> tuple:
     if not SQL.is_valid_input(email, first_name, last_name, department):
         return False, "invalid argument to pass to SQL"
     if not Utils.is_password_allowed(password, password_repeat):
@@ -24,7 +27,10 @@ def register(db, email: str, password: str, password_repeat: str, first_name: st
                 f"VALUES ('{id}', '{email}', '{hashed_password}', '{user_salt}', '{first_name}', '{last_name}', {departmentData[0]});"
     cursor = db.cursor()
     cursor.execute(statement)
-    return login(db, email, password)
+
+    valid, user, login_token = login(db, email, password)
+    user.send_verify_email()
+    return valid, user, login_token
 
 
 def login(db, email: str, password: str) -> tuple:
