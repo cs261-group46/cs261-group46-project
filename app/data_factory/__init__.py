@@ -1,7 +1,8 @@
-import app as a
+import app
 import app.utils as Utils
-import secrets, random
-db = a.db
+import secrets
+import random
+db = app.db
 
 
 def register_departments(departments: list):

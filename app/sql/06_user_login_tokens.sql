@@ -1,11 +1,13 @@
-CREATE TABLE IF NOT EXISTS USER_LOGIN_TOKENS (
+DROP TABLE IF EXISTS USER_LOGIN_TOKENS cascade;
+CREATE TABLE USER_LOGIN_TOKENS (
     loginToken varchar(128),
-    userID integer,
+    userID varchar(36),
     loginDate timestamp default current_timestamp(0),
     loginTimeout timestamp default add_minutes_to_timestamp_with_timezone(current_timestamp(0), 60),
     primary key (loginToken),
     foreign key (userID) references USERS(id)
 );
+
 
 CREATE OR REPLACE FUNCTION get_user_id_from_token(login_token varchar(128))
     returns integer

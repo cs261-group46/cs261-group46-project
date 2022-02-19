@@ -1,15 +1,18 @@
-CREATE TABLE IF NOT EXISTS NOTIFICATION_TYPE (
+DROP TABLE NOTIFICATION_TYPE cascade;
+CREATE TABLE NOTIFICATION_TYPE (
     id serial,
     name varchar(128),
     primary key (id)
 );
 
+DROP TABLE NOTIFICATION_LEVEL cascade;
 CREATE TABLE IF NOT EXISTS NOTIFICATION_LEVEL (
     id serial,
     name varchar(128),
     primary key (id)
 );
 
+DROP TABLE NOTIFICATIONS cascade;
 CREATE TABLE IF NOT EXISTS NOTIFICATIONS (
     id serial,
     notificationTypeID integer,

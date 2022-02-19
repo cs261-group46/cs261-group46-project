@@ -118,6 +118,7 @@ const Register: FC<RegisterProps> = () => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
       },
       body: JSON.stringify(body), // body data type must match "Content-Type" header
     });
@@ -141,16 +142,23 @@ const Register: FC<RegisterProps> = () => {
   };
 
   useEffect(() => {
-    fetchDepartment();
+    fetchDepartments();
   }, []);
 
-  const [departments, setDepartments] = useState<SelectOptions>(DUMMY_DEPARTMENTS);
+  const [departments, setDepartments] =
+    useState<SelectOptions>(DUMMY_DEPARTMENTS);
 
-  const fetchDepartment = async () => {
-    const departments = await fetch("/api/departments");
+  const fetchDepartments = async () => {
+    const departments = await fetch("/api/departments", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      }
+    });
     const body = await departments.json();
     setDepartments([]);
-    console.log(body);
+    console.log("departments: ", body);
   };
 
   return (
@@ -218,7 +226,7 @@ const Register: FC<RegisterProps> = () => {
       <Button icon="👑" onClick={registrationHandler} buttonStyle={"primary"}>
         Register
       </Button>
-      <div data-testid="Register"/>
+      <div data-testid="Register" />
     </MainLayout>
   );
 };

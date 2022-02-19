@@ -23,7 +23,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "start-api": "python run.py",
+    "start-api": "python app/run.py",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "test-api": "cd api && ../venv/bin/flask test",

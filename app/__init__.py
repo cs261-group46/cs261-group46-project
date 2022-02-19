@@ -24,7 +24,7 @@ import app.FileManager as FileManager
 import app.config as Config
 import app.SQL as SQL
 import app.user as Users
-from app.email import EMail as Mail
+from app.ouremail import EMail as Mail
 
 peper = environ.get('PEPER')
 name = environ.get('NAME')
@@ -37,12 +37,13 @@ login_token_key_str = "login_token"
 
 
 sql_config   = Config.load_config("sql")
-email_config = Config.load_config("email")
+email_config = Config.load_config("ouremail")
+print(sql_config["connection"])
 db = SQL.open_connection(sql_config["connection"])
 
-for sql_file in sql_config["sql_files"]:
-    print(f"Loading SQL file {sql_file}")
-    SQL.load_defaults_2(db, FileManager.read_file("sql", sql_file))
+# for sql_file in sql_config["sql_files"]:
+#     print(f"Loading SQL file {sql_file}")
+#     SQL.load_defaults_2(db, FileManager.read_file("sql", sql_file))
 
 #############
 # App setup #
@@ -50,6 +51,7 @@ for sql_file in sql_config["sql_files"]:
 
 app = Flask(__name__, static_folder="../build/static/", static_url_path="/static")
 app.config["SECRET_KEY"] = environ.get('SECRET_KEY')
+
 if email_config["enabled"]:
     for key, value in email_config["email_server"].items():
         app.config[f"MAIL_{key.upper()}"] = value

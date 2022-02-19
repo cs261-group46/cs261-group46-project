@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS USERS (
     department integer,
     groupID integer,
     primary key (id),
-    foreign key (department) references DEPARTMENTS(departmentID),
+    foreign key (department) references DEPARTMENTS(id),
     foreign key (groupID) references PERMISSION_GROUPS(id)
 );
 

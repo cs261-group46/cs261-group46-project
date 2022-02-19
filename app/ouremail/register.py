@@ -1,4 +1,4 @@
-import app.email as email
+import app.ouremail as email
 import app.environ as environ
 Mail = email.EMail
 
