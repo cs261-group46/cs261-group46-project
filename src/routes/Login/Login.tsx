@@ -51,11 +51,8 @@ const Login: FC<LoginProps> = () => {
 
         console.log(returnedData);
 
-        // TODO: unsuccessful responses send a non 200 response
         if (response.ok) {
-            if (returnedData.successful === true)
-                navigate("/dashboard");
-            else setError(true);
+            navigate("/dashboard");
         } else {
             setError(true);
         }
