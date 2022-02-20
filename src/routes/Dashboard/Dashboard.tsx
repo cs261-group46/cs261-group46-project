@@ -3,6 +3,7 @@ import React, { FC } from "react";
 import MainLayout from "../../layouts/MainLayout/MainLayout";
 import Button from "../../components/UI/Button/Button";
 import Title from "../../components/UI/Title/Title";
+import {useNavigate} from "react-router-dom";
 
 interface DashboardProps {}
 
@@ -10,6 +11,28 @@ const Dashboard: FC<DashboardProps> = () => {
   const isMentor = false;
   const isMentee = false;
   const isExpert = false;
+
+  const navigate = useNavigate();
+
+  const logout = async () => {
+      const response = await fetch("/api/user/logout", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+          },
+      });
+
+      const returnedData = await response.json();
+
+      console.log(returnedData);
+
+      if (response.ok) {
+          navigate("/");
+      } else {
+          // setError(true);
+      }
+  };
 
   return (
     <MainLayout title={"Dashboard"}>
@@ -37,7 +60,7 @@ const Dashboard: FC<DashboardProps> = () => {
         Settings
       </Button>
 
-      <Button icon={"👋"}>Logout</Button>
+      <Button icon={"👋"} onClick={logout}>Logout</Button>
 
       <Title text={"Your Learning"} />
 
