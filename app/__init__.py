@@ -22,7 +22,7 @@ import os
 import app.environ as environ
 import app.filemanager as FileManager
 import app.config as Config
-import app.SQL as SQL
+import app.sql as sql
 from app.email import EMail as Mail, register as MailRegister
 import app.user as Users
 
@@ -40,14 +40,9 @@ login_token_key_str = "login_token"
 
 sql_config   = Config.load_config("sql")
 email_config = Config.load_config("email")
-db = SQL.open_connection(sql_config["connection"])
 
-schemas: list[str] = [filemanager.read_file("sql", sql_file) for sql_file in sql_config["sql_files"]]
-SQL.load_defaults_3(db, schemas, reset=False)
-
-load_factories = False
-if load_factories:
-    SQL.load_defaults_3(db, [filemanager.read_file("sql/factories", sql_file) for sql_file in ["departments_factory.sql", "topics_factory.sql"]])
+db = sql.open_connection(sql_config["connection"])
+sql.launch(db, reset=False)
 
 #############
 # App setup #
@@ -89,9 +84,10 @@ def execute_after_requests(response):
     return response
 
 
-from app.routes import APIRoute
+from app.routes import APIRoute, VerificationRoute
 
 app.register_blueprint(APIRoute.routes.blueprint)
+app.register_blueprint(VerificationRoute.routes.blueprint)
 
 
 

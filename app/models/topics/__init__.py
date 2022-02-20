@@ -9,5 +9,5 @@ class Topic:
         return f"Topic [{self.id}, {self.name!r}]"
 
 
-import app.models.topic.GetBy as GetBy
+import app.models.topics.GetBy as GetBy
 Topic.GetBy = GetBy

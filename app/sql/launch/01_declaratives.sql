@@ -37,9 +37,3 @@ CREATE TABLE IF NOT EXISTS TOPICS (
     name varchar(128),
     primary key (id)
 );
-
-CREATE TABLE IF NOT EXISTS EXPERTISES (
-    id serial,
-    name varchar(128),
-    primary key (id)
-);

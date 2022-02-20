@@ -6,15 +6,7 @@ configs_to_load = {
             "database": "cs261",
             "user": "user",
             "password": ""
-        },
-        "sql_files": [
-            "01_declaratives.sql",
-            "02_permissions.sql",
-            "03_users.sql",
-            "04_mentors_mentees.sql",
-            "05_notifications.sql",
-            "06_user_login_tokens.sql"
-        ]
+        }
     },
     "email": {
         "email_server": {

@@ -1,5 +1,5 @@
 from app.models.departments import Department
-import app.SQL as SQL
+import app.sql as SQL
 
 
 def name(db: SQL.conn, department_name: str):
@@ -10,12 +10,20 @@ def name(db: SQL.conn, department_name: str):
     return None
 
 
-def databaseID(db: SQL.conn, department_id: int):
+def database_id(db: SQL.conn, department_id: int):
     if SQL.is_valid_input(department_id):
         department = sql_statement(db, f"SELECT * FROM DEPARTMENTS WHERE id={department_id};")
         if department is not None:
             return department[0]
     return None
+
+
+def startswith(db: SQL.conn, start: str):
+    if SQL.is_valid_input(start):
+        departments = sql_statement(db, f"SELECT * FROM DEPARTMENTS WHERE name LIKE '{start}%';")
+        if departments is not None:
+            return departments
+    return []
 
 
 def exists(db: SQL.conn, department):
@@ -29,22 +37,14 @@ def exists(db: SQL.conn, department):
 
 def nameExists(db: SQL.conn, department_name: str):
     if (d := name(db, department_name)) is None:
-        return False, None
-    return True, d
+        return None
+    return d
 
 
 def idExists(db: SQL.conn, department_id: int):
     if (d := databaseID(db, department_id)) is None:
-        return False, None
-    return True, d
-
-
-def startswith(db: SQL.conn, start:str):
-    if SQL.is_valid_input(start):
-        departments = sql_statement(db, f"SELECT * FROM DEPARTMENTS WHERE name LIKE '{start}%';")
-        if departments is not None:
-            return departments
-    return []
+        return None
+    return d
 
 
 def all(db):

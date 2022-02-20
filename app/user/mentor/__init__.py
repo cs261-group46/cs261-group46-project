@@ -1,6 +1,6 @@
 import app.user as Users
 from app.models import Topics
-import app.SQL as SQL
+import app.sql as SQL
 import app.utils as Utils
 
 

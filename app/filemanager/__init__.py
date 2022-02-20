@@ -16,13 +16,71 @@ def get_project_root() -> str:
             raise FileNotFoundError("Current directory does not know /app")
 
 
-def read_file(*file_name: str) -> str:
-    f_name = os.path.join(*file_name)
-    if not os.path.isabs(f_name):
-        f_name = os.path.join(get_project_root(), f_name)
-    # file_content = None
-    with open(f_name, "r") as file:
-        file_content = file.read()
+class RelativeReader:
+    def __init__(self, *root):
+        if len(root) > 0:
+            if not isinstance(root[0], RelativeReader):
+                if os.path.isabs(abs_root := os.path.join(*root)):
+                    self.root = abs_root
+                    return
+        root_creation: str
+        if len(root) > 0 and isinstance(root[0], RelativeReader):
+            root_reader: RelativeReader = root[0]
+            root_creation = root_reader.get_abs_path()
+            root = root[1:]
+        else:
+            root_creation = get_project_root()
+        self.root = os.path.join(root_creation, *root)
 
-    # print(file_content)
-    return file_content
+    def read_file(self, *file_name) -> str:
+        with open(self.get_abs_path(*file_name), "r") as file:
+            file_content = file.read()
+        return file_content
+
+    def exists(self, *file_name) -> bool:
+        return os.path.exists(self.get_abs_path(*file_name))
+
+    def get_abs_path(self, *elements) -> str:
+        if len(elements) > 0:
+            full_path = os.path.join(*elements)
+        else:
+            full_path = ""
+
+        if not os.path.isabs(full_path):
+            full_path = os.path.join(self.root, full_path)
+        return os.path.abspath(full_path)
+
+    def list_directory(self, *elements, with_root=False):
+        original_path = os.path.join(*elements)
+        abs_path = self.get_abs_path(*elements)
+        if os.path.exists(abs_path):
+            if os.path.isdir(abs_path) or os.path.isdir(abs_path + os.sep):
+                dir_contents = os.listdir(abs_path)
+                if with_root:
+                    return [os.path.join(original_path, dir_file_name) for dir_file_name in os.listdir(abs_path)]
+                else:
+                    return os.listdir(abs_path)
+            else:
+                raise TypeError(f"Path {abs_path} is not a directory")
+        else:
+            raise TypeError(f"Path {abs_path} does not exists")
+
+    def path_exists(self, *elements):
+        return os.path.exists(self.get_abs_path(*elements))
+
+    def move(self, source_file, destination_dir):
+        abs_source_file = self.get_abs_path(source_file)
+        abs_destination_dir = self.get_abs_path(destination_dir)
+        if not os.path.isdir(abs_destination_dir):
+            raise FileNotFoundError(f"{abs_destination_dir} is not a dir")
+        if not os.path.isfile(abs_source_file):
+            raise FileNotFoundError(f"{abs_source_file} is not a file")
+
+        source_file_name: str = abs_source_file.split(os.sep)[-1]
+        abs_destination_file = os.path.join(abs_destination_dir, source_file_name)
+        os.rename(abs_source_file, abs_destination_file)
+
+
+root_relative_reader = RelativeReader()
+read_file = root_relative_reader.read_file
+

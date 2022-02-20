@@ -17,10 +17,9 @@ CREATE OR REPLACE FUNCTION get_user_id_from_token(login_token varchar(128))
             user_id integer;
             token_timeout timestamp;
         BEGIN
-            SELECT userID FROM USER_LOGIN_TOKENS WHERE loginToken=login_token LIMIT 1 INTO user_id;
+            SELECT userID, loginTimeout FROM USER_LOGIN_TOKENS WHERE token=login_token LIMIT 1 INTO user_id, token_timeout;
 
             IF found then
-                SELECT loginTimeout FROM USER_LOGIN_TOKENS WHERE loginToken=login_token LIMIT 1 INTO token_timeout;
 
                 IF token_timeout < current_timestamp(0) THEN
                     DELETE FROM USER_LOGIN_TOKENS WHERE loginToken=login_token;

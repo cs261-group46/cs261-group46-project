@@ -1,5 +1,5 @@
 import app.user as Users
-import app.SQL as SQL
+import app.sql as SQL
 from uuid import UUID
 import app.user.mentee as Mentees
 
@@ -24,7 +24,7 @@ def uuid(db, uuid: UUID) -> list:
 
 def login_token(db, login_token: str):
     if SQL.is_valid_input(login_token):
-        mentees = sql_statement(db, f"SELECT * FROM view_MENTEES WHERE userID=get_user_id_from_token('{login_token}');")
+        mentees = sql_statement(db, f"SELECT * FROM view_MENTEES WHERE userID=get_user_id_from_token('{login_token}', 'LOGIN');")
         if not (mentees is None):
             return mentees
     return []

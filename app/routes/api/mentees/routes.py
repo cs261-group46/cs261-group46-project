@@ -14,8 +14,6 @@ def register():
 
 @blueprint.route("/", methods=["GET"])
 def get():
-    if login_token_key_str in session.keys():
-        user = Users.GetBy.login_token(db, session.get(login_token_key_str))
-        if user.isLoaded():
-            return {"mentees": Utils.to_api_return_data(Users.Mentees.GetBy.user(db, user))}
-    return []
+    if (user := Users.GetBy.session(db, login_token_key_str, session)).isLoaded():
+        return {"mentees": Utils.to_api_return_data(Users.Mentees.GetBy.user(db, user))}
+    return {"mentees": []}

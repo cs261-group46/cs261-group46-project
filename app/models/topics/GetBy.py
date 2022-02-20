@@ -1,5 +1,5 @@
-from app.models.topic import Topic
-import app.SQL as SQL
+from app.models.topics import Topic
+import app.sql as SQL
 
 
 def name(db: SQL.conn, name: str):

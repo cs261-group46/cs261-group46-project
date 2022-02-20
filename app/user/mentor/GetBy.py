@@ -1,5 +1,5 @@
 import app.user as Users
-import app.SQL as SQL
+import app.sql as SQL
 from uuid import UUID
 import app.user.mentor as Mentors
 from app.models import Topics
@@ -35,7 +35,7 @@ def uuid(db, uuid: UUID):
 
 def login_token(db, login_token: str):
     if SQL.is_valid_input(login_token):
-        mentor = sql_statement(db, f"SELECT * FROM view_MENTORS WHERE userID=get_user_id_from_token('{login_token}');")
+        mentor = sql_statement(db, f"SELECT * FROM view_MENTORS WHERE userID=get_user_id_from_token('{login_token}', 'LOGIN');")
         if not (mentor is None):
             return mentor[0]
     return None
