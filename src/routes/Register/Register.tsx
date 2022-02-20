@@ -3,22 +3,14 @@ import MainLayout from "../../layouts/MainLayout/MainLayout";
 import TextInput from "../../components/UI/FormInput/TextInput/TextInput";
 import PasswordInput from "../../components/Register/PasswordInput/PasswordInput";
 import Select from "../../components/UI/FormInput/Select/Select";
-import MultiSelect from "../../components/UI/FormInput/MultiSelect/MultiSelect";
 import Button from "../../components/UI/Button/Button";
 import useInput from "../../hooks/UseInput/UseInput";
 import {
   SelectOption,
   SelectOptions,
 } from "../../components/UI/FormInput/Select/Select.d";
-import {
-  MultiSelectOptions,
-  SearchPromise,
-} from "../../components/UI/FormInput/MultiSelect/MultiSelect.d";
-import { useNavigate } from "react-router-dom";
 
 interface RegisterProps {}
-
-const DUMMY_DEPARTMENTS: SelectOptions = [{ id: "1", label: "Department 1" }];
 
 function validateEmail(email: string) {
   const re =
@@ -59,7 +51,7 @@ function validateRepeatedPassword(
     password === repeatedPassword
   );
 }
-function validateDepartment(_department: SelectOption) {
+function validateDepartment(_department: SelectOption<number>) {
   return true;
 }
 
@@ -107,7 +99,7 @@ const Register: FC<RegisterProps> = () => {
     isInputValid: isInputDepartmentValid,
     changeHandler: departmentChangeHandler,
     blurHandler: departmentBlurHandler,
-  } = useInput<SelectOption>(validateDepartment, { id: "0" });
+  } = useInput<SelectOption<number>>(validateDepartment, { id: -1 });
 
   const sendRegistrationData = async () => {
     const body = {
@@ -123,6 +115,7 @@ const Register: FC<RegisterProps> = () => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
       },
       body: JSON.stringify(body), // body data type must match "Content-Type" header
     });
@@ -132,42 +125,36 @@ const Register: FC<RegisterProps> = () => {
     console.log(returnedData);
   };
 
-  let navigate = useNavigate();
-
   const registrationHandler = () => {
+    console.log(isInputPasswordValid)
+
+
     if (
       isInputFirstNameValid &&
       isInputLastNameValid &&
       isInputEmailValid &&
       isInputPasswordValid &&
-      enteredRepeatedPassword &&
+      isInputRepeatedPasswordValid &&
       isInputDepartmentValid
     ) {
       sendRegistrationData();
-      navigate("/dashboard");
     }
   };
 
-  const searchPromise: SearchPromise = (_search) => {
-    return new Promise((resolve) =>
-      resolve([
-        { label: "Tracking", value: "tracking" },
-        { label: "Training", value: "training" },
-      ])
-    );
-  };
-
   useEffect(() => {
-    fetchDepartment();
+    fetchDepartments();
   }, []);
 
   const [departments, setDepartments] = useState<SelectOptions>([]);
 
-  const fetchDepartment = async () => {
-    const departments = await fetch("/api/departments");
-    const body = await departments.json();
-    setDepartments([]);
-    console.log(body);
+  const fetchDepartments = async () => {
+    console.log("sending");
+
+    const dep = await fetch("/api/departments");
+    const body = await dep.json();
+    console.log(body.result);
+
+    setDepartments(body.result);
   };
 
   return (
@@ -235,6 +222,7 @@ const Register: FC<RegisterProps> = () => {
       <Button icon="👑" onClick={registrationHandler} buttonStyle={"primary"}>
         Register
       </Button>
+      <div data-testid="Register" />
     </MainLayout>
   );
 };

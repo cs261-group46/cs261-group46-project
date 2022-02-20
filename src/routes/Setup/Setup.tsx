@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import MultiSelect from "../../components/UI/FormInput/MultiSelect/MultiSelect";
 import { MultiSelectOptions } from "../../components/UI/FormInput/MultiSelect/MultiSelect.d";
-import styles from "./Setup.module.scss";
+// import styles from "./Setup.module.scss";
 import useInput from "../../hooks/UseInput/UseInput";
 import { SearchPromise } from "../../components/UI/FormInput/MultiSelect/MultiSelect.d";
 import MainLayout from "../../layouts/MainLayout/MainLayout";
@@ -41,6 +41,7 @@ const Setup: FC<SetupProps> = () => {
         icon="💪"
         searchPromise={searchPromise}
       />
+      <div data-testid="Setup"/>
     </MainLayout>
   );
 };
