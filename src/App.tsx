@@ -21,10 +21,9 @@ function App() {
           <Route path="/verifyregister" element={<VerifyRegister/>}/>
           <Route path="/expert" element={<Expert/>}/>
           <Route path="/setup" element={<Setup />} />
-          <Route path="/mentor">
           <Route path="/login" element={<Login />} />
-
-          <Route path="become-mentor" element={<MentorSignup/>}/>
+          <Route path="/mentor">
+            <Route path="become-mentor" element={<MentorSignup/>}/>
           </Route>
           <Route path="/learn">
             <Route path="become-mentee" element={<MenteeSignup/>}/>
