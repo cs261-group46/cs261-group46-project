@@ -80,6 +80,12 @@ def execute_before_requests():
 
 @app.after_request
 def execute_after_requests(response):
+    # change response code on unsuccessful responses
+    # TODO: move this to where response is actually called
+    data = response.get_json()
+    if data and "successful" in data and not data["successful"]:
+        response.status = 400
+
     response.headers["Access-Control-Allow-Origin"] = "*"
     return response
 
