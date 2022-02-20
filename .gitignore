@@ -30,4 +30,5 @@ yarn-error.log*
 /app/templates/react
 /app/config/sql.json
 /app/config/email.json
+/app/dev_environ.py
 

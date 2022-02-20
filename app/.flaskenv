@@ -1,0 +1,2 @@
+FLASK_APP=SkillQuest
+FLASK_ENV=development

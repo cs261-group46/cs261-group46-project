@@ -128,19 +128,6 @@ const Register: FC<RegisterProps> = () => {
     console.log(returnedData);
   };
 
-  const registrationHandler = () => {
-    if (
-      isInputFirstNameValid &&
-      isInputLastNameValid &&
-      isInputEmailValid &&
-      isInputPasswordValid &&
-      enteredRepeatedPassword &&
-      isInputDepartmentValid
-    ) {
-      sendRegistrationData();
-    }
-  };
-
   useEffect(() => {
     fetchDepartments();
   }, []);
@@ -157,8 +144,22 @@ const Register: FC<RegisterProps> = () => {
     setDepartments(body.result);
   };
 
+  const submitHandler = () => {
+    if (
+      isInputFirstNameValid &&
+      isInputLastNameValid &&
+      isInputEmailValid &&
+      isInputPasswordValid &&
+      enteredRepeatedPassword &&
+      isInputDepartmentValid
+    ) {
+      sendRegistrationData();
+    }
+  }
+
   return (
     <MainLayout title="Register">
+      <form onSubmit={submitHandler}>
       <TextInput
         icon="1️⃣"
         value={enteredFirstName}
@@ -219,9 +220,10 @@ const Register: FC<RegisterProps> = () => {
         label="Department"
         options={departments}
       />
-      <Button icon="👑" onClick={registrationHandler} buttonStyle={"primary"}>
+      <Button icon="👑" buttonStyle={"primary"} type="submit">
         Register
       </Button>
+      </form>
       <div data-testid="Register" />
     </MainLayout>
   );

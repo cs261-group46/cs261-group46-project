@@ -5,10 +5,10 @@ import app.utils as Utils
 from app.models import Topics
 
 
-blueprint = Blueprint("api_topics", __name__, url_prefix="/topics")
+topics = Blueprint("api_topics", __name__, url_prefix="/topics")
 
 
-@blueprint.route("/", methods=["GET"])
+@topics.route("/", methods=["GET"])
 def get():
     if request.args.get("startwith") is None:
         topics = Topics.GetBy.all(db)

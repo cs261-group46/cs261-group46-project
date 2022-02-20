@@ -10,6 +10,7 @@ interface ButtonProps {
   onClick?: () => void;
   buttonStyle?: ButtonStyle;
   href?: string;
+  type?: "button" | "submit" | "reset" | undefined
 }
 
 const Button: FC<ButtonProps> = (props) => {
@@ -21,6 +22,7 @@ const Button: FC<ButtonProps> = (props) => {
       onClick={props.onClick}
       className={`${styles[styleName]}`}
       data-testid="Button"
+      type={props.type}
     >
       {props.icon && <Icon icon={props.icon} className={styles.Icon} />}
       {props.children}
