@@ -51,6 +51,9 @@ Config.load_defaults()
 sql_config = Config.load_config("sql")
 db = SQL.create_connection(sql_config["connection"])
 
+#Load Dummy Data into the database
+
+
 for sql_file in sql_config["sql_files"]:
     SQL.load_defaults(db, Config.read_file("sql" + sep + sql_file))
 

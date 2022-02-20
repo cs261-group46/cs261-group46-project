@@ -1,4 +1,5 @@
 import psycopg2 as sql
+import loadDummyData
 
 conn = sql._psycopg.connection
 
@@ -16,6 +17,7 @@ def create_connection(loaded_config: dict) -> conn:
         return db_temp_func
 
     try:
+        loadDummyData.fillDatabase(connect())
         return connect()
     except sql.OperationalError as e1:
         try:
