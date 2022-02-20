@@ -50,16 +50,28 @@ class RelativeReader:
             full_path = os.path.join(self.root, full_path)
         return os.path.abspath(full_path)
 
-    def list_directory(self, *elements, with_root=False):
+    def list_directory(self, *elements, with_root=False, extensions=None):
+        if extensions is None:
+            extensions = []
+
         original_path = os.path.join(*elements)
         abs_path = self.get_abs_path(*elements)
         if os.path.exists(abs_path):
             if os.path.isdir(abs_path) or os.path.isdir(abs_path + os.sep):
                 dir_contents = os.listdir(abs_path)
                 if with_root:
-                    return [os.path.join(original_path, dir_file_name) for dir_file_name in os.listdir(abs_path)]
+                    to_return = [os.path.join(original_path, dir_file_name) for dir_file_name in os.listdir(abs_path)]
                 else:
-                    return os.listdir(abs_path)
+                    to_return = os.listdir(abs_path)
+                for f in to_return.copy():
+                    valid_extension = False
+                    for extension in extensions:
+                        if f.endswith(f".{extension}"):
+                            valid_extension = True
+                    if not valid_extension:
+                        to_return.remove(f)
+                return to_return
+
             else:
                 raise TypeError(f"Path {abs_path} is not a directory")
         else:

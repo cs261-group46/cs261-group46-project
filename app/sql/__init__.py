@@ -5,10 +5,10 @@ from app.sql.schema_loaders import load_schema, load_schemas
 
 
 def launch(db: conn, reset=False):
-    before_first_launch_dir_files = sql_relative_reader.list_directory("first_launch", "to_execute", "before_launch", with_root=True)
-    reset_dir_files = sql_relative_reader.list_directory("reset", with_root=True)
-    launch_dir_files = sql_relative_reader.list_directory("launch", with_root=True)
-    after_first_launch_dir_files = sql_relative_reader.list_directory("first_launch", "to_execute", "after_launch", with_root=True)
+    before_first_launch_dir_files = sql_relative_reader.list_directory("first_launch", "to_execute", "before_launch", with_root=True, extensions=["sql", "osql"])
+    reset_dir_files = sql_relative_reader.list_directory("reset", with_root=True, extensions=["sql", "osql"])
+    launch_dir_files = sql_relative_reader.list_directory("launch", with_root=True, extensions=["sql", "osql"])
+    after_first_launch_dir_files = sql_relative_reader.list_directory("first_launch", "to_execute", "after_launch", with_root=True, extensions=["sql", "osql"])
 
     before_first_launch_files = get_executing_files(*before_first_launch_dir_files)
     reset_files = get_executing_files(*reset_dir_files)
