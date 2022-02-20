@@ -9,6 +9,8 @@ import {
   SelectOption,
   SelectOptions,
 } from "../../components/UI/FormInput/Select/Select.d";
+import {useNavigate} from "react-router-dom";
+import SystemMessage from "../../components/UI/SystemMessage/SystemMessage";
 
 interface RegisterProps {}
 
@@ -101,6 +103,10 @@ const Register: FC<RegisterProps> = () => {
     blurHandler: departmentBlurHandler,
   } = useInput<SelectOption<number>>(validateDepartment, { id: -1 });
 
+  const [error, setError] = useState(false);
+
+  const navigate = useNavigate();
+
   const sendRegistrationData = async () => {
     const body = {
       email: enteredEmail,
@@ -123,12 +129,15 @@ const Register: FC<RegisterProps> = () => {
     const returnedData = await response.json();
 
     console.log(returnedData);
+
+    if (response.ok) {
+      navigate("/register/verify-email");
+    } else {
+      setError(true);
+    }
   };
 
   const registrationHandler = () => {
-    console.log(isInputPasswordValid)
-
-
     if (
       isInputFirstNameValid &&
       isInputLastNameValid &&
@@ -222,6 +231,7 @@ const Register: FC<RegisterProps> = () => {
       <Button icon="👑" onClick={registrationHandler} buttonStyle={"primary"}>
         Register
       </Button>
+      <SystemMessage sort={"inline"} type={"warning"} description={"Registration failed! Please try again later."} visible={error} setVisible={setError}/>
       <div data-testid="Register" />
     </MainLayout>
   );
