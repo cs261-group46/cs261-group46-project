@@ -1,7 +1,5 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import ReactDOM from 'react-dom';
-import { isPropertySignature } from 'typescript';
-import { parentPort } from 'worker_threads';
 import styles from './SystemMessage.module.scss';
 
 interface SystemMessageProps {
@@ -9,18 +7,16 @@ interface SystemMessageProps {
     type: "warning" | "alert" | "information"
     description: string
     visible: boolean
+    setVisible: (newVisible: boolean) => void
     children?: React.ReactNode
 }
 
 const SystemMessage: FC<SystemMessageProps> = (props) => {
-
-  const [visible, setVisible] = useState(props.visible)
-
   const handleClick = () => {
-    setVisible(prevState => !prevState)
+    props.setVisible(true)
   }
 
-  if (props.sort === "inline" && visible) {
+  if (props.sort === "inline" && props.visible) {
     return (
         <div className={styles.SystemMessage+ ' ' + 
                         (props.type === "warning" ? styles.warning : '') + ' ' + 
@@ -32,7 +28,7 @@ const SystemMessage: FC<SystemMessageProps> = (props) => {
         </div>
     )
   }
-  else if (props.sort === "popup" && visible) {
+  else if (props.sort === "popup" && props.visible) {
     return ReactDOM.createPortal(
       <div className={styles.PopUpModal}>
         <div className={styles.PopUpSystemMessage+ ' ' + 
