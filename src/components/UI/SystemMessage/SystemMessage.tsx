@@ -13,7 +13,7 @@ interface SystemMessageProps {
 
 const SystemMessage: FC<SystemMessageProps> = (props) => {
   const handleClick = () => {
-    props.setVisible(true)
+    props.setVisible(false)
   }
 
   if (props.sort === "inline" && props.visible) {
