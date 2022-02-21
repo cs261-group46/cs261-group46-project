@@ -69,7 +69,8 @@ def get():
     users = Users.session(login_token_key_str, session)
     if user := users.first():
         return user.get_api_return_data()
-    return {}
+
+    return {}, 401
     # if login_token_key_str in session.keys():
     #     user = Users.GetBy.login_token(db, session.get(login_token_key_str))
     #     if user.isLoaded():
