@@ -9,6 +9,7 @@ import Setup from "./routes/Setup/Setup";
 import Login from "./routes/Login/Login.lazy";
 import MentorSignup from "./routes/mentor/MentorSignup/MentorSignup.lazy";
 import MenteeSignup from "./routes/learn/MenteeSignup/MenteeSignup.lazy";
+import Homepage from "./routes/Homepage/Homepage.lazy";
 
 function App() {
 
@@ -28,6 +29,7 @@ function App() {
           <Route path="/learn">
             <Route path="become-mentee" element={<MenteeSignup/>}/>
           </Route>
+          <Route index element={<Homepage/>}/>
         </Routes>
       </div>
     </BrowserRouter>
