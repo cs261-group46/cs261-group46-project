@@ -1,8 +1,9 @@
-import app.user as Users
+import app.models.mentor as Mentors
+import app.models.topics as Topics
+import app.models.user as Users
+
 import app.sql as SQL
 from uuid import UUID
-import app.user.mentor as Mentors
-from app.models import Topics
 from app.utils import ConcurrentContext
 
 

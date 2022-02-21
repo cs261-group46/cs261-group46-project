@@ -19,16 +19,13 @@
 
 from flask import Flask, request, session, redirect, url_for, send_file
 import os
+
 import app.environ as environ
+
 import app.filemanager as FileManager
 import app.config as Config
 import app.sql as sql
 from app.email import EMail as Mail, register as MailRegister
-import app.user as Users
-
-
-peper = environ.get('PEPER')
-name = environ.get('NAME')
 
 ##########################
 # Config Options/Loading #
@@ -43,6 +40,24 @@ email_config = Config.load_config("email")
 
 db = sql.open_connection(sql_config["connection"])
 sql.launch(db, reset=False)
+
+##################
+# Import Modules #
+##################
+
+
+import app.models as Models
+import app.user as Users
+
+
+peper = environ.get('PEPER')
+name = environ.get('NAME')
+
+##########################
+# Config Options/Loading #
+##########################
+
+
 
 #############
 # App setup #
@@ -63,37 +78,12 @@ Mail.debug = True
 ###############
 
 
-@app.errorhandler(404)
-def index(error):
-    with open(os.path.abspath(f"{app.static_folder}/../index.html"), "r") as file:
-        file_contents = file.read()
-    return file_contents
 
 
-@app.before_request
-def execute_before_requests():
-    if login_token_key_str in session.keys():
-        login_token = session.get(login_token_key_str)
-        if not (login_token is None):
-            Users.GetBy.login_token(db, login_token)  # Refresh auth token
 
+from app.routes import load_routes
 
-@app.after_request
-def execute_after_requests(response):
-    # change response code on unsuccessful responses
-    # TODO: move this to where response is actually called
-    data = response.get_json()
-    if data and "successful" in data and not data["successful"]:
-        response.status = 400
-
-    response.headers["Access-Control-Allow-Origin"] = "*"
-    return response
-
-
-from app.routes import APIRoute, VerificationRoute
-
-app.register_blueprint(APIRoute.routes.blueprint)
-app.register_blueprint(VerificationRoute.routes.blueprint)
+load_routes(app)
 
 
 

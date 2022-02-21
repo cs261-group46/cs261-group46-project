@@ -1,7 +1,8 @@
 from uuid import UUID
 from app.sql import conn
 from app.utils import random_string
-from app.user import User
+# import app.models.user
+# from app.models import User
 
 
 class Token:
@@ -27,7 +28,7 @@ class Token:
         cursor.execute(f"DELETE FROM USER_TOKENS WHERE tokenValue='{self.tokenValue}';")
 
     @staticmethod
-    def generate(db: conn, user: User, token_type) -> str:
+    def generate(db: conn, user, token_type) -> str:
         token_value = get_available_token(db)
         Token(userID=user.id, tokenValue=token_value, tokenType=token_type).save(db)
         return token_value

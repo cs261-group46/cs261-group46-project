@@ -1,13 +1,15 @@
+import app.models.user as Users
+
 from uuid import UUID
 
 from flask.sessions import SessionMixin
 
 import app.sql as sql
-import app.user as Users
 
 
 def email(db, address: str):
     if sql.is_valid_input(address):
+        Users.query.filter_by(email=address)
         user = sql_statement(db, f"SELECT * FROM USERS WHERE email='{address}';")
         if not (user is None):
             return user
@@ -17,6 +19,7 @@ def email(db, address: str):
 def uuid(db, id: UUID):
     id = str(id)
     if sql.is_valid_input(id):
+        Users.query.filter_by(unique_user_id=id)
         user = sql_statement(db, f"SELECT * FROM USERS WHERE unique_user_id='{id}';")
         if not (user is None):
             return user

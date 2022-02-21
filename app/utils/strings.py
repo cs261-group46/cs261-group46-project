@@ -1,18 +1,10 @@
 import secrets
+import string
 
-chars = []
-for i in range(26):
-    chars.append(chr(ord("a")+i))
-    chars.append(chr(ord("A")+i))
-
-for i in range(10):
-    chars.append(chr(ord("0")+i))
+chars = string.ascii_lowercase + string.ascii_uppercase + string.digits
 
 
 def random_string(length: int) -> str:
+    return "".join(secrets.choice(chars) for _ in range(length))
 
-    s = ""
-    for i in range(length):
-        s += secrets.choice(chars)
-    return s
 

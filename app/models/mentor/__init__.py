@@ -1,7 +1,7 @@
-import app.user as Users
-from app.models import Topics
+# import app.user as Users
 import app.sql as SQL
 import app.utils as Utils
+from app.models import Topics, Users
 
 
 class Mentor:
@@ -72,4 +72,5 @@ def register(db, user: Users.User, about: str, topics: list) -> tuple:
 
     return True, GetBy.user2(db, user)
 
-import app.user.mentor.GetBy as GetBy
+
+import app.models.mentor.GetBy as GetBy

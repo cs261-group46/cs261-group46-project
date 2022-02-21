@@ -1,5 +1,3 @@
-
-
 class Department:
     def __init__(self, id=None, name=None):
         self.id: int = id
@@ -10,4 +8,5 @@ class Department:
 
 
 import app.models.departments.GetBy as GetBy
+import app.models.departments.query as query
 Department.GetBy = GetBy
