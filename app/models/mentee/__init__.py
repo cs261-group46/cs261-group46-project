@@ -1,13 +1,11 @@
-import app.user.mentee.GetBy as GetBy
-import app.user as Users
-
+from app.models import User
 
 
 class Mentee:
     def __init__(self):
         self.databaseID: int = None
         self.userID: int = None
-        self.user: Users.User
+        self.user: User
         self.topicID: int = None
 
     def get_api_return_data(self, start_dict=None):
@@ -36,3 +34,6 @@ class DummyMentee(Mentee):
 
     def isDummy(self):
         return True
+
+
+import app.models.mentee.GetBy as GetBy

@@ -1,5 +1,7 @@
 import psycopg2
+import psycopg2.extras
 
+psycopg2.extras.register_uuid()
 conn = psycopg2._psycopg.connection
 
 

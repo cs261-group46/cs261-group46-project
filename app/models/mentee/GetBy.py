@@ -1,10 +1,10 @@
-import app.user as Users
+from app.models import User
 import app.sql as SQL
 from uuid import UUID
-import app.user.mentee as Mentees
+import app.models.mentee as Mentees
 
 
-def user(db, user: Users.User) -> list:
+def user(db, user: User) -> list:
     db_id = str(user.id)
     if SQL.is_valid_input(db_id):
         mentees = sql_statement(db, f"SELECT * FROM view_MENTEES WHERE userID='{db_id}';")
@@ -39,7 +39,7 @@ def sql_statement(db: SQL.conn, statement):
     mentees = []
     for row in data:
         mentee = Mentees.Mentee()
-        mentee.user = Users.User()
+        mentee.user = User()
         mentee.databaseID = row[0]
         mentee.usedID = mentee.user.database_id = row[1]
         mentee.topicID = row[2]

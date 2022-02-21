@@ -1,11 +1,17 @@
 from uuid import uuid4
-
+from app.validators.LoginValidator import validator as login_validator
+from app.validators.RegisterValidator import validator as register_validator
 import app.utils as Utils
 import app.environ as environ
+
 import app.sql as SQL
+from app.models import Token, Departments, Users
 
 
 def register(db, email: str, password: str, password_repeat: str, first_name: str, last_name: str, department) -> tuple:
+
+    register_validator.validate({"email": email, "password": password, "password_repeat": password_repeat, "first_name": first_name, "last_name": last_name})
+    print(register_validator.errors)
 
     if not SQL.is_valid_input(email):
         return False, "SQL.invalid", 1
@@ -16,19 +22,20 @@ def register(db, email: str, password: str, password_repeat: str, first_name: st
 
     if not Utils.is_password_allowed(password, password_repeat):
         return False, "Password.invalid", 2
-    if GetBy.email(db, email).isLoaded():
+    if not Users.query.select(email=email).is_empty():
+    #if Users.GetBy.email(db, email).isLoaded():
         return False, "Email.duplicate", 1
 
-    departmentData: Departments.Department = Departments.GetBy.exists(db, department)
-    if departmentData is None:
+    department_data: Departments.Department = Departments.GetBy.exists(db, department)
+    if department_data is None:
         print(department)
         return False, "Department.invalid", 6
 
     user_salt = Utils.random_string(16)
     hashed_password = Utils.hash_password(password, first_name + " " + last_name, user_salt, environ.get("PEPER"))
-    id = get_available_random_uuid(db)  # Still need to verify unocupied
+    id = get_available_random_uuid(db)  # Still need to verify unoccupied
     statement = f"INSERT INTO USERS(unique_user_id, email, hashedPassword, salt, firstName, lastName, departmentId) " \
-                f"VALUES ('{id}', '{email}', '{hashed_password}', '{user_salt}', '{first_name}', '{last_name}', {departmentData.id});"
+                f"VALUES ('{id}', '{email}', '{hashed_password}', '{user_salt}', '{first_name}', '{last_name}', {department_data.id});"
     cursor = db.cursor()
     cursor.execute(statement)
 
@@ -41,11 +48,11 @@ def login(db, email: str, password: str) -> tuple:
     if not SQL.is_valid_input(email):
         return False, "SQL.invalid", 1
 
-    user = GetBy.email(db, email)
-    if user is False:
+    user = Users.query.select(email=email).first()
+    if user is None:
         return False, "User.EmailNotRegistered", 1
 
-    if not Utils.check_password(user.first_name + " " + user.last_name, user.salt, environ.get("PEPER"), password, user.hashed_password):
+    if not Utils.check_password(user.firstName + " " + user.lastName, user.salt, environ.get("PEPER"), password, user.hashed_password):
         return False, "Password.Wrong", 2
 
     login_token = Token.generate(db, user, "LOGIN")
@@ -56,8 +63,8 @@ def login(db, email: str, password: str) -> tuple:
 
 
 def logout(db, login_token: str):
-    user = GetBy.login_token(db, login_token)
-    if user.isDummy():
+    user = Users.query.select(login_token=login_token).first()
+    if user is None:
         return False
 
     print(f"Logging out {repr(user)}")
@@ -70,9 +77,9 @@ def logout(db, login_token: str):
 def get_available_random_uuid(db):
     while True:
         id = uuid4()
-        if GetBy.uuid(db, id).isDummy():
+        if Users.query.select(uuid=id).is_empty():  #   .GetBy.uuid(db, id).isDummy():
             break
     return id
 
-from app.user import GetBy
-from app.models import Token, Departments
+
+

@@ -27,13 +27,13 @@ CREATE OR REPLACE FUNCTION add_minutes_to_timestamp_with_timezone(t TIMESTAMP WI
 
 CREATE TABLE IF NOT EXISTS DEPARTMENTS (
     id serial,
-    name varchar(128),
+    name varchar(128) unique ,
     primary key (id)
 );
 
 
 CREATE TABLE IF NOT EXISTS TOPICS (
     id serial,
-    name varchar(128),
+    name varchar(128) unique ,
     primary key (id)
 );
