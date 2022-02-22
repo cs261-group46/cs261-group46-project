@@ -1,1 +1,10 @@
-.HoursInput {}
+.HoursInput {
+  position: relative;
+  .clockFace {
+  }
+  
+  .segment {
+    position: absolute;
+    left: 0;
+  }
+}

@@ -5,9 +5,12 @@ import HoursInput from "./HoursInput";
 
 describe('<24HourInput />', () => {
   test('it should mount', () => {
-    render(<HoursInput />);
+    let value: boolean[] = []
+    const setValue = (newValue: boolean[]) => { value = newValue }
+
+    render(<HoursInput label={"test"} value={value} onChange={setValue} onBlur={() => {}} isValid={true}/>);
     
-    const hoursInput = screen.getByTestId('24HourInput');
+    const hoursInput = screen.getByTestId('HoursInput');
 
     expect(hoursInput).toBeInTheDocument();
   });
