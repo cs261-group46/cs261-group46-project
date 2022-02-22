@@ -1,13 +1,12 @@
 import React, { ChangeEventHandler, FC } from 'react';
-import styles from './TextInput.module.scss';
+import styles from './BigTextInput.module.scss';
 import Label from '../Label/Label';
 
-interface TextInputProps {
+interface BigTextInputProps {
   id: string;
   label: string;
   placeholder: string;
   icon?: React.ReactNode;
-  type?: string;
   className?: any;
   value: string | undefined;
   isValid: boolean;
@@ -15,8 +14,8 @@ interface TextInputProps {
   onBlur: () => void;
 }
 
-const TextInput: FC<TextInputProps> = props => {
-  const changeHandler: ChangeEventHandler<HTMLInputElement> = event => {
+const BigTextInput: FC<BigTextInputProps> = props => {
+  const changeHandler: ChangeEventHandler<HTMLTextAreaElement> = event => {
     const target = event.target;
     if (target) {
       props.onChange(target.value);
@@ -24,13 +23,12 @@ const TextInput: FC<TextInputProps> = props => {
   };
 
   return (
-    <div className={`${styles.TextInput} ${props.className}`} data-testid='TextInput'>
+    <div className={styles.BigTextInput} data-testid='BigTextInput'>
       <Label htmlFor={props.id} icon={props.icon}>
         {props.label}
       </Label>
-      <input
+      <textarea
         value={props.value}
-        type={props.type ?? 'text'}
         name={props.id}
         id={props.id}
         placeholder={props.placeholder}
@@ -41,4 +39,4 @@ const TextInput: FC<TextInputProps> = props => {
   );
 };
 
-export default TextInput;
+export default BigTextInput;
