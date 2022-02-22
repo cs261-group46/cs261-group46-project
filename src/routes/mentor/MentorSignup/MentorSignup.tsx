@@ -28,10 +28,19 @@ const MentorSignup: FC<MentorSignupProps> = () => {
     enteredValue: profile,
   } = useInput<string>(() => true, '');
 
+  const {
+    isInputValid: isCapacityInputValid,
+    isValueValid: isCapacityValueValid,
+    changeHandler: capacityChangeHandler,
+    blurHandler: capacityBlurHandler,
+    enteredValue: capacity,
+  } = useInput<string>(() => true, '');
+
   let navigate = useNavigate();
 
   const registrationHandler = () => {
-    if (isSkillsValueValid && isProfileValueValid) {
+    console.log(skills, profile, capacity);
+    if (isSkillsValueValid && isProfileValueValid && isCapacityValueValid) {
       // sendRegistrationData();
       navigate('/dashboard');
     }
@@ -56,6 +65,17 @@ const MentorSignup: FC<MentorSignupProps> = () => {
         isValid={isProfileInputValid}
         onChange={profileChangeHandler}
         onBlur={profileBlurHandler}
+      />
+
+      <TextInput
+        id={'capacity'}
+        label={'How many mentees do you want?'}
+        placeholder={'e.g. 5'}
+        value={capacity}
+        type={'number'}
+        isValid={isCapacityInputValid}
+        onChange={capacityChangeHandler}
+        onBlur={capacityBlurHandler}
       />
 
       <Button icon='👑' onClick={registrationHandler} buttonStyle={'primary'}>

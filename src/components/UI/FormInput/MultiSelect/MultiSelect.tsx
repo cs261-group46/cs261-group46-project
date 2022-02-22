@@ -5,19 +5,19 @@ import React, {
   useMemo,
   useRef,
   useState,
-} from "react";
-import styles from "./MultiSelect.module.scss";
-import Label from "../Label/Label";
-import { debounceTime, Subject } from "rxjs";
+} from 'react';
+import styles from './MultiSelect.module.scss';
+import Label from '../Label/Label';
+import { debounceTime, Subject } from 'rxjs';
 import {
   AddSelectedHandler,
   MultiSelectOptions,
   RemoveSelectedHandler,
   SearchPromise,
-} from "./MultiSelect.d";
+} from './MultiSelect.d';
 
-import SelectedOptions from "./SelectedOptions/SelectedOptions";
-import Autocomplete from "./Autocomplete/Autocomplete";
+import SelectedOptions from './SelectedOptions/SelectedOptions';
+import Autocomplete from './Autocomplete/Autocomplete';
 
 interface MultiSelectProps<T> {
   id: string;
@@ -33,7 +33,7 @@ interface MultiSelectProps<T> {
 
 function MultiSelect<T>(props: PropsWithChildren<MultiSelectProps<T>>) {
   const [searchResults, setSearchResults] = useState<MultiSelectOptions<T>>([]);
-  const [currentSearch, setCurrentSearch] = useState("");
+  const [currentSearch, setCurrentSearch] = useState('');
   const [focused, setFocused] = useState(false);
   const searchSubject = useMemo(() => new Subject<string>(), []);
 
@@ -41,22 +41,22 @@ function MultiSelect<T>(props: PropsWithChildren<MultiSelectProps<T>>) {
 
   const { searchPromise } = props;
 
-  const removeExpertiseHandler: RemoveSelectedHandler<T> = (selected) => {
-    const newExpertises = props.value.filter((x) => x.value !== selected);
+  const removeExpertiseHandler: RemoveSelectedHandler<T> = selected => {
+    const newExpertises = props.value.filter(x => x.value !== selected);
     props.onChange(newExpertises);
   };
 
-  const addSelectedHandler: AddSelectedHandler<T> = (selected) => {
+  const addSelectedHandler: AddSelectedHandler<T> = selected => {
     const newExpertises = props.value.concat(selected);
     props.onChange(newExpertises);
-    setCurrentSearch("");
+    setCurrentSearch('');
     setSearchResults([]);
     const inputEl: HTMLSpanElement | null = inputElement.current;
-    if (inputEl) inputEl.innerText = "";
+    if (inputEl) inputEl.innerText = '';
   };
 
   useEffect(() => {
-    searchSubject.pipe(debounceTime(300)).subscribe(async (debounced) => {
+    searchSubject.pipe(debounceTime(300)).subscribe(async debounced => {
       if (searchPromise) {
         const result = await searchPromise(debounced);
         setSearchResults(result);
@@ -65,10 +65,8 @@ function MultiSelect<T>(props: PropsWithChildren<MultiSelectProps<T>>) {
   }, [searchPromise, searchSubject]);
 
   const possibleResults = searchResults.filter(
-    (searchResult) =>
-      !props.value
-        .map((labelled) => labelled.value)
-        .includes(searchResult.value)
+    searchResult =>
+      !props.value.map(labelled => labelled.value).includes(searchResult.value)
   );
 
   const inputHandler = () => {
@@ -80,21 +78,20 @@ function MultiSelect<T>(props: PropsWithChildren<MultiSelectProps<T>>) {
     }
   };
 
-  const blurHandler: FocusEventHandler<HTMLDivElement> = (event) => {
+  const blurHandler: FocusEventHandler<HTMLDivElement> = event => {
     props.onBlur();
     if (!event.currentTarget.contains(event.relatedTarget)) {
       setFocused(false);
     }
   };
 
-  const focusHandler: FocusEventHandler<HTMLDivElement> = (event) => {
+  const focusHandler: FocusEventHandler<HTMLDivElement> = event => {
     if (
       event.currentTarget === event.target ||
       !event.currentTarget.contains(event.relatedTarget)
     ) {
       const inputEl: HTMLSpanElement | null = inputElement.current;
       if (inputEl) {
-        console.log(inputEl);
         inputEl.focus();
       }
       setFocused(true);
@@ -107,7 +104,7 @@ function MultiSelect<T>(props: PropsWithChildren<MultiSelectProps<T>>) {
       tabIndex={0}
       onFocus={focusHandler}
       onBlur={blurHandler}
-      data-testid="MultiSelect"
+      data-testid='MultiSelect'
     >
       <Label htmlFor={props.id} icon={props.icon}>
         {props.label}
@@ -125,7 +122,7 @@ function MultiSelect<T>(props: PropsWithChildren<MultiSelectProps<T>>) {
 
         <span
           className={styles.search}
-          role="search"
+          role='search'
           ref={inputElement}
           contentEditable
           onInput={inputHandler}

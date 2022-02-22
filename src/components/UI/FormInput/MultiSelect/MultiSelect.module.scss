@@ -23,20 +23,20 @@
       padding: 5px 10px 5px 0;
       border: none;
       outline: none;
+      padding: 0;
     }
 
     .search {
       z-index: 2;
       flex: 1;
       max-width: 100%;
-      padding: 0;
     }
 
     .placeholder {
       position: absolute;
       z-index: 1;
       margin-left: 5px;
-      padding: 0;
+      color: rgb(117, 117, 117);
     }
   }
 
