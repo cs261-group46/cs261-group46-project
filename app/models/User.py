@@ -25,9 +25,9 @@ class User(db.Model):
     def get_api_return_data(self, d=None):
         if d is None:
             d = {}
-        d["uuid"] = self.unique_user_id
-        d["first_name"] = self.firstName
-        d["last_name"] = self.lastName
+        d["uuid"] = self.id
+        d["first_name"] = self.first_name
+        d["last_name"] = self.last_name
         d["verified"] = self.verified
         d["expert"] = self.expert
         return d

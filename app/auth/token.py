@@ -49,7 +49,7 @@ def get_user_from_jwt(token_value: str, token_type: TokenType):
         return None
 
 
-def get_user_from_token(token_value: str, token_type: TokenType) -> User:
+def get_user_from_token(token_value: str, token_type: TokenType) -> User | None:
 
     # token_type_data = TokenType.query.filter_by(name=token_type_name)
     # token_type = token_type_data.first()
@@ -69,7 +69,7 @@ def get_user_from_token(token_value: str, token_type: TokenType) -> User:
         # db.session.delete(token)
         return None
 
-    user = User.query.filter_by(id=token.user_id)
+    user = User.query.filter_by(id=token.user_id).first()
 
     if token_type.single_use:
         token_data.delete()
