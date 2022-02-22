@@ -33,7 +33,7 @@ const ClockInput: FC<ClockInputProps> = (props) => {
     props.onChange(props.value.map((bool, replaceIndex) => i === replaceIndex ? !bool : bool))
   }
 
-  return <div className={styles.ClockInput} data-testid="HoursInput">
+  return <div className={styles.ClockInput}>
     {
       // reversed so slice 0 is on top - leads to easier math
       Array.from(Array(12).keys()).reverse().map(i =>
