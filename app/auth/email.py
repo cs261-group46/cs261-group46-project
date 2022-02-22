@@ -1,6 +1,6 @@
 from flask import url_for
 
-from app import Mail, MailRegister, User
+from app import MailRegister, User
 from app.auth import register_email_verification_token
 
 
@@ -10,7 +10,7 @@ def send_verification_email(user: User):
                              user=user,
                              password_reset_redirect_link="/reset_password",
                              verify_url=f"/verification/register/{(validation_token := register_email_verification_token(user))}")
-    print(url_for("verification.verification_register.token", token=validation_token, _external=True))
+    print(url_for("verification.verification_register.token", token_value=validation_token, _external=True))
 
 
 def send_password_reset_email(user: User):

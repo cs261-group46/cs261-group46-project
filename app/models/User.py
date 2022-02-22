@@ -20,7 +20,7 @@ class User(db.Model):
     tokens = db.relationship("Token", backref="user", lazy=True)
 
     def __repr__(self):
-        return f"{self.__name__} ({self.id}, {self.email})"
+        return f"{self.__class__.__name__} ({self.id}, {self.email})"
 
     def get_api_return_data(self, d=None):
         if d is None:

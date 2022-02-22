@@ -13,7 +13,7 @@ def register(email: str, password: str, password_repeat: str, first_name: str, l
         print(register_validator.errors)
         return False, register_validator.errors, None, 401
 
-    department = Department.query.filter_by(name=department_name).first
+    department = Department.query.filter_by(name=department_name).first()
     if department is None:
         return False, {"department": "The selected department does not exist"}, None, 401
 
@@ -35,6 +35,6 @@ def register(email: str, password: str, password_repeat: str, first_name: str, l
 
 
 def get_available_uuid():
-    while User.query.filter_by(id=(uuid := uuid4())) is not None:
+    while User.query.filter_by(id=(uuid := uuid4())).first() is not None:
         continue
     return uuid

@@ -1,8 +1,6 @@
-from typing import Tuple, Any
-
 import jwt
 from flask import current_app, session
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from app import db, User, TokenType, Token, LOGIN, EMAIL_VERIFY, PASSWORD_RESET
 from app.utils import random_string
@@ -27,7 +25,7 @@ def register_token(user: User, token_type: TokenType) -> str:
     token = Token(user_id=user.id, value=token_value, type=token_type.id, timeout_timestamp=token_type.get_timeout())
 
     db.session.add(token)
-    db.commit()
+    db.session.commit()
     return token_value
 
 
