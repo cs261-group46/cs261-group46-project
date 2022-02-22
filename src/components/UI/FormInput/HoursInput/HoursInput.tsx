@@ -22,8 +22,10 @@ const HoursInput: FC<HoursInputProps> = (props) => {
    */
   const getClickedIndex = (event: MouseEvent<HTMLImageElement>) => {
     const rect = event.currentTarget.getBoundingClientRect();
+    // centre x and y to middle of the element
     const x = (event.clientX - rect.left) - (rect.width / 2);
     const y = (event.clientY - rect.top) - (rect.height / 2);
+    // uses atan2 to convert to an angle and does some processing to allign it to the slot correctly
     return (12 - Math.ceil((Math.atan2(x, y) / (Math.PI / 6)) + 6));
   }
 
@@ -37,22 +39,18 @@ const HoursInput: FC<HoursInputProps> = (props) => {
               className={styles.segment}
               alt="Clock Face"
               style={{rotate: `${i * 30}deg`}}
-              // onClick={(event) => {
-              //   const rect = event.currentTarget.getBoundingClientRect();
-              //   const x = (event.clientX - rect.left) - (rect.width / 2);
-              //   const y = (event.clientY - rect.top) - (rect.height / 2);
-              //   const clickedI = (12 - Math.ceil((Math.atan2(x,y) / (Math.PI / 6)) + 6));
-              //   props.onChange(props.value.map((bool, replaceI) => clickedI === replaceI ? !bool : bool))
-              // }}
               onMouseDown={(event) => {
                 setMouseDown(true);
+                // store whether the initial segment was on/off.
                 setInitialClickState(props.value[getClickedIndex(event)]);
               }}
               onMouseUp={() => setMouseDown(false)}
               onMouseMove={(event) => {
                 if (mouseDown) {
                   const clickedIndex = getClickedIndex(event);
+                  // for any segments the same value as what you clicked initially
                   if (props.value[clickedIndex] === initialClickState)
+                    // flip them
                     props.onChange(props.value.map((bool, replaceIndex) => clickedIndex === replaceIndex ? !bool : bool))
                 }
               }}
