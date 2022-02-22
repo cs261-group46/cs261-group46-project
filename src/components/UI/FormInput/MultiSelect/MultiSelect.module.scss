@@ -1,4 +1,4 @@
-@import "../../../../variables";
+@import '../../../../variables';
 
 .MultiSelect {
   margin: 20px 0 40px;
@@ -12,10 +12,11 @@
     border-radius: 10px;
     display: flex;
     align-items: center;
-    padding: 10px 20px;
+    padding: 12px 20px;
     flex-wrap: wrap;
     gap: 5px;
     background-color: #ffffff;
+    font-size: 13.3px;
 
     .search,
     .placeholder {
@@ -28,12 +29,14 @@
       z-index: 2;
       flex: 1;
       max-width: 100%;
+      padding: 0;
     }
 
     .placeholder {
       position: absolute;
       z-index: 1;
       margin-left: 5px;
+      padding: 0;
     }
   }
 

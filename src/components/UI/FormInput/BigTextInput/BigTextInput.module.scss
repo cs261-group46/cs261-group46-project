@@ -1,13 +1,13 @@
 @import '../../../../variables';
 
 .BigTextInput {
-  margin: 15px 0 40px;
+  margin: 20px 0 40px;
 
   textarea {
     width: 100%;
     border-radius: 10px;
     border: 1px solid $sq_light_gray;
-    padding: 15px 20px;
+    padding: 12px 20px;
     position: relative;
     box-sizing: border-box;
     transition-duration: 0.05s;
