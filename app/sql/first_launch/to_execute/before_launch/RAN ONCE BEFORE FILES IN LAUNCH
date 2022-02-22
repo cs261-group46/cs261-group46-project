@@ -1,2 +1,0 @@
-files here will be executed, then moved to /app/sql/first_launch/executed/before_launch
-This allows for files to be ran only once, so now the database should be normally reset

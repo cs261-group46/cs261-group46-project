@@ -1,77 +1,61 @@
 from flask import Blueprint, request, session
-from app import db, login_token_key_str
-from app.user import auth
-from app.models import Users
+from app import db
+import app.auth as auth
+from app.models import User
 
 blueprint = Blueprint("api_users", __name__, url_prefix="/user")
 
 
 @blueprint.route("/register", methods=["POST"])
 def register():
-    data_dict = dict(request.get_json())
+    register_form = dict(request.get_json())
 
-    state, a, b = auth.register(db,
-                                 data_dict.get("email"),
-                                 data_dict.get("password"),
-                                 data_dict.get("password_repeat"),
-                                 data_dict.get("first_name"),
-                                 data_dict.get("last_name"),
-                                 data_dict.get("department").get("label"))
-    if state:
-        user, login_token = a, b
-        session[login_token_key_str] = login_token
-        return user.get_api_return_data(start_dict={"successful": True})
-    else:
-        errorType, errorLocation = a, b
-        error_keys = ["email", "password", "password_repeat", "first_name", "last_name", "department"]
-        r_dict = {"successful": False, "errors": {key: [] for key in error_keys}}
-        r_dict["errors"][error_keys[b-1]].append(errorType)
+    successful, errors, login_token_value, response_code = auth.register(register_form.get("email"),
+                                                                         register_form.get("password"),
+                                                                         register_form.get("password_repeat"),
+                                                                         register_form.get("first_name"),
+                                                                         register_form.get("last_name"),
+                                                                         register_form.get("department").get("label"))
+    if successful:
+        session["login_token"] = login_token_value
 
-
-        return r_dict
+    return {"successful": successful, "errors": errors}, response_code
 
 
 @blueprint.route("/login", methods=["POST"])
 def login():
-    data_dict = dict(request.get_json())
+    if "login_token" in session:
+        if auth.get_user_from_login_token(session.get("login_token")) is None:
+            session.pop("login_token")
+        else:
+            return {"successful": False, "errors": "Already logged in"}
 
-    if login_token_key_str in session:
-        return {"successful": False}
-    state, a, b = auth.login(db, data_dict.get("email"), data_dict.get("password"))
-    if state:
-        user, login_token = a, b
-        session[login_token_key_str] = login_token
-        return user.get_api_return_data(start_dict={"successful": True})
-    else:
-        errorType, errorLocation = a, b
-        error_keys = ["email", "password"]
-        r_dict = {"successful": False, "errors": {key: [] for key in error_keys}}
-        r_dict["errors"][error_keys[b-1]].append(errorType)
-        return r_dict
+    register_form = dict(request.get_json())
+
+    successful, errors, login_token_value, response_code = auth.login(register_form.get("email"),
+                                                                      register_form.get("password"))
+
+    if successful:
+        session["login_token"] = login_token_value
+
+    return {"successful": successful, "errors": errors}, response_code
 
 
 @blueprint.route("/logout", methods=["POST"])
-def logout():
-    if login_token_key_str in session.keys():
-        state = auth.logout(db, session.get(login_token_key_str))
-        if state:
-            session.pop(login_token_key_str)
-            return {"successful": True}
-        else:
-            return {"successful": False}
-    else:
-        return {"successful": False}
+@auth.auth_required
+def logout(user: User):
+    if "login_token" not in session:
+        return {"successful": False, "errors": "Not logged in"}, 401
+
+    return {"successful": auth.logout(user)}
 
 
 @blueprint.route("/", methods=["GET"])
-def get():
-    user: Users.User
-    users = Users.session(login_token_key_str, session)
-    if user := users.first():
-        return user.get_api_return_data()
-    return {}
-    # if login_token_key_str in session.keys():
-    #     user = Users.GetBy.login_token(db, session.get(login_token_key_str))
-    #     if user.isLoaded():
-    #         return user.get_api_return_data()
-    #     return {}
+@auth.auth_required
+def get(user: User):
+    return user.get_api_return_data()
+
+
+from app.routes.api.users.setup import blueprint as api_users_setup_module
+
+blueprint.register_blueprint(api_users_setup_module)

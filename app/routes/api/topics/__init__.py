@@ -1,6 +1,5 @@
 from flask import Blueprint, request, session
-from app import db, login_token_key_str
-from app.models import Topics
+from app import db, Topic
 
 
 blueprint = Blueprint("api_topics", __name__, url_prefix="/topics")
@@ -8,8 +7,7 @@ blueprint = Blueprint("api_topics", __name__, url_prefix="/topics")
 
 @blueprint.route("/", methods=["GET"])
 def get():
-    if request.args.get("startwith") is None:
-        topics = Topics.GetBy.all(db)
-    else:
-        topics = Topics.GetBy.startswith(db, request.args.get("startwith"))
-    return {"result": [{"id":topic.id, "label": topic.name} for topic in topics]}
+    if (startswith := request.args.get("startwith")) is None:
+        startswith = ""
+    topics = Topic.query.filter(Topic.name.ilike(f"{startswith}%")).all()
+    return {"result": [{"id": topic.id, "label": topic.name} for topic in topics]}

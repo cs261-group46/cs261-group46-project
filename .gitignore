@@ -33,3 +33,4 @@ yarn-error.log*
 /app/sql/first_launch/executed/before_launch/*.*
 /app/sql/first_launch/executed/after_launch/*.*
 
+/.env

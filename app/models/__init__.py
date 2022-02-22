@@ -1,19 +1,17 @@
-from app.models import departments as Departments
-from app.models.departments import Department
+from app import app, db
 
-from app.models import topics as Topics
-from app.models.topics import Topic
+from app.models.Department import Department
+from app.models.Topic import Topic
+from app.models.Room import Room
+from app.models.User import User
+from app.models.ExpertTopic import ExpertTopic
+from app.models.Mentor import Mentor
+from app.models.Mentee import Mentee
+from app.models.MentorMenteeRelation import MentorMenteeRelation
+from app.models.Notification import Notification
+from app.models.Token import TokenType, Token, LOGIN, PASSWORD_RESET, EMAIL_VERIFY
+from app.models.Meeting import MeetingType, Meeting
+from app.models.Feedback import ApplicationFeedback, PairingFeedback, MeetingFeedback
 
-from app.models import tokens as Tokens
-from app.models.tokens import Token
-
-from app.models import user as Users
-from app.models.user import User
-
-from app.models import mentor as Mentors
-from app.models.mentor import Mentor
-
-from app.models import mentee as Mentees
-from app.models.mentee import Mentee
-
-
+with app.app_context():
+    db.create_all()
