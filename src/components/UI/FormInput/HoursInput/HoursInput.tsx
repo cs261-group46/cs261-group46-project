@@ -1,66 +1,77 @@
-import React, {FC, MouseEvent, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import styles from './HoursInput.module.scss';
-import clockFace from './face.svg'
-import segment from './segment.svg'
-import segmentHighlight from './segment_highlight.svg'
+import ClockInput from "./ClockInput";
+
+export type Range = [number, number];
 
 interface HoursInputProps {
   label: string;
   isValid: boolean;
-  value: boolean[];
-  onChange: (input: boolean[]) => void;
+  value: Range[];
+  onChange: (input: Range[]) => void;
   onBlur: () => void;
 }
 
-const HoursInput: FC<HoursInputProps> = (props) => {
-  const [mouseDown, setMouseDown] = useState(false);
-  const [initialClickState, setInitialClickState] = useState(false);
+function boolsToRanges(input: boolean[]) {
+  var inARange = false; // if currently defining a range or waiting for a new start
+  var rangeStart = -1;
+  var ranges: Range[] = [];
 
-  /**
-   * From a click event, determines the index in the array that was clicked
-   * @param event
-   */
-  const getClickedIndex = (event: MouseEvent<HTMLImageElement>) => {
-    const rect = event.currentTarget.getBoundingClientRect();
-    // centre x and y to middle of the element
-    const x = (event.clientX - rect.left) - (rect.width / 2);
-    const y = (event.clientY - rect.top) - (rect.height / 2);
-    // uses atan2 to convert to an angle and does some processing to allign it to the slot correctly
-    return (12 - Math.ceil((Math.atan2(x, y) / (Math.PI / 6)) + 6));
+  for (let i = 0; i < 12; i++) {
+    if (!inARange && input[i]) {
+      inARange = true;
+      rangeStart = i;
+    }
+    if (inARange && !input[i]) {
+      inARange = false;
+      ranges.push([rangeStart, i-1]);
+    }
   }
 
-  return <div className={styles.HoursInput} data-testid="HoursInput">
-    {
-      // reversed so slice 0 is on top - leads to easier math
-      Array.from(Array(12).keys()).reverse().map(i =>
-          <img
-              src={props.value[i] ? segmentHighlight : segment}
-              key={i}
-              className={styles.segment}
-              alt="Clock Face"
-              style={{rotate: `${i * 30}deg`}}
-              onMouseDown={(event) => {
-                setMouseDown(true);
-                // store whether the initial segment was on/off.
-                setInitialClickState(props.value[getClickedIndex(event)]);
-              }}
-              onMouseUp={() => setMouseDown(false)}
-              onMouseMove={(event) => {
-                if (mouseDown) {
-                  const clickedIndex = getClickedIndex(event);
-                  // for any segments the same value as what you clicked initially
-                  if (props.value[clickedIndex] === initialClickState)
-                    // flip them
-                    props.onChange(props.value.map((bool, replaceIndex) => clickedIndex === replaceIndex ? !bool : bool))
-                }
-              }}
+  if (inARange)
+    ranges.push([rangeStart, 11]);
 
-              // need to stop image dragging
-              onDragStart={(event) => event.preventDefault()}
-          />
-      )
+  return ranges;
+}
+
+const HoursInput: FC<HoursInputProps> = (props) => {
+  const { onChange } = props;
+  const [amTime, setAmTime] = useState(Array(12).fill(false));
+  const [pmTime, setPmTime] = useState(Array.from(amTime));
+  const [stopInfiniteLoop, setStopInfiniteLoop] = useState(false);
+  const width = "200px";
+
+  useEffect(() => {
+    if (!stopInfiniteLoop) {
+      onChange(boolsToRanges(amTime).concat(boolsToRanges(pmTime)));
+      setStopInfiniteLoop(true);
     }
-    <img src={clockFace} className={styles.clockFace} alt="Clock Face"/>
+  }, [amTime, pmTime, onChange, stopInfiniteLoop]);
+
+
+  return <div className={styles.HoursInput} data-testid="HoursInput">
+    <div>
+      {/* for onchange - not the best solution. otherwise it infinitely loops and im not sure why */}
+      <ClockInput value={amTime} onChange={value => {setStopInfiniteLoop(false); setAmTime(value)}} onBlur={props.onBlur} width={width} label={"AM"}/>
+      <div className={styles.times}>
+        {/*there are so many edge cases dealing with hours*/}
+        {/*0 hour is really twelve*/}
+        {/*it must flip to pm for the last hour*/}
+        {boolsToRanges(amTime).map(([from, to]) => <p key={`(${from},${to})`}>
+          {`${(from !== 0 ? from : 12).toString().padStart(2,"0")}:00AM - 
+          ${(to+1).toString().padStart(2,"0")}:00${to !== 11 ? "AM" : "PM"}`}
+        </p>)}
+      </div>
+    </div>
+    <div>
+      <ClockInput value={pmTime} onChange={value => {setStopInfiniteLoop(false); setPmTime(value)}} onBlur={props.onBlur} width={width} label={"PM"}/>
+      <div className={styles.times}>
+        {boolsToRanges(pmTime).map(([from, to]) => <p key={`(${from},${to})`}>
+          {`${(from !== 0 ? from : 12).toString().padStart(2,"0")}:00PM -
+           ${(to+1).toString().padStart(2,"0")}:00${to !== 11 ? "PM" : "AM"}`}
+        </p>)}
+      </div>
+    </div>
   </div>
 }
 

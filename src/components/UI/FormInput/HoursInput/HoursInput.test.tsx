@@ -1,12 +1,12 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
-import HoursInput from "./HoursInput";
+import HoursInput, {Range} from "./HoursInput";
 
 describe('<24HourInput />', () => {
   test('it should mount', () => {
-    let value: boolean[] = []
-    const setValue = (newValue: boolean[]) => { value = newValue }
+    let value: Range[] = []
+    const setValue = (newValue: Range[]) => { value = newValue }
 
     render(<HoursInput label={"test"} value={value} onChange={setValue} onBlur={() => {}} isValid={true}/>);
     

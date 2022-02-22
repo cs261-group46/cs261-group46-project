@@ -1,10 +1,12 @@
 .HoursInput {
-  position: relative;
-  .clockFace {
-  }
-  
-  .segment {
-    position: absolute;
-    left: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+  .times {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
   }
 }

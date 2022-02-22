@@ -1,0 +1,13 @@
+.ClockInput {
+  position: relative;
+
+  .segment {
+    position: absolute;
+    left: 0;
+  }
+
+  .label {
+    position: absolute;
+    right: 1rem;
+  }
+}
