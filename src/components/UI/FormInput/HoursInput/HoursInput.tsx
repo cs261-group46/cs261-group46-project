@@ -17,21 +17,36 @@ function boolsToRanges(input: boolean[]) {
   var rangeStart = -1;
   var ranges: Range[] = [];
 
-  for (let i = 0; i < 12; i++) {
+  for (let i = 0; i < 24; i++) {
     if (!inARange && input[i]) {
       inARange = true;
       rangeStart = i;
     }
     if (inARange && !input[i]) {
       inARange = false;
-      ranges.push([rangeStart, i-1]);
+      ranges.push([rangeStart, i]);
     }
   }
 
   if (inARange)
-    ranges.push([rangeStart, 11]);
+    ranges.push([rangeStart, 24]);
 
   return ranges;
+}
+
+/**
+ * Converts an hour 0-24 to a time string e.g 01:00PM
+ */
+function hourToString(hour: number) {
+  function pad(hour: number) {
+    return hour.toString().padStart(2,"0");
+  }
+
+  if (hour === 0) return "12:00AM";
+  if (hour > 0 && hour < 12) return `${pad(hour)}:00AM`;
+  if (hour === 12) return "12:00PM";
+  if (hour > 12 && hour < 24) return `${pad(hour-12)}:00PM`;
+  if (hour === 24) return "12:00AM";
 }
 
 const HoursInput: FC<HoursInputProps> = (props) => {
@@ -40,37 +55,30 @@ const HoursInput: FC<HoursInputProps> = (props) => {
   const [pmTime, setPmTime] = useState(Array.from(amTime));
   const [stopInfiniteLoop, setStopInfiniteLoop] = useState(false);
   const width = "200px";
+  const ranges = boolsToRanges(amTime.concat(pmTime));
 
   useEffect(() => {
     if (!stopInfiniteLoop) {
-      onChange(boolsToRanges(amTime).concat(boolsToRanges(pmTime)));
+      console.log(ranges);
+      onChange(ranges);
       setStopInfiniteLoop(true);
     }
-  }, [amTime, pmTime, onChange, stopInfiniteLoop]);
+  }, [ranges, onChange, stopInfiniteLoop]);
 
 
   return <div className={styles.HoursInput} data-testid="HoursInput">
-    <div>
+    <div className={styles.clocks}>
       {/* for onchange - not the best solution. otherwise it infinitely loops and im not sure why */}
       <ClockInput value={amTime} onChange={value => {setStopInfiniteLoop(false); setAmTime(value)}} onBlur={props.onBlur} width={width} label={"AM"}/>
-      <div className={styles.times}>
-        {/*there are so many edge cases dealing with hours*/}
-        {/*0 hour is really twelve*/}
-        {/*it must flip to pm for the last hour*/}
-        {boolsToRanges(amTime).map(([from, to]) => <p key={`(${from},${to})`}>
-          {`${(from !== 0 ? from : 12).toString().padStart(2,"0")}:00AM - 
-          ${(to+1).toString().padStart(2,"0")}:00${to !== 11 ? "AM" : "PM"}`}
-        </p>)}
-      </div>
-    </div>
-    <div>
       <ClockInput value={pmTime} onChange={value => {setStopInfiniteLoop(false); setPmTime(value)}} onBlur={props.onBlur} width={width} label={"PM"}/>
-      <div className={styles.times}>
-        {boolsToRanges(pmTime).map(([from, to]) => <p key={`(${from},${to})`}>
-          {`${(from !== 0 ? from : 12).toString().padStart(2,"0")}:00PM -
-           ${(to+1).toString().padStart(2,"0")}:00${to !== 11 ? "PM" : "AM"}`}
-        </p>)}
-      </div>
+    </div>
+    <div className={styles.times}>
+      {/*there are so many edge cases dealing with hours*/}
+      {/*0 hour is really twelve*/}
+      {/*it must flip to pm for the last hour*/}
+      {ranges.map(([from, to]) => <p key={`(${from},${to})`}>
+        {hourToString(from)} - {hourToString(to)}
+      </p>)}
     </div>
   </div>
 }
