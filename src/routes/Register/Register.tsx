@@ -110,8 +110,6 @@ const Register: FC<RegisterProps> = () => {
   const [departments, setDepartments] = useState<SelectOptions>([]);
 
   const fetchDepartments = async () => {
-    console.log("sending");
-
     const dep = await fetch("/api/departments");
     const body = await dep.json();
     console.log(body);
@@ -133,9 +131,9 @@ const Register: FC<RegisterProps> = () => {
     }
   };
 
-  const sendRegistrationData = async () => {
-    console.log(enteredDepartment);
+  let navigate = useNavigate();
 
+  const sendRegistrationData = async () => {
     const body = {
       email: enteredEmail,
       password: enteredPassword,
@@ -156,7 +154,9 @@ const Register: FC<RegisterProps> = () => {
 
     const returnedData = await response.json();
 
-    console.log(returnedData);
+    // TODO : if unsuccesfull, show errors
+
+    if (returnedData.successful) navigate("/register/verifyemail");
   };
 
   return (

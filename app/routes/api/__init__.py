@@ -2,8 +2,8 @@ from flask import Blueprint
 
 api = Blueprint("api", __name__, url_prefix="/api")
 
-from app.api.auth import auth
-from app.api.departments import departments
+from app.routes.api.auth import auth
+from app.routes.api.departments import departments
 # from app.api.mentees import mentees
 # from app.api.mentors import mentors
 # from app.api.users import users

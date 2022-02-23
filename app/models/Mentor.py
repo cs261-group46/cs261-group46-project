@@ -9,7 +9,7 @@ mentors_topics = db.Table('mentors_topics',
 class Mentor(db.Model):
     __tablename__ = 'mentors'
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.String(36), db.ForeignKey('users.id'), unique=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), unique=True)
     about = db.Column(db.Text, nullable=True)
     score = db.Column(db.Integer, nullable=False)
     topics = db.relationship('Topic', secondary=mentors_topics, backref='mentors', lazy=True)

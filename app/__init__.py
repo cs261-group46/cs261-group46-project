@@ -17,7 +17,8 @@
 # Imports #
 ###########
 
-from flask import Flask, request, session, redirect, url_for, send_file, jsonify
+from flask import Flask
+from flask_mail import Mail, Message
 from flask_sqlalchemy import SQLAlchemy
 import os
 from dotenv import load_dotenv
@@ -39,19 +40,18 @@ db_database = os.getenv('DATABASE_NAME')
 
 app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{db_user}:{db_password}@localhost:5432/{db_database}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['PEPER'] = os.getenv("PEPER")
+
+app.config['MAIL_DEFAULT_SENDER'] = "noreply@skillquest.com"
+app.config['MAIL_SERVER'] = 'smtp.mailtrap.io'
+app.config['MAIL_PORT'] = 2525
+app.config['MAIL_USERNAME'] = '9df87ed9dbd792'
+app.config['MAIL_PASSWORD'] = 'a1da64e3af15fc'
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
+
 db = SQLAlchemy(app)
-
-# if email_config["enabled"]:
-#     for key, value in email_config["email_server"].items():
-#         app.config[f"MAIL_{key.upper()}"] = value
-#
-#     Mail.main(True, app, email_config["sender"])
-#     Mail.debug = True
-
-###############
-# Route setup #
-###############
-
+mail = Mail(app)
 
 @app.errorhandler(404)
 def index(error):
@@ -61,9 +61,7 @@ def index(error):
 
 
 from app.models import *
-
-from app.api import api
-app.register_blueprint(api)
+from app.routes import *
 
 
 

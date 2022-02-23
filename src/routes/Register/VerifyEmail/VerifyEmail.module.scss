@@ -1,0 +1,20 @@
+@import "../../../_variables.scss";
+.VerifyEmail {
+  h1 {
+    font-weight: 900;
+    font-size: 25pt;
+    color: $sq_black;
+    margin-top: 20px;
+  }
+
+  h2 {
+    font-weight: bold;
+    font-size: 20px;
+    padding-top: 40px;
+    display: flex;
+    color: $sq_dark_gray;
+    margin-bottom: 60px;
+  }
+
+  
+}

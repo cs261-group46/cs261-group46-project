@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>
+    Hi {{user.first_name}}!
+</h1>
+
+
+
+<p>
+    Here are the details of your account:
+    Full Name: {{user.first_name}} {{user.last_name}}
+    Email: {{user.email}}
+</p>
+
+<p>
+    To make sure that this account does indeed belong to you, please follow the following link to verify it:
+<a href={{verify_url}}>Verify Email</a>
+</p>
+
+</body>
+</html>

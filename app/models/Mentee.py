@@ -10,7 +10,7 @@ mentees_topics = db.Table('mentees_topics',
 class Mentee(db.Model):
     __tablename__ = 'mentees'
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.String(36), db.ForeignKey('users.id'), unique=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), unique=True)
     mentor_iD = db.Column(db.Integer, db.ForeignKey('mentors.id'), nullable=False)
     about = db.Column(db.Text, nullable=True)
     weight = db.Column(db.Float, nullable=False)

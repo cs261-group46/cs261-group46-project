@@ -21,7 +21,7 @@ class Notification(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     notification_level = db.Column(db.String(10), db.CheckConstraint("notification_level IN ('warning', 'alert', 'info')"))
     notification_type = db.Column(db.String(10), db.CheckConstraint("notification_type IN ('learning', 'mentoring', 'expertise')"))
-    user_id = db.Column(db.String(36), db.ForeignKey('users.id'), unique=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), unique=True)
     description = db.Column(db.Text, nullable=True)
     solution = db.Column(db.Text, nullable=True)
     sent = db.Column(db.Boolean, default=False)

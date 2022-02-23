@@ -3,7 +3,7 @@ import { Routes, BrowserRouter, Route } from "react-router-dom";
 import "./App.scss";
 import Register from "./routes/Register/Register.lazy";
 import Dashboard from "./routes/Dashboard/Dashboard.lazy";
-import VerifyRegister from "./routes/VerifyRegister/VerifyRegister.lazy"
+import VerifyEmail from "./routes/Register/VerifyEmail/VerifyEmail.lazy"
 import Expert from "./routes/Expert/Expert.lazy"
 import Setup from "./routes/Setup/Setup";
 import MentorSignup from "./routes/mentor/MentorSignup/MentorSignup.lazy";
@@ -15,9 +15,9 @@ function App() {
     <BrowserRouter>
       <div className="App">
         <Routes>
+          <Route path="/register/verifyemail" element={<VerifyEmail/>}/>
           <Route path="/register" element={<Register/>}/>
           <Route path="/dashboard" element={<Dashboard/>}/>
-          <Route path="/verifyregister" element={<VerifyRegister/>}/>
           <Route path="/expert" element={<Expert/>}/>
           <Route path="/setup" element={<Setup />} />
           <Route path="/mentor">

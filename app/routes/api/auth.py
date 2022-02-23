@@ -1,6 +1,8 @@
 import datetime
 
-from flask import Blueprint, request, session, current_app
+from flask import Blueprint, request, session, current_app, url_for, render_template
+
+from app.utils.email import send_email
 from app.validators.RegistrationValidator import validator as registration_validator
 from app.validators.LoginValidator import validator as login_validator
 
@@ -9,6 +11,7 @@ from app import db, User, Department
 from werkzeug.security import generate_password_hash, check_password_hash
 from uuid import uuid4
 from app.utils.auth import get_login_token_timeout
+from app.utils.email_confirm_token import generate_confirmation_token
 import jwt
 from app.middleware.auth import auth_required
 
@@ -48,18 +51,12 @@ def register():
 
     password_hash = generate_password_hash(password=data.get("password"))
 
-    while True:
-        new_id = uuid4()
-        if User.query.filter_by(id=new_id).first() is None:
-            break
-
     new_user = User(
-        id=new_id,
         email=data.get("email"),
         hashed_password=password_hash,
         first_name=data.get("first_name"),
         last_name=data.get("last_name"),
-        department_id=data.get("department"),
+        department_id=data.get("department").get("id"),
     )
 
     db.session.add(new_user)
@@ -72,7 +69,43 @@ def register():
 
     session['login_token'] = login_token
 
+    token = generate_confirmation_token(new_user.email)
+
+    verify_url = url_for('verifyemail.verify_email', token=token, _external=True)
+    html = render_template(
+        'emails/verify_email.html',
+        user={
+            "first_name": new_user.first_name,
+            "last_name": new_user.last_name,
+            "email": new_user.email
+        },
+        verify_url = verify_url
+    )
+
+    subject = "Please confirm your email"
+
+    send_email(new_user.email, subject, html)
+
     return {"successful": True}
+
+
+# @user_blueprint.route('/confirm/<token>')
+# @login_required
+# def confirm_email(token):
+#     try:
+#         email = confirm_token(token)
+#     except:
+#         flash('The confirmation link is invalid or has expired.', 'danger')
+#     user = User.query.filter_by(email=email).first_or_404()
+#     if user.confirmed:
+#         flash('Account already confirmed. Please login.', 'success')
+#     else:
+#         user.confirmed = True
+#         user.confirmed_on = datetime.datetime.now()
+#         db.session.add(user)
+#         db.session.commit()
+#         flash('You have confirmed your account. Thanks!', 'success')
+#     return redirect(url_for('main.home'))
 
 
 @auth.route("/login", methods=["POST"])
