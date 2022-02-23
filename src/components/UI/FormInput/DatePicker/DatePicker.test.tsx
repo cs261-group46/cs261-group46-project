@@ -5,7 +5,7 @@ import DatePicker from './DatePicker';
 
 describe('<DatePicker />', () => {
   test('it should mount', () => {
-    render(<DatePicker onChange={() => {}} value={new Date()}/>);
+    render(<DatePicker onChange={() => {}} value={new Date()} isValid={true} label={"Test"} onBlur={() => {}} id={"test"}/>);
     
     const datePicker = screen.getByTestId('DatePicker');
 
