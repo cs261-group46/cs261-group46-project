@@ -519,6 +519,22 @@
   position: relative;
   display: inline-block;
   width: 100%;
+
+  input {
+    width: 100%;
+    height: 40px;
+    border-radius: 10px;
+    border: 1px solid $sq_light_gray;
+    padding: 15px 20px;
+    box-sizing: border-box;
+    transition-duration: 0.05s;
+    outline: 0 solid $sq_dark_gray;
+
+    &:focus-visible, &:hover {
+      outline: 2px solid $sq_dark_gray;
+      border-color: $sq_dark_gray;
+    }
+  }
 }
 
 .react-datepicker__year-read-view,
