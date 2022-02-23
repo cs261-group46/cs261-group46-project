@@ -36,6 +36,7 @@ app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 db_user = os.getenv('DATABASE_USER')
 db_password = os.getenv('DATABASE_PASSWORD')
 db_database = os.getenv('DATABASE_NAME')
+
 app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{db_user}:{db_password}@localhost:5432/{db_database}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)

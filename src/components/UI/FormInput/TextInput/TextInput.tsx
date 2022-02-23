@@ -1,6 +1,7 @@
-import React, {ChangeEventHandler, FC} from "react";
+import React, { ChangeEventHandler, FC, useEffect, useState } from "react";
 import styles from "./TextInput.module.scss";
 import Label from "../Label/Label";
+import SystemMessage from "../../SystemMessage/SystemMessage";
 
 interface TextInputProps {
   id: string;
@@ -23,6 +24,12 @@ const TextInput: FC<TextInputProps> = (props) => {
     }
   };
 
+  const [isInvalidMessageVisible, setInvalidMessageVisible] = useState(false);
+
+  useEffect(() => {
+    setInvalidMessageVisible(!props.isValid);
+  }, [props.isValid]);
+
   return (
     <div
       className={`${styles.TextInput} ${props.className}`}
@@ -39,6 +46,13 @@ const TextInput: FC<TextInputProps> = (props) => {
         placeholder={props.placeholder}
         onChange={changeHandler}
         onBlur={props.onBlur}
+      />
+
+      <SystemMessage
+        sort="inline"
+        type="alert"
+        description={`The ${props.label} field seems to be incorrect`}
+        visible={isInvalidMessageVisible}
       />
     </div>
   );

@@ -8,7 +8,15 @@ from cerberus import Validator
 
 class RegistrationValidator(Validator):
     def _validate_are_equal(self, password, field, password_repeat):
-        if password != password_repeat:
+        """ Test password and password_repeat are the same.
+
+        The rule's arguments are validated against this schema:
+        {'type': 'string'}
+        """
+        if password not in self.document:
+            return False
+
+        if self.document[password] != password_repeat:
             self._error(field, "Passwords don't match")
 
 
@@ -22,7 +30,7 @@ validationRules = {
     },
     'password': {
         'type': 'string',
-        'regex': '',    # TODO: Create regex for it
+        # 'regex': '"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"',    # TODO: Create regex for it
         'required': True,
         'minlength': 10,
         'maxlength': 126
@@ -44,11 +52,20 @@ validationRules = {
         'maxlength': 126
     },
     'department': {
-        'type': 'integer',
+        'type': 'dict',
+        'schema': {
+            'id': {
+                'type': 'integer',
+                'required': True
+            },
+            'label': {
+                'type': 'string',
+                'required': False
+            }
+        },
         'required': True,
         'min': 1
     }
-
 }
 
 validator = RegistrationValidator(validationRules)

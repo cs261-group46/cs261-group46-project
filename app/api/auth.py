@@ -38,7 +38,8 @@ def register():
         }
 
     # check whether department exists
-    department_not_exists = Department.query.filter_by(id=data.get("department")).first() is None
+    department_not_exists = Department.query.filter_by(id=data.get("department").get('id'), name=data.get("department").get('label')).first() is None
+
     if department_not_exists:
         return {
             "successful": False,
@@ -49,7 +50,7 @@ def register():
 
     while True:
         new_id = uuid4()
-        if User.query.filter_by(id=new_id) is None:
+        if User.query.filter_by(id=new_id).first() is None:
             break
 
     new_user = User(
@@ -115,5 +116,3 @@ def login():
 def logout():
     session.pop('login_token')
     return {"successful": True}
-
-# logout route

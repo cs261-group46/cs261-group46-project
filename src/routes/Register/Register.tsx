@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, FormEventHandler, useEffect, useState } from "react";
 import MainLayout from "../../layouts/MainLayout/MainLayout";
 import TextInput from "../../components/UI/FormInput/TextInput/TextInput";
 import PasswordInput from "../../components/Register/PasswordInput/PasswordInput";
@@ -12,8 +12,6 @@ import {
 import { useNavigate } from "react-router-dom";
 
 interface RegisterProps {}
-
-const DUMMY_DEPARTMENTS: SelectOptions = [{ id: "1", label: "Department 1" }];
 
 function validateEmail(email: string) {
   const re =
@@ -54,8 +52,9 @@ function validateRepeatedPassword(
     password === repeatedPassword
   );
 }
+
 function validateDepartment(_department: SelectOption) {
-  return true;
+  return _department.id !== -1;
 }
 
 const Register: FC<RegisterProps> = () => {
@@ -102,9 +101,41 @@ const Register: FC<RegisterProps> = () => {
     isInputValid: isInputDepartmentValid,
     changeHandler: departmentChangeHandler,
     blurHandler: departmentBlurHandler,
-  } = useInput<SelectOption>(validateDepartment, { id: "0" });
+  } = useInput<SelectOption>(validateDepartment, { id: -1 });
+
+  useEffect(() => {
+    fetchDepartments();
+  }, []);
+
+  const [departments, setDepartments] = useState<SelectOptions>([]);
+
+  const fetchDepartments = async () => {
+    console.log("sending");
+
+    const dep = await fetch("/api/departments");
+    const body = await dep.json();
+    console.log(body);
+
+    setDepartments(body.result);
+  };
+
+  const submitHandler: FormEventHandler = (event) => {
+    event.preventDefault();
+    if (
+      isInputFirstNameValid &&
+      isInputLastNameValid &&
+      isInputEmailValid &&
+      isInputPasswordValid &&
+      enteredRepeatedPassword &&
+      isInputDepartmentValid
+    ) {
+      sendRegistrationData();
+    }
+  };
 
   const sendRegistrationData = async () => {
+    console.log(enteredDepartment);
+
     const body = {
       email: enteredEmail,
       password: enteredPassword,
@@ -114,7 +145,7 @@ const Register: FC<RegisterProps> = () => {
       department: enteredDepartment,
     };
 
-    const response = await fetch("/api/user/register", {
+    const response = await fetch("/api/auth/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -128,101 +159,72 @@ const Register: FC<RegisterProps> = () => {
     console.log(returnedData);
   };
 
-  useEffect(() => {
-    fetchDepartments();
-  }, []);
-
-  const [departments, setDepartments] = useState<SelectOptions>([]);
-
-  const fetchDepartments = async () => {
-    console.log("sending");
-
-    const dep = await fetch("/api/departments");
-    const body = await dep.json();
-    console.log(body.result);
-
-    setDepartments(body.result);
-  };
-
-  const submitHandler = () => {
-    if (
-      isInputFirstNameValid &&
-      isInputLastNameValid &&
-      isInputEmailValid &&
-      isInputPasswordValid &&
-      enteredRepeatedPassword &&
-      isInputDepartmentValid
-    ) {
-      sendRegistrationData();
-    }
-  }
-
   return (
     <MainLayout title="Register">
       <form onSubmit={submitHandler}>
-      <TextInput
-        icon="1️⃣"
-        value={enteredFirstName}
-        isValid={isInputFirstNameValid}
-        onChange={firstNameChangeHandler}
-        onBlur={firstNameBlurHandler}
-        id="firstname"
-        label="First Name"
-        placeholder="Please provide your first name"
-      />
+        <TextInput
+          icon="1️⃣"
+          value={enteredFirstName}
+          isValid={isInputFirstNameValid}
+          onChange={firstNameChangeHandler}
+          onBlur={firstNameBlurHandler}
+          id="firstname"
+          label="First Name"
+          placeholder="Please provide your first name"
+        />
 
-      <TextInput
-        icon="2️⃣"
-        value={enteredLastName}
-        isValid={isInputLastNameValid}
-        onChange={lastNameChangeHandler}
-        onBlur={lastNameBlurHandler}
-        id="lastname"
-        label="Last Name"
-        placeholder="Please provide your last name"
-      />
+        <TextInput
+          icon="2️⃣"
+          value={enteredLastName}
+          isValid={isInputLastNameValid}
+          onChange={lastNameChangeHandler}
+          onBlur={lastNameBlurHandler}
+          id="lastname"
+          label="Last Name"
+          placeholder="Please provide your last name"
+        />
 
-      <TextInput
-        icon="✉️"
-        value={enteredEmail}
-        isValid={isInputEmailValid}
-        onChange={emailChangeHandler}
-        onBlur={emailBlurHandler}
-        id="email"
-        label="Email"
-        placeholder="Please provide your email address"
-      />
-      <PasswordInput
-        value={enteredPassword}
-        isValid={isInputPasswordValid}
-        onChange={passwordChangeHandler}
-        onBlur={passwordBlurHandler}
-      />
-      <TextInput
-        value={enteredRepeatedPassword}
-        isValid={isInputRepeatedPasswordValid}
-        onChange={repeatedPasswordChangeHandler}
-        onBlur={repeatedPasswordBlurHandler}
-        icon="🔒️"
-        type="password"
-        id="password_r"
-        label="Repeat Password"
-        placeholder="Please provide your password again"
-      />
-      <Select
-        value={enteredDepartment}
-        isValid={isInputDepartmentValid}
-        onChange={departmentChangeHandler}
-        onBlur={departmentBlurHandler}
-        icon="👥"
-        id="department"
-        placeholder="Please select your department"
-        label="Department"
-        options={departments}
-      />
-      <Button icon="👑" buttonStyle={"primary"} type="submit">
-        Register
-      </Button>
+        <TextInput
+          icon="✉️"
+          value={enteredEmail}
+          isValid={isInputEmailValid}
+          onChange={emailChangeHandler}
+          onBlur={emailBlurHandler}
+          id="email"
+          label="Email"
+          placeholder="Please provide your email address"
+        />
+        <PasswordInput
+          value={enteredPassword}
+          isValid={isInputPasswordValid}
+          onChange={passwordChangeHandler}
+          onBlur={passwordBlurHandler}
+        />
+        <TextInput
+          value={enteredRepeatedPassword}
+          isValid={isInputRepeatedPasswordValid}
+          onChange={repeatedPasswordChangeHandler}
+          onBlur={repeatedPasswordBlurHandler}
+          icon="🔒️"
+          type="password"
+          id="password_r"
+          label="Repeat Password"
+          placeholder="Please provide your password again"
+        />
+        <Select
+          value={enteredDepartment}
+          isValid={isInputDepartmentValid}
+          onChange={departmentChangeHandler}
+          onBlur={departmentBlurHandler}
+          icon="👥"
+          id="department"
+          placeholder="Please select your department"
+          label="Department"
+          options={departments}
+        />
+        <Button icon="👑" buttonStyle={"primary"} type="submit">
+          Register
+        </Button>
       </form>
       <div data-testid="Register" />
     </MainLayout>
