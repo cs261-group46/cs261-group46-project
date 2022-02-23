@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from "react";
 import styles from "./Autocomplete.module.scss";
-import { MultiSelectOptions, AddSelectedHandler } from "../MultiSelect.d";
+import { MultiSelectOptions, AddSelectedHandler } from "../SearchSelect.d";
 
 interface AutocompleteProps<T> {
   possibleResults: MultiSelectOptions<T>;
