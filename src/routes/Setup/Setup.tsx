@@ -1,9 +1,9 @@
 import React, { FC } from "react";
 import SearchSelect from "../../components/UI/FormInput/SearchSelect/SearchSelect";
-import { MultiSelectOptions } from "../../components/UI/FormInput/SearchSelect/MultiSelect.d";
+import { MultiSelectOptions } from "../../components/UI/FormInput/SearchSelect/SearchSelect.d";
 // import styles from "./Setup.module.scss";
 import useInput from "../../hooks/UseInput/UseInput";
-import { SearchPromise } from "../../components/UI/FormInput/SearchSelect/MultiSelect.d";
+import { SearchPromise } from "../../components/UI/FormInput/SearchSelect/SearchSelect.d";
 import MainLayout from "../../layouts/MainLayout/MainLayout";
 
 interface SetupProps {}

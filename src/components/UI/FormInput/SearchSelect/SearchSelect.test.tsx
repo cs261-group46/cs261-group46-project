@@ -2,7 +2,7 @@ import React from 'react';
 import {render, screen} from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import SearchSelect from './SearchSelect';
-import {MultiSelectOptions} from "./MultiSelect.d"
+import {MultiSelectOptions} from "./SearchSelect.d"
 
 describe('<SearchSelect />', () => {
   test('it should mount', () => {

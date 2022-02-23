@@ -14,7 +14,7 @@ import {
   MultiSelectOptions,
   RemoveSelectedHandler,
   SearchPromise,
-} from './MultiSelect.d';
+} from './SearchSelect.d';
 
 import SelectedOptions from './SelectedOptions/SelectedOptions';
 import Autocomplete from './Autocomplete/Autocomplete';

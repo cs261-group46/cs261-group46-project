@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 // import styles from './MentorSignup.module.scss';
 import MainLayout from '../../../layouts/MainLayout/MainLayout';
 import SearchSelect from '../../../components/UI/FormInput/SearchSelect/SearchSelect';
-import { MultiSelectOptions } from '../../../components/UI/FormInput/SearchSelect/MultiSelect.d';
+import { MultiSelectOptions } from '../../../components/UI/FormInput/SearchSelect/SearchSelect.d';
 import useInput from '../../../hooks/UseInput/UseInput';
 import Button from '../../../components/UI/Button/Button';
 import { useNavigate } from 'react-router-dom';

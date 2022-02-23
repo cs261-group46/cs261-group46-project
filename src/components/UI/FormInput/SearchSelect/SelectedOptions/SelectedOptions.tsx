@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from "react";
 import styles from "./SelectedOptions.module.scss";
-import { MultiSelectOptions, RemoveSelectedHandler } from "../MultiSelect.d";
+import { MultiSelectOptions, RemoveSelectedHandler } from "../SearchSelect.d";
 
 interface SelectedOptionsProps<T> {
   selected: MultiSelectOptions<T>;
