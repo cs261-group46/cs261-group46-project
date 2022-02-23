@@ -1,9 +1,9 @@
 import React, { FC } from "react";
-import MultiSelect from "../../components/UI/FormInput/MultiSelect/MultiSelect";
-import { MultiSelectOptions } from "../../components/UI/FormInput/MultiSelect/MultiSelect.d";
+import SearchSelect from "../../components/UI/FormInput/SearchSelect/SearchSelect";
+import { MultiSelectOptions } from "../../components/UI/FormInput/SearchSelect/SearchSelect.d";
 // import styles from "./Setup.module.scss";
 import useInput from "../../hooks/UseInput/UseInput";
-import { SearchPromise } from "../../components/UI/FormInput/MultiSelect/MultiSelect.d";
+import { SearchPromise } from "../../components/UI/FormInput/SearchSelect/SearchSelect.d";
 import MainLayout from "../../layouts/MainLayout/MainLayout";
 
 interface SetupProps {}
@@ -31,7 +31,7 @@ const Setup: FC<SetupProps> = () => {
 
   return (
     <MainLayout title="Setup">
-      <MultiSelect
+      <SearchSelect
         id="expertise"
         label="Fields of Expertise"
         value={enteredExpertises}

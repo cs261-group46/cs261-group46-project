@@ -13,4 +13,4 @@ class Notification(db.Model):
     sent = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
-        return f"{self.__name__} ({self.id}, {self.notification_level}, {self.notification_type}, {self.user_id}, {self.description})"
+        return f"{self.__class__.__name__} ({self.id}, {self.notification_level}, {self.notification_type}, {self.user_id}, {self.description})"

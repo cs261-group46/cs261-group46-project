@@ -11,4 +11,4 @@ class ExpertTopic(db.Model):
     # users = db.relationship("User", backref="department", lazy=True)
 
     def __repr__(self):
-        return f"{self.__name__} ({self.user_id}, {self.topic_id})"
+        return f"{self.__class__.__name__} ({self.user_id}, {self.topic_id})"

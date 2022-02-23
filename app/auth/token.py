@@ -94,7 +94,7 @@ def remove_token(user: User, token_value: str, token_type: TokenType):
 
 
 def get_available_token() -> str:
-    while Token.query.filter_by(value=(token_value := random_string(128))).first():
+    while Token.query.filter_by(value=(token_value := random_string(128))).first() is not None:
         continue
     return token_value
     # if not Token.query.filter_by(value=(token_value := random_string(128))).first():
