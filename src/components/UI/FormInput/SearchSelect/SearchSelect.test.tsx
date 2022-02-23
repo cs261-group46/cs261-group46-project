@@ -1,16 +1,16 @@
 import React from 'react';
 import {render, screen} from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
-import MultiSelect from './MultiSelect';
+import SearchSelect from './SearchSelect';
 import {MultiSelectOptions} from "./MultiSelect.d"
 
-describe('<MultiSelect />', () => {
+describe('<SearchSelect />', () => {
   test('it should mount', () => {
     let value:MultiSelectOptions<string> = [{value: "test", label: "test"}]
     const setValue = (newValue: MultiSelectOptions<string>) => {value = newValue};
 
     render(
-        <MultiSelect
+        <SearchSelect
             icon='💪'
             id='expertise'
             label='Fields of Expertise'
@@ -27,7 +27,7 @@ describe('<MultiSelect />', () => {
         />
     );
 
-    const multiSelect = screen.getByTestId('MultiSelect');
+    const multiSelect = screen.getByTestId('SearchSelect');
 
     expect(multiSelect).toBeInTheDocument();
   });

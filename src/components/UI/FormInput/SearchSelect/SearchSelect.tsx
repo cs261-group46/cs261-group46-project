@@ -6,7 +6,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import styles from './MultiSelect.module.scss';
+import styles from './SearchSelect.module.scss';
 import Label from '../Label/Label';
 import { debounceTime, Subject } from 'rxjs';
 import {
@@ -31,7 +31,7 @@ interface MultiSelectProps<T> {
   onBlur: () => void;
 }
 
-function MultiSelect<T>(props: PropsWithChildren<MultiSelectProps<T>>) {
+function SearchSelect<T>(props: PropsWithChildren<MultiSelectProps<T>>) {
   const [searchResults, setSearchResults] = useState<MultiSelectOptions<T>>([]);
   const [currentSearch, setCurrentSearch] = useState('');
   const [focused, setFocused] = useState(false);
@@ -104,7 +104,7 @@ function MultiSelect<T>(props: PropsWithChildren<MultiSelectProps<T>>) {
       tabIndex={0}
       onFocus={focusHandler}
       onBlur={blurHandler}
-      data-testid='MultiSelect'
+      data-testid='SearchSelect'
     >
       <Label htmlFor={props.id} icon={props.icon}>
         {props.label}
@@ -142,4 +142,4 @@ function MultiSelect<T>(props: PropsWithChildren<MultiSelectProps<T>>) {
   );
 }
 
-export default MultiSelect;
+export default SearchSelect;

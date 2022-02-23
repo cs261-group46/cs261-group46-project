@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
 // import styles from './MentorSignup.module.scss';
 import MainLayout from '../../../layouts/MainLayout/MainLayout';
-import MultiSelect from '../../../components/UI/FormInput/MultiSelect/MultiSelect';
-import { MultiSelectOptions } from '../../../components/UI/FormInput/MultiSelect/MultiSelect.d';
+import SearchSelect from '../../../components/UI/FormInput/SearchSelect/SearchSelect';
+import { MultiSelectOptions } from '../../../components/UI/FormInput/SearchSelect/MultiSelect.d';
 import useInput from '../../../hooks/UseInput/UseInput';
 import Button from '../../../components/UI/Button/Button';
 import { useNavigate } from 'react-router-dom';
@@ -48,7 +48,7 @@ const MentorSignup: FC<MentorSignupProps> = () => {
 
   return (
     <MainLayout title={'Sign up to be a Mentor'}>
-      <MultiSelect
+      <SearchSelect
         id={'interests'}
         label={'What are you interested in mentoring colleagues on?'}
         isValid={isSkillsInputValid}

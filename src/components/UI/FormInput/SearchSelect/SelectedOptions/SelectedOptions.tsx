@@ -7,7 +7,7 @@ interface SelectedOptionsProps<T> {
   onRemoveSelected: RemoveSelectedHandler<T>;
 }
 
-// function MultiSelect<T>(
+// function SearchSelect<T>(
 //     props: PropsWithChildren<MultiSelectProps<T>>
 // ) {
 
