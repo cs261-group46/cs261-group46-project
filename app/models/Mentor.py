@@ -17,4 +17,4 @@ class Mentor(db.Model):
     topics = db.relationship('Topic', secondary=mentors_topics, backref='mentors', lazy=True)
 
     def __repr__(self):
-        return f"{self.__name__} ({self.id}, {self.user_id}, {self.score})"
+        return f"{self.__class__.__name__} ({self.id}, {self.user_id}, {self.score})"

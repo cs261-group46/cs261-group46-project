@@ -16,7 +16,7 @@ def request_email(user: User):
 
 @blueprint.route("/<token_value>")
 @auth_required
-def token(session_user: User, token_value: str):
+def token_value(session_user: User, token_value: str):
     token_user = get_user_from_email_verification_token(token_value)
 
     if token_user is not None:
