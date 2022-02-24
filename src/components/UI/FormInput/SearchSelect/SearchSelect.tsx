@@ -27,6 +27,7 @@ interface MultiSelectProps<T> {
   icon?: React.ReactNode;
   searchPromise?: SearchPromise;
   value: MultiSelectOptions<T>;
+  limit?: number;
   onChange: (input: MultiSelectOptions<T>) => void;
   onBlur: () => void;
 }
@@ -36,6 +37,7 @@ function SearchSelect<T>(props: PropsWithChildren<MultiSelectProps<T>>) {
   const [currentSearch, setCurrentSearch] = useState('');
   const [focused, setFocused] = useState(false);
   const searchSubject = useMemo(() => new Subject<string>(), []);
+  const limit = props.limit || -1;
 
   const inputElement = useRef<HTMLSpanElement>(null);
 
@@ -112,7 +114,10 @@ function SearchSelect<T>(props: PropsWithChildren<MultiSelectProps<T>>) {
 
       <div
         className={`${styles.selectArea} ${focused && styles.focused} ${
-          focused && possibleResults.length > 0 && styles.focusedWithResults
+          focused &&
+          possibleResults.length > 0 &&
+          props.value.length < limit! &&
+          styles.focusedWithResults
         }`}
       >
         <SelectedOptions
@@ -131,7 +136,7 @@ function SearchSelect<T>(props: PropsWithChildren<MultiSelectProps<T>>) {
           <span className={styles.placeholder}>Search...</span>
         )}
       </div>
-      {focused && possibleResults.length > 0 && (
+      {focused && possibleResults.length > 0 && props.value.length < limit! && (
         <Autocomplete
           possibleResults={possibleResults}
           currentSearch={currentSearch}
