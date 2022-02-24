@@ -18,7 +18,12 @@ interface Workshop {
 }
 
 const ViewWorkshops: FC<ViewWorkshopsProps> = () => {
-    const [workshops, setWorkshops] = useState<Workshop[] | null>(null);
+    const [workshops, setWorkshops] = useState<Workshop[]>();
+    const pageSize = 3;
+    const [page, setPage] = useState(0);
+    const hasPages = (workshops?.length ?? 0) > 0;
+    const pageAmount = Math.ceil((workshops?.length ?? 0) / pageSize) - 1;
+    const workshopsOnPage: Workshop[] = workshops?.slice(page * pageSize, (page + 1) * pageSize) ?? [];
 
     async function dummyRequest(): Promise<Workshop[]> {
         // some code to feign an API request taking 500ms & returning the below object
@@ -42,6 +47,36 @@ const ViewWorkshops: FC<ViewWorkshopsProps> = () => {
                 duration: 5,
                 capacity: 100,
                 signups: 80,
+            },
+            {
+                id: "3",
+                host: "me",
+                title: "Introduction to Python II",
+                date: new Date(),
+                roomName: "CS0.01",
+                duration: 120,
+                capacity: 10,
+                signups: 2,
+            },
+            {
+                id: "4",
+                host: "somebody else",
+                title: "Introduction to C++ II",
+                date: new Date(),
+                roomName: "CS0.04",
+                duration: 5,
+                capacity: 100,
+                signups: 80,
+            },
+            {
+                id: "5",
+                host: "somebody else",
+                title: "Introduction to C++ III",
+                date: new Date(),
+                roomName: "CS0.04",
+                duration: 5,
+                capacity: 100,
+                signups: 80,
             }
         ]), 500));
     }
@@ -57,9 +92,9 @@ const ViewWorkshops: FC<ViewWorkshopsProps> = () => {
 
     return <MainLayout title={"Workshops"}>
         <div className={styles.ViewWorkshops} data-testid="ViewWorkshops">
-            { workshops ? // if workshops truthy
+            {workshops ? // if workshops truthy
                 <div>
-                    { workshops.map(workshop =>
+                    {workshopsOnPage.map(workshop =>
                         <div key={workshop.id} className={styles.workshop}>
                             <div>
                                 <Title text={workshop.title}/>
@@ -71,12 +106,15 @@ const ViewWorkshops: FC<ViewWorkshopsProps> = () => {
                             </div>
                             <Button href={`/workshops/${workshop.id}`}>See More...</Button>
                         </div>
-                    ) }
+                    )}
                 </div>
                 : // else not loaded yet
                 <p>Loading workshops...</p>
             }
-
+            {hasPages && <div>
+                {page > 0 && <Button onClick={() => setPage(page => page - 1)}>Last Page</Button>}
+                {page < pageAmount && <Button onClick={() => setPage(page => page + 1)}>Next Page</Button>}
+            </div>}
         </div>
     </MainLayout>
 }
