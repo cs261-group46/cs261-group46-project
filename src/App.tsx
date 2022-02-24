@@ -9,6 +9,7 @@ import Setup from "./routes/Setup/Setup";
 import Login from "./routes/Login/Login.lazy";
 import MentorSignup from "./routes/mentor/MentorSignup/MentorSignup.lazy";
 import MenteeSignup from "./routes/learn/MenteeSignup/MenteeSignup.lazy";
+import ComponentPlaygound from "./routes/ComponentPlaygound/ComponentPlaygound.lazy";
 
 function App() {
 
@@ -28,6 +29,7 @@ function App() {
           <Route path="/learn">
             <Route path="become-mentee" element={<MenteeSignup/>}/>
           </Route>
+          <Route path="/test" element={<ComponentPlaygound/>}/>
         </Routes>
       </div>
     </BrowserRouter>
