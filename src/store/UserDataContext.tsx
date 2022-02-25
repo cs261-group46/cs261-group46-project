@@ -7,23 +7,25 @@ import React, {
 } from "react";
 
 interface UserDataContext {
+  isLoggedIn: boolean;
   isExpert: boolean;
   isMentee: boolean;
   isMentor: boolean;
-  updateExpertStatusHandler: (status: boolean) => void;
-  updateMenteeStatusHandler: (status: boolean) => void;
-  updateMentorStatusHandler: (status: boolean) => void;
-  updateLoggedInStatusHandler: (status: boolean) => void;
+  setExpertStatus: (status: boolean) => void;
+  setMenteeStatus: (status: boolean) => void;
+  setMentorStatus: (status: boolean) => void;
+  setLoggedInStatus: (status: boolean) => void;
 }
 
 const UserDataContext = React.createContext<UserDataContext>({
+  isLoggedIn: false,
   isExpert: false,
   isMentee: false,
   isMentor: false,
-  updateExpertStatusHandler: (status) => {},
-  updateMenteeStatusHandler: (status) => {},
-  updateMentorStatusHandler: (status) => {},
-  updateLoggedInStatusHandler: (status) => {},
+  setExpertStatus: (status) => {},
+  setMenteeStatus: (status) => {},
+  setMentorStatus: (status) => {},
+  setLoggedInStatus: (status) => {},
 });
 
 export const UserDataContextProvider: FC = ({ children }) => {
@@ -32,16 +34,16 @@ export const UserDataContextProvider: FC = ({ children }) => {
   const [isMentor, setIsMentor] = useState(false);
   const [isMentee, setIsMentee] = useState(false);
 
-  const updateExpertStatusHandler = (status: boolean) => {
+  const setExpertStatus = (status: boolean) => {
     setIsExpert(status);
   };
-  const updateMenteeStatusHandler = (status: boolean) => {
+  const setMenteeStatus = (status: boolean) => {
     setIsMentor(status);
   };
-  const updateMentorStatusHandler = (status: boolean) => {
+  const setMentorStatus = (status: boolean) => {
     setIsMentee(status);
   };
-  const updateLoggedInStatusHandler = (status: boolean) => {
+  const setLoggedInStatus = (status: boolean) => {
     setIsLoggedIn(status);
   };
 
@@ -56,13 +58,14 @@ export const UserDataContextProvider: FC = ({ children }) => {
   }, [isLoggedIn]);
 
   const contextValue = {
+    isLoggedIn,
     isExpert,
     isMentee,
     isMentor,
-    updateExpertStatusHandler,
-    updateMenteeStatusHandler,
-    updateMentorStatusHandler,
-    updateLoggedInStatusHandler,
+    setExpertStatus,
+    setMenteeStatus,
+    setMentorStatus,
+    setLoggedInStatus,
   };
   return (
     <UserDataContext.Provider value={contextValue}>

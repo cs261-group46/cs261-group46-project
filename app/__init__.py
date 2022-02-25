@@ -38,15 +38,5 @@ mail = Mail(app)
 
 
 
-@app.errorhandler(404)
-def index(error):
-    with open(os.path.abspath(f"{app.static_folder}/../index.html"), "r") as file:
-        file_contents = file.read()
-    return file_contents
-
-
 from app.models import *
 from app.routes import *
-#
-
-

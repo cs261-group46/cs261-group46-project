@@ -64,7 +64,7 @@ def register():
             "last_name": new_user.last_name,
             "email": new_user.email
         },
-        verify_url = verify_url
+        verify_url=verify_url
     )
     subject = "Please confirm your email"
     send_email(new_user.email, subject, html)
@@ -111,8 +111,8 @@ def login():
     return {"successful": True}
 
 
-@auth.route("/logout", methods=["POST"])
+@auth.route("/logout", methods=["GET"])
 @auth_required()
 def logout(user=None):
     session.pop('login_token')
-    return {"successful": True}
+    return {"successful": True}, 200

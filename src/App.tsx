@@ -8,6 +8,7 @@ import Setup from "./routes/Setup/Setup";
 import MentorSignup from "./routes/mentor/MentorSignup/MentorSignup.lazy";
 import MenteeSignup from "./routes/learn/MenteeSignup/MenteeSignup.lazy";
 import Login from "./routes/Auth/Login/Login";
+import YourInterests from "./routes/learn/YourInterests/YourInterests";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           </Route>
           <Route path="/learn">
             <Route path="become-mentee" element={<MenteeSignup />} />
+            <Route path="interests" element={<YourInterests />} />
           </Route>
         </Routes>
       </div>

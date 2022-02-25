@@ -5,20 +5,23 @@ import UserDataContext from "../../store/UserDataContext";
 const UseVerifyAuth = (minPermissionLevel: number | undefined = 0) => {
   const navigate = useNavigate();
   const userDataCtx = useContext(UserDataContext);
+
+  const { isLoggedIn, setLoggedInStatus } = userDataCtx;
+
   const verifyAuth = useCallback(async () => {
     const response = await fetch(
       `/api/auth/verify?permission=${minPermissionLevel}`
     );
 
     const returnedData = await response.json();
-    userDataCtx.updateLoggedInStatusHandler(returnedData.isLoggedIn);
+    setLoggedInStatus(returnedData.isLoggedIn);
 
     if (!returnedData.isLoggedIn) navigate("/login");
-  }, [minPermissionLevel, navigate]);
+  }, [minPermissionLevel, navigate, setLoggedInStatus]);
 
   useEffect(() => {
     verifyAuth();
-  }, [verifyAuth]);
+  }, [verifyAuth, isLoggedIn]);
 };
 
 export default UseVerifyAuth;

@@ -16,6 +16,10 @@ import { Link, useNavigate } from "react-router-dom";
 
 import UseVerifyAuth from "../../hooks/UseVerifyAuth/UseVerifyAuth";
 
+function validateExpertises(_experises: MultiSelectOptions<number>) {
+  return true;
+}
+
 const Setup = () => {
   UseVerifyAuth();
   const navigate = useNavigate();
@@ -24,10 +28,6 @@ const Setup = () => {
   const increment = () => {
     setShowExpertise(1);
   };
-
-  function validateExpertises(_experises: MultiSelectOptions<number>) {
-    return true;
-  }
 
   const fetchTopics = async (startsWith: string) => {
     const body = {
