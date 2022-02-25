@@ -10,7 +10,7 @@ interface ButtonProps {
   onClick?: () => void;
   buttonStyle?: ButtonStyle;
   href?: string;
-  type?: "button" | "submit" | "reset" | undefined
+  type?: "button" | "submit" | "reset" | undefined;
 }
 
 const Button: FC<ButtonProps> = (props) => {
@@ -30,9 +30,11 @@ const Button: FC<ButtonProps> = (props) => {
   );
 
   return props.href ? (
-    <Link className={styles.Button} to={props.href}>
-      {buttonElem}
-    </Link>
+    <div className={styles.Button}>
+      <Link className={styles.Button} to={props.href}>
+        {buttonElem}
+      </Link>
+    </div>
   ) : (
     <div className={styles.Button}>{buttonElem}</div>
   );

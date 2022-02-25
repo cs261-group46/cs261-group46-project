@@ -1,14 +1,14 @@
 import React, { FC, FormEventHandler, useEffect, useState } from "react";
-import MainLayout from "../../layouts/MainLayout/MainLayout";
-import TextInput from "../../components/UI/FormInput/TextInput/TextInput";
-import PasswordInput from "../../components/Register/PasswordInput/PasswordInput";
-import Select from "../../components/UI/FormInput/Select/Select";
-import Button from "../../components/UI/Button/Button";
-import useInput from "../../hooks/UseInput/UseInput";
+import MainLayout from "../../../layouts/MainLayout/MainLayout";
+import TextInput from "../../../components/UI/FormInput/TextInput/TextInput";
+import PasswordInput from "../../../components/Register/PasswordInput/PasswordInput";
+import Select from "../../../components/UI/FormInput/Select/Select";
+import Button from "../../../components/UI/Button/Button";
+import useInput from "../../../hooks/UseInput/UseInput";
 import {
   SelectOption,
   SelectOptions,
-} from "../../components/UI/FormInput/Select/Select.d";
+} from "../../../components/UI/FormInput/Select/Select.d";
 import { useNavigate } from "react-router-dom";
 
 interface RegisterProps {}
@@ -63,28 +63,28 @@ const Register: FC<RegisterProps> = () => {
     isInputValid: isInputFirstNameValid,
     changeHandler: firstNameChangeHandler,
     blurHandler: firstNameBlurHandler,
-  } = useInput<string>(validateName, "");
+  } = useInput<string>("", validateName);
 
   const {
     enteredValue: enteredLastName,
     isInputValid: isInputLastNameValid,
     changeHandler: lastNameChangeHandler,
     blurHandler: lastNameBlurHandler,
-  } = useInput<string>(validateSurname, "");
+  } = useInput<string>("", validateSurname);
 
   const {
     enteredValue: enteredEmail,
     isInputValid: isInputEmailValid,
     changeHandler: emailChangeHandler,
     blurHandler: emailBlurHandler,
-  } = useInput<string>(validateEmail, "");
+  } = useInput<string>("", validateEmail);
 
   const {
     enteredValue: enteredPassword,
     isInputValid: isInputPasswordValid,
     changeHandler: passwordChangeHandler,
     blurHandler: passwordBlurHandler,
-  } = useInput<string>(validatePassword, "");
+  } = useInput<string>("", validatePassword);
 
   const {
     enteredValue: enteredRepeatedPassword,
@@ -92,8 +92,8 @@ const Register: FC<RegisterProps> = () => {
     changeHandler: repeatedPasswordChangeHandler,
     blurHandler: repeatedPasswordBlurHandler,
   } = useInput<string>(
-    validateRepeatedPassword.bind(null, enteredPassword),
-    ""
+    "",
+    validateRepeatedPassword.bind(null, enteredPassword)
   );
 
   const {
@@ -101,7 +101,7 @@ const Register: FC<RegisterProps> = () => {
     isInputValid: isInputDepartmentValid,
     changeHandler: departmentChangeHandler,
     blurHandler: departmentBlurHandler,
-  } = useInput<SelectOption>(validateDepartment, { id: -1 });
+  } = useInput<SelectOption>({ id: -1 }, validateDepartment);
 
   useEffect(() => {
     fetchDepartments();

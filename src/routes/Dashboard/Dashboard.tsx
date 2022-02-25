@@ -1,15 +1,19 @@
-import React, { FC } from "react";
+import React, { FC, useContext } from "react";
 // import styles from "./Dashboard.module.scss";
 import MainLayout from "../../layouts/MainLayout/MainLayout";
 import Button from "../../components/UI/Button/Button";
 import Title from "../../components/UI/Title/Title";
+import UseVerifyAuth from "../../hooks/UseVerifyAuth/UseVerifyAuth";
+import UserDataContext from "../../store/UserDataContext";
 
 interface DashboardProps {}
 
 const Dashboard: FC<DashboardProps> = () => {
+  UseVerifyAuth();
+  const userDataCtx = useContext(UserDataContext);
   const isMentor = false;
   const isMentee = false;
-  const isExpert = false;
+  const isExpert = userDataCtx.isExpert;
 
   return (
     <MainLayout title={"Dashboard"}>
@@ -101,7 +105,7 @@ const Dashboard: FC<DashboardProps> = () => {
 
       <Title text={"Your Expertise"} />
 
-      {!isMentor && (
+      {!isExpert && (
         <Button
           href={"/expert/become-expert"}
           buttonStyle="primary"

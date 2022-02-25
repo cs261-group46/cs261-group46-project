@@ -6,6 +6,7 @@ from datetime import datetime
 
 
 class User(db.Model):
+    query: db.Query # Type hint here
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     uuid = db.Column(UUID(as_uuid=True), unique=True, nullable=False, default=uuid4)

@@ -17,6 +17,7 @@ from app import db
 
 
 class Notification(db.Model):
+    query: db.Query # Type hint here
     __tablename__ = 'notifications'
     id = db.Column(db.Integer, primary_key=True)
     notification_level = db.Column(db.String(10), db.CheckConstraint("notification_level IN ('warning', 'alert', 'info')"))

@@ -1,6 +1,6 @@
 import React from "react";
-import HelperLink from "../../../components/UI/HelperLink/HelperLink";
-import MainLayout from "../../../layouts/MainLayout/MainLayout";
+import HelperLink from "../../../../components/UI/HelperLink/HelperLink";
+import MainLayout from "../../../../layouts/MainLayout/MainLayout";
 import styles from "./VerifyEmail.module.scss";
 
 function VerifyEmail() {

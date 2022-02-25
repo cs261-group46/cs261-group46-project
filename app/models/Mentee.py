@@ -1,13 +1,14 @@
 from app import db
 
 mentees_topics = db.Table('mentees_topics',
-    db.Column('menteeId', db.Integer, db.ForeignKey('mentees.id'), primary_key=True),
-    db.Column('topicId', db.Integer, db.ForeignKey('topics.id'), primary_key=True),
+    db.Column('mentee_id', db.Integer, db.ForeignKey('mentees.id'), primary_key=True),
+    db.Column('topic_id', db.Integer, db.ForeignKey('topics.id'), primary_key=True),
     db.Column('priority', db.Integer)
 )
 
 
 class Mentee(db.Model):
+    query: db.Query # Type hint here
     __tablename__ = 'mentees'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), unique=True)
