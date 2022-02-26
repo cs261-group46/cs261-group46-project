@@ -3,6 +3,7 @@ import styles from './ViewWorkshops.module.scss';
 import MainLayout from "../../../layouts/MainLayout/MainLayout";
 import Title from '../../../components/UI/Title/Title';
 import Button from "../../../components/UI/Button/Button";
+import PageStepper from "../../../components/UI/PageStepper/PageStepper";
 
 interface ViewWorkshopsProps {}
 
@@ -15,6 +16,7 @@ interface Workshop {
     duration: number;
     capacity: number;
     signups: number;
+    type: "workshop" | "group_session"
 }
 
 const ViewWorkshops: FC<ViewWorkshopsProps> = () => {
@@ -22,7 +24,8 @@ const ViewWorkshops: FC<ViewWorkshopsProps> = () => {
     const pageSize = 3;
     const [page, setPage] = useState(0);
     const hasPages = (workshops?.length ?? 0) > 0;
-    const pageAmount = Math.ceil((workshops?.length ?? 0) / pageSize) - 1;
+    const pageAmount = Math.ceil((workshops?.length ?? 0) / pageSize) ;
+    console.log(pageAmount)
     const workshopsOnPage: Workshop[] = workshops?.slice(page * pageSize, (page + 1) * pageSize) ?? [];
 
     async function dummyRequest(): Promise<Workshop[]> {
@@ -37,6 +40,7 @@ const ViewWorkshops: FC<ViewWorkshopsProps> = () => {
                 duration: 120,
                 capacity: 10,
                 signups: 2,
+                type: "workshop",
             },
             {
                 id: "2",
@@ -47,6 +51,7 @@ const ViewWorkshops: FC<ViewWorkshopsProps> = () => {
                 duration: 5,
                 capacity: 100,
                 signups: 80,
+                type: "group_session",
             },
             {
                 id: "3",
@@ -57,6 +62,7 @@ const ViewWorkshops: FC<ViewWorkshopsProps> = () => {
                 duration: 120,
                 capacity: 10,
                 signups: 2,
+                type: "workshop",
             },
             {
                 id: "4",
@@ -67,6 +73,7 @@ const ViewWorkshops: FC<ViewWorkshopsProps> = () => {
                 duration: 5,
                 capacity: 100,
                 signups: 80,
+                type: "workshop",
             },
             {
                 id: "5",
@@ -77,6 +84,7 @@ const ViewWorkshops: FC<ViewWorkshopsProps> = () => {
                 duration: 5,
                 capacity: 100,
                 signups: 80,
+                type: "workshop",
             }
         ]), 500));
     }
@@ -111,9 +119,11 @@ const ViewWorkshops: FC<ViewWorkshopsProps> = () => {
                 : // else not loaded yet
                 <p>Loading workshops...</p>
             }
-            {hasPages && <div>
-                {page > 0 && <Button onClick={() => setPage(page => page - 1)}>Last Page</Button>}
-                {page < pageAmount && <Button onClick={() => setPage(page => page + 1)}>Next Page</Button>}
+            {hasPages && <div className={styles.pagecontainer}>
+                <PageStepper page={page} setPage={newPage => {
+                    setPage(newPage);
+                    window.scrollTo(0,0);
+                }} maxPages={pageAmount}/>
             </div>}
         </div>
     </MainLayout>
