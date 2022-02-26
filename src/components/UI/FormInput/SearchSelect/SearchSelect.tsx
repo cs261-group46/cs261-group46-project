@@ -116,7 +116,7 @@ function SearchSelect<T>(props: PropsWithChildren<MultiSelectProps<T>>) {
         className={`${styles.selectArea} ${focused && styles.focused} ${
           focused &&
           possibleResults.length > 0 &&
-          props.value.length < limit! &&
+          props.value.length < limit &&
           styles.focusedWithResults
         }`}
       >
@@ -136,7 +136,7 @@ function SearchSelect<T>(props: PropsWithChildren<MultiSelectProps<T>>) {
           <span className={styles.placeholder}>Search...</span>
         )}
       </div>
-      {focused && possibleResults.length > 0 && props.value.length < limit! && (
+      {focused && possibleResults.length > 0 && props.value.length < limit && (
         <Autocomplete
           possibleResults={possibleResults}
           currentSearch={currentSearch}
