@@ -1,6 +1,11 @@
 @import "../../../variables";
 
 .PlansOfAction {
+  .stats {
+    display: flex;
+    justify-content: center;
+  }
+
   .plan {
     display: flex;
     align-items: center;

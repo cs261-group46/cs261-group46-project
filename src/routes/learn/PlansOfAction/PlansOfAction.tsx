@@ -3,6 +3,7 @@ import styles from './PlansOfAction.module.scss';
 import MainLayout from "../../../layouts/MainLayout/MainLayout";
 import Title from "../../../components/UI/Title/Title";
 import Icon from "../../../components/UI/Icon/Icon";
+import PieView from "../../../components/UI/PieView/PieView";
 
 interface PlansOfActionProps {}
 
@@ -16,12 +17,6 @@ const PlansOfAction: FC<PlansOfActionProps> = () => {
     const [plansOfAction, setPlansOfAction] = useState<PlanOfAction[]>([]);
     const activePlans = plansOfAction.filter(plan => plan.status === "active");
     const completedPlans = plansOfAction.filter(plan => plan.status === "completed");
-
-    const planAmount = activePlans.length;
-
-    const circle = <svg width={100} height={100} viewBox="0 0 100 100">
-        <path d="100 0 0"/>
-    </svg>
 
     async function dummyFetch(): Promise<PlanOfAction[]> {
         return new Promise(resolve => setTimeout(() => resolve([
@@ -59,6 +54,12 @@ const PlansOfAction: FC<PlansOfActionProps> = () => {
     }, [fetchPlans])
 
     return <MainLayout title={"Plans of Action"}><div className={styles.PlansOfAction} data-testid="PlansOfAction">
+        <div className={styles.stats}>
+            <PieView segments={[
+                {label: "Active", fill: "#393838", fr: activePlans.length},
+                {label: "Completed", fill: "#07A417", fr: completedPlans.length}
+            ]}/>
+        </div>
         <Title text={"Active"}/>
         {activePlans.map(plan => <div key={plan.id} className={styles.plan}>
             <Icon className={styles.icon} icon={"📈"}/>
