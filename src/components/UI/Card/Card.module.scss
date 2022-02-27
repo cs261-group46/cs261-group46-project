@@ -1,0 +1,8 @@
+@import '../../../_variables.scss';
+
+.Card {
+  border: 1px solid $sq_light_gray;
+  padding: 15px 20px;
+  background-color: white;
+  border-radius: 10px;
+}

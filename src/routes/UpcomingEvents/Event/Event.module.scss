@@ -1,0 +1,44 @@
+@import '../../../_variables.scss';
+
+.Event {
+  text-align: center;
+
+  .splitCard {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: row;
+    gap: 10px;
+    // width: 100%;
+    // flex-wrap: nowrap;
+  }
+  .splitCard div {
+    // flex: 1;
+    //  display: inline-block;
+  }
+
+  .dateTimeSquare {
+    background-color: $sq_teal;
+    border-radius: 10px;
+    color: white;
+    padding: 10px 5px;
+    font-size: 15px;
+    font-weight: bold;
+    letter-spacing: -0.5px;
+
+    span {
+      font-size: 30px;
+    }
+  }
+
+  .details {
+    align-items: center;
+    font-size: 14px;
+
+    .sessionType {
+      font-weight: bold;
+      font-size: 20px;
+      margin-bottom: 2px;
+    }
+  }
+}

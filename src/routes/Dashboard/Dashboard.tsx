@@ -1,9 +1,9 @@
-import React, {FC, useEffect, useState} from "react";
+import React, { FC, useEffect, useState } from 'react';
 // import styles from "./Dashboard.module.scss";
-import MainLayout from "../../layouts/MainLayout/MainLayout";
-import Button from "../../components/UI/Button/Button";
-import Title from "../../components/UI/Title/Title";
-import {useNavigate} from "react-router-dom";
+import MainLayout from '../../layouts/MainLayout/MainLayout';
+import Button from '../../components/UI/Button/Button';
+import Title from '../../components/UI/Title/Title';
+import { useNavigate } from 'react-router-dom';
 
 interface DashboardProps {}
 
@@ -12,20 +12,20 @@ const Dashboard: FC<DashboardProps> = () => {
   const isMentee = false;
   const isExpert = false;
 
-  const [firstName, setFirstName] = useState<string>()
+  const [firstName, setFirstName] = useState<string>();
 
   useEffect(() => {
     fetchFirstName();
   }, []);
 
   const fetchFirstName = async () => {
-    console.log("sending");
+    console.log('sending');
 
-    const response = await fetch("/api/user/", {
-      method: "GET",
+    const response = await fetch('/api/user/', {
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
       },
     });
     const body = await response.json();
@@ -39,139 +39,131 @@ const Dashboard: FC<DashboardProps> = () => {
   const navigate = useNavigate();
 
   const logout = async () => {
-      const response = await fetch("/api/user/logout", {
-          method: "POST",
-          headers: {
-              "Content-Type": "application/json",
-              "Access-Control-Allow-Origin": "*",
-          },
-      });
+    const response = await fetch('/api/user/logout', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+      },
+    });
 
-      const returnedData = await response.json();
+    const returnedData = await response.json();
 
-      console.log(returnedData);
+    console.log(returnedData);
 
-      if (response.ok) {
-          navigate("/");
-      } else {
-          // setError(true);
-      }
+    if (response.ok) {
+      navigate('/');
+    } else {
+      // setError(true);
+    }
   };
 
   return (
-    <MainLayout title={"Dashboard"}>
-      <Title text={`Welcome back${firstName ? `, ${firstName}` : ""}!`} />
+    <MainLayout title={'Dashboard'}>
+      <Title text={`Welcome back${firstName ? `, ${firstName}` : ''}!`} />
 
-      <Button icon={"👤"} href={"/profile"}>
-        <p style={{ textDecoration: "none", display: "inline-block" }}>
-          Your Profile
-        </p>
+      <Button icon={'👤'} href={'/profile'}>
+        <p style={{ textDecoration: 'none', display: 'inline-block' }}>Your Profile</p>
       </Button>
 
-      <Button icon={"🔔"} href={"/notifications"}>
+      <Button icon={'🔔'} href={'/notifications'}>
         All Notifications
       </Button>
 
-      <Button icon={"📅"} href={"/calendar"}>
+      <Button icon={'📅'} href={'/calendar'}>
         Upcoming Events
       </Button>
 
-      <Button icon={"💬"} href={"/calendar"}>
+      <Button icon={'💬'} href={'/calendar'}>
         Messages
       </Button>
 
-      <Button icon={"⚙️"} href={"/settings"}>
+      <Button icon={'⚙️'} href={'/settings'}>
         Settings
       </Button>
 
-      <Button icon={"👋"} onClick={logout}>Logout</Button>
+      <Button icon={'👋'} onClick={logout}>
+        Logout
+      </Button>
 
-      <Title text={"Your Learning"} />
+      <Title text={'Your Learning'} />
 
       {!isMentee && (
-        <Button href={"/learn/become-mentee"} buttonStyle="primary" icon={"👨‍🏫"}>
+        <Button href={'/learn/become-mentee'} buttonStyle='primary' icon={'👨‍🏫'}>
           Get a mentor
         </Button>
       )}
 
-      <Button icon={"🔔"}>Recent Notifications</Button>
+      <Button icon={'🔔'}>Recent Notifications</Button>
 
       {isMentee && (
-        <Button href={"/learn/your-mentor"} icon={"👨‍🏫"}>
+        <Button href={'/learn/your-mentor'} icon={'👨‍🏫'}>
           Your Mentor
         </Button>
       )}
 
       {isMentee && (
-        <Button href={"/learn/plans-of-action"} icon={"📈"}>
+        <Button href={'/learn/plans-of-action'} icon={'📈'}>
           Plans of Action
         </Button>
       )}
 
-      <Button href={"/learn/workshops"} icon={"✏️"}>
+      <Button href={'/learn/workshops'} icon={'✏️'}>
         Workshops
       </Button>
 
-      <Button href={"/learn/group-sessions"} icon={"👥"}>
+      <Button href={'/learn/group-sessions'} icon={'👥'}>
         Group Sessions
       </Button>
 
-      <Button href={"/learn/interests"} icon={"💡"}>
+      <Button href={'/learn/interests'} icon={'💡'}>
         Your Interests
       </Button>
 
-      <Title text={"Your Mentoring"} />
+      <Title text={'Your Mentoring'} />
 
       {!isMentor && (
-        <Button
-          href={"/mentor/become-mentor"}
-          buttonStyle="primary"
-          icon={"👨‍🏫"}
-        >
+        <Button href={'/mentor/become-mentor'} buttonStyle='primary' icon={'👨‍🏫'}>
           Become a Mentor
         </Button>
       )}
 
-      {isMentor && <Button icon={"🔔"}>Recent Notifications</Button>}
+      {isMentor && <Button icon={'🔔'}>Recent Notifications</Button>}
 
       {isMentor && (
-        <Button href={"/mentor/your-mentees"} icon={"🧑‍🎓"}>
+        <Button href={'/mentor/your-mentees'} icon={'🧑‍🎓'}>
           Your Mentees
         </Button>
       )}
 
       {isMentor && (
-        <Button href={"/mentor/skills"} icon={"💪"}>
+        <Button href={'/mentor/skills'} icon={'💪'}>
           Your Skills
         </Button>
       )}
 
-      <Title text={"Your Expertise"} />
+      <Title text={'Your Expertise'} />
 
       {!isMentor && (
-        <Button
-          href={"/expert/become-expert"}
-          buttonStyle="primary"
-          icon={"👨‍🏫"}
-        >
+        <Button href={'/expert/become-expert'} buttonStyle='primary' icon={'👨‍🏫'}>
           Become an Expert
         </Button>
       )}
 
-      {isExpert && <Button icon={"🔔"}>Recent Notifications</Button>}
+      {isExpert && <Button icon={'🔔'}>Recent Notifications</Button>}
 
       {isExpert && (
-        <Button href={"/expert/workshops"} icon={"✏"}>
+        <Button href={'/expert/workshops'} icon={'✏'}>
           Your Workshops
         </Button>
       )}
       {isExpert && (
-        <Button href={"/expert/skills"} icon={"💪"}>
+        <Button href={'/expert/skills'} icon={'💪'}>
           Your Fields of Expertise
         </Button>
       )}
 
-      <div data-testid="Dashboard" />
+      <div data-testid='Dashboard' />
     </MainLayout>
   );
 };
