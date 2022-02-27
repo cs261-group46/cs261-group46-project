@@ -1,1 +1,44 @@
-.PieView {}
+.PieView {
+  display: flex;
+  gap: 1rem;
+
+  .segments {
+    position: relative;
+
+    .segment {
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+  }
+
+  .labels {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+
+    .label {
+      display: flex;
+      gap: 1rem;
+
+      .size {
+        width:  30px;
+        height: 30px;
+        color: white;
+        border-radius: 100px;
+        font-weight: bold;
+        font-size: larger;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .description {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+  }
+}
