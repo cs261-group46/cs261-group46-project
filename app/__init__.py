@@ -8,49 +8,55 @@
 #   flask                         #
 #   flask-mail                    #
 #   flask-wtf                     #
+#   flask_sqlalchemy              #
 #   passlib                       #
 #   psycopg2                      #
 #   gunicorn                      #
 ###################################
 
-###########
-# Imports #
-###########
+#######################
+# Imports | Libraries #
+#######################
 
-from flask import Flask, request, session, redirect, url_for, send_file
+
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
 import os
-import app.environ as environ
-import app.filemanager as FileManager
+from dotenv import load_dotenv
+
+# import app.environ as environ
+
+#################################
+# Loading Environment Variables #
+#################################
+
+load_dotenv()
+NAME = os.getenv("NAME")
+HOST_URL = os.getenv("HOST_URL")
+
+
+#####################
+# Imports | Modules #
+#####################
+
 import app.config as Config
-import app.sql as sql
 from app.email import EMail as Mail, register as MailRegister
-import app.user as Users
 
-
-peper = environ.get('PEPER')
-name = environ.get('NAME')
-
-##########################
-# Config Options/Loading #
-##########################
-
-login_token_key_str = "login_token"
-
-# ALL THE FOLLOWING HAS WORKED FOR SEVERAL WEEKS, DON'T BREAK IT
-
-sql_config   = Config.load_config("sql")
-email_config = Config.load_config("email")
-
-db = sql.open_connection(sql_config["connection"])
-sql.launch(db, reset=False)
 
 #############
 # App setup #
 #############
 
+# Create app
 app = Flask(__name__, static_folder="../build/static/", static_url_path="/static")
-app.config["SECRET_KEY"] = environ.get('SECRET_KEY')
 
+# Load config options
+app.config["SECRET_KEY"] = os.getenv('SECRET_KEY')
+app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{os.getenv("SQL_USER")}:{os.getenv("SQL_PASSWORD")}@{os.getenv("SQL_HOST")}:{os.getenv("SQL_PORT")}/{os.getenv("SQL_DB_NAME")}'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+
+# Find email config options in config and add them (dynamic, so that end users can configure it however they want
+email_config = Config.load_config("email")
 if email_config["enabled"]:
     for key, value in email_config["email_server"].items():
         app.config[f"MAIL_{key.upper()}"] = value
@@ -58,42 +64,31 @@ if email_config["enabled"]:
 Mail.main(email_config["enabled"], app, email_config["sender"])
 Mail.debug = True
 
+# Open database connection
+db = SQLAlchemy(app)
+
 ###############
-# Route setup #
+# Load Models #
 ###############
 
-
-@app.errorhandler(404)
-def index(error):
-    with open(os.path.abspath(f"{app.static_folder}/../index.html"), "r") as file:
-        file_contents = file.read()
-    return file_contents
+print("Loading Models")
+from app.models import *
 
 
-@app.before_request
-def execute_before_requests():
-    if login_token_key_str in session.keys():
-        login_token = session.get(login_token_key_str)
-        if not (login_token is None):
-            Users.GetBy.login_token(db, login_token)  # Refresh auth token
+###############
+# Load Routes #
+###############
+
+print("Loading Routes")
+import app.routes as routes
+# from app.routes import load_routes
+#
+# load_routes(app)
 
 
-@app.after_request
-def execute_after_requests(response):
-    # change response code on unsuccessful responses
-    # TODO: move this to where response is actually called
-    data = response.get_json()
-    if data and "successful" in data and not data["successful"]:
-        response.status = 400
+############
+# Testting #
+############
 
-    response.headers["Access-Control-Allow-Origin"] = "*"
-    return response
-
-
-from app.routes import APIRoute, VerificationRoute
-
-app.register_blueprint(APIRoute.routes.blueprint)
-app.register_blueprint(VerificationRoute.routes.blueprint)
-
-
-
+if len(Department.query.all()) == 0:
+    import app.factory.departments_factory as departments_factory

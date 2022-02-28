@@ -1,0 +1,45 @@
+@import "../../../variables";
+
+.PageStepper {
+  display: flex;
+
+  button {
+    background-color: $sq_red;
+    font-weight: bold;
+    box-sizing: border-box;
+    height: 30px;
+    width: 30px;
+    border-radius: 10px;
+    padding: 0;
+    border: none;
+    transition-duration: 0.05s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover,
+    &:focus-visible {
+      outline: 3px solid $sq_dark_gray;
+    }
+
+    &:hover {
+      cursor: pointer;
+    }
+    
+    .flip {
+      rotate: 180deg;
+    }
+  }
+
+  .progress {
+    display: flex;
+    gap: 0.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+
+    div {
+      display: flex;
+      align-items: center;
+    }
+  }
+}
