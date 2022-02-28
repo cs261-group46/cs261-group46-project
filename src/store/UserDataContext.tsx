@@ -53,8 +53,15 @@ export const UserDataContextProvider: FC = ({ children }) => {
     setIsExpert(returnedData.isExpert);
   };
 
+  const verifyMentorStatus = async () => {
+    const response = await fetch("/api/mentors/verify");
+    const returnedData = await response.json();
+    setIsMentor(returnedData.isMentor);
+  };
+
   useEffect(() => {
     if (isLoggedIn) verifyExpertStatus();
+    if (isLoggedIn) verifyMentorStatus();
   }, [isLoggedIn]);
 
   const contextValue = {

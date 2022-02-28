@@ -16,10 +16,6 @@ import { Link, useNavigate } from "react-router-dom";
 
 import UseVerifyAuth from "../../hooks/UseVerifyAuth/UseVerifyAuth";
 
-function validateExpertises(_experises: MultiSelectOptions<number>) {
-  return true;
-}
-
 const Setup = () => {
   UseVerifyAuth();
   const navigate = useNavigate();
@@ -49,9 +45,13 @@ const Setup = () => {
   const {
     enteredValue: enteredExpertises,
     isInputValid: isInputExpertisesValid,
+    isValueValid: isValueExpertisesValid,
     changeHandler: expertisesChangeHandler,
     blurHandler: expertisesBlurHandler,
-  } = useInput<MultiSelectOptions<number>>([], validateExpertises);
+  } = useInput<MultiSelectOptions<number>>(
+    [],
+    (selectedOptions) => selectedOptions.length > 0
+  );
 
   const sendExpertisesData = async () => {
     const body = {
@@ -73,8 +73,10 @@ const Setup = () => {
 
   const submitHandler: FormEventHandler = (event) => {
     event.preventDefault();
-    if (isInputExpertisesValid) {
+    if (isValueExpertisesValid) {
       sendExpertisesData();
+    } else {
+      expertisesBlurHandler();
     }
   };
   return (

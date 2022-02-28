@@ -17,7 +17,9 @@ interface TextInputProps {
 }
 
 const TextInput: FC<TextInputProps> = (props) => {
-  const changeHandler: ChangeEventHandler<HTMLInputElement> = (event) => {
+  const changeHandler: ChangeEventHandler<
+    HTMLInputElement | HTMLTextAreaElement
+  > = (event) => {
     const target = event.target;
     if (target) {
       props.onChange(target.value);
@@ -38,16 +40,26 @@ const TextInput: FC<TextInputProps> = (props) => {
       <Label htmlFor={props.id} icon={props.icon}>
         {props.label}
       </Label>
-      <input
-        value={props.value}
-        type={props.type ?? "text"}
-        name={props.id}
-        id={props.id}
-        placeholder={props.placeholder}
-        onChange={changeHandler}
-        onBlur={props.onBlur}
-      />
-
+      {props.type !== "textarea" ? (
+        <input
+          value={props.value}
+          type={props.type ?? "text"}
+          name={props.id}
+          id={props.id}
+          placeholder={props.placeholder}
+          onChange={changeHandler}
+          onBlur={props.onBlur}
+        />
+      ) : (
+        <textarea
+          value={props.value}
+          name={props.id}
+          id={props.id}
+          placeholder={props.placeholder}
+          onChange={changeHandler}
+          onBlur={props.onBlur}
+        ></textarea>
+      )}
       <SystemMessage
         sort="inline"
         type="alert"

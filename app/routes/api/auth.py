@@ -49,10 +49,7 @@ def register():
         first_name=data.get("first_name"),
         last_name=data.get("last_name"),
         department_id=data.get("department").get("id"),
-    )
-
-    db.session.add(new_user)
-    db.session.commit()
+    ).commit()
 
     token = generate_confirmation_token(new_user.email)
 
@@ -74,7 +71,6 @@ def register():
 
 @auth.route("/verify", methods=["GET"])
 def verify():
-    # TODO : Validator
     permission = request.args.get('permission')
     is_logged_in = verify_auth(int(permission))
 

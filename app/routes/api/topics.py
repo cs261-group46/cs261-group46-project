@@ -13,7 +13,6 @@ topics = Blueprint("api_topics", __name__, url_prefix="/topics")
 def get(user=None):
     start_with = request.args.get('startswith').lower()
     topics = Topic.query.filter(func.lower(Topic.name).startswith(start_with)).limit(5).all()
-
     return {"result": [{"id": topic.id, "label": topic.name} for topic in topics]}
 
 #

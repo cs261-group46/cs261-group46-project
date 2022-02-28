@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 // function UseInput<T, E>(validateFunction: ((input: T) => boolean)) {
 //         enteredValue: string,
@@ -19,9 +19,9 @@ function useInput<T>(
   const isValueValid = enteredValue && validationFunction(enteredValue);
   const isInputValid = isValueValid || !isTouched;
 
-  const changeHandler: (newValue: T) => void = (newValue: T) => {
+  const changeHandler: (newValue: T) => void = useCallback((newValue: T) => {
     updateEnteredValue(newValue);
-  };
+  }, []);
 
   const blurHandler = () => {
     updateIsTouched(true);

@@ -3,13 +3,22 @@ from uuid import uuid4
 from sqlalchemy.dialects.postgresql import UUID
 from app import db
 from datetime import datetime
+from app.models.BaseModel import BaseModel
 
 
-class User(db.Model):
-    query: db.Query # Type hint here
+users_topics = db.Table('users_topics',
+                        db.Column('user_id', db.Integer, db.ForeignKey(
+                            'users.id'), primary_key=True),
+                        db.Column('topic_id', db.Integer, db.ForeignKey(
+                            'topics.id'), primary_key=True),
+                        db.Column('priority', db.Integer)
+                        )
+
+class User(BaseModel):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
-    uuid = db.Column(UUID(as_uuid=True), unique=True, nullable=False, default=uuid4)
+    uuid = db.Column(UUID(as_uuid=True), unique=True,
+                     nullable=False, default=uuid4)
     email = db.Column(db.String(128), unique=True, nullable=False)
     hashed_password = db.Column(db.Text, nullable=False)
     first_name = db.Column(db.String(128), nullable=False)
@@ -17,7 +26,16 @@ class User(db.Model):
     account_creation_date = db.Column(db.DateTime, default=datetime.now())
     verified = db.Column(db.Boolean, default=False)
     permissions = db.Column(db.Integer, default=0)
-    department_id = db.Column(db.Integer, db.ForeignKey('departments.id'), nullable=False)
+    topics = db.relationship(
+        'Topic', secondary=users_topics, backref='users', lazy=True)
+
+    department_id = db.Column(db.Integer, db.ForeignKey(
+        'departments.id'), nullable=False)
 
     def __repr__(self):
         return '<User %r>' % self.email
+
+    def commit(self):
+        db.session.add(self)
+        db.session.commit()
+        return self

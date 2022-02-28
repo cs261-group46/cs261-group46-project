@@ -1,0 +1,26 @@
+.HelperLink p {
+  font-weight: 600;
+  font-size: 15px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  height: 20px;
+  color: #646464;
+}
+
+.HelperLink a,
+.HelperLink button {
+  color: #EA596E;
+  font-weight: 600;
+  height: 20px;
+  font-size: 15px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.HelperLink button {
+  border: none;
+  background-color: transparent;
+  padding: 0;
+}
+/*# sourceMappingURL=HelperLink.module.css.map */

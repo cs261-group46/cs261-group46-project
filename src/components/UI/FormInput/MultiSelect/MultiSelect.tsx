@@ -18,6 +18,7 @@ import {
 
 import SelectedOptions from "./SelectedOptions/SelectedOptions";
 import Autocomplete from "./Autocomplete/Autocomplete";
+import SystemMessage from "../../SystemMessage/SystemMessage";
 
 interface MultiSelectProps<T> {
   id: string;
@@ -101,6 +102,12 @@ function MultiSelect<T>(props: PropsWithChildren<MultiSelectProps<T>>) {
     }
   };
 
+  const [isInvalidMessageVisible, setInvalidMessageVisible] = useState(false);
+
+  useEffect(() => {
+    setInvalidMessageVisible(!props.isValid);
+  }, [props.isValid]);
+
   return (
     <div
       className={styles.MultiSelect}
@@ -127,6 +134,9 @@ function MultiSelect<T>(props: PropsWithChildren<MultiSelectProps<T>>) {
           className={styles.search}
           role="search"
           ref={inputElement}
+          onKeyPress={(event) =>
+            event.key === "Enter" && event.preventDefault()
+          }
           contentEditable
           onInput={inputHandler}
         ></span>
@@ -141,6 +151,12 @@ function MultiSelect<T>(props: PropsWithChildren<MultiSelectProps<T>>) {
           onAddSelected={addSelectedHandler}
         />
       )}
+      <SystemMessage
+        sort="inline"
+        type="alert"
+        description={`The ${props.label} field seems to be incorrect`}
+        visible={isInvalidMessageVisible}
+      />
     </div>
   );
 }

@@ -1,0 +1,26 @@
+.Autocomplete {
+  width: 100%;
+  background-color: #fff;
+  border-radius: 10px;
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+  margin: 0;
+  border: 1px solid #646464;
+  outline: 2px solid #646464;
+  position: relative;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  -webkit-transition-duration: 0.05s;
+          transition-duration: 0.05s;
+}
+
+.Autocomplete .AutoCompleteOption {
+  padding: 15px 20px;
+  cursor: pointer;
+}
+
+.Autocomplete .AutoCompleteOption b {
+  font-weight: bold;
+  color: #ea596e;
+}
+/*# sourceMappingURL=Autocomplete.module.css.map */

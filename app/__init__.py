@@ -18,9 +18,8 @@
 ###########
 import json
 from flask import Flask
-from flask_mail import Mail, Message
+from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
-import os
 
 ##########################
 # Config Options/Loading #
@@ -30,13 +29,12 @@ import os
 # App setup #
 #############
 
-app = Flask(__name__, static_folder="../build/static/", static_url_path="/static")
+app = Flask(__name__, static_folder="../build/static/",
+            static_url_path="/static")
 app.config.from_file("config.json", load=json.load)
 
 db = SQLAlchemy(app)
 mail = Mail(app)
-
-
 
 from app.models import *
 from app.routes import *

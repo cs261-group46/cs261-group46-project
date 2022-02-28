@@ -11,8 +11,6 @@ import {
 } from "../../../components/UI/FormInput/Select/Select.d";
 import { useNavigate } from "react-router-dom";
 
-interface RegisterProps {}
-
 function validateEmail(email: string) {
   const re =
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -57,81 +55,44 @@ function validateDepartment(_department: SelectOption) {
   return _department.id !== -1;
 }
 
-const Register: FC<RegisterProps> = () => {
-  const {
-    enteredValue: enteredFirstName,
-    isInputValid: isInputFirstNameValid,
-    changeHandler: firstNameChangeHandler,
-    blurHandler: firstNameBlurHandler,
-  } = useInput<string>("", validateName);
-
-  const {
-    enteredValue: enteredLastName,
-    isInputValid: isInputLastNameValid,
-    changeHandler: lastNameChangeHandler,
-    blurHandler: lastNameBlurHandler,
-  } = useInput<string>("", validateSurname);
-
-  const {
-    enteredValue: enteredEmail,
-    isInputValid: isInputEmailValid,
-    changeHandler: emailChangeHandler,
-    blurHandler: emailBlurHandler,
-  } = useInput<string>("", validateEmail);
-
-  const {
-    enteredValue: enteredPassword,
-    isInputValid: isInputPasswordValid,
-    changeHandler: passwordChangeHandler,
-    blurHandler: passwordBlurHandler,
-  } = useInput<string>("", validatePassword);
-
-  const {
-    enteredValue: enteredRepeatedPassword,
-    isInputValid: isInputRepeatedPasswordValid,
-    changeHandler: repeatedPasswordChangeHandler,
-    blurHandler: repeatedPasswordBlurHandler,
-  } = useInput<string>(
-    "",
-    validateRepeatedPassword.bind(null, enteredPassword)
-  );
-
-  const {
-    enteredValue: enteredDepartment,
-    isInputValid: isInputDepartmentValid,
-    changeHandler: departmentChangeHandler,
-    blurHandler: departmentBlurHandler,
-  } = useInput<SelectOption>({ id: -1 }, validateDepartment);
+const Register: FC = () => {
+  const [departments, setDepartments] = useState<SelectOptions>([]);
+  let navigate = useNavigate();
 
   useEffect(() => {
     fetchDepartments();
   }, []);
 
-  const [departments, setDepartments] = useState<SelectOptions>([]);
-
   const fetchDepartments = async () => {
     const dep = await fetch("/api/departments");
     const body = await dep.json();
-    console.log(body);
-
     setDepartments(body.result);
+  };
+
+  const showAllErrors = () => {
+    firstNameBlurHandler();
+    lastNameBlurHandler();
+    emailBlurHandler();
+    passwordBlurHandler();
+    repeatedPasswordBlurHandler();
+    departmentBlurHandler();
   };
 
   const submitHandler: FormEventHandler = (event) => {
     event.preventDefault();
     if (
-      isInputFirstNameValid &&
-      isInputLastNameValid &&
-      isInputEmailValid &&
-      isInputPasswordValid &&
-      enteredRepeatedPassword &&
-      isInputDepartmentValid
+      isValueFirstNameValid &&
+      isValueLastNameValid &&
+      isValueEmailValid &&
+      isValuePasswordValid &&
+      isValueRepeatedPasswordValid &&
+      isValueDeprtmentPasswordValid
     ) {
       sendRegistrationData();
+    } else {
+      showAllErrors();
     }
   };
-
-  let navigate = useNavigate();
 
   const sendRegistrationData = async () => {
     const body = {
@@ -158,6 +119,57 @@ const Register: FC<RegisterProps> = () => {
 
     if (returnedData.successful) navigate("/register/verifyemail");
   };
+
+  const {
+    enteredValue: enteredFirstName,
+    isInputValid: isInputFirstNameValid,
+    isValueValid: isValueFirstNameValid,
+    changeHandler: firstNameChangeHandler,
+    blurHandler: firstNameBlurHandler,
+  } = useInput<string>("", validateName);
+
+  const {
+    enteredValue: enteredLastName,
+    isInputValid: isInputLastNameValid,
+    isValueValid: isValueLastNameValid,
+    changeHandler: lastNameChangeHandler,
+    blurHandler: lastNameBlurHandler,
+  } = useInput<string>("", validateSurname);
+
+  const {
+    enteredValue: enteredEmail,
+    isInputValid: isInputEmailValid,
+    isValueValid: isValueEmailValid,
+    changeHandler: emailChangeHandler,
+    blurHandler: emailBlurHandler,
+  } = useInput<string>("", validateEmail);
+
+  const {
+    enteredValue: enteredPassword,
+    isInputValid: isInputPasswordValid,
+    isValueValid: isValuePasswordValid,
+    changeHandler: passwordChangeHandler,
+    blurHandler: passwordBlurHandler,
+  } = useInput<string>("", validatePassword);
+
+  const {
+    enteredValue: enteredRepeatedPassword,
+    isInputValid: isInputRepeatedPasswordValid,
+    isValueValid: isValueRepeatedPasswordValid,
+    changeHandler: repeatedPasswordChangeHandler,
+    blurHandler: repeatedPasswordBlurHandler,
+  } = useInput<string>(
+    "",
+    validateRepeatedPassword.bind(null, enteredPassword)
+  );
+
+  const {
+    enteredValue: enteredDepartment,
+    isInputValid: isInputDepartmentValid,
+    isValueValid: isValueDeprtmentPasswordValid,
+    changeHandler: departmentChangeHandler,
+    blurHandler: departmentBlurHandler,
+  } = useInput<SelectOption>({ id: -1 }, validateDepartment);
 
   return (
     <MainLayout title="Register">

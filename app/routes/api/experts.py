@@ -12,9 +12,7 @@ def store(user=None):
     data = dict(request.get_json())
     # TODO: VALIDATE
     selectedTopics = Topic.query.filter(Topic.id.in_(data.get("expertises"))).all()
-    expert = Expert(user_id=user.id, topics=selectedTopics)
-    db.session.add(expert)
-    db.session.commit()
+    Expert(user_id=user.id, topics=selectedTopics).commit()
     return {"successful": True}, 200
 
 

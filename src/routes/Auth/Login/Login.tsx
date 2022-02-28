@@ -21,24 +21,17 @@ function validatePassword(password: string) {
 const Login: FC<LoginProps> = (props) => {
   const navigate = useNavigate();
 
-  const {
-    enteredValue: enteredEmail,
-    isInputValid: isInputEmailValid,
-    changeHandler: emailChangeHandler,
-    blurHandler: emailBlurHandler,
-  } = useInput<string>("", validateEmail);
-
-  const {
-    enteredValue: enteredPassword,
-    isInputValid: isInputPasswordValid,
-    changeHandler: passwordChangeHandler,
-    blurHandler: passwordBlurHandler,
-  } = useInput<string>("", validatePassword);
+  const showAllErrors = () => {
+    emailBlurHandler();
+    passwordBlurHandler();
+  };
 
   const submitHandler: FormEventHandler = (event) => {
     event.preventDefault();
-    if (isInputEmailValid && isInputPasswordValid) {
+    if (isValueEmailValid && isValuePasswordValid) {
       sendLoginData();
+    } else {
+      showAllErrors();
     }
   };
 
@@ -58,12 +51,27 @@ const Login: FC<LoginProps> = (props) => {
     });
 
     const returnedData = await response.json();
-    console.log(returnedData);
 
     // TODO : if unsuccesfull, show errors
 
     if (returnedData.successful) navigate("/dashboard");
   };
+
+  const {
+    enteredValue: enteredEmail,
+    isInputValid: isInputEmailValid,
+    isValueValid: isValueEmailValid,
+    changeHandler: emailChangeHandler,
+    blurHandler: emailBlurHandler,
+  } = useInput<string>("", validateEmail);
+
+  const {
+    enteredValue: enteredPassword,
+    isInputValid: isInputPasswordValid,
+    isValueValid: isValuePasswordValid,
+    changeHandler: passwordChangeHandler,
+    blurHandler: passwordBlurHandler,
+  } = useInput<string>("", validatePassword);
 
   return (
     <MainLayout title="Login">

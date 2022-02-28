@@ -8,7 +8,8 @@ import Setup from "./routes/Setup/Setup";
 import MentorSignup from "./routes/mentor/MentorSignup/MentorSignup.lazy";
 import MenteeSignup from "./routes/learn/MenteeSignup/MenteeSignup.lazy";
 import Login from "./routes/Auth/Login/Login";
-import YourInterests from "./routes/learn/YourInterests/YourInterests";
+import YourInterests from "./routes/learn/Interests/Interests";
+import MentorSkills from "./routes/mentor/MentorSkills/MentorSkills";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path="/setup" element={<Setup />} />
           <Route path="/mentor">
             <Route path="become-mentor" element={<MentorSignup />} />
+            <Route path="skills" element={<MentorSkills />} />
           </Route>
           <Route path="/learn">
             <Route path="become-mentee" element={<MenteeSignup />} />
