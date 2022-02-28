@@ -29,3 +29,10 @@ def register(user: User):
 def get(user: User):
     raise NotImplemented
 
+
+#TODO
+@blueprint.route("/your-mentees", methods=["GET"])
+@auth_required
+def mentees(user : User):
+    return None
+ 

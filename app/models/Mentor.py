@@ -18,3 +18,9 @@ class Mentor(db.Model):
 
     def __repr__(self):
         return f"{self.__class__.__name__} ({self.id}, {self.user_id}, {self.score})"
+
+    def get_mentees(self):
+        return "hello"
+    # TODO
+
+
