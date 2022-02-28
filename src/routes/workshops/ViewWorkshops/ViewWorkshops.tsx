@@ -164,7 +164,7 @@ const ViewWorkshops: FC<ViewWorkshopsProps> = () => {
                     </div>
 
                     {/* TODO: create an 'x' button component */}
-                    <img className={styles.x} src={""} width={25} height={25} onClick={() => setSelectedWorkshop(undefined)}/>
+                    <img className={styles.x} src={""} alt={"close"} width={25} height={25} onClick={() => setSelectedWorkshop(undefined)}/>
                 </div>}
             </div>
         </div>
