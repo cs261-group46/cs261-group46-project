@@ -154,7 +154,7 @@ const Register: FC<RegisterProps> = () => {
     fetchDepartments();
   }, []);
 
-  const [departments, setDepartments] = useState<SelectOptions>([]);
+  const [departments, setDepartments] = useState<SelectOptions<number>>([]);
 
   const fetchDepartments = async () => {
     console.log("sending");

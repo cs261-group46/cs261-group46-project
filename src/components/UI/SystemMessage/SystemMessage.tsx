@@ -7,13 +7,14 @@ interface SystemMessageProps {
     type: "warning" | "alert" | "information"
     description: string
     visible: boolean
-    setVisible: (newVisible: boolean) => void
+    setVisible?: (newVisible: boolean) => void
+    noX?: boolean
     children?: React.ReactNode
 }
 
 const SystemMessage: FC<SystemMessageProps> = (props) => {
   const handleClick = () => {
-    props.setVisible(false)
+    if (props.setVisible) props.setVisible(false)
   }
 
   if (props.sort === "inline" && props.visible) {
@@ -22,9 +23,9 @@ const SystemMessage: FC<SystemMessageProps> = (props) => {
                         (props.type === "warning" ? styles.warning : '') + ' ' + 
                         (props.type === "alert" ? styles.alert : '') + ' ' + 
                         (props.type === "information" ? styles.information : '')} data-testid="SystemMessage">
-          <span onClick={handleClick}>&#10006;</span>
+          {!props.noX && <span onClick={handleClick}>&#10006;</span>}
           <h1>{props.type}</h1>
-          <p>{props.description}</p>
+            <p>{props.description}</p>
         </div>
     )
   }
@@ -35,7 +36,7 @@ const SystemMessage: FC<SystemMessageProps> = (props) => {
                         (props.type === "warning" ? styles.warning : '') + ' ' + 
                         (props.type === "alert" ? styles.alert : '') + ' ' + 
                         (props.type === "information" ? styles.information : '')} data-testid="SystemMessage">
-          <span onClick={handleClick}>&#10006;</span>
+          {!props.noX && <span onClick={handleClick}>&#10006;</span>}
           <h1>{props.type}</h1>
           <p>{props.description}</p>
         </div>

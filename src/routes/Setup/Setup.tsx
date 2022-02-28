@@ -20,7 +20,7 @@ const Setup: FC<SetupProps> = () => {
     blurHandler: experiencesBlurHandler,
   } = useInput<MultiSelectOptions<string>>(validateExpertises, []);
 
-  const searchPromise: SearchPromise = (_search) => {
+  const searchPromise: SearchPromise<string> = (_search) => {
     return new Promise((resolve) =>
       resolve([
         { label: "Tracking", value: "tracking" },

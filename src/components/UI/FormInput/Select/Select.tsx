@@ -8,7 +8,7 @@ interface SelectProps<T> {
   icon?: React.ReactNode;
   label: string;
   placeholder: string;
-  options: SelectOptions;
+  options: SelectOptions<T>;
   value: SelectOption<T> | undefined;
   isValid: boolean;
   onChange: (input: SelectOption<T>) => void;
@@ -16,10 +16,8 @@ interface SelectProps<T> {
 }
 
 function Select<T>(props: PropsWithChildren<SelectProps<T>>) {
-  console.log(props.options);
-
-  const options = props.options.map(({ id, label }) => (
-    <option key={id} value={label}>
+  const options = props.options.map(({ id, label }, i) => (
+    <option key={i} value={label}>
       {label}
     </option>
   ));
@@ -53,6 +51,6 @@ function Select<T>(props: PropsWithChildren<SelectProps<T>>) {
       </select>
     </div>
   );
-};
+}
 
 export default Select;

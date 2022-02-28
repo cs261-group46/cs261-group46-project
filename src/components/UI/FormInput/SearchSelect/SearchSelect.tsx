@@ -25,7 +25,7 @@ interface MultiSelectProps<T> {
   default?: T;
   isValid: boolean;
   icon?: React.ReactNode;
-  searchPromise?: SearchPromise;
+  searchPromise?: SearchPromise<T>;
   value: MultiSelectOptions<T>;
   limit?: number;
   onChange: (input: MultiSelectOptions<T>) => void;
