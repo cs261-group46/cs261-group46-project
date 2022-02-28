@@ -20,7 +20,7 @@ function Expert() {
     return true;
   }
 
-  const searchPromise: SearchPromise = _search => {
+  const searchPromise: SearchPromise<string> = _search => {
     return new Promise(resolve =>
       resolve([
         { label: 'Tracking', value: 'tracking' },
