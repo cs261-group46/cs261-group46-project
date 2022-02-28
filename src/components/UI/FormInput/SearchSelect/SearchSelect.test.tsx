@@ -20,8 +20,8 @@ describe('<SearchSelect />', () => {
             onBlur={() => {}}
             searchPromise={(_search) => {
              return new Promise(resolve => resolve([
-               {label: "test1", value: 1},
-               {label: "test2", value: 2}
+               {label: "test1", value: "1"},
+               {label: "test2", value: "2"}
              ]))
             }}
         />
