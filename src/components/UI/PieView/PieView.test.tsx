@@ -14,4 +14,18 @@ describe('<PieView />', () => {
 
     expect(pieView).toBeInTheDocument();
   });
+
+  it('should contain the labels', () => {
+    render(<PieView segments={[
+      {fr: 2, fill: "#07A417", label: "Active"},
+      {fr: 1, fill: "#393838", label: "Completed"},
+      {fr: 1, fill: "#FF0000", label: "Unknown"}]}/>);
+
+
+    const pieView = screen.getByTestId('PieView');
+
+    expect(pieView).toHaveTextContent("Active");
+    expect(pieView).toHaveTextContent("Completed");
+    expect(pieView).toHaveTextContent("Unknown");
+  })
 });
