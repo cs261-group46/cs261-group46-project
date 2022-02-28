@@ -33,6 +33,7 @@ function UseLogin() {
             },
         });
 
+        console.log(response.ok)
         if (response.ok) {
             const body = await response.json();
             setLoginState({state: "logged_in", details: body});

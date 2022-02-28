@@ -1,8 +1,6 @@
-import app.email as email
-import app.environ as environ
-Mail = email.EMail
+from app import NAME, HOST_URL
+from app.email import EMail as Mail
 
 
-VERIFY = Mail("verify", f"[{environ.get('NAME')}] Account signup", "Verify.html",
-              name=environ.get("NAME"), url_root=environ.get("HOST_URL"))
-RESET  = Mail("reset_password", f"[{environ.get('NAME')}] Password Reset", "Reset.html")
+VERIFY = Mail("verify", f"[{NAME}] Account signup", "Verify.html", name=NAME, url_root=HOST_URL)
+RESET  = Mail("reset_password", f"[{NAME}] Password Reset", "Reset.html")

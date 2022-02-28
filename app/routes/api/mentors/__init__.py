@@ -1,18 +1,31 @@
 from flask import Blueprint, request, session
-from app import db, login_token_key_str, Users
-import app.utils as Utils
+from app import db, User
+from app.auth import auth_required
+from app.utils import to_api_return_data
 
 
 blueprint = Blueprint("api_mentors", __name__, url_prefix="/mentor")
 
 
 @blueprint.route("/register", methods=["POST"])
-def register():
+@auth_required
+def register(user: User):
+
+    data = request.get_json()
+    about = data.get("about")
+    topics = data.get("topics")
+
+    if not about:
+        return {"successful": False, "errors": ["About.Missing"]}
+    if not topics:
+        return {"successful": False, "errors": ["Topics.Missing"]}
+    # Start by creating a mentor profile
+    # Then, add the topics
     return {}
 
 
 @blueprint.route("/", methods=["GET"])
-def get():
-    if (user := Users.GetBy.session(db, login_token_key_str, session)).isLoaded():
-        return {"mentors": Utils.to_api_return_data(Users.Mentors.GetBy.user(db, user))}
-    return {"mentors": []}
+@auth_required
+def get(user: User):
+    raise NotImplemented
+
