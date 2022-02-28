@@ -1,7 +1,7 @@
 from flask import Blueprint, request, session
-from app import db, login_token_key_str
-import app.user as Users
-import app.utils as Utils
+from app import db, User
+from app.auth import auth_required
+from app.utils import to_api_return_data
 
 
 blueprint = Blueprint("api_mentees", __name__, url_prefix="/mentee")
@@ -13,7 +13,11 @@ def register():
 
 
 @blueprint.route("/", methods=["GET"])
-def get():
-    if (user := Users.GetBy.session(db, login_token_key_str, session)).isLoaded():
-        return {"mentees": Utils.to_api_return_data(Users.Mentees.GetBy.user(db, user))}
-    return {"mentees": []}
+@auth_required
+def get(user: User):
+    raise NotImplemented
+
+
+    # if (user := Users.GetBy.session(db, login_token_key_str, session)).isLoaded():
+    #     return {"mentees": Utils.to_api_return_data(Users.Mentees.GetBy.user(db, user))}
+    # return {"mentees": []}

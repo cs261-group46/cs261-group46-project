@@ -12,7 +12,7 @@ validationRules = {
     },
     'password': {
         'type': 'string',
-        'regex': regex.password,
+        # 'regex': regex.password,
         'required': True,
         'minlength': 10,
         'maxlength': 126

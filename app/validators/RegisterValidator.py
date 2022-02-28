@@ -23,7 +23,7 @@ validationRules = {
     },
     'password': {
         'type': 'string',
-        'regex': regex.password,
+        # 'regex': regex.password,
         'required': True,
         'minlength': 10,
         'maxlength': 126
@@ -32,7 +32,7 @@ validationRules = {
         'type': 'string',
         'required': True,
         'dependencies': 'password',
-        'are_equal': 'password'
+        # 'are_equal': 'password'
     },
     'first_name': {
         'type': 'string',

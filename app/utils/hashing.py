@@ -1,8 +1,5 @@
 import hashlib
-import uuid
 import hmac
-
-secret_key: str = None
 
 
 def hash_password(password, username, salt, peper):
@@ -21,10 +18,3 @@ def hash_string(text: str) -> str:
     crypt = hashlib.sha512()
     crypt.update(b64p)
     return str(crypt.hexdigest())
-
-
-def is_password_allowed(password, repeat) -> bool:
-    if password == repeat:
-        return True
-    else:
-        return False

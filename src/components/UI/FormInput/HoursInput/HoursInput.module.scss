@@ -1,0 +1,18 @@
+.HoursInput {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .clocks {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .times {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+}
