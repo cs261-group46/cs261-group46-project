@@ -10,6 +10,7 @@ import Login from "./routes/Login/Login.lazy";
 import MentorSignup from "./routes/mentor/MentorSignup/MentorSignup.lazy";
 import MenteeSignup from "./routes/learn/MenteeSignup/MenteeSignup.lazy";
 import ComponentPlaygound from "./routes/ComponentPlaygound/ComponentPlaygound.lazy";
+import PlansOfAction from "./routes/learn/PlansOfAction/PlansOfAction.lazy";
 
 function App() {
 
@@ -28,6 +29,7 @@ function App() {
           </Route>
           <Route path="/learn">
             <Route path="become-mentee" element={<MenteeSignup/>}/>
+            <Route path="plans-of-action" element={<PlansOfAction/>}/>
           </Route>
           <Route path="/test" element={<ComponentPlaygound/>}/>
         </Routes>
