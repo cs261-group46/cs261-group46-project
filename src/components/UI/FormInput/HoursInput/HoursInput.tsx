@@ -1,6 +1,7 @@
 import React, {FC, useEffect, useState} from 'react';
 import styles from './HoursInput.module.scss';
 import ClockInput from "./ClockInput";
+import Label from "../Label/Label";
 
 export type Range = [number, number];
 
@@ -10,6 +11,7 @@ interface HoursInputProps {
   value: Range[];
   onChange: (input: Range[]) => void;
   onBlur: () => void;
+  width?: string;
 }
 
 function boolsToRanges(input: boolean[]) {
@@ -54,12 +56,11 @@ const HoursInput: FC<HoursInputProps> = (props) => {
   const [amTime, setAmTime] = useState(Array(12).fill(false));
   const [pmTime, setPmTime] = useState(Array.from(amTime));
   const [stopInfiniteLoop, setStopInfiniteLoop] = useState(false);
-  const width = "200px";
+  const width = props.width ?? "200px";
   const ranges = boolsToRanges(amTime.concat(pmTime));
 
   useEffect(() => {
     if (!stopInfiniteLoop) {
-      console.log(ranges);
       onChange(ranges);
       setStopInfiniteLoop(true);
     }
@@ -67,6 +68,12 @@ const HoursInput: FC<HoursInputProps> = (props) => {
 
 
   return <div className={styles.HoursInput} data-testid="HoursInput">
+    {/* TODO: add these to props */}
+    <div className={styles.label}>
+      <Label htmlFor={""} icon={""}>
+        {props.label}
+      </Label>
+    </div>
     <div className={styles.clocks}>
       {/* for onchange - not the best solution. otherwise it infinitely loops and im not sure why */}
       <ClockInput value={amTime} onChange={value => {setStopInfiniteLoop(false); setAmTime(value)}} onBlur={props.onBlur} width={width} label={"AM"}/>

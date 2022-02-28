@@ -51,7 +51,10 @@ const ClockInput: FC<ClockInputProps> = (props) => {
                 // also flip this val when you click
                 flip(getClickedIndex(event));
               }}
-              onMouseUp={() => setMouseDown(false)}
+              onMouseUp={() => {
+                setMouseDown(false);
+                props.onBlur();
+              }}
               onMouseMove={(event) => {
                 if (mouseDown) {
                   const clickedIndex = getClickedIndex(event);
