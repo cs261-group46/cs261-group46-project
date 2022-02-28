@@ -53,8 +53,8 @@ function validateRepeatedPassword(
     password === repeatedPassword
   );
 }
-function validateDepartment(_department: SelectOption<number>) {
-  return true;
+function validateDepartment(department: SelectOption<number>) {
+  return department.id !== -1;
 }
 
 const Register: FC<RegisterProps> = () => {
@@ -138,6 +138,13 @@ const Register: FC<RegisterProps> = () => {
   };
 
   const registrationHandler = () => {
+    firstNameBlurHandler();
+    lastNameBlurHandler();
+    emailBlurHandler();
+    passwordBlurHandler();
+    repeatedPasswordBlurHandler();
+    departmentBlurHandler();
+
     if (
       isInputFirstNameValid &&
       isInputLastNameValid &&
@@ -179,6 +186,8 @@ const Register: FC<RegisterProps> = () => {
         placeholder="Please provide your first name"
       />
 
+      <SystemMessage sort={"inline"} type={"alert"} description={"Please provide your first name"} visible={!isInputFirstNameValid} noX/>
+
       <TextInput
         icon="2️⃣"
         value={enteredLastName}
@@ -190,6 +199,8 @@ const Register: FC<RegisterProps> = () => {
         placeholder="Please provide your last name"
       />
 
+      <SystemMessage sort={"inline"} type={"alert"} description={"Please provide your last name"} visible={!isInputLastNameValid} noX/>
+
       <TextInput
         icon="✉️"
         value={enteredEmail}
@@ -200,12 +211,18 @@ const Register: FC<RegisterProps> = () => {
         label="Email"
         placeholder="Please provide your email address"
       />
+
+      <SystemMessage sort={"inline"} type={"alert"} description={"Please provide your last name"} visible={!isInputEmailValid} noX/>
+
       <PasswordInput
         value={enteredPassword}
         isValid={isInputPasswordValid}
         onChange={passwordChangeHandler}
         onBlur={passwordBlurHandler}
       />
+
+      <SystemMessage sort={"inline"} type={"alert"} description={"Your password is not secure enough"} visible={!isInputPasswordValid} noX/>
+
       <TextInput
         value={enteredRepeatedPassword}
         isValid={isInputRepeatedPasswordValid}
@@ -217,6 +234,9 @@ const Register: FC<RegisterProps> = () => {
         label="Repeat Password"
         placeholder="Please provide your password again"
       />
+
+      <SystemMessage sort={"inline"} type={"alert"} description={"Passwords do not match"} visible={!isInputRepeatedPasswordValid} noX/>
+
       <Select
         value={enteredDepartment}
         isValid={isInputDepartmentValid}
@@ -228,6 +248,9 @@ const Register: FC<RegisterProps> = () => {
         label="Department"
         options={departments}
       />
+
+      <SystemMessage sort={"inline"} type={"alert"} description={"Please select a Department"} visible={!isInputDepartmentValid} noX/>
+
       <Button icon="👑" onClick={registrationHandler} buttonStyle={"primary"}>
         Register
       </Button>
