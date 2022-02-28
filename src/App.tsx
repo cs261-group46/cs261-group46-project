@@ -9,6 +9,7 @@ import Setup from "./routes/Setup/Setup";
 import Login from "./routes/Login/Login.lazy";
 import MentorSignup from "./routes/mentor/MentorSignup/MentorSignup.lazy";
 import MenteeSignup from "./routes/learn/MenteeSignup/MenteeSignup.lazy";
+import Homepage from "./routes/Homepage/Homepage.lazy";
 import ViewWorkshops from "./routes/workshops/ViewWorkshops/ViewWorkshops.lazy";
 import ComponentPlaygound from "./routes/ComponentPlaygound/ComponentPlaygound.lazy";
 import PlansOfAction from "./routes/learn/PlansOfAction/PlansOfAction.lazy";
@@ -36,6 +37,7 @@ function App() {
             <Route index element={<ViewWorkshops/>}/>
           </Route>
           <Route path="/test" element={<ComponentPlaygound/>}/>
+          <Route index element={<Homepage/>}/>
         </Routes>
       </div>
     </BrowserRouter>
