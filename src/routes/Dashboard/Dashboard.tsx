@@ -1,9 +1,10 @@
-import React, {FC, useEffect, useState} from "react";
+import React, {FC} from "react";
 // import styles from "./Dashboard.module.scss";
 import MainLayout from "../../layouts/MainLayout/MainLayout";
 import Button from "../../components/UI/Button/Button";
 import Title from "../../components/UI/Title/Title";
 import {useNavigate} from "react-router-dom";
+import useLogin from "../../hooks/UseLogin/UseLogin";
 
 interface DashboardProps {}
 
@@ -12,31 +13,8 @@ const Dashboard: FC<DashboardProps> = () => {
   const isMentee = false;
   const isExpert = false;
 
-  const [firstName, setFirstName] = useState<string>()
-
-  useEffect(() => {
-    fetchFirstName();
-  }, []);
-
-  const fetchFirstName = async () => {
-    console.log("sending");
-
-    const response = await fetch("/api/user/", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-    });
-    const body = await response.json();
-    console.log(body);
-
-    setFirstName(body.first_name);
-
-    // setDepartments(body.result);
-  };
-
   const navigate = useNavigate();
+  const loginState = useLogin();
 
   const logout = async () => {
       const response = await fetch("/api/user/logout", {
@@ -58,9 +36,20 @@ const Dashboard: FC<DashboardProps> = () => {
       }
   };
 
+  const titleText: () => string = () => {
+    switch (loginState.state) {
+      case "trying_to_login":
+        return "";
+      case "logged_out":
+        return ""; // TODO: redirect to homepage
+      case "logged_in":
+        return `Welcome ${loginState.details.first_name}!`;
+    }
+  }
+
   return (
     <MainLayout title={"Dashboard"}>
-      <Title text={`Welcome back${firstName ? `, ${firstName}` : ""}!`} />
+      <Title text={titleText()}/>
 
       <Button icon={"👤"} href={"/profile"}>
         <p style={{ textDecoration: "none", display: "inline-block" }}>
