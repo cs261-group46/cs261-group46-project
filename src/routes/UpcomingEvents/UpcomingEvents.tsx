@@ -13,7 +13,7 @@ const UpcomingEvents: FC<UpcomingEventsProps> = props => {
   return (
     <MainLayout title={'Upcoming Events'}>
       {props.events.map((event_props, index) => {
-        return <Event event={event_props} />;
+        return <Event event={event_props} key={index} />;
       })}
 
       <div data-testid='UpcomingEvents' />

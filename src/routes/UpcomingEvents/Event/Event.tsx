@@ -19,8 +19,12 @@ const Event: FC<Props> = props => (
           <div className={styles.sessionType}>{props.event.sessionType}</div>
           <div>{props.event.subject}</div>
           <br />
-          <div>Mentor: {props.event.mentor}</div>
-          <div>Mentee: {props.event.mentee}</div>
+          <div>
+            Mentor: <span>{props.event.mentor}</span>
+          </div>
+          <div>
+            Mentee: <span>{props.event.mentee}</span>
+          </div>
         </div>
       </div>
     </div>
