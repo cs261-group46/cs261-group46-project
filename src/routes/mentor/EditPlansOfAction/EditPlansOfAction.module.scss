@@ -1,1 +1,66 @@
-.EditPlansOfAction {}
+@import "../../../variables";
+
+.EditPlansOfAction {
+  .plan {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    border-radius: 10px;
+    border: 1px solid $sq_light_gray;
+    padding: 15px 20px;
+    position: relative;
+    box-sizing: border-box;
+    transition-duration: 0.05s;
+    outline: 0 solid $sq_dark_gray;
+    margin-bottom: 1rem;
+    width: 100%;
+
+    &:focus-visible, &:hover {
+      outline: 2px solid $sq_dark_gray;
+      border-color: $sq_dark_gray;
+    }
+
+    .plantext {
+      width: 100%;
+      display: flex;
+      gap: 0.5rem;
+
+      .icon {
+        display: inline;
+        height: 20px;
+      }
+
+      input {
+        border-radius: 5px;
+        border: 1px solid $sq_light_gray;
+        background-color: white;
+        transition-duration: 0.05s;
+        outline: 0 solid $sq_dark_gray;
+        font-family: "Inter", sans-serif;
+        width: 100%;
+
+        &:focus-visible, &:hover {
+          outline: 1px solid $sq_dark_gray;
+          border-color: $sq_dark_gray;
+        }
+      }
+    }
+
+    select {
+      border-radius: 5px;
+      border: 1px solid $sq_light_gray;
+      background-color: white;
+      transition-duration: 0.05s;
+      outline: 0 solid $sq_dark_gray;
+      height: 20px;
+      width: 100%;
+
+      &:focus-visible, &:hover {
+        outline: 1px solid $sq_dark_gray;
+        border-color: $sq_dark_gray;
+      }
+    }
+  }
+}
