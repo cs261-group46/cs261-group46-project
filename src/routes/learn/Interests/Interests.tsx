@@ -58,7 +58,7 @@ const Interests: FC<InterestsProps> = () => {
       const data = await get({
         resource: "users",
         args: {
-          fields: "topics",
+          fields: ["topics"],
         },
       });
       const topicsOptions: MultiSelectOptions<number> = data.user.topics.map(
