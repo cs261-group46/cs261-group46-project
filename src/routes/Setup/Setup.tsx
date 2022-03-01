@@ -2,7 +2,9 @@ import React, { FormEventHandler, useState } from "react";
 import MainLayout from "../../layouts/MainLayout/MainLayout";
 import Button from "../../components/UI/Button/Button";
 import styles from "./Setup.module.scss";
-import MultiSelect from "../../components/UI/FormInput/MultiSelect/MultiSelect";
+import MultiSelect, {
+  MultiSelectOption,
+} from "../../components/UI/FormInput/SearchSelect/SearchSelect.d";
 import useInput from "../../hooks/UseInput/UseInput";
 import {
   SelectOption,
@@ -11,11 +13,12 @@ import {
 import {
   MultiSelectOptions,
   SearchPromise,
-} from "../../components/UI/FormInput/MultiSelect/MultiSelect.d";
+} from "../../components/UI/FormInput/SearchSelect/SearchSelect.d";
 import { Link, useNavigate } from "react-router-dom";
 
 import UseVerifyAuth from "../../hooks/UseVerifyAuth/UseVerifyAuth";
 import { get, index, store } from "../../api/api";
+import SearchSelect from "../../components/UI/FormInput/SearchSelect/SearchSelect";
 
 const Setup = () => {
   UseVerifyAuth();
@@ -40,10 +43,11 @@ const Setup = () => {
       return options;
     } catch (errors) {
       console.log(errors);
+      return [];
     }
   };
 
-  const searchPromise: SearchPromise = (_search) => {
+  const searchPromise: SearchPromise<number> = (_search) => {
     return new Promise((resolve) => resolve(getTopics(_search)));
   };
 
@@ -61,7 +65,9 @@ const Setup = () => {
   const storeExpertises = async () => {
     try {
       const requestBody = {
-        expertises: enteredExpertises.map((skill) => skill.value),
+        expertises: enteredExpertises.map(
+          (skill: MultiSelectOption<number>) => skill.value
+        ),
       };
       await store({
         resource: "experts",
@@ -81,9 +87,9 @@ const Setup = () => {
       expertisesBlurHandler();
     }
   };
+
   return (
     <MainLayout title="Setup">
-<<<<<<< HEAD
       <div className={styles.Setup}>
         <h1>Would you like to be an expert?</h1>
         <h2>Experts can organise group workshops.</h2>
@@ -102,7 +108,7 @@ const Setup = () => {
         )}
         {showExpertise === 1 && (
           <form onSubmit={submitHandler}>
-            <MultiSelect
+            <SearchSelect
               id="expertise"
               label="Fields of Expertise"
               value={enteredExpertises}
@@ -125,73 +131,8 @@ const Setup = () => {
           Finish setup later
         </Link>
       </div>
-=======
-      <SearchSelect
-        id="expertise"
-        label="Fields of Expertise"
-        value={enteredExpertises}
-        isValid={isInputExpertisesValid}
-        onChange={expertisesChangeHandler}
-        onBlur={experiencesBlurHandler}
-        icon="💪"
-        searchPromise={searchPromise}
-      />
-      <div data-testid="Setup"/>
->>>>>>> develop
     </MainLayout>
   );
 };
 
 export default Setup;
-
-// import React, { FC } from "react";
-// import MultiSelect from "../../components/UI/FormInput/MultiSelect/MultiSelect";
-// import { MultiSelectOptions } from "../../components/UI/FormInput/MultiSelect/MultiSelect.d";
-// // import styles from "./Setup.module.scss";
-// import useInput from "../../hooks/UseInput/UseInput";
-// import { SearchPromise } from "../../components/UI/FormInput/MultiSelect/MultiSelect.d";
-// import MainLayout from "../../layouts/MainLayout/MainLayout";
-// import UseVerifyAuth from "../../hooks/UseVerifyAuth/UseVerifyAuth";
-
-// interface SetupProps {}
-
-// function validateExpertises(_experises: MultiSelectOptions<string>) {
-//   return true;
-// }
-
-// const Setup: FC<SetupProps> = () => {
-//   UseVerifyAuth(0);
-//   const {
-//     enteredValue: enteredExpertises,
-//     isInputValid: isInputExpertisesValid,
-//     changeHandler: expertisesChangeHandler,
-//     blurHandler: experiencesBlurHandler,
-//   } = useInput<MultiSelectOptions<string>>(validateExpertises, []);
-
-//   const searchPromise: SearchPromise = (_search) => {
-//     return new Promise((resolve) =>
-//       resolve([
-//         { label: "Tracking", value: "tracking" },
-//         { label: "Training", value: "training" },
-//       ])
-//     );
-//   };
-
-//   return (
-//     <MainLayout title="Setup">
-//       <MultiSelect
-//         id="expertise"
-//         label="Fields of Expertise"
-//         value={enteredExpertises}
-//         isValid={isInputExpertisesValid}
-//         onChange={expertisesChangeHandler}
-//         onBlur={experiencesBlurHandler}
-//         icon="💪"
-//         searchPromise={searchPromise}
-//       />
-//       <div data-testid="Setup" />
-//     </MainLayout>
-//   );
-// };
-
-// export default Setup;

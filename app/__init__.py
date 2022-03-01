@@ -22,10 +22,6 @@ from flask import Flask
 from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
 
-load_dotenv()
-NAME = os.getenv("NAME")
-HOST_URL = os.getenv("HOST_URL")
-
 #############
 # App setup #
 #############

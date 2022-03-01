@@ -52,12 +52,12 @@ function validateRepeatedPassword(
   );
 }
 
-function validateDepartment(_department: SelectOption) {
+function validateDepartment(_department: SelectOption<number>) {
   return _department.id !== -1;
 }
 
 const Register: FC = () => {
-  const [departments, setDepartments] = useState<SelectOptions>([]);
+  const [departments, setDepartments] = useState<SelectOptions<number>>([]);
   let navigate = useNavigate();
 
   useEffect(() => {
@@ -181,7 +181,7 @@ const Register: FC = () => {
     isValueValid: isValueDeprtmentPasswordValid,
     changeHandler: departmentChangeHandler,
     blurHandler: departmentBlurHandler,
-  } = useInput<SelectOption>({ id: -1 }, validateDepartment);
+  } = useInput<SelectOption<number>>({ id: -1 }, validateDepartment);
 
   return (
     <MainLayout title="Register">

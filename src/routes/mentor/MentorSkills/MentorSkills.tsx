@@ -2,11 +2,11 @@ import React, { FC, FormEventHandler, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { get, index, update } from "../../../api/api";
 import Button from "../../../components/UI/Button/Button";
-import MultiSelect from "../../../components/UI/FormInput/MultiSelect/MultiSelect";
+import SearchSelect from "../../../components/UI/FormInput/SearchSelect/SearchSelect";
 import {
   MultiSelectOptions,
   SearchPromise,
-} from "../../../components/UI/FormInput/MultiSelect/MultiSelect.d";
+} from "../../../components/UI/FormInput/SearchSelect/SearchSelect.d";
 import useInput from "../../../hooks/UseInput/UseInput";
 import UseVerifyAuth from "../../../hooks/UseVerifyAuth/UseVerifyAuth";
 import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
@@ -37,11 +37,12 @@ const MentorSkills: FC<MentorSkillsProps> = () => {
       return options;
     } catch (errors) {
       console.log(errors);
+      return [];
     }
   };
   // return data;
 
-  const searchPromise: SearchPromise = (_search) => {
+  const searchPromise: SearchPromise<number> = (_search) => {
     return new Promise((resolve) => resolve(getTopics(_search)));
   };
 
@@ -104,7 +105,7 @@ const MentorSkills: FC<MentorSkillsProps> = () => {
   return (
     <DashboardSubpageLayout title="Your Mentorship Areas">
       <form onSubmit={submitHandler}>
-        <MultiSelect
+        <SearchSelect
           id="skills"
           label="Areas of Mentorship"
           value={enteredSkills}

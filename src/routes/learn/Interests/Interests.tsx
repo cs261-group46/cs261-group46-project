@@ -2,11 +2,12 @@ import React, { FC, FormEventHandler, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { get, index, update } from "../../../api/api";
 import Button from "../../../components/UI/Button/Button";
-import MultiSelect from "../../../components/UI/FormInput/MultiSelect/MultiSelect";
+import SearchSelect from "../../../components/UI/FormInput/SearchSelect/SearchSelect";
+import MultiSelect from "../../../components/UI/FormInput/SearchSelect/SearchSelect.d";
 import {
   MultiSelectOptions,
   SearchPromise,
-} from "../../../components/UI/FormInput/MultiSelect/MultiSelect.d";
+} from "../../../components/UI/FormInput/SearchSelect/SearchSelect.d";
 import useInput from "../../../hooks/UseInput/UseInput";
 import UseVerifyAuth from "../../../hooks/UseVerifyAuth/UseVerifyAuth";
 import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
@@ -37,9 +38,10 @@ const Interests: FC<InterestsProps> = () => {
       return options;
     } catch (errors) {
       console.log(errors);
+      return [];
     }
   };
-  const searchPromise: SearchPromise = (_search) => {
+  const searchPromise: SearchPromise<number> = (_search) => {
     return new Promise((resolve) => resolve(getTopics(_search)));
   };
 
@@ -102,7 +104,7 @@ const Interests: FC<InterestsProps> = () => {
   return (
     <DashboardSubpageLayout title="Your Interests">
       <form onSubmit={submitHandler}>
-        <MultiSelect
+        <SearchSelect
           id="interests"
           label="Fields of Interests"
           value={enteredInterests}

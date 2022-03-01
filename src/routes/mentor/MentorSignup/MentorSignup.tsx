@@ -1,11 +1,10 @@
 import React, { FC, FormEventHandler } from "react";
 // import styles from './MentorSignup.module.scss';
 import MainLayout from "../../../layouts/MainLayout/MainLayout";
-import MultiSelect from "../../../components/UI/FormInput/MultiSelect/MultiSelect";
 import {
   MultiSelectOptions,
   SearchPromise,
-} from "../../../components/UI/FormInput/MultiSelect/MultiSelect.d";
+} from "../../../components/UI/FormInput/SearchSelect/SearchSelect.d";
 import useInput from "../../../hooks/UseInput/UseInput";
 import Button from "../../../components/UI/Button/Button";
 import { useNavigate } from "react-router-dom";
@@ -13,13 +12,14 @@ import TextInput from "../../../components/UI/FormInput/TextInput/TextInput";
 import useVerifyAuth from "../../../hooks/UseVerifyAuth/UseVerifyAuth";
 import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
 import { index, store } from "../../../api/api";
-import SearchSelect from '../../../components/UI/FormInput/SearchSelect/SearchSelect';
-import BigTextInput from '../../../components/UI/FormInput/BigTextInput/BigTextInput';
+import SearchSelect from "../../../components/UI/FormInput/SearchSelect/SearchSelect";
+import BigTextInput from "../../../components/UI/FormInput/BigTextInput/BigTextInput";
 
 interface MentorSignupProps {}
 
 const MentorSignup: FC<MentorSignupProps> = () => {
   useVerifyAuth();
+
   let navigate = useNavigate();
 
   const {
@@ -28,11 +28,10 @@ const MentorSignup: FC<MentorSignupProps> = () => {
     changeHandler: skillsChangeHandler,
     blurHandler: skillsBlurHandler,
     enteredValue: enteredSkills,
-  } = useInput<MultiSelectOptions<string>>(
+  } = useInput<MultiSelectOptions<number>>(
     [],
     (selectedOptions) => selectedOptions.length > 0
   );
-
 
   const {
     isInputValid: isAboutInputValid,
@@ -48,7 +47,7 @@ const MentorSignup: FC<MentorSignupProps> = () => {
     changeHandler: capacityChangeHandler,
     blurHandler: capacityBlurHandler,
     enteredValue: capacity,
-  } = useInput<string>('', () => true);
+  } = useInput<string>("", () => true);
 
   const showAllErrors = () => {
     aboutBlurHandler();
@@ -94,17 +93,18 @@ const MentorSignup: FC<MentorSignupProps> = () => {
       return options;
     } catch (errors) {
       console.log(errors);
+      return [];
     }
   };
 
-  const searchPromise: SearchPromise = (_search) => {
+  const searchPromise: SearchPromise<number> = (_search) => {
     return new Promise((resolve) => resolve(getTopics(_search)));
   };
 
   return (
     <DashboardSubpageLayout title={"Become a Mentor"}>
       <form onSubmit={submitHandler}>
-        <MultiSelect
+        <SearchSelect
           id={"interests"}
           label={"Mentorship areas"}
           isValid={isSkillsInputValid}
@@ -117,7 +117,6 @@ const MentorSignup: FC<MentorSignupProps> = () => {
         <BigTextInput
           id={"profile"}
           label={"About me"}
-          type="textarea"
           placeholder={"I can play Electric Guitar"}
           value={enteredAbout}
           isValid={isAboutInputValid}
@@ -126,16 +125,16 @@ const MentorSignup: FC<MentorSignupProps> = () => {
         />
 
         <TextInput
-          id={'capacity'}
-          label={'How many mentees do you want?'}
-          placeholder={'e.g. 5'}
+          id={"capacity"}
+          label={"How many mentees do you want?"}
+          placeholder={"e.g. 5"}
           value={capacity}
-          type={'number'}
+          type={"number"}
           isValid={isCapacityInputValid}
           onChange={capacityChangeHandler}
           onBlur={capacityBlurHandler}
         />
-      
+
         <Button icon="👑" type="submit" buttonStyle={"primary"}>
           Become a Mentor
         </Button>
@@ -143,6 +142,7 @@ const MentorSignup: FC<MentorSignupProps> = () => {
 
       <div data-testid="MentorSignup" />
     </DashboardSubpageLayout>
+  );
 };
 
 export default MentorSignup;
