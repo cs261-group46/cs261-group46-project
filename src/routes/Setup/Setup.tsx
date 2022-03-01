@@ -83,7 +83,7 @@ const Setup = () => {
 
   return (
     <MainLayout title="Setup">
-      <div className={styles.Setup}>
+      <div className={styles.Setup} data-testid={"Setup"}>
         <h1>Would you like to be an expert?</h1>
         <h2>Experts can organise group workshops.</h2>
         {showExpertise === 0 && (
