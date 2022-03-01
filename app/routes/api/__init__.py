@@ -1,5 +1,6 @@
 from app.routes.api.mentors import mentors
 from app.routes.api.experts import experts
+from app.routes.api.notifications import notifications
 from app.routes.api.topics import topics
 from app.routes.api.departments import departments
 from app.routes.api.auth import auth
@@ -17,5 +18,6 @@ api.register_blueprint(topics)
 api.register_blueprint(experts)
 api.register_blueprint(mentors)
 api.register_blueprint(users)
+api.register_blueprint(notifications)
 
 # api.register_blueprint(mentees)

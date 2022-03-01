@@ -10,7 +10,12 @@ describe("<MentorCard />", () => {
         mentor={{
           id: 0,
           about: "",
+          topics: [],
           user: {
+            department: {
+              id: 0,
+              name: "",
+            },
             first_name: "",
             last_name: "",
             email: "",

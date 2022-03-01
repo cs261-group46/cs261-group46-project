@@ -91,3 +91,24 @@ export async function index(requestData: { resource: string; args?: args }) {
 
   return data.data;
 }
+
+export async function destroy(requestData: {
+  resource: string;
+  entity?: number;
+}) {
+  const response = await fetch(
+    `/api/${requestData.resource}/${requestData.entity ?? "-1"}`,
+    {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+    }
+  );
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.errors || ["Unexpected error occurred"]);
+  }
+}

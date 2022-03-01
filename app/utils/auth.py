@@ -4,7 +4,7 @@ from flask import current_app, session
 
 
 def get_login_token_timeout():
-    return datetime.utcnow() + timedelta(minutes=10)
+    return datetime.utcnow() + timedelta(minutes=60)
 
 def set_login_token(user):
     login_token = jwt.encode({

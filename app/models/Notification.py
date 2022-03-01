@@ -14,6 +14,8 @@ class Notification(BaseModel):
     solution = db.Column(db.Text, nullable=True)
     sent = db.Column(db.Boolean, default=False)
 
+    user = db.relationship("User", backref="notifications", lazy=True)
+
     def __repr__(self):
         return f"Notification('')"
 

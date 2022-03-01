@@ -1,12 +1,10 @@
-type Topic = {
-  id: number;
-  name: string;
-};
-
 export type Mentor = {
   id: number;
   about: string;
-  topics: Topic[];
+  topics: {
+    id: number;
+    name: string;
+  }[];
   user: {
     department: { id: number; name: string };
     first_name: string;

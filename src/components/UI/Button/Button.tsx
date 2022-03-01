@@ -39,7 +39,7 @@ const Button: FC<ButtonProps> = (props) => {
       </Link>
     </div>
   ) : (
-    <div className={styles.Button}>{buttonElem}</div>
+    <div className={`${styles.Button} ${props.className}`}>{buttonElem}</div>
   );
 };
 

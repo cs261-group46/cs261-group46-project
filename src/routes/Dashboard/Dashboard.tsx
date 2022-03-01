@@ -1,10 +1,14 @@
-import React, { FC, useContext } from "react";
+import React, { FC, useContext, useEffect, useState } from "react";
 import styles from "./Dashboard.module.scss";
 import MainLayout from "../../layouts/MainLayout/MainLayout";
 import Button from "../../components/UI/Button/Button";
 import Title from "../../components/UI/Title/Title";
 import UseVerifyAuth from "../../hooks/UseVerifyAuth/UseVerifyAuth";
 import UserDataContext from "../../store/UserDataContext";
+import { get } from "../../api/api";
+import { NotificationType } from "../../types/Notification";
+import Notifications from "../../components/Notifications/Notifications";
+import Icon from "../../components/UI/Icon/Icon";
 
 interface DashboardProps {}
 
@@ -15,10 +19,111 @@ const Dashboard: FC<DashboardProps> = () => {
   const isMentee = userDataCtx.isMentee;
   const isExpert = userDataCtx.isExpert;
 
+  const [notificationsLearn, setNotificationsLearn] = useState<
+    NotificationType<"learning">[]
+  >([]);
+
+  const [notificationsMentor, setNotificationsMentor] = useState<
+    NotificationType<"mentoring">[]
+  >([]);
+
+  const [notificationsExpert, setNotificationsExpert] = useState<
+    NotificationType<"expertise">[]
+  >([]);
+
+  const [notificationsLearnVisible, setNotificationsLearnVisible] =
+    useState<boolean>(false);
+  const [notificationsMentorVisible, setNotificationsMentorVisible] =
+    useState<boolean>(false);
+  const [notificationsExpertVisible, setNotificationsExpertVisible] =
+    useState<boolean>(false);
+
+  const getNotifications = async () => {
+    try {
+      const data = await get({
+        resource: "notifications",
+        args: {
+          fields: [
+            "description",
+            "notification_level",
+            "notification_type",
+            "solution",
+          ],
+        },
+      });
+
+      const mentorNotifications: NotificationType<"mentoring">[] = [];
+      const learnNotifications: NotificationType<"learning">[] = [];
+      const expertNotifcations: NotificationType<"expertise">[] = [];
+
+      data.notifications.forEach(
+        (
+          notification: NotificationType<"learning" | "mentoring" | "expertise">
+        ) => {
+          if (notification.notification_type === "learning")
+            learnNotifications.push(
+              notification as NotificationType<"learning">
+            );
+          else if (notification.notification_type === "mentoring")
+            mentorNotifications.push(
+              notification as NotificationType<"mentoring">
+            );
+          else if (notification.notification_type === "expertise")
+            expertNotifcations.push(
+              notification as NotificationType<"expertise">
+            );
+        }
+      );
+      setNotificationsLearn(learnNotifications);
+      setNotificationsMentor(mentorNotifications);
+      setNotificationsExpert(expertNotifcations);
+    } catch (errors) {}
+  };
+
+  useEffect(() => {
+    getNotifications();
+  }, []);
+
   const logoutHandler = async () => {
     const response = await fetch("/api/auth/logout");
     const returnedData = await response.json();
     if (returnedData.successful) userDataCtx.setLoggedInStatus(false);
+  };
+
+  const toggleLearnNotificationHandler = () => {
+    setNotificationsLearnVisible((prevState) => !prevState);
+  };
+
+  const toggleMentorNotificationHandler = () => {
+    setNotificationsMentorVisible((prevState) => !prevState);
+  };
+
+  const toggleExpertNotificationHandler = () => {
+    setNotificationsExpertVisible((prevState) => !prevState);
+  };
+
+  const removeLearnNotificationHandler = (
+    notification: NotificationType<string>
+  ) => {
+    setNotificationsLearn((prevNotifications) =>
+      prevNotifications.filter((n) => n.id !== notification.id)
+    );
+  };
+
+  const removeMentorNotificationHandler = (
+    notification: NotificationType<string>
+  ) => {
+    setNotificationsMentor((prevNotifications) =>
+      prevNotifications.filter((n) => n.id !== notification.id)
+    );
+  };
+
+  const removeExpertNotificationHandler = (
+    notification: NotificationType<string>
+  ) => {
+    setNotificationsExpert((prevNotifications) =>
+      prevNotifications.filter((n) => n.id !== notification.id)
+    );
   };
 
   return (
@@ -31,9 +136,9 @@ const Dashboard: FC<DashboardProps> = () => {
           </p>
         </Button>
 
-        <Button icon={"🔔"} href={"/notifications"}>
+        {/* <Button icon={"🔔"} href={"/notifications"}>
           All Notifications
-        </Button>
+        </Button> */}
 
         <Button icon={"📅"} href={"/calendar"}>
           Upcoming Events
@@ -61,7 +166,31 @@ const Dashboard: FC<DashboardProps> = () => {
           </Button>
         )}
 
-        <Button icon={"🔔"}>Recent Notifications</Button>
+        {notificationsLearn.length > 0 && (
+          <>
+            <Button
+              className={styles.NotificationButton}
+              buttonStyle="primary"
+              icon={"🔔"}
+              onClick={toggleLearnNotificationHandler}
+            >
+              Recent Notifications
+              <div className={styles.NotificationCounter}>
+                {notificationsMentor.length}
+              </div>
+              <Icon
+                className={styles.NotificationButtonToggleIcon}
+                icon={notificationsLearnVisible ? "🔼" : "🔽"}
+              />
+            </Button>
+            {notificationsLearnVisible && (
+              <Notifications
+                onRemove={removeLearnNotificationHandler}
+                notifications={notificationsLearn}
+              />
+            )}
+          </>
+        )}
 
         {isMentee && (
           <Button href={"/learn/your-mentor"} icon={"👨‍🏫"}>
@@ -100,7 +229,31 @@ const Dashboard: FC<DashboardProps> = () => {
           </Button>
         )}
 
-        {isMentor && <Button icon={"🔔"}>Recent Notifications</Button>}
+        {isMentor && notificationsMentor.length > 0 && (
+          <>
+            <Button
+              className={styles.NotificationButton}
+              buttonStyle="primary"
+              icon={"🔔"}
+              onClick={toggleMentorNotificationHandler}
+            >
+              Recent Notifications
+              <div className={styles.NotificationCounter}>
+                {notificationsMentor.length}
+              </div>
+              <Icon
+                className={styles.NotificationButtonToggleIcon}
+                icon={notificationsMentorVisible ? "🔼" : "🔽"}
+              />
+            </Button>
+            {notificationsMentorVisible && (
+              <Notifications
+                onRemove={removeMentorNotificationHandler}
+                notifications={notificationsMentor}
+              />
+            )}
+          </>
+        )}
 
         {isMentor && (
           <Button href={"/mentor/your-mentees"} icon={"🧑‍🎓"}>
@@ -127,7 +280,31 @@ const Dashboard: FC<DashboardProps> = () => {
           </Button>
         )}
 
-        {isExpert && <Button icon={"🔔"}>Recent Notifications</Button>}
+        {isExpert && notificationsExpert.length > 0 && (
+          <>
+            <Button
+              className={styles.NotificationButton}
+              buttonStyle="primary"
+              icon={"🔔"}
+              onClick={toggleExpertNotificationHandler}
+            >
+              Recent Notifications
+              <div className={styles.NotificationCounter}>
+                {notificationsMentor.length}
+              </div>
+              <Icon
+                className={styles.NotificationButtonToggleIcon}
+                icon={notificationsExpertVisible ? "🔼" : "🔽"}
+              />
+            </Button>
+            {notificationsExpertVisible && (
+              <Notifications
+                onRemove={removeExpertNotificationHandler}
+                notifications={notificationsExpert}
+              />
+            )}
+          </>
+        )}
 
         {isExpert && (
           <Button href={"/expert/workshops"} icon={"✏"}>
