@@ -5,12 +5,13 @@ import { ButtonStyle } from "./Button.d";
 import { Link } from "react-router-dom";
 
 interface ButtonProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   icon?: React.ReactNode;
   onClick?: () => void;
   buttonStyle?: ButtonStyle;
   href?: string;
   type?: "button" | "submit" | "reset" | undefined;
+  className?: string;
 }
 
 const Button: FC<ButtonProps> = (props) => {
@@ -25,12 +26,14 @@ const Button: FC<ButtonProps> = (props) => {
       type={props.type}
     >
       {props.icon && <Icon icon={props.icon} className={styles.Icon} />}
-      {props.children}
+      {props.children && (
+        <div className={styles.Description}>{props.children}</div>
+      )}
     </button>
   );
 
   return props.href ? (
-    <div className={styles.Button}>
+    <div className={`${styles.Button} ${props.className}`}>
       <Link className={styles.Button} to={props.href}>
         {buttonElem}
       </Link>

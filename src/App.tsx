@@ -6,10 +6,11 @@ import Dashboard from "./routes/Dashboard/Dashboard.lazy";
 import VerifyEmail from "./routes/Auth/Register/VerifyEmail/VerifyEmail.lazy";
 import Setup from "./routes/Setup/Setup";
 import MentorSignup from "./routes/mentor/MentorSignup/MentorSignup.lazy";
-import MenteeSignup from "./routes/learn/MenteeSignup/MenteeSignup.lazy";
+import MenteeSignup from "./routes/learn/FindMentor/FindMentor.lazy";
 import Login from "./routes/Auth/Login/Login";
 import YourInterests from "./routes/learn/Interests/Interests";
 import MentorSkills from "./routes/mentor/MentorSkills/MentorSkills";
+import ExpertExpertises from "./routes/expert/ExpertExpertises/ExpertExpertises.lazy";
 
 function App() {
   return (
@@ -28,8 +29,13 @@ function App() {
             <Route path="skills" element={<MentorSkills />} />
           </Route>
           <Route path="/learn">
-            <Route path="become-mentee" element={<MenteeSignup />} />
+            <Route path="find-mentor" element={<MenteeSignup />} />
             <Route path="interests" element={<YourInterests />} />
+          </Route>
+
+          <Route path="/expert">
+            {/* <Route path="become-expert" element={<MenteeSignup />} /> */}
+            <Route path="skills" element={<ExpertExpertises />} />
           </Route>
         </Routes>
       </div>

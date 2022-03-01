@@ -1,6 +1,7 @@
 import React, { FC, Fragment } from "react";
 import Button from "../../../components/UI/Button/Button";
 import MainLayout from "../MainLayout";
+import styles from "./DashboardSubpageLayout.module.scss";
 interface DashboardSubpageLayoutTemplateProps {
   children: React.ReactNode;
   title: string;
@@ -13,7 +14,9 @@ const DashboardSubpageLayout: FC<DashboardSubpageLayoutTemplateProps> = (
   //   MainTemplate Component
   // </div>
   <MainLayout title={props.title}>
-    <Button href="/Dashboard">Dashboard</Button>
+    <Button className={styles.HomeButton} href="/Dashboard" icon="🏠">
+      Dashboard
+    </Button>
     {props.children}
   </MainLayout>
 );

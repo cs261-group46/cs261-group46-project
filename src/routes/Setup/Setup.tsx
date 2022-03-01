@@ -15,6 +15,7 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 
 import UseVerifyAuth from "../../hooks/UseVerifyAuth/UseVerifyAuth";
+import { get, index, store } from "../../api/api";
 
 const Setup = () => {
   UseVerifyAuth();
@@ -25,21 +26,25 @@ const Setup = () => {
     setShowExpertise(1);
   };
 
-  const fetchTopics = async (startsWith: string) => {
-    const body = {
-      query: startsWith,
-    };
-
-    const response = await fetch(`/api/topics?startswith=${startsWith}`);
-
-    const returnedData = await response.json();
-    const options: MultiSelectOptions<number> = returnedData.result.map(
-      ({ label, id }: { label: string; id: number }) => ({ label, value: id })
-    );
-    return options;
+  const getTopics = async (startsWith: string) => {
+    try {
+      const data = await index({
+        resource: "topics",
+        args: {
+          startswith: startsWith,
+        },
+      });
+      const options: MultiSelectOptions<number> = data.map(
+        ({ label, id }: { label: string; id: number }) => ({ label, value: id })
+      );
+      return options;
+    } catch (errors) {
+      console.log(errors);
+    }
   };
+
   const searchPromise: SearchPromise = (_search) => {
-    return new Promise((resolve) => resolve(fetchTopics(_search)));
+    return new Promise((resolve) => resolve(getTopics(_search)));
   };
 
   const {
@@ -53,28 +58,25 @@ const Setup = () => {
     (selectedOptions) => selectedOptions.length > 0
   );
 
-  const sendExpertisesData = async () => {
-    const body = {
-      expertises: enteredExpertises.map((expertise) => expertise.value),
-    };
-
-    const response = await fetch("/api/experts", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-      body: JSON.stringify(body), // body data type must match "Content-Type" header
-    });
-
-    const returnedData = await response.json();
-    if (returnedData.successful) navigate("/dashboard");
+  const storeExpertises = async () => {
+    try {
+      const requestBody = {
+        expertises: enteredExpertises.map((skill) => skill.value),
+      };
+      await store({
+        resource: "experts",
+        body: requestBody,
+      });
+      navigate("/dashboard"); // show message instead
+    } catch (errors) {
+      console.log(errors);
+    }
   };
 
   const submitHandler: FormEventHandler = (event) => {
     event.preventDefault();
     if (isValueExpertisesValid) {
-      sendExpertisesData();
+      storeExpertises();
     } else {
       expertisesBlurHandler();
     }

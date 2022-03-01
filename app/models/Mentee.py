@@ -11,6 +11,9 @@ class Mentee(BaseModel):
     about = db.Column(db.Text, nullable=True)
     weight = db.Column(db.Float, nullable=False)
 
+    user = db.relationship("User", backref=db.backref("mentee", uselist=False))
+
+
     def __repr__(self):
         return f"Mentee('')"
 

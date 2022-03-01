@@ -56,12 +56,8 @@ const Dashboard: FC<DashboardProps> = () => {
         <Title text={"Your Learning"} className={styles.Title} />
 
         {!isMentee && (
-          <Button
-            href={"/learn/become-mentee"}
-            buttonStyle="primary"
-            icon={"👨‍🏫"}
-          >
-            Get a mentor
+          <Button href={"/learn/find-mentor"} buttonStyle="primary" icon={"👨‍🏫"}>
+            Find a mentor
           </Button>
         )}
 

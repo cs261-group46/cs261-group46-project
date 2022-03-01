@@ -1,6 +1,6 @@
 import React, { FC, FormEventHandler, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { get, index, update } from "../../../api/api";
+import { get, update } from "../../../api/api";
 import Button from "../../../components/UI/Button/Button";
 import MultiSelect from "../../../components/UI/FormInput/MultiSelect/MultiSelect";
 import {
@@ -11,33 +11,29 @@ import useInput from "../../../hooks/UseInput/UseInput";
 import UseVerifyAuth from "../../../hooks/UseVerifyAuth/UseVerifyAuth";
 import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
 import MainLayout from "../../../layouts/MainLayout/MainLayout";
-import styles from "./MentorSkills.module.scss";
+import styles from "./ExpertExpertises.module.scss";
 
-interface MentorSkillsProps {}
+interface ExpertExpertisesProps {}
 
 function validateInterests(_experises: MultiSelectOptions<number>) {
   return true;
 }
 
-const MentorSkills: FC<MentorSkillsProps> = () => {
+const ExpertExpertises: FC<ExpertExpertisesProps> = () => {
   UseVerifyAuth();
   const navigate = useNavigate();
 
   const getTopics = async (startsWith: string) => {
-    try {
-      const data = await index({
-        resource: "topics",
-        args: {
-          startswith: startsWith,
-        },
-      });
-      const options: MultiSelectOptions<number> = data.map(
-        ({ label, id }: { label: string; id: number }) => ({ label, value: id })
-      );
-      return options;
-    } catch (errors) {
-      console.log(errors);
-    }
+    const data = await get({
+      resource: "topics",
+      args: {
+        startswith: startsWith,
+      },
+    });
+    const options: MultiSelectOptions<number> = data.map(
+      ({ label, id }: { label: string; id: number }) => ({ label, value: id })
+    );
+    return options;
   };
   // return data;
 
@@ -46,44 +42,44 @@ const MentorSkills: FC<MentorSkillsProps> = () => {
   };
 
   const {
-    enteredValue: enteredSkills,
-    isInputValid: isInputSkillsValid,
-    isValueValid: isValueSkillsValid,
-    changeHandler: skillsChangeHandler,
-    blurHandler: skillsBlurHandler,
+    enteredValue: enteredExpertises,
+    isInputValid: isInputExpertisesValid,
+    isValueValid: isValueExpertisesValid,
+    changeHandler: expertisesChangeHandler,
+    blurHandler: expertisesBlurHandler,
   } = useInput<MultiSelectOptions<number>>([], validateInterests);
 
-  const getSkills = useCallback(async () => {
+  const getExpertises = useCallback(async () => {
     try {
       const data = await get({
-        resource: "mentors",
+        resource: "experts",
         args: {
           fields: "topics",
         },
       });
-      const topicsOptions: MultiSelectOptions<number> = data.mentor.topics.map(
+      const topicsOptions: MultiSelectOptions<number> = data.expert.topics.map(
         (topic: { id: number; name: string }) => ({
           value: topic.id,
           label: topic.name,
         })
       );
-      skillsChangeHandler(topicsOptions);
+      expertisesChangeHandler(topicsOptions);
     } catch (errors) {
       console.log(errors);
     }
-  }, [skillsChangeHandler]);
+  }, [expertisesChangeHandler]);
 
   useEffect(() => {
-    getSkills();
-  }, [getSkills]);
+    getExpertises();
+  }, [getExpertises]);
 
-  const updateSkills = async () => {
+  const updateExpertises = async () => {
     try {
       const requestBody = {
-        skills: enteredSkills.map((skill) => skill.value),
+        expertises: enteredExpertises.map((expertise) => expertise.value),
       };
       await update({
-        resource: "mentors",
+        resource: "experts",
         body: requestBody,
       });
       navigate("/dashboard"); // show message instead
@@ -94,23 +90,23 @@ const MentorSkills: FC<MentorSkillsProps> = () => {
 
   const submitHandler: FormEventHandler = (event) => {
     event.preventDefault();
-    if (isValueSkillsValid) {
-      updateSkills();
+    if (isValueExpertisesValid) {
+      updateExpertises();
     } else {
-      skillsBlurHandler();
+      expertisesBlurHandler();
     }
   };
 
   return (
-    <DashboardSubpageLayout title="Your Mentorship Areas">
+    <DashboardSubpageLayout title="Your Fields of Expertise">
       <form onSubmit={submitHandler}>
         <MultiSelect
-          id="skills"
-          label="Areas of Mentorship"
-          value={enteredSkills}
-          isValid={isInputSkillsValid}
-          onChange={skillsChangeHandler}
-          onBlur={skillsBlurHandler}
+          id="expertises"
+          label="Fields of Expertise"
+          value={enteredExpertises}
+          isValid={isInputExpertisesValid}
+          onChange={expertisesChangeHandler}
+          onBlur={expertisesBlurHandler}
           icon="💪"
           searchPromise={searchPromise}
         />
@@ -120,10 +116,10 @@ const MentorSkills: FC<MentorSkillsProps> = () => {
         </Button>
       </form>
     </DashboardSubpageLayout>
-    // <div className={styles.MentorSkills} data-testid="MentorSkills">
-    //   MentorSkills Component
+    // <div className={styles.ExpertExpertises} data-testid="ExpertExpertises">
+    //   ExpertExpertises Component
     // </div>
   );
 };
 
-export default MentorSkills;
+export default ExpertExpertises;

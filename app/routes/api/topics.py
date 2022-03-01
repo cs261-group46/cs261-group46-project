@@ -8,12 +8,12 @@ from app.middleware.auth import auth_required
 topics = Blueprint("api_topics", __name__, url_prefix="/topics")
 
 
-@topics.route("", methods=["GET"])
+@topics.route("/", methods=["GET"])
 @auth_required()
-def get(user=None):
+def index(user=None):
     start_with = request.args.get('startswith').lower()
     topics = Topic.query.filter(func.lower(Topic.name).startswith(start_with)).limit(5).all()
-    return {"result": [{"id": topic.id, "label": topic.name} for topic in topics]}
+    return {"data": [{"id": topic.id, "label": topic.name} for topic in topics]}
 
 #
 # @auth_required

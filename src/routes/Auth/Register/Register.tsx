@@ -10,6 +10,7 @@ import {
   SelectOptions,
 } from "../../../components/UI/FormInput/Select/Select.d";
 import { useNavigate } from "react-router-dom";
+import { index } from "../../../api/api";
 
 function validateEmail(email: string) {
   const re =
@@ -60,13 +61,24 @@ const Register: FC = () => {
   let navigate = useNavigate();
 
   useEffect(() => {
-    fetchDepartments();
+    getDepartments();
   }, []);
 
-  const fetchDepartments = async () => {
-    const dep = await fetch("/api/departments");
-    const body = await dep.json();
-    setDepartments(body.result);
+  // const fetchDepartments = async () => {
+  //   const dep = await fetch("/api/departments");
+  //   const body = await dep.json();
+  //   setDepartments(body.result);
+  // };
+
+  const getDepartments = async () => {
+    try {
+      const data = await index({
+        resource: "departments",
+      });
+      setDepartments(data);
+    } catch (errors) {
+      console.log(errors);
+    }
   };
 
   const showAllErrors = () => {

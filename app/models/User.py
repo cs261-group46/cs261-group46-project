@@ -32,6 +32,11 @@ class User(BaseModel):
     department_id = db.Column(db.Integer, db.ForeignKey(
         'departments.id'), nullable=False)
 
+    department = db.relationship('Department', backref="users", lazy=True)
+
+    default_fields = ['email', 'first_name', 'last_name', 'department']
+    hidden_fields = ['hashed_password']
+
     def __repr__(self):
         return '<User %r>' % self.email
 

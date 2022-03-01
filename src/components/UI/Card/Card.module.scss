@@ -1,0 +1,15 @@
+@import "../../../variables";
+
+.Card {
+  background-color: white;
+  width: 100%;
+  margin: 20px 0 40px;
+
+  border-radius: 10px;
+  border: 1px solid $sq_light_gray;
+  padding: 40px 20px;
+  position: relative;
+  box-sizing: border-box;
+  transition-duration: 0.05s;
+  outline: 0 solid $sq_dark_gray;
+}

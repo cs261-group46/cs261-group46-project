@@ -4,7 +4,7 @@ from app.middleware.auth import auth_required
 
 users = Blueprint("api_users", __name__, url_prefix="/users")
 
-@users.route("", methods=["GET"])
+@users.route("/-1", methods=["GET"])
 @auth_required()
 def get(user=None):
     fields = request.args.get('fields').split(',')
@@ -12,7 +12,7 @@ def get(user=None):
     return {"successful": True, "data": {"user": user.to_dict(show=fields)}}, 200
 
 
-@users.route("", methods=["PUT"])
+@users.route("/-1", methods=["PUT"])
 @auth_required()
 def update(user=None):
     print("interest received")

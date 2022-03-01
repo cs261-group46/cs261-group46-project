@@ -1,6 +1,6 @@
 import React, { lazy, Suspense } from "react";
 
-const LazyMenteeSignup = lazy(() => import("./MenteeSignup"));
+const LazyMenteeSignup = lazy(() => import("./FindMentor"));
 
 const MenteeSignup = (
   props: JSX.IntrinsicAttributes & { children?: React.ReactNode }

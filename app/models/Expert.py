@@ -17,6 +17,10 @@ class Expert(BaseModel):
     topics = db.relationship(
         'Topic', secondary=experts_topics, backref='experts', lazy=True)
 
+    user = db.relationship("User", backref=db.backref("expert", uselist=False))
+
+
+
     def __repr__(self):
         return f"Expert('')"
 

@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import TextInput from "../../../components/UI/FormInput/TextInput/TextInput";
 import useVerifyAuth from "../../../hooks/UseVerifyAuth/UseVerifyAuth";
 import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
+import { index, store } from "../../../api/api";
 
 interface MentorSignupProps {}
 
@@ -44,52 +45,49 @@ const MentorSignup: FC<MentorSignupProps> = () => {
   };
 
   const sendBecomeMentorData = async () => {
-    const body = {
-      skills: enteredSkills.map((skill) => skill.value),
-      about: enteredAbout,
-    };
-
-    const response = await fetch("/api/mentors", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-      body: JSON.stringify(body), // body data type must match "Content-Type" header
-    });
-
-    // have to do something along the lines of if respone.ok
-
-    const returnedData = await response.json();
-    if (returnedData.successful) navigate("/dashboard");
+    try {
+      const requestBody = {
+        skills: enteredSkills.map((skill) => skill.value),
+        about: enteredAbout,
+      };
+      await store({
+        resource: "mentors",
+        body: requestBody,
+      });
+      navigate("/dashboard"); // show message instead
+    } catch (errors) {
+      console.log(errors);
+    }
   };
 
   const submitHandler: FormEventHandler = (event) => {
     event.preventDefault();
     if (isSkillsValueValid && isAboutValueValid) {
       sendBecomeMentorData();
-
-      //   navigate("/dashboard");
     } else {
       showAllErrors();
     }
   };
 
-  const fetchTopics = async (startsWith: string) => {
-    const body = {
-      query: startsWith,
-    };
-
-    const response = await fetch(`/api/topics?startswith=${startsWith}`);
-    const returnedData = await response.json();
-    const options: MultiSelectOptions<number> = returnedData.result.map(
-      ({ label, id }: { label: string; id: number }) => ({ label, value: id })
-    );
-    return options;
+  const getTopics = async (startsWith: string) => {
+    try {
+      const data = await index({
+        resource: "topics",
+        args: {
+          startswith: startsWith,
+        },
+      });
+      const options: MultiSelectOptions<number> = data.map(
+        ({ label, id }: { label: string; id: number }) => ({ label, value: id })
+      );
+      return options;
+    } catch (errors) {
+      console.log(errors);
+    }
   };
 
   const searchPromise: SearchPromise = (_search) => {
-    return new Promise((resolve) => resolve(fetchTopics(_search)));
+    return new Promise((resolve) => resolve(getTopics(_search)));
   };
 
   return (

@@ -1,5 +1,6 @@
 import React, { FC, FormEventHandler, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { get, index, update } from "../../../api/api";
 import Button from "../../../components/UI/Button/Button";
 import MultiSelect from "../../../components/UI/FormInput/MultiSelect/MultiSelect";
 import {
@@ -22,21 +23,24 @@ const Interests: FC<InterestsProps> = () => {
   UseVerifyAuth();
   const navigate = useNavigate();
 
-  const fetchTopics = async (startsWith: string) => {
-    const body = {
-      query: startsWith,
-    };
-
-    const response = await fetch(`/api/topics?startswith=${startsWith}`);
-    const returnedData = await response.json();
-    const options: MultiSelectOptions<number> = returnedData.result.map(
-      ({ label, id }: { label: string; id: number }) => ({ label, value: id })
-    );
-    return options;
+  const getTopics = async (startsWith: string) => {
+    try {
+      const data = await index({
+        resource: "topics",
+        args: {
+          startswith: startsWith,
+        },
+      });
+      const options: MultiSelectOptions<number> = data.map(
+        ({ label, id }: { label: string; id: number }) => ({ label, value: id })
+      );
+      return options;
+    } catch (errors) {
+      console.log(errors);
+    }
   };
-
   const searchPromise: SearchPromise = (_search) => {
-    return new Promise((resolve) => resolve(fetchTopics(_search)));
+    return new Promise((resolve) => resolve(getTopics(_search)));
   };
 
   const {
@@ -47,49 +51,49 @@ const Interests: FC<InterestsProps> = () => {
     blurHandler: interestsBlurHandler,
   } = useInput<MultiSelectOptions<number>>([], validateInterests);
 
-  const fetchInterests = useCallback(async () => {
-    const response = await fetch("/api/users?fields=topics");
-    const returnedData = await response.json();
-
-    const topicsOptions: MultiSelectOptions<number> =
-      returnedData.data.user.topics.map(
+  const getInterests = useCallback(async () => {
+    try {
+      const data = await get({
+        resource: "users",
+        args: {
+          fields: "topics",
+        },
+      });
+      const topicsOptions: MultiSelectOptions<number> = data.user.topics.map(
         (topic: { id: number; name: string }) => ({
           value: topic.id,
           label: topic.name,
         })
       );
-
-    console.log(topicsOptions);
-
-    interestsChangeHandler(topicsOptions);
+      interestsChangeHandler(topicsOptions);
+    } catch (errors) {
+      console.log(errors);
+    }
   }, [interestsChangeHandler]);
 
   useEffect(() => {
-    fetchInterests();
-  }, [fetchInterests]);
+    getInterests();
+  }, [getInterests]);
 
-  const sendInterestsData = async () => {
-    const body = {
-      interests: enteredInterests.map((interest) => interest.value),
-    };
-
-    const response = await fetch("/api/users", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-      body: JSON.stringify(body), // body data type must match "Content-Type" header
-    });
-
-    // const returnedData = await response.json();
-    if (response.ok) navigate("/dashboard");
+  const updateInterests = async () => {
+    try {
+      const requestBody = {
+        interests: enteredInterests.map((interest) => interest.value),
+      };
+      await update({
+        resource: "users",
+        body: requestBody,
+      });
+      navigate("/dashboard"); // show message instead
+    } catch (errors) {
+      console.log(errors);
+    }
   };
 
   const submitHandler: FormEventHandler = (event) => {
     event.preventDefault();
     if (isValueInterestsValid) {
-      sendInterestsData();
+      updateInterests();
     } else {
       interestsBlurHandler();
     }
