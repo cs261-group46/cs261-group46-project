@@ -4,6 +4,8 @@ import MainLayout from '../../../layouts/MainLayout/MainLayout';
 import Button from '../../../components/UI/Button/Button';
 import UseLogin from '../../../hooks/UseLogin/UseLogin';
 import useLogin from "../../../hooks/UseLogin/UseLogin";
+import Title from '../../../components/UI/Title/Title';
+import MenteeCard from './MenteeCard/MenteeCard';
 
 interface YourMenteeProps {
 
@@ -11,12 +13,15 @@ interface YourMenteeProps {
 
 const exampleMentees = [
     {
-        name: "John",
+        firstname: "John",
+        lastname: "Smith",
         completedGoal: 4,
-        totalGoal: 10, 
+        totalGoal: 10,
+        startDate: 1, //TODO, there is no date in the database
     },
     {
-        name: "Kai",
+        firstname: "Kai",
+        lastname: "Smith",
         completedGoal: 2,
         totalGoal: 4,
     }
@@ -24,17 +29,17 @@ const exampleMentees = [
 
 const YourMentees: FC<YourMenteeProps> = () => {
 
+    const currentMentee = 3; {/*TODO: get from database */}
+    
+    {/* Replace with MenteeCard */}
     const menteelist = exampleMentees.map( (mentee) => 
-        <div>
-            <h1>{mentee.name}</h1>
-            {mentee.completedGoal} / {mentee.totalGoal} {/*TODO: just use pie chart instead */}
-        </div>
+        <MenteeCard firstname={mentee.firstname} lastname={mentee.lastname}/> 
     );
     /* app/routes/api */
     console.log(exampleMentees);
     return( 
         <MainLayout title='Your Mentees'>
-
+            <Title text={`Current Mentees: ${currentMentee}`}/>
             <div>
                 {menteelist}
             </div>

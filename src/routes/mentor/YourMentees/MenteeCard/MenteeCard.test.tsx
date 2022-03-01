@@ -6,7 +6,7 @@ import { BrowserRouter } from 'react-router-dom';
 
 describe('<MenteeCard />', () => {
   test('it should mount', () => {
-    render(<BrowserRouter><MenteeCard /></BrowserRouter>);
+    render(<BrowserRouter><MenteeCard firstname='John' lastname='Smith'/></BrowserRouter>);
     
     const menteecard = screen.getByTestId('MenteeCard');
 
