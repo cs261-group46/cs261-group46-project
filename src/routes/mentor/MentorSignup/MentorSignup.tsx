@@ -1,6 +1,5 @@
 import React, { FC, FormEventHandler } from "react";
 // import styles from './MentorSignup.module.scss';
-import MainLayout from "../../../layouts/MainLayout/MainLayout";
 import {
   MultiSelectOptions,
   SearchPromise,
@@ -72,7 +71,7 @@ const MentorSignup: FC<MentorSignupProps> = () => {
 
   const submitHandler: FormEventHandler = (event) => {
     event.preventDefault();
-    if (isSkillsValueValid && isAboutValueValid) {
+    if (isSkillsValueValid && isAboutValueValid && isCapacityValueValid) {
       sendBecomeMentorData();
     } else {
       showAllErrors();

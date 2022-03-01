@@ -1,6 +1,5 @@
 import React, { FC, FormEventHandler } from "react";
 import MainLayout from "../../../layouts/MainLayout/MainLayout";
-import styles from "./Login.module.scss";
 import useInput from "../../../hooks/UseInput/UseInput";
 import { useNavigate } from "react-router-dom";
 import Button from "../../../components/UI/Button/Button";

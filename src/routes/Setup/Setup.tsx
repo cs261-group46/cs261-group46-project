@@ -2,22 +2,14 @@ import React, { FormEventHandler, useState } from "react";
 import MainLayout from "../../layouts/MainLayout/MainLayout";
 import Button from "../../components/UI/Button/Button";
 import styles from "./Setup.module.scss";
-import MultiSelect, {
-  MultiSelectOption,
-} from "../../components/UI/FormInput/SearchSelect/SearchSelect.d";
 import useInput from "../../hooks/UseInput/UseInput";
-import {
-  SelectOption,
-  SelectOptions,
-} from "../../components/UI/FormInput/Select/Select.d";
 import {
   MultiSelectOptions,
   SearchPromise,
 } from "../../components/UI/FormInput/SearchSelect/SearchSelect.d";
 import { Link, useNavigate } from "react-router-dom";
-
 import UseVerifyAuth from "../../hooks/UseVerifyAuth/UseVerifyAuth";
-import { get, index, store } from "../../api/api";
+import { index, store } from "../../api/api";
 import SearchSelect from "../../components/UI/FormInput/SearchSelect/SearchSelect";
 
 const Setup = () => {

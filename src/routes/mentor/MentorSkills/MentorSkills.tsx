@@ -10,8 +10,6 @@ import {
 import useInput from "../../../hooks/UseInput/UseInput";
 import UseVerifyAuth from "../../../hooks/UseVerifyAuth/UseVerifyAuth";
 import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
-import MainLayout from "../../../layouts/MainLayout/MainLayout";
-import styles from "./MentorSkills.module.scss";
 
 interface MentorSkillsProps {}
 

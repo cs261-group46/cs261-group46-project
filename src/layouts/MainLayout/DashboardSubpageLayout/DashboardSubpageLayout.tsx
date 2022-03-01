@@ -1,4 +1,4 @@
-import React, { FC, Fragment } from "react";
+import React, { FC } from "react";
 import Button from "../../../components/UI/Button/Button";
 import MainLayout from "../MainLayout";
 import styles from "./DashboardSubpageLayout.module.scss";

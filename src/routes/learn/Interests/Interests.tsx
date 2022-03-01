@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { get, index, update } from "../../../api/api";
 import Button from "../../../components/UI/Button/Button";
 import SearchSelect from "../../../components/UI/FormInput/SearchSelect/SearchSelect";
-import MultiSelect from "../../../components/UI/FormInput/SearchSelect/SearchSelect.d";
 import {
   MultiSelectOptions,
   SearchPromise,
@@ -11,8 +10,6 @@ import {
 import useInput from "../../../hooks/UseInput/UseInput";
 import UseVerifyAuth from "../../../hooks/UseVerifyAuth/UseVerifyAuth";
 import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
-import MainLayout from "../../../layouts/MainLayout/MainLayout";
-import styles from "./Interests.module.scss";
 
 interface InterestsProps {}
 

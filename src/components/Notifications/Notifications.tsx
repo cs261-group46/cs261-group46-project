@@ -1,7 +1,6 @@
-import React, { FC } from "react";
+import { FC } from "react";
 import styles from "./Notifications.module.scss";
 import { NotificationType } from "../../types/Notification";
-import SystemMessage from "../UI/SystemMessage/SystemMessage";
 import Notification from "./Notification/Notification";
 
 interface NotificationsProps {
