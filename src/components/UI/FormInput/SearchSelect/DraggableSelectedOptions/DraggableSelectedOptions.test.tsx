@@ -5,7 +5,7 @@ import DraggableSelectedOptions from './DraggableSelectedOptions';
 
 describe('<DraggableSelectedOptions />', () => {
   test('it should mount', () => {
-    render(<DraggableSelectedOptions selected={[]} onRemoveSelected={() => {}}/>);
+    render(<DraggableSelectedOptions selected={[]} onRemoveSelected={() => {}} onSetSelected={() => {}}/>);
     
     const selectedOptions = screen.getByTestId('DraggableSelectedOptions');
 

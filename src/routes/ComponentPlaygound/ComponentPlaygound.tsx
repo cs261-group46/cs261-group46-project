@@ -42,7 +42,7 @@ const ComponentPlaygound: FC<ComponentPlaygoundProps> = () => {
                     label: "Test 2",
                     value: "2"
                 },
-            ]), 100))}
+            ]), 0))}
         />
     </div>
 }

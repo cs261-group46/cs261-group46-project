@@ -168,6 +168,7 @@ function SearchSelect<T>(props: PropsWithChildren<MultiSelectProps<T>>) {
           <DraggableSelectedOptions
               selected={props.value}
               onRemoveSelected={removeExpertiseHandler}
+              onSetSelected={props.onChange}
           />}
       <SystemMessage
         sort="inline"
