@@ -27,7 +27,7 @@ const YourMentees: FC<YourMenteeProps> = () => {
     const menteelist = exampleMentees.map( (mentee) => 
         <div>
             <h1>{mentee.name}</h1>
-            {mentee.completedGoal} / {mentee.totalGoal}
+            {mentee.completedGoal} / {mentee.totalGoal} {/*TODO: just use pie chart instead */}
         </div>
     );
     /* app/routes/api */
