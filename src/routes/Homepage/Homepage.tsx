@@ -1,9 +1,9 @@
-import React, {FC, useEffect} from 'react';
-import styles from './Homepage.module.scss';
+import React, { FC, useEffect } from "react";
+import styles from "./Homepage.module.scss";
 import Button from "../../components/UI/Button/Button";
 import Logo from "../../logo";
 import useLogin from "../../hooks/UseLogin/UseLogin";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 interface HomepageProps {}
 
@@ -17,13 +17,15 @@ const Homepage: FC<HomepageProps> = () => {
     }
   }, [loginState, navigate]);
 
-  return <div className={styles.Homepage} data-testid="Homepage">
-    <Logo scale={0.5}/>
-    <div className={styles.buttons}>
-      <Button href={"/register"}>Register</Button>
-      <Button href={"/login"}>Login</Button>
+  return (
+    <div className={styles.Homepage} data-testid="Homepage">
+      <Logo scale={0.2} />
+      <div className={styles.buttons}>
+        <Button href={"/register"}>Register</Button>
+        <Button href={"/login"}>Login</Button>
+      </div>
     </div>
-  </div>
-}
+  );
+};
 
 export default Homepage;

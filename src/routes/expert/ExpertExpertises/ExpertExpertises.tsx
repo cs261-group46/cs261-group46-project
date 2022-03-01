@@ -2,7 +2,7 @@ import React, { FC, FormEventHandler, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { get, update } from "../../../api/api";
 import Button from "../../../components/UI/Button/Button";
-import MultiSelect from "../../../components/UI/FormInput/SearchSelect/SearchSelect";
+import SearchSelect from "../../../components/UI/FormInput/SearchSelect/SearchSelect";
 import {
   MultiSelectOptions,
   SearchPromise,
@@ -103,7 +103,7 @@ const ExpertExpertises: FC<ExpertExpertisesProps> = () => {
   return (
     <DashboardSubpageLayout title="Your Fields of Expertise">
       <form onSubmit={submitHandler}>
-        <MultiSelect
+        <SearchSelect
           id="expertises"
           label="Fields of Expertise"
           value={enteredExpertises}

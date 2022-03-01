@@ -16,17 +16,17 @@ def index(user=None):
 
     if request.args:
         fields = [] if request.args.get(
-            'fields') is None else request.args.get('fields').split(',')
+             'fields') is None else request.args.get('fields').split(',')
         filters = [] if request.args.get(
             'filters') is None else request.args.get('filters').split(',')
 
     # TODO: VALIDATE
 
     # Need to introduce some filters ?
-    mentors = Mentor.query
+    mentors = Mentor.query.all()
 
     if "suitable" in filters:
-        mentors = sort_mentors(mentors)
+        mentors = sort_mentors(mentors, user)
 
     mentors = mentors.all()
     return {"success": True, "data": {"mentors": [mentor.to_dict(show=fields) for mentor in mentors]}}, 200

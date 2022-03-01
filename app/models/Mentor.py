@@ -15,7 +15,7 @@ class Mentor(BaseModel):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), unique=True)
     about = db.Column(db.Text, nullable=True)
-    score = db.Column(db.Integer, nullable=False, default=0)
+    score = db.Column(db.Float, nullable=False, default=2.5)
     topics = db.relationship(
         'Topic', secondary=mentors_topics, backref='mentors', lazy=True)
 

@@ -2,8 +2,9 @@ from app import db, Department
 
 
 def department_factory():
-    db.session.add(Department(name="Computer Science"))
-    db.session.add(Department(name="Economics"))
-    db.session.add(Department(name="Humanities"))
-    db.session.add(Department(name="Geography"))
-    db.session.commit()
+    department1 = Department(name="Computer Science")
+    department2 = Department(name="Economics")
+    department3 = Department(name="Humanities")
+    department4 = Department(name="Geography")
+
+    return [department1, department2, department3, department4]

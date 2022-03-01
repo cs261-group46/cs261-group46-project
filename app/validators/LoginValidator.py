@@ -10,10 +10,7 @@ validationRules = {
     },
     'password': {
         'type': 'string',
-        # 'regex': '',    TODO: Create regex for it
-        'required': True,
-        'minlength': 10,
-        'maxlength': 126
+        'required': True
     },
 }
 

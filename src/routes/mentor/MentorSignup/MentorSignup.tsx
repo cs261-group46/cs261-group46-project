@@ -90,6 +90,8 @@ const MentorSignup: FC<MentorSignupProps> = () => {
       const options: MultiSelectOptions<number> = data.map(
         ({ label, id }: { label: string; id: number }) => ({ label, value: id })
       );
+      console.log(options);
+
       return options;
     } catch (errors) {
       console.log(errors);
