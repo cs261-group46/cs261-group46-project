@@ -83,6 +83,7 @@ const Setup = () => {
   };
   return (
     <MainLayout title="Setup">
+<<<<<<< HEAD
       <div className={styles.Setup}>
         <h1>Would you like to be an expert?</h1>
         <h2>Experts can organise group workshops.</h2>
@@ -124,6 +125,19 @@ const Setup = () => {
           Finish setup later
         </Link>
       </div>
+=======
+      <SearchSelect
+        id="expertise"
+        label="Fields of Expertise"
+        value={enteredExpertises}
+        isValid={isInputExpertisesValid}
+        onChange={expertisesChangeHandler}
+        onBlur={experiencesBlurHandler}
+        icon="💪"
+        searchPromise={searchPromise}
+      />
+      <div data-testid="Setup"/>
+>>>>>>> develop
     </MainLayout>
   );
 };

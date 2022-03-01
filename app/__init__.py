@@ -8,6 +8,7 @@
 #   flask                         #
 #   flask-mail                    #
 #   flask-wtf                     #
+#   flask_sqlalchemy              #
 #   passlib                       #
 #   psycopg2                      #
 #   gunicorn                      #
@@ -21,9 +22,9 @@ from flask import Flask
 from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
 
-##########################
-# Config Options/Loading #
-##########################
+load_dotenv()
+NAME = os.getenv("NAME")
+HOST_URL = os.getenv("HOST_URL")
 
 #############
 # App setup #

@@ -1,9 +1,5 @@
 from cerberus import Validator
 
-# data_dict.get("first_name"),
-# data_dict.get("last_name"),
-# data_dict.get("department"))
-
 validationRules = {
     'email': {
         'type': 'string',

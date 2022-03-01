@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { FC, useContext, useEffect, useState } from "react";
 import styles from "./Dashboard.module.scss";
 import MainLayout from "../../layouts/MainLayout/MainLayout";
@@ -9,6 +10,15 @@ import { get } from "../../api/api";
 import { NotificationType } from "../../types/Notification";
 import Notifications from "../../components/Notifications/Notifications";
 import Icon from "../../components/UI/Icon/Icon";
+=======
+import React, {FC} from "react";
+// import styles from "./Dashboard.module.scss";
+import MainLayout from "../../layouts/MainLayout/MainLayout";
+import Button from "../../components/UI/Button/Button";
+import Title from "../../components/UI/Title/Title";
+import {useNavigate} from "react-router-dom";
+import useLogin from "../../hooks/UseLogin/UseLogin";
+>>>>>>> develop
 
 interface DashboardProps {}
 
@@ -19,9 +29,55 @@ const Dashboard: FC<DashboardProps> = () => {
   const isMentee = userDataCtx.isMentee;
   const isExpert = userDataCtx.isExpert;
 
+<<<<<<< HEAD
   const [notificationsLearn, setNotificationsLearn] = useState<
     NotificationType<"learning">[]
   >([]);
+=======
+  const navigate = useNavigate();
+  const loginState = useLogin();
+
+  const logout = async () => {
+      const response = await fetch("/api/user/logout", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+          },
+      });
+
+      const returnedData = await response.json();
+
+      console.log(returnedData);
+
+      if (response.ok) {
+          navigate("/");
+      } else {
+          // setError(true);
+      }
+  };
+
+  const titleText: () => string = () => {
+    switch (loginState.state) {
+      case "trying_to_login":
+        return "";
+      case "logged_out":
+        return ""; // TODO: redirect to homepage
+      case "logged_in":
+        return `Welcome ${loginState.details.first_name}!`;
+    }
+  }
+
+  return (
+    <MainLayout title={"Dashboard"}>
+      <Title text={titleText()}/>
+
+      <Button icon={"👤"} href={"/profile"}>
+        <p style={{ textDecoration: "none", display: "inline-block" }}>
+          Your Profile
+        </p>
+      </Button>
+>>>>>>> develop
 
   const [notificationsMentor, setNotificationsMentor] = useState<
     NotificationType<"mentoring">[]

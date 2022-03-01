@@ -13,6 +13,8 @@ import TextInput from "../../../components/UI/FormInput/TextInput/TextInput";
 import useVerifyAuth from "../../../hooks/UseVerifyAuth/UseVerifyAuth";
 import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
 import { index, store } from "../../../api/api";
+import SearchSelect from '../../../components/UI/FormInput/SearchSelect/SearchSelect';
+import BigTextInput from '../../../components/UI/FormInput/BigTextInput/BigTextInput';
 
 interface MentorSignupProps {}
 
@@ -31,6 +33,7 @@ const MentorSignup: FC<MentorSignupProps> = () => {
     (selectedOptions) => selectedOptions.length > 0
   );
 
+
   const {
     isInputValid: isAboutInputValid,
     isValueValid: isAboutValueValid,
@@ -38,6 +41,14 @@ const MentorSignup: FC<MentorSignupProps> = () => {
     blurHandler: aboutBlurHandler,
     enteredValue: enteredAbout,
   } = useInput<string>("", (about) => about.length > 0 && about.length < 1000);
+
+  const {
+    isInputValid: isCapacityInputValid,
+    isValueValid: isCapacityValueValid,
+    changeHandler: capacityChangeHandler,
+    blurHandler: capacityBlurHandler,
+    enteredValue: capacity,
+  } = useInput<string>('', () => true);
 
   const showAllErrors = () => {
     aboutBlurHandler();
@@ -103,7 +114,7 @@ const MentorSignup: FC<MentorSignupProps> = () => {
           searchPromise={searchPromise}
         />
 
-        <TextInput
+        <BigTextInput
           id={"profile"}
           label={"About me"}
           type="textarea"
@@ -114,6 +125,17 @@ const MentorSignup: FC<MentorSignupProps> = () => {
           onBlur={aboutBlurHandler}
         />
 
+        <TextInput
+          id={'capacity'}
+          label={'How many mentees do you want?'}
+          placeholder={'e.g. 5'}
+          value={capacity}
+          type={'number'}
+          isValid={isCapacityInputValid}
+          onChange={capacityChangeHandler}
+          onBlur={capacityBlurHandler}
+        />
+      
         <Button icon="👑" type="submit" buttonStyle={"primary"}>
           Become a Mentor
         </Button>
@@ -121,7 +143,6 @@ const MentorSignup: FC<MentorSignupProps> = () => {
 
       <div data-testid="MentorSignup" />
     </DashboardSubpageLayout>
-  );
 };
 
 export default MentorSignup;

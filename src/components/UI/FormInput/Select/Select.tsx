@@ -1,25 +1,25 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, PropsWithChildren, useEffect, useState } from "react";
 import styles from "./Select.module.scss";
 import Label from "../Label/Label";
 import textInputStyles from "../TextInput/TextInput.module.scss";
 import { SelectOptions, SelectOption } from "./Select.d";
 import SystemMessage from "../../SystemMessage/SystemMessage";
 
-interface SelectProps {
+interface SelectProps<T> {
   id: string;
   icon?: React.ReactNode;
   label: string;
   placeholder: string;
-  options: SelectOptions;
-  value: SelectOption | undefined;
+  options: SelectOptions<T>;
+  value: SelectOption<T> | undefined;
   isValid: boolean;
-  onChange: (input: SelectOption) => void;
+  onChange: (input: SelectOption<T>) => void;
   onBlur: () => void;
 }
 
-const Select: FC<SelectProps> = (props) => {
-  const options = props.options.map(({ id, label }) => (
-    <option key={id} value={[id.toString(), label ?? ""]}>
+function Select<T>(props: PropsWithChildren<SelectProps<T>>) {
+  const options = props.options.map(({ label }, i) => (
+    <option key={i} value={label}>
       {label}
     </option>
   ));
@@ -28,13 +28,7 @@ const Select: FC<SelectProps> = (props) => {
     event
   ) => {
     // the pair can be reconstructed from id & value properties
-    const selected = event.target.value.split(",");
-    const newSelectOption: SelectOption = {
-      id: parseInt(selected[0]),
-      label: selected[1],
-    };
-
-    props.onChange(newSelectOption);
+    props.onChange(props.options[event.target.selectedIndex]);
   };
 
   const [isInvalidMessageVisible, setInvalidMessageVisible] = useState(false);
@@ -57,7 +51,8 @@ const Select: FC<SelectProps> = (props) => {
       <select
         name={props.id}
         id={props.id}
-        defaultValue={(props.value && props.value.id) || -1}
+        defaultValue={-1}
+        // defaultValue={(props.value && props.value.id) || -1}
         onChange={changeHandler}
         onBlur={props.onBlur}
       >
@@ -76,6 +71,6 @@ const Select: FC<SelectProps> = (props) => {
       />
     </div>
   );
-};
+}
 
 export default Select;

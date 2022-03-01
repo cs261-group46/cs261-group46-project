@@ -1,2 +1,3 @@
-export type SelectOption = { id: number; label?: string };
-export type SelectOptions = SelectOption[];
+export type SelectOption<T> = { id: T; label?: string };
+export type SelectOptions<T> = SelectOption<T>[];
+

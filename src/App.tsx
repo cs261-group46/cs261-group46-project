@@ -11,6 +11,10 @@ import Login from "./routes/Auth/Login/Login";
 import YourInterests from "./routes/learn/Interests/Interests";
 import MentorSkills from "./routes/mentor/MentorSkills/MentorSkills";
 import ExpertExpertises from "./routes/expert/ExpertExpertises/ExpertExpertises.lazy";
+import Homepage from "./routes/Homepage/Homepage.lazy";
+import ViewWorkshops from "./routes/workshops/ViewWorkshops/ViewWorkshops.lazy";
+import ComponentPlaygound from "./routes/ComponentPlaygound/ComponentPlaygound.lazy";
+import PlansOfAction from "./routes/learn/PlansOfAction/PlansOfAction.lazy";
 
 function App() {
   return (
@@ -24,19 +28,28 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/setup" element={<Setup />} />
+
           <Route path="/mentor">
             <Route path="become-mentor" element={<MentorSignup />} />
             <Route path="skills" element={<MentorSkills />} />
           </Route>
+
           <Route path="/learn">
             <Route path="find-mentor" element={<MenteeSignup />} />
             <Route path="interests" element={<YourInterests />} />
+            <Route path="plans-of-action" element={<PlansOfAction />} />
           </Route>
 
           <Route path="/expert">
-            {/* <Route path="become-expert" element={<MenteeSignup />} /> */}
             <Route path="skills" element={<ExpertExpertises />} />
+            {/* <Route path="become-expert" element={<MentorSignup/>}/> */}
           </Route>
+
+          <Route path="/workshops">
+            <Route index element={<ViewWorkshops />} />
+          </Route>
+          <Route path="/test" element={<ComponentPlaygound />} />
+          <Route index element={<Homepage />} />
         </Routes>
       </div>
     </BrowserRouter>
