@@ -4,7 +4,7 @@ import React, {
   useState,
 } from "react";
 
-interface UserDataContext {
+interface IUserDataContext {
   isLoggedIn: boolean;
   isExpert: boolean;
   isMentee: boolean;
@@ -15,7 +15,7 @@ interface UserDataContext {
   setLoggedInStatus: (status: boolean) => void;
 }
 
-const UserDataContext = React.createContext<UserDataContext>({
+const UserDataContext = React.createContext<IUserDataContext>({
   isLoggedIn: false,
   isExpert: false,
   isMentee: false,

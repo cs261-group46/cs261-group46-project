@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC } from "react";
 import SystemMessage from "../../UI/SystemMessage/SystemMessage";
 import styles from "./Notification.module.scss";
 import { NotificationType } from "../../../types/Notification";
