@@ -4,6 +4,7 @@ import Button from "../../components/UI/Button/Button";
 import styles from "./Setup.module.scss";
 import useInput from "../../hooks/UseInput/UseInput";
 import {
+  MultiSelectOption,
   MultiSelectOptions,
   SearchPromise,
 } from "../../components/UI/FormInput/SearchSelect/SearchSelect.d";
