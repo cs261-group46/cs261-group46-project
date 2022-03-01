@@ -1,16 +1,25 @@
-from sqlalchemy.dialects.postgresql import UUID
 from app import db
+from app.models.BaseModel import BaseModel
 
 
-class Notification(db.Model):
+class Notification(BaseModel):
     __tablename__ = 'notifications'
     id = db.Column(db.Integer, primary_key=True)
-    notification_level = db.Column(db.String(10), db.CheckConstraint("notification_level IN ('warning', 'alert', 'info')"))
-    notification_type = db.Column(db.String(10), db.CheckConstraint("notification_type IN ('learning', 'mentoring', 'expertise')"))
-    user_id = db.Column(UUID, db.ForeignKey('users.id'), nullable=False)
+    notification_level = db.Column(db.String(10), db.CheckConstraint(
+        "notification_level IN ('warning', 'alert', 'info')"))
+    notification_type = db.Column(db.String(10), db.CheckConstraint(
+        "notification_type IN ('learning', 'mentoring', 'expertise')"))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), unique=True)
     description = db.Column(db.Text, nullable=True)
     solution = db.Column(db.Text, nullable=True)
     sent = db.Column(db.Boolean, default=False)
 
+    user = db.relationship("User", backref="notifications", lazy=True)
+
     def __repr__(self):
-        return f"{self.__class__.__name__} ({self.id}, {self.notification_level}, {self.notification_type}, {self.user_id}, {self.description})"
+        return f"Notification('')"
+
+    def commit(self):
+        db.session.add(self)
+        db.session.commit()
+        return self

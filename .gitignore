@@ -29,6 +29,8 @@ yarn-error.log*
 /app/static/react
 /app/templates/react
 /app/config/sql.json
+/app/config/email.json
+/app/dev_environ.py
 /app/config/email_local.json
 /app/sql/first_launch/executed/before_launch/*.*
 /app/sql/first_launch/executed/after_launch/*.*

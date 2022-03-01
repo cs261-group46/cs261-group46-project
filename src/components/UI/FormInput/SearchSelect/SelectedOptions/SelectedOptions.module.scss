@@ -2,11 +2,11 @@
 
 .SelectedOption {
   padding: 3px 5px;
-  padding-right: 0;
-  margin: 0 1px;
+  // padding-right: 0;
+  margin: 0px 5px 0 0;
   border: $sq_light_gray 1px solid;
   border-radius: 5px;
-  background-color: #f7f7f7;
+  background-color: $sq_cream;
 
   p,
   button {

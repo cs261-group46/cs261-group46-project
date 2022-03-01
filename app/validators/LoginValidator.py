@@ -1,22 +1,17 @@
 from cerberus import Validator
-import app.validators.regex as regex
 
 validationRules = {
     'email': {
         'type': 'string',
-        'regex': regex.email,
+        'regex': '^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$',
         'required': True,
         'minlength': 5,
-        'maxlength': 126,
-        "valid_sql": True
+        'maxlength': 126
     },
     'password': {
         'type': 'string',
-        # 'regex': regex.password,
-        'required': True,
-        'minlength': 10,
-        'maxlength': 126
+        'required': True
     },
 }
 
-validator = regex.SQLValidator(validationRules)
+validator = Validator(validationRules)

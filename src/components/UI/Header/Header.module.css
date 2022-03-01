@@ -1,0 +1,11 @@
+.Header {
+  width: 100%;
+  margin: 40px 0 80px;
+}
+
+.Header h1 {
+  font-weight: 900;
+  font-size: 35pt;
+  color: #393838;
+}
+/*# sourceMappingURL=Header.module.css.map */

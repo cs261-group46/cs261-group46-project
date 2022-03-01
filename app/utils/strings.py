@@ -1,10 +1,6 @@
 import secrets
 import string
 
-chars = string.ascii_lowercase + string.ascii_uppercase + string.digits
-
-
-def random_string(length: int) -> str:
-    return "".join(secrets.choice(chars) for _ in range(length))
-
+def generate_random_string(length: int) -> str:
+    return ''.join(secrets.choice(string.ascii_letters + string.digits + string.punctuation) for _ in range(length))
 

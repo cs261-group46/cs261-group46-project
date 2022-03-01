@@ -1,0 +1,15 @@
+@import "../../../variables";
+
+.Tag {
+  padding: 3px 5px;
+  // padding-right: 0;
+  margin: 5px 5px 5px 0;
+  border: $sq_light_gray 1px solid;
+  border-radius: 5px;
+  background-color: $sq_cream;
+
+  p {
+    display: inline;
+    color: #393838;
+  }
+}
