@@ -17,6 +17,7 @@ import ComponentPlaygound from './routes/ComponentPlaygound/ComponentPlaygound.l
 import PlansOfAction from './routes/learn/PlansOfAction/PlansOfAction.lazy';
 import UpcomingEvents from './routes/UpcomingEvents/UpcomingEvents.lazy';
 import { EventProps } from './routes/UpcomingEvents/Event/Event.d';
+import YourMentor from "./routes/learn/YourMentor/YourMentor";
 
 function App() {
   return (
@@ -36,10 +37,12 @@ function App() {
             <Route path='skills' element={<MentorSkills />} />
           </Route>
 
-          <Route path='/learn'>
-            <Route path='find-mentor' element={<MenteeSignup />} />
-            <Route path='interests' element={<YourInterests />} />
-            <Route path='plans-of-action' element={<PlansOfAction />} />
+          <Route path="/learn">
+            <Route path="find-mentor" element={<MenteeSignup />} />
+            <Route path="your-mentor" element={<YourMentor />} />
+
+            <Route path="interests" element={<YourInterests />} />
+            <Route path="plans-of-action" element={<PlansOfAction />} />
           </Route>
 
           <Route path='/expert'>

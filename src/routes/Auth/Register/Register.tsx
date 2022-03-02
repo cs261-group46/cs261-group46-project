@@ -10,7 +10,8 @@ import {
   SelectOptions,
 } from "../../../components/UI/FormInput/Select/Select.d";
 import { useNavigate } from "react-router-dom";
-import { index } from "../../../api/api";
+import { custom, index } from "../../../api/api";
+import UseVerifyAuth from "../../../hooks/UseVerifyAuth/UseVerifyAuth";
 
 function validateEmail(email: string) {
   const re =
@@ -57,6 +58,8 @@ function validateDepartment(_department: SelectOption<number>) {
 }
 
 const Register: FC = () => {
+  UseVerifyAuth(0, false);
+
   const [departments, setDepartments] = useState<SelectOptions<number>>([]);
   let navigate = useNavigate();
 
@@ -75,7 +78,7 @@ const Register: FC = () => {
       const data = await index({
         resource: "departments",
       });
-      setDepartments(data);
+      setDepartments(data.departments);
     } catch (errors) {
       console.log(errors);
     }
@@ -116,20 +119,16 @@ const Register: FC = () => {
       department: enteredDepartment,
     };
 
-    const response = await fetch("/api/auth/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-      body: JSON.stringify(body), // body data type must match "Content-Type" header
-    });
-
-    const returnedData = await response.json();
-
-    // TODO : if unsuccesfull, show errors
-
-    if (returnedData.successful) navigate("/register/verifyemail");
+    try {
+      custom({
+        endpoint: "/auth/register",
+        method: "POST",
+        body: body,
+      });
+      navigate("/register/verifyemail");
+    } catch (errors) {
+      console.log(errors);
+    }
   };
 
   const {

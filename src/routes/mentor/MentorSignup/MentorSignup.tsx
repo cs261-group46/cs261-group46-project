@@ -1,4 +1,4 @@
-import React, { FC, FormEventHandler } from "react";
+import React, { FC, FormEventHandler, useContext } from "react";
 // import styles from './MentorSignup.module.scss';
 import {
   MultiSelectOptions,
@@ -13,10 +13,13 @@ import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpage
 import { index, store } from "../../../api/api";
 import SearchSelect from "../../../components/UI/FormInput/SearchSelect/SearchSelect";
 import BigTextInput from "../../../components/UI/FormInput/BigTextInput/BigTextInput";
+import UserDataContext from "../../../store/UserDataContext";
 
 interface MentorSignupProps {}
 
 const MentorSignup: FC<MentorSignupProps> = () => {
+  const userDataCtx = useContext(UserDataContext);
+
   useVerifyAuth();
 
   let navigate = useNavigate();
@@ -63,6 +66,8 @@ const MentorSignup: FC<MentorSignupProps> = () => {
         resource: "mentors",
         body: requestBody,
       });
+
+      userDataCtx.updateMentorId();
       navigate("/dashboard"); // show message instead
     } catch (errors) {
       console.log(errors);
@@ -86,7 +91,7 @@ const MentorSignup: FC<MentorSignupProps> = () => {
           startswith: startsWith,
         },
       });
-      const options: MultiSelectOptions<number> = data.map(
+      const options: MultiSelectOptions<number> = data.topics.map(
         ({ label, id }: { label: string; id: number }) => ({ label, value: id })
       );
       console.log(options);
@@ -113,6 +118,7 @@ const MentorSignup: FC<MentorSignupProps> = () => {
           onChange={skillsChangeHandler}
           onBlur={skillsBlurHandler}
           searchPromise={searchPromise}
+          type={"draggable"}
         />
 
         <BigTextInput

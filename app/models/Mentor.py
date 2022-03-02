@@ -19,16 +19,12 @@ class Mentor(BaseModel):
     topics = db.relationship(
         'Topic', secondary=mentors_topics, backref='mentors', lazy=True)
 
-    mentees = db.relationship('Mentee', backref='mentor', lazy=True)
-
     user = db.relationship("User", backref=db.backref("mentor", uselist=False))
 
-    default_fields = [
-        "first_name",
-    ]
+    default_fields = ["user", "about", "score", "topics"]
 
     def __repr__(self):
-        return f"Mentor('')"
+        return f'<Mentor \n User: {self.user} \n About: {self.about} \n Score: {self.score} \n Topics : {self.topics}>'
 
     def commit(self):
         db.session.add(self)

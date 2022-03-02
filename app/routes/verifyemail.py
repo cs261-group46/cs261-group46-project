@@ -1,4 +1,4 @@
-from flask import Blueprint, request, session, current_app, redirect
+from flask import Blueprint, request, session, current_app, redirect, flash
 from app.middleware.auth import auth_required
 from app.utils.auth import set_login_token
 from app.utils.email_confirm_token import confirm_token
@@ -14,16 +14,13 @@ def verify_email(token):
         email = confirm_token(token)
     except:
         # return {"successful": False, "warnings": ["The confirmation link is invalid or has expired."]}
-        return redirect("http://localhost:3000/404")
+        flash('The confirmation link is invalid or has expired. Redirecting...')
+        return redirect("http://localhost:3000/")
     user = User.query.filter_by(email=email).first()
 
-    # if user is None:
-    #     return redirect("http://localhost:3000/404")
-
     if user.verified:
-        # return {"successful": True, "alerts": ["Account already confirmed. Please login."], "redirect": "/dashboard"}
-
-        return redirect("http://localhost:3000/setup")
+        flash('The account already verified. Redirecting...')
+        return redirect("http://localhost:3000/dashboard")
 
     else:
         user.verified = True
@@ -32,6 +29,6 @@ def verify_email(token):
 
         set_login_token(user)
 
-        # return {"successful": True, "infos": ["You have confirmed your account. Thanks!"], "redirect": "/dashboard"}
+        flash('You have confirmed your email address. Redirecting...')
         return redirect("http://localhost:3000/setup")
 

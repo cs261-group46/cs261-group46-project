@@ -19,6 +19,9 @@ import {
 import SelectedOptions from "./SelectedOptions/SelectedOptions";
 import Autocomplete from "./Autocomplete/Autocomplete";
 import SystemMessage from "../../SystemMessage/SystemMessage";
+import DraggableSelectedOptions from "./DraggableSelectedOptions/DraggableSelectedOptions";
+
+type OptionsType = "span" | "draggable";
 
 interface MultiSelectProps<T> {
   id: string;
@@ -31,6 +34,7 @@ interface MultiSelectProps<T> {
   limit?: number;
   onChange: (input: MultiSelectOptions<T>) => void;
   onBlur: () => void;
+  type?: OptionsType;
 }
 
 function SearchSelect<T>(props: PropsWithChildren<MultiSelectProps<T>>) {
@@ -43,8 +47,10 @@ function SearchSelect<T>(props: PropsWithChildren<MultiSelectProps<T>>) {
   const inputElement = useRef<HTMLSpanElement>(null);
 
   const { searchPromise } = props;
+  const type = props.type ?? "span";
 
-  const removeExpertiseHandler: RemoveSelectedHandler<T> = (selected) => {
+  const removeSelectedHandler: RemoveSelectedHandler<T> = (selected) => {
+    console.log("is removed");
     const newExpertises = props.value.filter((x) => x.value !== selected);
     props.onChange(newExpertises);
   };
@@ -62,8 +68,6 @@ function SearchSelect<T>(props: PropsWithChildren<MultiSelectProps<T>>) {
     searchSubject.pipe(debounceTime(300)).subscribe(async (debounced) => {
       if (searchPromise) {
         const result = await searchPromise(debounced);
-        console.log(result);
-
         setSearchResults(result);
       }
     });
@@ -131,10 +135,12 @@ function SearchSelect<T>(props: PropsWithChildren<MultiSelectProps<T>>) {
           styles.focusedWithResults
         }`}
       >
-        <SelectedOptions
-          selected={props.value}
-          onRemoveSelected={removeExpertiseHandler}
-        />
+        {type === "span" && (
+          <SelectedOptions
+            selected={props.value}
+            onRemoveSelected={removeSelectedHandler}
+          />
+        )}
 
         <span
           className={styles.search}
@@ -155,6 +161,13 @@ function SearchSelect<T>(props: PropsWithChildren<MultiSelectProps<T>>) {
           possibleResults={possibleResults}
           currentSearch={currentSearch}
           onAddSelected={addSelectedHandler}
+        />
+      )}
+      {type === "draggable" && (
+        <DraggableSelectedOptions
+          selected={props.value}
+          onRemoveSelected={removeSelectedHandler}
+          onSetSelected={props.onChange}
         />
       )}
       <SystemMessage

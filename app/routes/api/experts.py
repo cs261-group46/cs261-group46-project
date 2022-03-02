@@ -6,13 +6,17 @@ from sqlalchemy import func
 experts = Blueprint("api_experts", __name__, url_prefix="/experts")
 
 
-@experts.route("/-1", methods=["GET"])
+@experts.route("/<expertId>", methods=["GET"])
 @auth_required()
-def get(user=None):
+def get(expertId=None, user=None):
     fields = request.args.get('fields').split(',')
     # TODO: VALIDATE
-    mentor = user.expert
-    return {"success": True, "data": {"expert": mentor.to_dict(show=fields)}}, 200
+    expert = Expert.query.filter_by(id=expertId).first()
+
+    if expert is None:
+        return {"success": False, "errors": ["The expert with the given id doesn't exist"]}, 400
+
+    return {"success": True, "data": {"expert": expert.to_dict(show=fields)}}, 200
 
 
 @experts.route("/", methods=["POST"])
@@ -25,18 +29,21 @@ def store(user=None):
     return {"success": True}, 200
 
 
-@experts.route("/-1", methods=["PUT"])
+@experts.route("/<expertId>", methods=["PUT"])
 @auth_required()
-def update(user=None):
+def update(expertId=None, user=None):
     data = dict(request.get_json())
     # TODO: VALIDATE
-    expert = user.expert
+
+    expert = Expert.query.filter_by(id=expertId).first()
 
     if expert is None:
-        return {"success": False, "errors": ["User not signed up as expert"]}, 401
+        return {"success": False, "errors": ["The expert that is trying to be changed doesn't exist"]}, 400
+
+    if expert.user_id != user.id and user.permissions < 1:
+        return {"success": False, "errors": ["You do not have the permissions to change the data of other experts"]}, 401
 
     selectedTopics = Topic.query.filter(Topic.id.in_(data.get("expertises"))).all()
-
     expert.topics = selectedTopics
     expert.commit()
 
@@ -44,9 +51,9 @@ def update(user=None):
 
 
 
-@experts.route("/verify", methods=["GET"])
-@auth_required()
-def verify(user=None):
-    isExpert = not Expert.query.filter_by(user_id=user.id).first() is None
-    return {"isExpert": isExpert}
+# @experts.route("/verify", methods=["GET"])
+# @auth_required()
+# def verify(user=None):
+#     isExpert = not Expert.query.filter_by(user_id=user.id).first() is None
+#     return {"isExpert": isExpert}
 

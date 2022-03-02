@@ -6,12 +6,12 @@ from app import db, User, Department
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.utils.auth import set_login_token
 from app.utils.email_confirm_token import generate_confirmation_token
-from app.middleware.auth import auth_required, verify_auth
+from app.middleware.auth import auth_required
 
 auth = Blueprint("api_auth", __name__, url_prefix="/auth")
 
 
-@auth.route("/register", methods=["POST"])
+@auth.route("/register/", methods=["POST"])
 def register():
 
     data = dict(request.get_json())
@@ -20,26 +20,26 @@ def register():
     registration_validator.validate(data)
     if registration_validator.errors:
         return {
-            "successful": False,
-            "errors": registration_validator.errors
-        }
+            "success": False,
+            "errors": registration_validator.errors.values()
+        }, 400
 
     # check whether email is repeated
     email_repeated = not User.query.filter_by(email=data.get("email")).first() is None
     if email_repeated:
         return {
-            "successful": False,
-            "errors": {"email": "An account with the given email already exists"}
-        }
+            "success": False,
+            "errors": ["An account with the given email already exists"]
+        }, 400
 
     # check whether department exists
     department_not_exists = Department.query.filter_by(id=data.get("department").get('id'), name=data.get("department").get('label')).first() is None
 
     if department_not_exists:
         return {
-            "successful": False,
-            "errors": {"department": "The selected department doesn't exist"}
-        }
+            "success": False,
+            "errors": ["The selected department doesn't exist"]
+        }, 400
 
     password_hash = generate_password_hash(password=data.get("password"))
 
@@ -66,49 +66,49 @@ def register():
     subject = "Please confirm your email"
     send_email(new_user.email, subject, html)
 
-    return {"successful": True}
+    return {"success": True}, 200
 
 
-@auth.route("/verify", methods=["GET"])
-def verify():
-    permission = request.args.get('permission')
-    is_logged_in = verify_auth(int(permission))
+# @auth.route("/verify", methods=["GET"])
+# def verify():
+#     permission = request.args.get('permission')
+#     is_logged_in = verify_auth(int(permission))
+#
+#     return {"isLoggedIn": is_logged_in}
 
-    return {"isLoggedIn": is_logged_in}
 
-
-@auth.route("/login", methods=["POST"])
+@auth.route("/login/", methods=["POST"])
 def login():
     data = dict(request.get_json())
     login_validator.validate(data)
     if login_validator.errors:
         return {
-            "successful": False,
-            "errors": login_validator.errors
-        }
+            "success": False,
+            "errors": login_validator.errors.values()
+        }, 400
 
     # check whether email is repeated
     email_doesnt_exists = User.query.filter_by(email=data.get("email")).first() is None
     if email_doesnt_exists:
         return {
-            "successful": False,
-            "errors": {"email": "An account with the given email doesn't exist exists"}
-        }
+            "success": False,
+            "errors": ["An account with the given email doesn't exist exists"]
+        }, 400
 
     user = User.query.filter_by(email=data.get("email")).first()
     if not check_password_hash(user.hashed_password, data.get("password")):
         return {
-            "successful": False,
-            "errors": {"password": "Password seems to be wrong"}
-        }
+            "success": False,
+            "errors": ["The given password is incorrect"]
+        }, 400
 
     set_login_token(user)
 
-    return {"successful": True}
+    return {"success": True}, 200
 
 
-@auth.route("/logout", methods=["GET"])
+@auth.route("/logout/", methods=["GET"])
 @auth_required()
 def logout(user=None):
     session.pop('login_token')
-    return {"successful": True}, 200
+    return {"success": True}, 200

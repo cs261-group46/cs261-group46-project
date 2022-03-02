@@ -1,23 +1,28 @@
-import React, { FC, useContext, useEffect, useState } from "react";
+import React, { FC, useCallback, useContext, useEffect, useState } from "react";
 import styles from "./Dashboard.module.scss";
 import MainLayout from "../../layouts/MainLayout/MainLayout";
 import Button from "../../components/UI/Button/Button";
 import Title from "../../components/UI/Title/Title";
 import UseVerifyAuth from "../../hooks/UseVerifyAuth/UseVerifyAuth";
 import UserDataContext from "../../store/UserDataContext";
-import { get } from "../../api/api";
+import { custom, get } from "../../api/api";
 import { NotificationType } from "../../types/Notification";
 import Notifications from "../../components/Notifications/Notifications";
 import Icon from "../../components/UI/Icon/Icon";
+import { useNavigate } from "react-router-dom";
 
 interface DashboardProps {}
 
 const Dashboard: FC<DashboardProps> = () => {
   UseVerifyAuth();
+
+  const navigate = useNavigate();
+
   const userDataCtx = useContext(UserDataContext);
-  const isMentor = userDataCtx.isMentor;
-  const isMentee = userDataCtx.isMentee;
-  const isExpert = userDataCtx.isExpert;
+  const userId = userDataCtx.userId;
+  const isMentor = !!userDataCtx.mentorId;
+  const isMentee = !!userDataCtx.menteeId;
+  const isExpert = !!userDataCtx.expertId;
 
   const [notificationsLearn, setNotificationsLearn] = useState<
     NotificationType<"learning">[]
@@ -38,25 +43,24 @@ const Dashboard: FC<DashboardProps> = () => {
   const [notificationsExpertVisible, setNotificationsExpertVisible] =
     useState<boolean>(false);
 
-  const getNotifications = async () => {
+  const getNotifications = useCallback(async () => {
+    if (!userId) return;
     try {
       const data = await get({
-        resource: "notifications",
+        resource: "users",
+        entity: userId as number,
         args: {
-          fields: [
-            "description",
-            "notification_level",
-            "notification_type",
-            "solution",
-          ],
+          fields: ["notifications"],
         },
       });
+
+      console.log(data.user.notifications);
 
       const mentorNotifications: NotificationType<"mentoring">[] = [];
       const learnNotifications: NotificationType<"learning">[] = [];
       const expertNotifcations: NotificationType<"expertise">[] = [];
 
-      data.notifications.forEach(
+      data.user.notifications.forEach(
         (
           notification: NotificationType<"learning" | "mentoring" | "expertise">
         ) => {
@@ -78,16 +82,21 @@ const Dashboard: FC<DashboardProps> = () => {
       setNotificationsMentor(mentorNotifications);
       setNotificationsExpert(expertNotifcations);
     } catch (errors) {}
-  };
+  }, [userId]);
 
   useEffect(() => {
     getNotifications();
-  }, []);
+  }, [getNotifications]);
 
   const logoutHandler = async () => {
-    const response = await fetch("/api/auth/logout");
-    const returnedData = await response.json();
-    if (returnedData.successful) userDataCtx.setLoggedInStatus(false);
+    try {
+      await custom({
+        endpoint: "/auth/logout",
+        method: "GET",
+      });
+      userDataCtx.updateUserId();
+      navigate("/login");
+    } catch (errors) {}
   };
 
   const toggleLearnNotificationHandler = () => {

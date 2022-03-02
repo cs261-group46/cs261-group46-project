@@ -1,4 +1,6 @@
 type args = { [key: string]: string | string[] | number };
+type body = { [key: string]: any };
+
 
 function argsToString(args: args) {
   let count = 1;
@@ -17,11 +19,11 @@ function argsToString(args: args) {
 
 export async function get(requestData: {
   resource: string;
-  entity?: number;
-  args: args;
+  entity: number;
+  args?: args;
 }) {
   const response = await fetch(
-    `/api/${requestData.resource}/${requestData.entity ?? "-1"}${
+    `/api/${requestData.resource}/${requestData.entity}${
       requestData.args ? "?" + argsToString(requestData.args) : ""
     }`
   );
@@ -36,11 +38,11 @@ export async function get(requestData: {
 
 export async function update(requestData: {
   resource: string;
-  entity?: number;
-  body: any;
+  entity: number;
+  body: body;
 }) {
   const response = await fetch(
-    `/api/${requestData.resource}/${requestData.entity ?? "-1"}`,
+    `/api/${requestData.resource}/${requestData.entity}`,
     {
       method: "PUT",
       headers: {
@@ -60,7 +62,7 @@ export async function update(requestData: {
 export async function store(requestData: {
   resource: string;
   entity?: number;
-  body: any;
+  body: body;
 }) {
   const response = await fetch(`/api/${requestData.resource}/`, {
     method: "POST",
@@ -94,10 +96,10 @@ export async function index(requestData: { resource: string; args?: args }) {
 
 export async function destroy(requestData: {
   resource: string;
-  entity?: number;
+  entity: number;
 }) {
   const response = await fetch(
-    `/api/${requestData.resource}/${requestData.entity ?? "-1"}`,
+    `/api/${requestData.resource}/${requestData.entity}`,
     {
       method: "DELETE",
       headers: {
@@ -111,4 +113,32 @@ export async function destroy(requestData: {
   if (!response.ok) {
     throw new Error(data.errors || ["Unexpected error occurred"]);
   }
+}
+
+export async function custom(requestData: {
+  endpoint: string;
+  entity?: number;
+  method: string;
+  body?: body;
+  args?: args;
+}) {
+  const response = await fetch(
+    `/api${requestData.endpoint}/${requestData.entity ?? ""}${
+      requestData.args ? "?" + argsToString(requestData.args) : ""
+    }`,
+    {
+      method: requestData.method,
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify(requestData.body), // body data type must match "Content-Type" header
+    }
+  );
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.errors || ["Unexpected error occurred"]);
+  }
+  return data;
 }

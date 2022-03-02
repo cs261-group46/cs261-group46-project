@@ -11,13 +11,15 @@ class Notification(BaseModel):
         "notification_type IN ('learning', 'mentoring', 'expertise')"))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), unique=True)
     description = db.Column(db.Text, nullable=True)
-    solution = db.Column(db.Text, nullable=True)
+    # solution = db.Column(db.Text, nullable=True)
     sent = db.Column(db.Boolean, default=False)
 
     user = db.relationship("User", backref="notifications", lazy=True)
 
+    default_fields = ["notification_level", "notification_type", "user", "description"]
+
     def __repr__(self):
-        return f"Notification('')"
+        return f'<Notification \n NotificationLevel: {self.notification_level} \n NotificationType: {self.notification_type} \n User: {self.user} \n Description: {self.description}>'
 
     def commit(self):
         db.session.add(self)

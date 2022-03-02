@@ -12,8 +12,9 @@ topics = Blueprint("api_topics", __name__, url_prefix="/topics")
 @auth_required()
 def index(user=None):
     start_with = request.args.get('startswith').lower()
-    topics = Topic.query.filter(func.lower(Topic.name).startswith(start_with)).limit(5).all()
-    return {"data": [{"id": topic.id, "label": topic.name} for topic in topics]}
+    topics = Topic.query.filter(func.lower(
+        Topic.name).startswith(start_with)).limit(5).all()
+    return {"success": True, "data": {"topics": [{"id": topic.id, "label": topic.name} for topic in topics]}}
 
 #
 # @auth_required

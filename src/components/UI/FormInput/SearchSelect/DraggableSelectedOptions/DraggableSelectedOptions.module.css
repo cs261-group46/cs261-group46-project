@@ -1,0 +1,19 @@
+.SelectedOption {
+  padding: 3px 5px;
+  margin: 0 5px 0 0;
+  border: #AFAFAF 1px solid;
+  border-radius: 5px;
+  background-color: #F7F7F7;
+}
+
+.SelectedOption p,
+.SelectedOption button {
+  display: inline;
+  color: #393838;
+}
+
+.SelectedOption button {
+  background-color: #f7f7f7;
+  border: none;
+}
+/*# sourceMappingURL=DraggableSelectedOptions.module.css.map */

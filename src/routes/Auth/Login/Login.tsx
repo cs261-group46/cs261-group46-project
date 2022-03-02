@@ -1,9 +1,12 @@
-import React, { FC, FormEventHandler } from "react";
+import React, { FC, FormEventHandler, useContext } from "react";
 import MainLayout from "../../../layouts/MainLayout/MainLayout";
 import useInput from "../../../hooks/UseInput/UseInput";
 import { useNavigate } from "react-router-dom";
 import Button from "../../../components/UI/Button/Button";
 import TextInput from "../../../components/UI/FormInput/TextInput/TextInput";
+import UserDataContext from "../../../store/UserDataContext";
+import { custom } from "../../../api/api";
+import UseVerifyAuth from "../../../hooks/UseVerifyAuth/UseVerifyAuth";
 
 interface LoginProps {}
 
@@ -18,6 +21,9 @@ function validatePassword(password: string) {
 }
 
 const Login: FC<LoginProps> = (props) => {
+  UseVerifyAuth(0, false);
+  const userDataCtx = useContext(UserDataContext);
+
   const navigate = useNavigate();
 
   const showAllErrors = () => {
@@ -40,20 +46,32 @@ const Login: FC<LoginProps> = (props) => {
       password: enteredPassword,
     };
 
-    const response = await fetch("/api/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-      body: JSON.stringify(body), // body data type must match "Content-Type" header
-    });
+    try {
+      const data = await custom({
+        endpoint: "/auth/login",
+        method: "POST",
+        body: body,
+      });
+      userDataCtx.updateUserId();
+      navigate("/dashboard");
+    } catch (errors) {
+      console.log(errors);
+    }
 
-    const returnedData = await response.json();
+    // const response = await fetch("/api/auth/login", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     "Access-Control-Allow-Origin": "*",
+    //   },
+    //   body: JSON.stringify(body), // body data type must match "Content-Type" header
+    // });
 
-    // TODO : if unsuccesfull, show errors
+    // const returnedData = await response.json();
 
-    if (returnedData.successful) navigate("/dashboard");
+    // if (returnedData.user) userDataCtx.setUserIdHandler(returnedData.user);
+
+    // if (returnedData.successful) navigate("/dashboard");
   };
 
   const {

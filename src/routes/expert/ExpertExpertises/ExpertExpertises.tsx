@@ -1,6 +1,12 @@
-import React, { FC, FormEventHandler, useCallback, useEffect } from "react";
+import React, {
+  FC,
+  FormEventHandler,
+  useCallback,
+  useContext,
+  useEffect,
+} from "react";
 import { useNavigate } from "react-router-dom";
-import { get, update } from "../../../api/api";
+import { get, index, update } from "../../../api/api";
 import Button from "../../../components/UI/Button/Button";
 import SearchSelect from "../../../components/UI/FormInput/SearchSelect/SearchSelect";
 import {
@@ -10,6 +16,7 @@ import {
 import useInput from "../../../hooks/UseInput/UseInput";
 import UseVerifyAuth from "../../../hooks/UseVerifyAuth/UseVerifyAuth";
 import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
+import UserDataContext from "../../../store/UserDataContext";
 
 interface ExpertExpertisesProps {}
 
@@ -21,9 +28,12 @@ const ExpertExpertises: FC<ExpertExpertisesProps> = () => {
   UseVerifyAuth();
   const navigate = useNavigate();
 
+  const userDataCtx = useContext(UserDataContext);
+  if (!userDataCtx.expertId) navigate("/dashboard");
+
   const getTopics = async (startsWith: string) => {
     try {
-      const data = await get({
+      const data = await index({
         resource: "topics",
         args: {
           startswith: startsWith,
@@ -56,6 +66,7 @@ const ExpertExpertises: FC<ExpertExpertisesProps> = () => {
     try {
       const data = await get({
         resource: "experts",
+        entity: userDataCtx.expertId as number,
         args: {
           fields: "topics",
         },
@@ -70,7 +81,7 @@ const ExpertExpertises: FC<ExpertExpertisesProps> = () => {
     } catch (errors) {
       console.log(errors);
     }
-  }, [expertisesChangeHandler]);
+  }, [expertisesChangeHandler, userDataCtx.expertId]);
 
   useEffect(() => {
     getExpertises();
@@ -83,6 +94,7 @@ const ExpertExpertises: FC<ExpertExpertisesProps> = () => {
       };
       await update({
         resource: "experts",
+        entity: userDataCtx.expertId as number,
         body: requestBody,
       });
       navigate("/dashboard"); // show message instead

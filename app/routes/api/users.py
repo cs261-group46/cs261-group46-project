@@ -4,15 +4,27 @@ from app.middleware.auth import auth_required
 
 users = Blueprint("api_users", __name__, url_prefix="/users")
 
-@users.route("/-1", methods=["GET"])
+@users.route("/<userId>", methods=["GET"])
 @auth_required()
-def get(user=None):
+def get(userId=None, user=None):
     fields = request.args.get('fields').split(',')
+    returnUser = User.query.filter_by(id=userId).first()
+
+    if returnUser is None:
+        return {"success": False, "errors": ["The user doesn't exist"]}, 400
+
     # TODO: VALIDATE
-    return {"successful": True, "data": {"user": user.to_dict(show=fields)}}, 200
+    return {"success": True, "data": {"user": returnUser.to_dict(show=fields)}}, 200
 
 
-@users.route("/-1", methods=["PUT"])
+@users.route("/loggedin/", methods=["GET"])
+@auth_required()
+def get_logged_in(user=None):
+    if user is None:
+        return {"success": False, "errors": ["No user is logged in"]}, 400
+    return {"success": True, "data": {"user": user.id}}, 200
+
+@users.route("/<userId>", methods=["PUT"])
 @auth_required()
 def update(user=None):
     print("interest received")

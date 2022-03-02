@@ -1,4 +1,4 @@
-export type Mentor = {
+export type MentorType = {
   id: number;
   about: string;
   topics: {
@@ -12,5 +12,3 @@ export type Mentor = {
     email: string;
   };
 };
-
-export as namespace MentorIndex;
