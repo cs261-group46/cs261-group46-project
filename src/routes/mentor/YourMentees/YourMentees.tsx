@@ -38,12 +38,12 @@ const exampleMentees = [
 const YourMentees: FC<YourMenteeProps> = () => {
 
     const currentMentee = 3; //TODO: get from database
-    
-    /* Replace with MenteeCard */
+
+    //TODO: get list of mentees from database
     const menteelist = exampleMentees.map( (mentee) => 
         <MenteeCard firstname={mentee.firstname} lastname={mentee.lastname} id={mentee.id} completedGoal={mentee.completedGoal} totalGoal={mentee.totalGoal}/> 
     );
-    /* app/routes/api */
+
     console.log(exampleMentees);
     return( 
         <MainLayout title='Your Mentees'>
