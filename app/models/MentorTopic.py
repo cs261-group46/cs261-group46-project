@@ -1,8 +1,8 @@
-from app import db
-from app.models.BaseModel import BaseModel
+from app import db, ma
+# from app.models.BaseModel import BaseModel
 
 
-class MentorTopic(BaseModel):
+class MentorTopic(db.Model):
     __tablename__ = 'mentors_topics'
     mentor_id = db.Column('mentor_id', db.Integer, db.ForeignKey('mentors.id'), primary_key=True)
     topic_id = db.Column('topic_id', db.Integer, db.ForeignKey('topics.id'), primary_key=True)

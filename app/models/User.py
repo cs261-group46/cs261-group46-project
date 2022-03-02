@@ -1,7 +1,7 @@
 from email.policy import default
 from uuid import uuid4
 from sqlalchemy.dialects.postgresql import UUID
-from app import db
+from app import db, ma
 from datetime import datetime
 from app.models.BaseModel import BaseModel
 
@@ -14,7 +14,10 @@ from app.models.BaseModel import BaseModel
 #                         db.Column('priority', db.Integer)
 #                         )
 
-class User(BaseModel):
+
+
+
+class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     uuid = db.Column(UUID(as_uuid=True), unique=True,
@@ -44,3 +47,5 @@ class User(BaseModel):
         db.session.add(self)
         db.session.commit()
         return self
+
+

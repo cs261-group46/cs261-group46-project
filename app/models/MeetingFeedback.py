@@ -2,7 +2,7 @@ from app import db
 from app.models.BaseModel import BaseModel
 
 
-class MeetingFeedback(BaseModel):
+class MeetingFeedback(db.Model):
     __tablename__ = "meeting_feedback"
 
     id = db.Column(db.Integer, primary_key=True)

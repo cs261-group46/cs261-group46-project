@@ -1,4 +1,4 @@
-from app import db
+from app import db, ma
 from app.models.BaseModel import BaseModel
 
 experts_topics = db.Table('experts_topics',
@@ -9,7 +9,7 @@ experts_topics = db.Table('experts_topics',
                           )
 
 
-class Expert(BaseModel):
+class Expert(db.Model):
     __tablename__ = 'experts'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), unique=True)
@@ -27,3 +27,5 @@ class Expert(BaseModel):
         db.session.add(self)
         db.session.commit()
         return self
+
+

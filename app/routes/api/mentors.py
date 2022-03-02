@@ -6,7 +6,9 @@ from app import db
 from app.middleware.auth import auth_required
 from app import Topic, Mentor, Notification, MentorTopic
 from app.models.MentorshipRequest import MentorshipRequest
+from app.models.schemas import MentorSchema
 from app.utils.mentor_reccomendations import sort_mentors
+from app.utils.request import parse_args_list
 
 mentors = Blueprint("api_mentors", __name__, url_prefix="/mentors")
 
@@ -14,17 +16,8 @@ mentors = Blueprint("api_mentors", __name__, url_prefix="/mentors")
 @mentors.route("/", methods=["GET"])
 @auth_required()
 def index(user=None):
-    fields = []
-    filters = []
-
-    if request.args:
-        fields = [] if request.args.get(
-            'fields') is None else request.args.get('fields').split(',')
-        filters = [] if request.args.get(
-            'filters') is None else request.args.get('filters').split(',')
-
-    # TODO: VALIDATE
-
+    fields = parse_args_list("fields")
+    filters = parse_args_list("filters")
     # Need to introduce some filters ?
     mentors = Mentor.query
 
@@ -33,7 +26,11 @@ def index(user=None):
     #     mentors = sort_mentors(mentors, user)
 
     mentors = mentors.all()
-    return {"success": True, "data": {"mentors": [mentor.to_dict(show=fields) for mentor in mentors]}}, 200
+
+    schema = MentorSchema(only=fields, many=True)
+    result = schema.dump(mentors)
+
+    return {"success": True, "data": {"mentors": result}}, 200
 
 
 @mentors.route("/request/", methods=["POST"])
@@ -57,14 +54,20 @@ def requestMentor(user=None):
 
 
 @mentors.route("/<mentorId>", methods=["GET"])
-@auth_required()
+# @auth_required()
 def get(mentorId, user=None):
-    fields = request.args.get('fields').split(',')
     # TODO: VALIDATE
+    fields = parse_args_list("fields")
 
-    mentor = user.mentor
-    print(mentor)
-    return {"success": True, "data": {"mentor": mentor.to_dict()}}, 200
+    mentor = Mentor.query.filter_by(id=mentorId).first()
+
+    if mentor is None:
+        return {"success" : False, "errors": ["Mentor does not exist"]}, 400
+
+    schema = MentorSchema(only=fields)
+    result = schema.dump(mentor)
+
+    return {"success": True, "data": {"mentor": result}}, 200
 
 
 @mentors.route("/", methods=["POST"])

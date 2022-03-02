@@ -12,7 +12,7 @@ meeting_attendees = db.Table('meeting_attendees',
                              )
 
 
-class Meeting(BaseModel):
+class Meeting(db.Model):
     __tablename__ = 'meetings'
 
     id = db.Column(db.Integer, primary_key=True)

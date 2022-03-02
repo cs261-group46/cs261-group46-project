@@ -21,6 +21,7 @@ import json
 from flask import Flask
 from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
+from flask_marshmallow import Marshmallow
 
 #############
 # App setup #
@@ -32,6 +33,7 @@ app.config.from_file("config.json", load=json.load)
 
 db = SQLAlchemy(app)
 mail = Mail(app)
+ma = Marshmallow(app)
 
 from app.models import *
 from app.routes import *

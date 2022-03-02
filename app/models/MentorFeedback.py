@@ -2,7 +2,7 @@ from app import db
 from app.models.BaseModel import BaseModel
 
 
-class MentorFeedback(BaseModel):
+class MentorFeedback(db.Model):
     __tablename__ = "mentor_feedback"
 
     id = db.Column(db.Integer, primary_key=True)

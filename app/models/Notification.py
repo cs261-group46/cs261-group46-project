@@ -1,8 +1,8 @@
-from app import db
+from app import db, ma
 from app.models.BaseModel import BaseModel
 
 
-class Notification(BaseModel):
+class Notification(db.Model):
     __tablename__ = 'notifications'
     id = db.Column(db.Integer, primary_key=True)
     notification_level = db.Column(db.String(10), db.CheckConstraint(
@@ -25,3 +25,5 @@ class Notification(BaseModel):
         db.session.add(self)
         db.session.commit()
         return self
+
+

@@ -3,20 +3,26 @@ from app import db, Expert, Topic
 from app.middleware.auth import auth_required
 from sqlalchemy import func
 
+from app.models.schemas import ExpertSchema
+from app.utils.request import parse_args_list
+
 experts = Blueprint("api_experts", __name__, url_prefix="/experts")
 
 
 @experts.route("/<expertId>", methods=["GET"])
 @auth_required()
 def get(expertId=None, user=None):
-    fields = request.args.get('fields').split(',')
+    fields = parse_args_list("fields")
     # TODO: VALIDATE
     expert = Expert.query.filter_by(id=expertId).first()
 
     if expert is None:
         return {"success": False, "errors": ["The expert with the given id doesn't exist"]}, 400
 
-    return {"success": True, "data": {"expert": expert.to_dict(show=fields)}}, 200
+    schema = ExpertSchema(only=fields)
+    result = schema.dump(expert)
+
+    return {"success": True, "data": {"expert": result}}, 200
 
 
 @experts.route("/", methods=["POST"])

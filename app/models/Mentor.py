@@ -1,4 +1,4 @@
-from app import db
+from app import db, ma
 from app.models.BaseModel import BaseModel
 
 # mentors_topics = db.Table('mentors_topics',
@@ -11,7 +11,7 @@ from app.models.BaseModel import BaseModel
 
 
 
-class Mentor(BaseModel):
+class Mentor(db.Model):
     __tablename__ = 'mentors'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), unique=True)
@@ -30,3 +30,18 @@ class Mentor(BaseModel):
         db.session.add(self)
         db.session.commit()
         return self
+
+#
+# class MentorSchema(ma.SQLAlchemySchema):
+#     class Meta:
+#         model = Mentor
+#
+#
+#     id = ma.auto_field()
+#     about = ma.auto_field()
+#     score = ma.auto_field()
+#     capacity = ma.auto_field()
+#     # topics
+#     # user
+#     # mentees
+#     # mentorship_requests_received

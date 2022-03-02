@@ -1,8 +1,8 @@
-from app import db
+from app import db, ma
 from app.models.BaseModel import BaseModel
 
 
-class Mentee(BaseModel):
+class Mentee(db.Model):
     __tablename__ = 'mentees'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), unique=True)
@@ -24,3 +24,14 @@ class Mentee(BaseModel):
         db.session.add(self)
         db.session.commit()
         return self
+
+# class MenteeSchema(ma.SQLAlchemySchema):
+#     class Meta:
+#         model = Mentee
+#
+#     id = ma.auto_field()
+#     about = ma.auto_field()
+#
+#     # user
+#     # mentor
+#     # topics

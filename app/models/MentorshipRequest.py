@@ -1,8 +1,8 @@
-from app import db
+from app import db, ma
 from app.models.BaseModel import BaseModel
 
 
-class MentorshipRequest(BaseModel):
+class MentorshipRequest(db.Model):
     __tablename__ = "mentorship_requests"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -19,3 +19,5 @@ class MentorshipRequest(BaseModel):
         db.session.add(self)
         db.session.commit()
         return self
+
+

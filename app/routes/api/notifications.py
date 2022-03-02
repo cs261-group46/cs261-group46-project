@@ -1,6 +1,8 @@
 from flask import Blueprint, request
 from app import Notification, db
 from app.middleware.auth import auth_required
+from app.models.schemas import NotificationSchema
+from app.utils.request import parse_args_list
 
 notifications = Blueprint("api_notifications", __name__,
                           url_prefix="/notifications")
@@ -9,11 +11,12 @@ notifications = Blueprint("api_notifications", __name__,
 @notifications.route("/", methods=["GET"])
 @auth_required()
 def index(user=None):
-    fields = []
-    if request.args:
-        fields = [] if request.args.get(
-            'fields') is None else request.args.get('fields').split(',')
-    return {"success": True, "data": {"notifications": [notification.to_dict(show=fields) for notification in user.notifications]}}, 200
+    fields = parse_args_list("fields")
+
+    schema = NotificationSchema(only=fields, many=True)
+    result = schema.dump(user.notifications)
+
+    return {"success": True, "data": {"notifications": result}}, 200
 
 
 @notifications.route("/<notificationId>", methods=["DELETE"])

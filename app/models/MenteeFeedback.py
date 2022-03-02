@@ -2,7 +2,7 @@ from app import db
 from app.models.BaseModel import BaseModel
 
 
-class MenteeFeedback(BaseModel):
+class MenteeFeedback(db.Model):
     __tablename__ = "mentee_feedback"
 
     id = db.Column(db.Integer, primary_key=True)
