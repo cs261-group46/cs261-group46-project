@@ -1,4 +1,10 @@
-import React, { FC, FormEventHandler, useCallback, useEffect } from "react";
+import React, {
+  FC,
+  FormEventHandler,
+  useCallback,
+  useContext,
+  useEffect,
+} from "react";
 import { useNavigate } from "react-router-dom";
 import { get, index, update } from "../../../api/api";
 import Button from "../../../components/UI/Button/Button";
@@ -10,6 +16,7 @@ import {
 import useInput from "../../../hooks/UseInput/UseInput";
 import UseVerifyAuth from "../../../hooks/UseVerifyAuth/UseVerifyAuth";
 import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
+import UserDataContext from "../../../store/UserDataContext";
 
 interface MentorSkillsProps {}
 
@@ -18,8 +25,11 @@ function validateInterests(_experises: MultiSelectOptions<number>) {
 }
 
 const MentorSkills: FC<MentorSkillsProps> = () => {
+  const userDataCtx = useContext(UserDataContext);
   UseVerifyAuth();
   const navigate = useNavigate();
+
+  if (!userDataCtx.mentorId) navigate("/dashboard");
 
   const getTopics = async (startsWith: string) => {
     try {
@@ -56,6 +66,7 @@ const MentorSkills: FC<MentorSkillsProps> = () => {
     try {
       const data = await get({
         resource: "mentors",
+        entity: userDataCtx.mentorId as number,
         args: {
           fields: "topics",
         },
@@ -83,6 +94,7 @@ const MentorSkills: FC<MentorSkillsProps> = () => {
       };
       await update({
         resource: "mentors",
+        entity: userDataCtx.mentorId as number,
         body: requestBody,
       });
       navigate("/dashboard"); // show message instead

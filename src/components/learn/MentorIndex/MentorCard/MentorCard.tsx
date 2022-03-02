@@ -5,6 +5,7 @@ import { Mentor } from "../MentorIndex.d";
 import Title from "../../../UI/Title/Title";
 import Tag from "../../../UI/Tag/Tag";
 import Button from "../../../UI/Button/Button";
+import { custom } from "../../../../api/api";
 
 interface MentorCardProps {
   mentor: Mentor;
@@ -17,23 +18,17 @@ const MentorCard: FC<MentorCardProps> = (props) => {
 
   const requestMentorHandler = async () => {
     try {
-      const requestBody = {
+      const body = {
         mentor: props.mentor.id,
       };
 
-      const response = await fetch("/api/mentors/request", {
+      const data = await custom({
+        endpoint: "/mentors/request",
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-        body: JSON.stringify(requestBody), // body data type must match "Content-Type" header
+        body: body,
       });
-      const data = await response.json();
 
-      if (!response.ok) {
-        throw new Error(data.errors || ["Unexpected error occurred"]);
-      }
+      
     } catch (errors) {
       console.log(errors);
     }

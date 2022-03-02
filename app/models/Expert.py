@@ -19,10 +19,10 @@ class Expert(BaseModel):
 
     user = db.relationship("User", backref=db.backref("expert", uselist=False))
 
-
+    default_fields = ["topics", "user"]
 
     def __repr__(self):
-        return f"Expert('')"
+        return f'<Expert \n User: {self.user} \n Topics : {self.topics}>'
 
     def commit(self):
         db.session.add(self)

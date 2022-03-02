@@ -6,7 +6,7 @@ notifications = Blueprint("api_notifications", __name__,
                           url_prefix="/notifications")
 
 
-@notifications.route("/-1", methods=["GET"])
+@notifications.route("/", methods=["GET"])
 @auth_required()
 def index(user=None):
     fields = []
@@ -15,7 +15,7 @@ def index(user=None):
         fields = [] if request.args.get(
             'fields') is None else request.args.get('fields').split(',')
 
-    return {"data": {"notifications": [notification.to_dict(show=fields) for notification in user.notifications]}}, 200
+    return {"success": True, "data": {"notifications": [notification.to_dict(show=fields) for notification in user.notifications]}}, 200
 
 
 @notifications.route("/<notificationId>", methods=["DELETE"])

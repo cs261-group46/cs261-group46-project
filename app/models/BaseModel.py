@@ -167,14 +167,14 @@ class BaseModel(db.Model):
             check = '%s.%s' % (path, key)
             if check in hide or key in hidden:
                 continue
-            if show_all or key is 'id' or check in show or key in default:
+            if show_all or key == 'id' or check in show or (key in default and show is None):
                 ret_data[key] = getattr(self, key)
 
         for key in relationships:
             check = '%s.%s' % (path, key)
             if check in hide or key in hidden:
                 continue
-            if show_all or check in show or key in default:
+            if show_all or check in show or (key in default and show is None):
                 hide.append(check)
                 is_list = self.__mapper__.relationships[key].uselist
                 if is_list:
@@ -188,12 +188,15 @@ class BaseModel(db.Model):
                         ))
                 else:
                     if self.__mapper__.relationships[key].query_class is not None:
-                        ret_data[key] = getattr(self, key).to_dict(
-                            show=show,
-                            hide=hide,
-                            path=('%s.%s' % (path, key.lower())),
-                            show_all=show_all,
-                        )
+                        try:
+                            ret_data[key] = getattr(self, key).to_dict(
+                                show=show,
+                                hide=hide,
+                                path=('%s.%s' % (path, key.lower())),
+                                show_all=show_all,
+                            )
+                        except AttributeError:
+                            ret_data[key] = None
                     else:
                         ret_data[key] = getattr(self, key)
 
@@ -203,7 +206,7 @@ class BaseModel(db.Model):
             check = '%s.%s' % (path, key)
             if check in hide or key in hidden:
                 continue
-            if show_all or check in show or key in default:
+            if show_all or check in show or (key in default and show is None):
                 val = getattr(self, key)
                 try:
                     ret_data[key] = json.loads(json.dumps(val))

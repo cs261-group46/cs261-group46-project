@@ -23,10 +23,11 @@ def index(user=None):
     # TODO: VALIDATE
 
     # Need to introduce some filters ?
-    mentors = Mentor.query.all()
+    mentors = Mentor.query
 
-    if "suitable" in filters:
-        mentors = sort_mentors(mentors, user)
+    # if "suitable" in filters:
+        # mentors = mentors.query.
+    #     mentors = sort_mentors(mentors, user)
 
     mentors = mentors.all()
     return {"success": True, "data": {"mentors": [mentor.to_dict(show=fields) for mentor in mentors]}}, 200
@@ -47,14 +48,14 @@ def requestMentor(user=None):
         user_id=mentor.user_id,
         description="You received a new mentorship request").commit()
 
-    return {"success" : True}, 200
+    return {"success": True}, 200
 
 
 
 
-@mentors.route("/-1", methods=["GET"])
+@mentors.route("/<mentorId>", methods=["GET"])
 @auth_required()
-def get(user=None):
+def get(mentorId, user=None):
     fields = request.args.get('fields').split(',')
     # TODO: VALIDATE
     mentor = user.mentor
@@ -73,7 +74,7 @@ def store(user=None):
     return {"success": True}, 200
 
 
-@mentors.route("/-1", methods=["PUT"])
+@mentors.route("/<mentorId>", methods=["PUT"])
 @auth_required()
 def update(user=None):
     data = dict(request.get_json())
@@ -91,9 +92,9 @@ def update(user=None):
     return {"success": True}, 200
 
 
-# TODO : REMOVE THIS ROUTE
-@mentors.route("/verify", methods=["GET"])
-@auth_required()
-def verify(user=None):
-    isMentor = not Mentor.query.filter_by(user_id=user.id).first() is None
-    return {"isMentor": isMentor}
+# # TODO : REMOVE THIS ROUTE
+# @mentors.route("/verify", methods=["GET"])
+# @auth_required()
+# def verify(user=None):
+#     isMentor = not Mentor.query.filter_by(user_id=user.id).first() is None
+#     return {"isMentor": isMentor}

@@ -14,11 +14,13 @@ const MentorIndex: FC<MentorIndexProps> = () => {
       const data = await index({
         resource: "mentors",
         args: {
-          fields: ["user", "about", "topics"],
+          fields: ["user", "about", "topics", "first_name"],
           filters: ["suitable"],
         },
       });
-      console.log(data.mentors);
+
+      console.log(data);
+
       setMentors(data.mentors);
     } catch (errors) {
       console.log(errors);

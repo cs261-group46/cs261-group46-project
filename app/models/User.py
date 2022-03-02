@@ -38,7 +38,7 @@ class User(BaseModel):
     hidden_fields = ['hashed_password']
 
     def __repr__(self):
-        return '<User %r>' % self.email
+        return f'<User \n Email: {self.email} \n FirstName: {self.first_name} \n LastName: {self.last_name}>'
 
     def commit(self):
         db.session.add(self)

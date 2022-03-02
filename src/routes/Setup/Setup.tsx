@@ -1,4 +1,4 @@
-import React, { FormEventHandler, useState } from "react";
+import React, { FormEventHandler, useContext, useState } from "react";
 import MainLayout from "../../layouts/MainLayout/MainLayout";
 import Button from "../../components/UI/Button/Button";
 import styles from "./Setup.module.scss";
@@ -12,8 +12,11 @@ import { Link, useNavigate } from "react-router-dom";
 import UseVerifyAuth from "../../hooks/UseVerifyAuth/UseVerifyAuth";
 import { index, store } from "../../api/api";
 import SearchSelect from "../../components/UI/FormInput/SearchSelect/SearchSelect";
+import UserDataContext from "../../store/UserDataContext";
 
 const Setup = () => {
+  const userDataCtx = useContext(UserDataContext);
+
   UseVerifyAuth();
   const navigate = useNavigate();
   const [showExpertise, setShowExpertise] = useState(0);
@@ -66,6 +69,7 @@ const Setup = () => {
         resource: "experts",
         body: requestBody,
       });
+      userDataCtx.updateExpertId();
       navigate("/dashboard"); // show message instead
     } catch (errors) {
       console.log(errors);
