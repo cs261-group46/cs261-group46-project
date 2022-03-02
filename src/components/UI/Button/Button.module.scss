@@ -1,4 +1,4 @@
-@import "../../../variables";
+@import '../../../variables';
 
 .Button {
   width: min-content;
@@ -6,6 +6,7 @@
   margin: 20px 0;
   text-decoration: none;
   width: max-content;
+
   button {
     font-weight: bold;
     display: flex;
