@@ -5,8 +5,7 @@ experts_topics = db.Table('experts_topics',
                           db.Column('expert_id', db.Integer, db.ForeignKey(
                               'experts.id'), primary_key=True),
                           db.Column('topic_id', db.Integer, db.ForeignKey(
-                              'topics.id'), primary_key=True),
-                          db.Column('priority', db.Integer)
+                              'topics.id'), primary_key=True)
                           )
 
 

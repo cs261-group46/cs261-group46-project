@@ -39,6 +39,7 @@ const MentorSkills: FC<MentorSkillsProps> = () => {
           startswith: startsWith,
         },
       });
+
       const options: MultiSelectOptions<number> = data.topics.map(
         ({ label, id }: { label: string; id: number }) => ({ label, value: id })
       );
@@ -71,6 +72,8 @@ const MentorSkills: FC<MentorSkillsProps> = () => {
           fields: "topics",
         },
       });
+      console.log(data);
+
       const topicsOptions: MultiSelectOptions<number> = data.mentor.topics.map(
         (topic: { id: number; name: string }) => ({
           value: topic.id,

@@ -48,8 +48,8 @@ const MentorSignup: FC<MentorSignupProps> = () => {
     isValueValid: isCapacityValueValid,
     changeHandler: capacityChangeHandler,
     blurHandler: capacityBlurHandler,
-    enteredValue: capacity,
-  } = useInput<string>("", () => true);
+    enteredValue: enteredCapacity,
+  } = useInput<string>("", (input) => parseInt(input) > 0);
 
   const showAllErrors = () => {
     aboutBlurHandler();
@@ -61,6 +61,7 @@ const MentorSignup: FC<MentorSignupProps> = () => {
       const requestBody = {
         skills: enteredSkills.map((skill) => skill.value),
         about: enteredAbout,
+        capacity: enteredCapacity,
       };
       await store({
         resource: "mentors",
@@ -135,7 +136,7 @@ const MentorSignup: FC<MentorSignupProps> = () => {
           id={"capacity"}
           label={"How many mentees do you want?"}
           placeholder={"e.g. 5"}
-          value={capacity}
+          value={enteredCapacity}
           type={"number"}
           isValid={isCapacityInputValid}
           onChange={capacityChangeHandler}

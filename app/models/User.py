@@ -6,13 +6,13 @@ from datetime import datetime
 from app.models.BaseModel import BaseModel
 
 
-users_topics = db.Table('users_topics',
-                        db.Column('user_id', db.Integer, db.ForeignKey(
-                            'users.id'), primary_key=True),
-                        db.Column('topic_id', db.Integer, db.ForeignKey(
-                            'topics.id'), primary_key=True),
-                        db.Column('priority', db.Integer)
-                        )
+# users_topics = db.Table('users_topics',
+#                         db.Column('user_id', db.Integer, db.ForeignKey(
+#                             'users.id'), primary_key=True),
+#                         db.Column('topic_id', db.Integer, db.ForeignKey(
+#                             'topics.id'), primary_key=True),
+#                         db.Column('priority', db.Integer)
+#                         )
 
 class User(BaseModel):
     __tablename__ = 'users'
@@ -26,8 +26,8 @@ class User(BaseModel):
     account_creation_date = db.Column(db.DateTime, default=datetime.now())
     verified = db.Column(db.Boolean, default=False)
     permissions = db.Column(db.Integer, default=0)
-    topics = db.relationship(
-        'Topic', secondary=users_topics, backref='users', lazy=True)
+    # topics = db.relationship(
+    #     'Topic', secondary=users_topics, backref='users', lazy=True)
 
     department_id = db.Column(db.Integer, db.ForeignKey(
         'departments.id'), nullable=False)

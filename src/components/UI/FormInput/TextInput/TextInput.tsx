@@ -16,8 +16,8 @@ interface TextInputProps {
   onBlur: () => void;
 }
 
-const TextInput: FC<TextInputProps> = props => {
-  const changeHandler: ChangeEventHandler<HTMLInputElement> = event => {
+const TextInput: FC<TextInputProps> = (props) => {
+  const changeHandler: ChangeEventHandler<HTMLInputElement> = (event) => {
     const target = event.target;
     if (target) {
       props.onChange(target.value);
@@ -41,6 +41,7 @@ const TextInput: FC<TextInputProps> = props => {
       <input
         value={props.value}
         type={props.type ?? "text"}
+        min={0}
         name={props.id}
         id={props.id}
         placeholder={props.placeholder}

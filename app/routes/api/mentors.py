@@ -1,8 +1,10 @@
 from flask import Blueprint, request
 from sqlalchemy import func, any_
+from app import db
+
 
 from app.middleware.auth import auth_required
-from app import Topic, Mentor, Notification
+from app import Topic, Mentor, Notification, MentorTopic
 from app.models.MentorshipRequest import MentorshipRequest
 from app.utils.mentor_reccomendations import sort_mentors
 
@@ -17,7 +19,7 @@ def index(user=None):
 
     if request.args:
         fields = [] if request.args.get(
-             'fields') is None else request.args.get('fields').split(',')
+            'fields') is None else request.args.get('fields').split(',')
         filters = [] if request.args.get(
             'filters') is None else request.args.get('filters').split(',')
 
@@ -27,7 +29,7 @@ def index(user=None):
     mentors = Mentor.query
 
     # if "suitable" in filters:
-        # mentors = mentors.query.
+    # mentors = mentors.query.
     #     mentors = sort_mentors(mentors, user)
 
     mentors = mentors.all()
@@ -54,16 +56,15 @@ def requestMentor(user=None):
     return {"success": True}, 200
 
 
-
-
 @mentors.route("/<mentorId>", methods=["GET"])
 @auth_required()
 def get(mentorId, user=None):
     fields = request.args.get('fields').split(',')
     # TODO: VALIDATE
+
     mentor = user.mentor
     print(mentor)
-    return {"success": True, "data": {"mentor": mentor.to_dict(show=fields)}}, 200
+    return {"success": True, "data": {"mentor": mentor.to_dict()}}, 200
 
 
 @mentors.route("/", methods=["POST"])
@@ -72,8 +73,22 @@ def store(user=None):
     data = dict(request.get_json())
     # TODO: VALIDATE
     selectedTopics = Topic.query.filter(Topic.id.in_(data.get("skills"))).all()
-    Mentor(user_id=user.id, topics=selectedTopics,
-           about=data.get("about")).commit()
+    mentor = Mentor(user_id=user.id, about=data.get("about"),
+                    capacity=data.get("capacity")).commit()
+
+    count = 1
+    for topic in selectedTopics:
+        mentor_topic = MentorTopic(priority=count)
+        mentor_topic.topic = topic
+        mentor_topic.mentor = mentor
+        db.session.add(mentor_topic)
+        count += 1
+    #     db.session.add(mentor_topic)
+    #
+    db.session.commit()
+
+    print(mentor.topics)
+
     return {"success": True}, 200
 
 
