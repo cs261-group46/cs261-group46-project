@@ -118,6 +118,7 @@ const MentorSignup: FC<MentorSignupProps> = () => {
           onChange={skillsChangeHandler}
           onBlur={skillsBlurHandler}
           searchPromise={searchPromise}
+          type={"draggable"}
         />
 
         <BigTextInput
