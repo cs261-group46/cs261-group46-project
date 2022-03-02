@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import Title from '../../../components/UI/Title/Title';
+// import Title from '../../../components/UI/Title/Title';
 import styles from './Event.module.scss';
 import Card from '../../../components/UI/Card/Card';
 import { EventProps } from './Event.d';
