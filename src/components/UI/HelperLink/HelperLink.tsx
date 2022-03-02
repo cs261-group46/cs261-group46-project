@@ -13,7 +13,7 @@ const HelperLink: FC<HelperLinkProps> = (props) => {
  
 
   return (
-    <div className={styles.HelperLink}>
+    <div className={styles.HelperLink} data-testid={"HelperLink"}>
       <p>{props.description}</p>
       {props.href && <Link to={props.href}>{props.linkText}</Link>}
       {!props.href && <button onClick={props.onClick}>{props.linkText}</button>}

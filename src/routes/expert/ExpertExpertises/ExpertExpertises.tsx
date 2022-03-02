@@ -130,6 +130,7 @@ const ExpertExpertises: FC<ExpertExpertisesProps> = () => {
           Apply
         </Button>
       </form>
+      <div data-testid={"ExpertExpertises"}/>
     </DashboardSubpageLayout>
     // <div className={styles.ExpertExpertises} data-testid="ExpertExpertises">
     //   ExpertExpertises Component

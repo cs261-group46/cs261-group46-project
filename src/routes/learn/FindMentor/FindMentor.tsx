@@ -13,6 +13,7 @@ const MenteeSignup: FC<MenteeSignupProps> = () => {
     <DashboardSubpageLayout title="Find a Mentor">
       <Title text={"Recommended Mentors"} />
       <MentorIndex />
+      <div data-testid="FindMentor"/>
     </DashboardSubpageLayout>
   );
 };

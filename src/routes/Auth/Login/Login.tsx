@@ -92,7 +92,7 @@ const Login: FC<LoginProps> = (props) => {
 
   return (
     <MainLayout title="Login">
-      <form onSubmit={submitHandler}>
+      <form onSubmit={submitHandler} data-testid={"Login"}>
         <TextInput
           icon="✉️"
           value={enteredEmail}

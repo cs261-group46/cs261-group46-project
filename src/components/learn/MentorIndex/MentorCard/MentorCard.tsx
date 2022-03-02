@@ -35,7 +35,7 @@ const MentorCard: FC<MentorCardProps> = (props) => {
   };
   return (
     <Card>
-      <div className={styles.MentorCard}>
+      <div className={styles.MentorCard} data-testid={"MentorCard"}>
         <div
           className={styles.Name}
         >{`${props.mentor.user.first_name} ${props.mentor.user.last_name}`}</div>

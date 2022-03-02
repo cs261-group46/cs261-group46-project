@@ -126,6 +126,7 @@ const Interests: FC<InterestsProps> = () => {
           Apply
         </Button>
       </form>
+      <div data-testid={"Interests"}/>
     </DashboardSubpageLayout>
     // <div className={styles.Interests} data-testid="Interests">
     //   Interests Component

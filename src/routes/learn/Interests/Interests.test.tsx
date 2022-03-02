@@ -1,13 +1,14 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
-import YourInterests from './Interests';
+import Interests from './Interests';
+import {BrowserRouter} from "react-router-dom";
 
 describe('<YourInterests />', () => {
   test('it should mount', () => {
-    render(<YourInterests />);
+    render(<BrowserRouter><Interests /></BrowserRouter>);
     
-    const yourInterests = screen.getByTestId('YourInterests');
+    const yourInterests = screen.getByTestId('Interests');
 
     expect(yourInterests).toBeInTheDocument();
   });
