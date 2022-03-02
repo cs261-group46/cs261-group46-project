@@ -11,7 +11,7 @@ const BarChart : FC<BarChartProp> = (props) => {
 
     return (
         <div className={styles.Container}>
-            <p>Completed Goals : {percentageDone.toFixed(2)}% </p>
+            <p>Completed Goals - {percentageDone.toFixed(2)}% </p>
             <div className={styles.BarChart}  style={{backgroundImage: `linear-gradient(to right, #07A417 0%, #07A417 ${percentageDone}%,#393838 ${percentageDone}%,#393838 100%)`}} data-testid='BarChart'> 
                 &nbsp;
             </div>

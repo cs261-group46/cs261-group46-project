@@ -39,7 +39,7 @@ const YourMentees: FC<YourMenteeProps> = () => {
 
     const currentMentee = 3; //TODO: get from database
 
-    //TODO: get list of mentees from database
+    //TODO: get list of mentees from database, and if tehy dont have any return a different thingy
     const menteelist = exampleMentees.map( (mentee) => 
         <MenteeCard firstname={mentee.firstname} lastname={mentee.lastname} id={mentee.id} completedGoal={mentee.completedGoal} totalGoal={mentee.totalGoal}/> 
     );
