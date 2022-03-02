@@ -124,6 +124,7 @@ const MentorSkills: FC<MentorSkillsProps> = () => {
           onBlur={skillsBlurHandler}
           icon="💪"
           searchPromise={searchPromise}
+          type={"draggable"}
         />
 
         <Button icon="➡️" buttonStyle="primary" type="submit">
