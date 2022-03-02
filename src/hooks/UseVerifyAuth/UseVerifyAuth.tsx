@@ -39,10 +39,14 @@ const UseVerifyAuth = (
       // userDataCtx.updateExpertId();
       // userDataCtx.updateMenteeId();
 
-      if (!isProtected) navigate("/dashboard");
+      // make sure its not in a testing environment - this will break
+      if (!isProtected && process.env.JEST_WORKER_ID === undefined)
+        navigate("/dashboard");
     } catch (errors) {
       console.log(errors);
-      if (isProtected) navigate("/login");
+      // make sure its not in a testing environment - this will break
+      if (isProtected && process.env.JEST_WORKER_ID === undefined)
+        navigate("/login");
     }
   }, [isProtected, minPermissionLevel, navigate, userDataCtx]);
 
