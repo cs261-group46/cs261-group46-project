@@ -22,7 +22,7 @@ const MentorCard: FC<MentorCardProps> = (props) => {
         mentor: props.mentor.id,
       };
 
-      const data = await custom({
+      await custom({
         endpoint: "/mentors/request",
         method: "POST",
         body: body,

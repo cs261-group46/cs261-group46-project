@@ -20,7 +20,7 @@ function validatePassword(password: string) {
   return password.length > 0;
 }
 
-const Login: FC<LoginProps> = (props) => {
+const Login: FC<LoginProps> = () => {
   UseVerifyAuth(0, false);
   const userDataCtx = useContext(UserDataContext);
 
@@ -47,7 +47,7 @@ const Login: FC<LoginProps> = (props) => {
     };
 
     try {
-      const data = await custom({
+      await custom({
         endpoint: "/auth/login",
         method: "POST",
         body: body,

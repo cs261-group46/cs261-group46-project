@@ -77,7 +77,7 @@ const Interests: FC<InterestsProps> = () => {
     } catch (errors) {
       console.log(errors);
     }
-  }, [interestsChangeHandler]);
+  }, [interestsChangeHandler, userDataCtx.userId]);
 
   useEffect(() => {
     getInterests();
