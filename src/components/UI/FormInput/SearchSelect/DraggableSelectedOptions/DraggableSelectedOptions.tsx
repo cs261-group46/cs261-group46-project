@@ -12,6 +12,7 @@ interface SelectedOptionsProps<T> {
 function DraggableSelectedOptions<T>(props: PropsWithChildren<SelectedOptionsProps<T>>) {
   const [currentDragged, setCurrentDragged] = useState<number>();
   const ref = useRef(null);
+  const refs = useRef<HTMLDivElement[]>([]);
 
   const selection = props.selected.map((option, index) =>
         <Draggable
@@ -25,7 +26,7 @@ function DraggableSelectedOptions<T>(props: PropsWithChildren<SelectedOptionsPro
               reorderList();
             }}
         >
-          <div id={`${option.label}-${index}`} ref={ref} className={`${styles.DraggableOption} handle`} style={{zIndex: currentDragged === index ? 1: "initial"}}>
+          <div ref={el => {if (el) refs.current[index] = el}} className={`${styles.DraggableOption} handle`} style={{zIndex: currentDragged === index ? 1: "initial"}}>
             <p>{option.label}</p>
             <button onClick={props.onRemoveSelected.bind(null, option.value)}>X</button>
           </div>
@@ -34,7 +35,8 @@ function DraggableSelectedOptions<T>(props: PropsWithChildren<SelectedOptionsPro
 
   function reorderList() {
     const sorted = props.selected.map<[number, MultiSelectOption<T>]>((option, index) => {
-      const div = document.getElementById(`${option.label}-${index}`)
+      const div = refs.current[index];
+
       return [div?.getBoundingClientRect().top ?? 0, option];
     }).sort((a, b) => a[0] - b[0]).map(height => height[1]);
 
