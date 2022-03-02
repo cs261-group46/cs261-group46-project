@@ -33,7 +33,7 @@ const Setup = () => {
           startswith: startsWith,
         },
       });
-      const options: MultiSelectOptions<number> = data.map(
+      const options: MultiSelectOptions<number> = data.topics.map(
         ({ label, id }: { label: string; id: number }) => ({ label, value: id })
       );
       return options;

@@ -10,11 +10,9 @@ notifications = Blueprint("api_notifications", __name__,
 @auth_required()
 def index(user=None):
     fields = []
-
     if request.args:
         fields = [] if request.args.get(
             'fields') is None else request.args.get('fields').split(',')
-
     return {"success": True, "data": {"notifications": [notification.to_dict(show=fields) for notification in user.notifications]}}, 200
 
 
@@ -25,14 +23,9 @@ def destory(user=None, notificationId=None):
 
     notification = Notification.query.filter_by(id=notificationId).first()
 
+    if (notification.user_id != user.id):
+        return {"success": False, "errors": ["You don't have the permission to delete this notification."]}, 401
+
     db.session.delete(notification)
     db.session.commit()
-
-    # fields = []
-
-    # if request.args:
-    #     fields = [] if request.args.get(
-    #         'fields') is None else request.args.get('fields').split(',')
-
-    # return {"data": {"notifications": [notification.to_dict(show=fields) for notification in user.notifications]}}, 200
-    return {"success": True}
+    return {"success": True}, 200

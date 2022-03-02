@@ -15,6 +15,7 @@ import Homepage from "./routes/Homepage/Homepage.lazy";
 import ViewWorkshops from "./routes/workshops/ViewWorkshops/ViewWorkshops.lazy";
 import ComponentPlaygound from "./routes/ComponentPlaygound/ComponentPlaygound.lazy";
 import PlansOfAction from "./routes/learn/PlansOfAction/PlansOfAction.lazy";
+import YourMentor from "./routes/learn/YourMentor/YourMentor";
 
 function App() {
   return (
@@ -36,6 +37,8 @@ function App() {
 
           <Route path="/learn">
             <Route path="find-mentor" element={<MenteeSignup />} />
+            <Route path="your-mentor" element={<YourMentor />} />
+
             <Route path="interests" element={<YourInterests />} />
             <Route path="plans-of-action" element={<PlansOfAction />} />
           </Route>

@@ -54,11 +54,13 @@ const Dashboard: FC<DashboardProps> = () => {
         },
       });
 
+      console.log(data.user.notifications);
+
       const mentorNotifications: NotificationType<"mentoring">[] = [];
       const learnNotifications: NotificationType<"learning">[] = [];
       const expertNotifcations: NotificationType<"expertise">[] = [];
 
-      data.notifications.forEach(
+      data.user.notifications.forEach(
         (
           notification: NotificationType<"learning" | "mentoring" | "expertise">
         ) => {

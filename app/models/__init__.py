@@ -11,3 +11,4 @@ from app.models.MeetingFeedback import MeetingFeedback
 from app.models.MenteeFeedback import MenteeFeedback
 from app.models.MentorFeedback import MentorFeedback
 from app.models.Notification import Notification
+from app.models.MentorshipRequest import MentorshipRequest

@@ -2,12 +2,12 @@ import React, { FC, useEffect, useState } from "react";
 import { index } from "../../../api/api";
 import MentorCard from "./MentorCard/MentorCard";
 import styles from "./MentorIndex.module.scss";
-import { Mentor } from "./MentorIndex.d";
+import { MentorType } from "../../../types/Mentor";
 
 interface MentorIndexProps {}
 
 const MentorIndex: FC<MentorIndexProps> = () => {
-  const [mentors, setMentors] = useState<Mentor[]>([]);
+  const [mentors, setMentors] = useState<MentorType[]>([]);
 
   const indexMentors = async () => {
     try {

@@ -1,14 +1,14 @@
 import React, { FC } from "react";
 import Card from "../../../UI/Card/Card";
 import styles from "./MentorCard.module.scss";
-import { Mentor } from "../MentorIndex.d";
+import { MentorType } from "../../../../types/Mentor";
 import Title from "../../../UI/Title/Title";
 import Tag from "../../../UI/Tag/Tag";
 import Button from "../../../UI/Button/Button";
 import { custom } from "../../../../api/api";
 
 interface MentorCardProps {
-  mentor: Mentor;
+  mentor: MentorType;
 }
 
 const MentorCard: FC<MentorCardProps> = (props) => {
@@ -27,8 +27,6 @@ const MentorCard: FC<MentorCardProps> = (props) => {
         method: "POST",
         body: body,
       });
-
-      
     } catch (errors) {
       console.log(errors);
     }
@@ -40,6 +38,8 @@ const MentorCard: FC<MentorCardProps> = (props) => {
           className={styles.Name}
         >{`${props.mentor.user.first_name} ${props.mentor.user.last_name}`}</div>
         <div className={styles.Details}>
+          <Title className={styles.Title} text={"Email"} />
+          <p>{props.mentor.user.email}</p>
           <Title className={styles.Title} text={"About"} />
           <p>{props.mentor.about}</p>
           <Title className={styles.Title} text={"Skills"} />

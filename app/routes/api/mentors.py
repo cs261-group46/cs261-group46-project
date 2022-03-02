@@ -3,6 +3,7 @@ from sqlalchemy import func, any_
 
 from app.middleware.auth import auth_required
 from app import Topic, Mentor, Notification
+from app.models.MentorshipRequest import MentorshipRequest
 from app.utils.mentor_reccomendations import sort_mentors
 
 mentors = Blueprint("api_mentors", __name__, url_prefix="/mentors")
@@ -33,7 +34,7 @@ def index(user=None):
     return {"success": True, "data": {"mentors": [mentor.to_dict(show=fields) for mentor in mentors]}}, 200
 
 
-@mentors.route("/request", methods=["POST"])
+@mentors.route("/request/", methods=["POST"])
 @auth_required()
 def requestMentor(user=None):
     data = dict(request.get_json())
@@ -42,11 +43,13 @@ def requestMentor(user=None):
 
     mentor = Mentor.query.filter_by(id=mentor_id).first()
 
+    MentorshipRequest(mentor_id=mentor.id, user_id=user.id).commit()
+
     Notification(
         notification_level="alert",
         notification_type="mentoring",
         user_id=mentor.user_id,
-        description="You received a new mentorship request").commit()
+        description="You received a new mentorship request!").commit()
 
     return {"success": True}, 200
 
@@ -76,13 +79,16 @@ def store(user=None):
 
 @mentors.route("/<mentorId>", methods=["PUT"])
 @auth_required()
-def update(user=None):
+def update(mentorId=None, user=None):
     data = dict(request.get_json())
     # TODO: VALIDATE
-    mentor = user.mentor
+    mentor = Mentor.query.filter_by(id=mentorId).first()
 
     if mentor is None:
-        return {"success": False, "errors": ["User not signed up as mentor"]}, 401
+        return {"success": False, "errors": ["Requested mentor not found."]}, 400
+
+    if mentor.user_id != user.id:
+        return {"success": False, "errors": ["You don't have the permissions to update a mentor"]}, 401
 
     selectedTopics = Topic.query.filter(Topic.id.in_(data.get("skills"))).all()
 

@@ -167,14 +167,14 @@ class BaseModel(db.Model):
             check = '%s.%s' % (path, key)
             if check in hide or key in hidden:
                 continue
-            if show_all or key == 'id' or check in show or (key in default and show is None):
+            if show_all or key == 'id' or check in show or key in default:
                 ret_data[key] = getattr(self, key)
 
         for key in relationships:
             check = '%s.%s' % (path, key)
             if check in hide or key in hidden:
                 continue
-            if show_all or check in show or (key in default and show is None):
+            if show_all or check in show or key in default:
                 hide.append(check)
                 is_list = self.__mapper__.relationships[key].uselist
                 if is_list:

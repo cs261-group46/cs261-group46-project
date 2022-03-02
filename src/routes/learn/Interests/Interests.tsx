@@ -37,7 +37,7 @@ const Interests: FC<InterestsProps> = () => {
           startswith: startsWith,
         },
       });
-      const options: MultiSelectOptions<number> = data.map(
+      const options: MultiSelectOptions<number> = data.topics.map(
         ({ label, id }: { label: string; id: number }) => ({ label, value: id })
       );
       return options;
@@ -126,7 +126,7 @@ const Interests: FC<InterestsProps> = () => {
           Apply
         </Button>
       </form>
-      <div data-testid={"Interests"}/>
+      <div data-testid={"Interests"} />
     </DashboardSubpageLayout>
     // <div className={styles.Interests} data-testid="Interests">
     //   Interests Component
