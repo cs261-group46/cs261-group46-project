@@ -15,25 +15,33 @@ const exampleMentees = [
     {
         firstname: "John",
         lastname: "Smith",
-        completedGoal: 4,
+        completedGoal: 3,
         totalGoal: 10,
-        startDate: 1, //TODO, there is no date in the database
+        id: 4
     },
     {
         firstname: "Kai",
         lastname: "Smith",
         completedGoal: 2,
-        totalGoal: 4,
+        totalGoal: 7,
+        id: 5
+    },
+    {
+        firstname: "Amy",
+        lastname: "Smith",
+        completedGoal: 6,
+        totalGoal: 10,
+        id: 6
     }
 ]
 
 const YourMentees: FC<YourMenteeProps> = () => {
 
-    const currentMentee = 3; {/*TODO: get from database */}
+    const currentMentee = 3; //TODO: get from database
     
-    {/* Replace with MenteeCard */}
+    /* Replace with MenteeCard */
     const menteelist = exampleMentees.map( (mentee) => 
-        <MenteeCard firstname={mentee.firstname} lastname={mentee.lastname}/> 
+        <MenteeCard firstname={mentee.firstname} lastname={mentee.lastname} id={mentee.id} completedGoal={mentee.completedGoal} totalGoal={mentee.totalGoal}/> 
     );
     /* app/routes/api */
     console.log(exampleMentees);
