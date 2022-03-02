@@ -17,6 +17,7 @@
     "react": "^17.0.2",
     "react-datepicker": "^4.6.0",
     "react-dom": "^17.0.2",
+    "react-draggable": "^4.4.4",
     "react-router-dom": "^6.2.1",
     "react-scripts": "5.0.0",
     "react-twemoji": "npm:react-twemoji-17@^0.4.0",
