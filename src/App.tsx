@@ -44,6 +44,12 @@ function App() {
                       mentee: 'Reiss',
                       mentor: 'Mohammed',
                     },
+                    {
+                      sessionType: 'Workshop',
+                      subject: 'Engineering',
+                      mentee: 'Mohammed',
+                      mentor: 'Reiss',
+                    },
                   ] as EventProps[]
                 }
               />

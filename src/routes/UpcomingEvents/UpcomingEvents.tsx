@@ -12,9 +12,11 @@ interface UpcomingEventsProps {
 const UpcomingEvents: FC<UpcomingEventsProps> = props => {
   return (
     <MainLayout title={'Upcoming Events'}>
-      {props.events.map((event_props, index) => {
-        return <Event event={event_props} key={index} />;
-      })}
+      <div className={styles.container}>
+        {props.events.map((event_props, index) => {
+          return <Event event={event_props} key={index} />;
+        })}
+      </div>
 
       <div data-testid='UpcomingEvents' />
     </MainLayout>
