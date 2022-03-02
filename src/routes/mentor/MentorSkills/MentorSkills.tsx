@@ -84,7 +84,7 @@ const MentorSkills: FC<MentorSkillsProps> = () => {
     } catch (errors) {
       console.log(errors);
     }
-  }, [skillsChangeHandler]);
+  }, [skillsChangeHandler, userDataCtx.mentorId]);
 
   useEffect(() => {
     getSkills();
@@ -127,6 +127,7 @@ const MentorSkills: FC<MentorSkillsProps> = () => {
           onBlur={skillsBlurHandler}
           icon="💪"
           searchPromise={searchPromise}
+          type={"draggable"}
         />
 
         <Button icon="➡️" buttonStyle="primary" type="submit">

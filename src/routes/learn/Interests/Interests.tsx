@@ -77,7 +77,7 @@ const Interests: FC<InterestsProps> = () => {
     } catch (errors) {
       console.log(errors);
     }
-  }, [interestsChangeHandler]);
+  }, [interestsChangeHandler, userDataCtx.userId]);
 
   useEffect(() => {
     getInterests();
@@ -120,6 +120,7 @@ const Interests: FC<InterestsProps> = () => {
           onBlur={interestsBlurHandler}
           icon="💪"
           searchPromise={searchPromise}
+          type={"draggable"}
         />
 
         <Button icon="➡️" buttonStyle="primary" type="submit">
