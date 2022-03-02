@@ -4,6 +4,14 @@
   display: flex;
   flex-direction: column;
 
+  .clickedwrapper {
+    z-index: 1;
+
+    .clicked {
+      cursor: grabbing;
+    }
+  }
+
   .DraggableOption {
     margin-top: 20px;
     display: flex;
@@ -18,8 +26,8 @@
     transition-duration: 0.05s;
     outline: 0 solid $sq_dark_gray;
     background-color: $sq_cream;
-    display: flex;
     align-items: center;
+    cursor: grab;
 
     p,
     button {

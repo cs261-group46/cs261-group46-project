@@ -1,9 +1,4 @@
-import React, {
-  MouseEventHandler,
-  PropsWithChildren,
-  useRef,
-  useState,
-} from "react";
+import React, { PropsWithChildren, useRef, useState } from "react";
 import styles from "./DraggableSelectedOptions.module.scss";
 import {
   MultiSelectOptions,
@@ -11,7 +6,8 @@ import {
   RemoveSelectedHandler,
   SetSelectedHandler,
 } from "../SearchSelect.d";
-import Draggable from "react-draggable";
+import Draggable, { DraggableBounds } from "react-draggable";
+import Label from "../../Label/Label";
 
 interface SelectedOptionsProps<T> {
   selected: MultiSelectOptions<T>;
@@ -31,6 +27,22 @@ function DraggableSelectedOptions<T>(
       event.target?.dispatchEvent(event);
   };
 
+  function calcBounds(index: number): DraggableBounds | undefined {
+    const box = refs.current[index]?.getBoundingClientRect();
+    const topBox = refs.current[0]?.getBoundingClientRect();
+    const bottomBox =
+      refs.current[refs.current.length - 1]?.getBoundingClientRect();
+
+    if (box && topBox && bottomBox)
+      return {
+        // the bounds are relative, so need to subtract from pos of top box
+        // also a bit of extra room (height) to make the element a bit smoother
+        top: topBox.top - box.top - box.height,
+        bottom: bottomBox.bottom - box.bottom + box.height,
+      };
+    else return undefined;
+  }
+
   const selection = props.selected.map((option, index) => (
     <Draggable
       axis={"y"}
@@ -39,27 +51,35 @@ function DraggableSelectedOptions<T>(
       nodeRef={ref}
       onStart={() => setCurrentDragged(index)}
       onMouseDown={mouseDownHandler}
+      bounds={calcBounds(index)}
       onStop={() => {
         setCurrentDragged(-1);
         reorderList();
       }}
     >
       <div
-        ref={(el) => {
-          if (el) refs.current[index] = el;
-        }}
-        className={`${styles.DraggableOption} handle`}
-        style={{ zIndex: currentDragged === index ? 1 : "initial" }}
+        ref={ref}
+        className={currentDragged === index ? styles.clickedwrapper : ""}
       >
-        <p>{option.label}</p>
-        <button
-          onMouseDown={(event) => {
-            event.stopPropagation();
-            props.onRemoveSelected(option.value);
+        <div
+          ref={(el) => {
+            if (el) refs.current[index] = el;
           }}
+          className={`${styles.DraggableOption} handle ${
+            currentDragged === index && styles.clicked
+          }`}
+          style={{ zIndex: currentDragged === index ? 1 : "initial" }}
         >
-          X
-        </button>
+          <p>{option.label}</p>
+          <button
+            onMouseDown={(event) => {
+              event.stopPropagation();
+              props.onRemoveSelected(option.value);
+            }}
+          >
+            X
+          </button>
+        </div>
       </div>
     </Draggable>
   ));
@@ -87,6 +107,9 @@ function DraggableSelectedOptions<T>(
       className={styles.DraggableOptions}
     >
       {selection}
+      <Label htmlFor={""}>
+        Drag to rearrange your options in order of priority
+      </Label>
     </div>
   );
 }
