@@ -19,6 +19,9 @@ import {
 import SelectedOptions from "./SelectedOptions/SelectedOptions";
 import Autocomplete from "./Autocomplete/Autocomplete";
 import SystemMessage from "../../SystemMessage/SystemMessage";
+import DraggableSelectedOptions from "./DraggableSelectedOptions/DraggableSelectedOptions";
+
+type OptionsType = "span" | "draggable"
 
 interface MultiSelectProps<T> {
   id: string;
@@ -31,6 +34,7 @@ interface MultiSelectProps<T> {
   limit?: number;
   onChange: (input: MultiSelectOptions<T>) => void;
   onBlur: () => void;
+  type?: OptionsType
 }
 
 function SearchSelect<T>(props: PropsWithChildren<MultiSelectProps<T>>) {
@@ -43,6 +47,7 @@ function SearchSelect<T>(props: PropsWithChildren<MultiSelectProps<T>>) {
   const inputElement = useRef<HTMLSpanElement>(null);
 
   const { searchPromise } = props;
+  const type = props.type ?? "span"
 
   const removeExpertiseHandler: RemoveSelectedHandler<T> = (selected) => {
     const newExpertises = props.value.filter((x) => x.value !== selected);
@@ -131,10 +136,12 @@ function SearchSelect<T>(props: PropsWithChildren<MultiSelectProps<T>>) {
           styles.focusedWithResults
         }`}
       >
-        <SelectedOptions
-          selected={props.value}
-          onRemoveSelected={removeExpertiseHandler}
-        />
+        {type === "span" &&
+            <SelectedOptions
+                selected={props.value}
+                onRemoveSelected={removeExpertiseHandler}
+            />
+        }
 
         <span
           className={styles.search}
@@ -157,6 +164,12 @@ function SearchSelect<T>(props: PropsWithChildren<MultiSelectProps<T>>) {
           onAddSelected={addSelectedHandler}
         />
       )}
+      {type === "draggable" &&
+          <DraggableSelectedOptions
+              selected={props.value}
+              onRemoveSelected={removeExpertiseHandler}
+              onSetSelected={props.onChange}
+          />}
       <SystemMessage
         sort="inline"
         type="alert"
