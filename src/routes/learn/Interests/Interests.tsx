@@ -120,6 +120,7 @@ const Interests: FC<InterestsProps> = () => {
           onBlur={interestsBlurHandler}
           icon="💪"
           searchPromise={searchPromise}
+          type={"draggable"}
         />
 
         <Button icon="➡️" buttonStyle="primary" type="submit">
