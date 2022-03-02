@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import styles from './YourMentee.module.scss';
+import styles from "./YourMentees.module.scss";
 import MainLayout from '../../../layouts/MainLayout/MainLayout';
 import UseLogin from '../../../hooks/UseLogin/UseLogin';
 import Title from '../../../components/UI/Title/Title';
@@ -35,19 +35,19 @@ const exampleMentees = [
 
 const YourMentees: FC<YourMenteeProps> = () => {
 
-    const currentMentee = 3; //TODO: get from database
+    const menteeNum = exampleMentees.length; //TODO: get from database
 
-    //TODO: get list of mentees from database, and if tehy dont have any return a different thingy
+    //TODO: get list of mentees from database, and if they dont have any return a different message (systemmessage?)
     const menteelist = exampleMentees.map( (mentee) => 
         <MenteeCard firstname={mentee.firstname} lastname={mentee.lastname} id={mentee.id} completedGoal={mentee.completedGoal} totalGoal={mentee.totalGoal}/> 
     );
 
-    console.log(exampleMentees);
+    console.log(menteelist)
     return( 
         <MainLayout title='Your Mentees'>
-            <Title text={`Current Mentees: ${currentMentee}`}/>
-            <div>
-                {menteelist}
+            <Title text={`Current Mentees: ${menteeNum}`}/>
+            <div className = {styles.YourMentees}> 
+                {menteeNum === 0 ? "You currently don't have any mentees" : menteelist}
             </div>
         <div data-testid='YourMentees' />
         </MainLayout>
