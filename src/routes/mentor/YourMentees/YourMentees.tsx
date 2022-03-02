@@ -1,9 +1,7 @@
 import React, { FC } from 'react';
 import styles from './YourMentee.module.scss';
 import MainLayout from '../../../layouts/MainLayout/MainLayout';
-import Button from '../../../components/UI/Button/Button';
 import UseLogin from '../../../hooks/UseLogin/UseLogin';
-import useLogin from "../../../hooks/UseLogin/UseLogin";
 import Title from '../../../components/UI/Title/Title';
 import MenteeCard from './MenteeCard/MenteeCard';
 
@@ -15,7 +13,7 @@ const exampleMentees = [
     {
         firstname: "John",
         lastname: "Smith",
-        completedGoal: 3,
+        completedGoal: 10,
         totalGoal: 10,
         id: 4
     },
