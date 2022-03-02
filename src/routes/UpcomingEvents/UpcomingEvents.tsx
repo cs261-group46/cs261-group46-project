@@ -4,14 +4,15 @@ import styles from './UpcomingEvents.module.scss';
 // import Title from '../../components/UI/Title/Title';
 import Event from './Event/Event';
 import Button from '../../components/UI/Button/Button';
-import useInput from '../../hooks/UseInput/UseInput';
 import { EventProps } from './Event/Event.d';
+import UseVerifyAuth from '../../hooks/UseVerifyAuth/UseVerifyAuth';
 
 interface UpcomingEventsProps {
   events: EventProps[];
 }
 
 const UpcomingEvents: FC<UpcomingEventsProps> = props => {
+  // UseVerifyAuth();
   const [filterEvents, setFilterEvents] = useState<number>(0);
 
   return (
