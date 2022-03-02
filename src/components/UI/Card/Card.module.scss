@@ -1,4 +1,5 @@
 @import "../../../variables";
+@import '../../../_variables.scss';
 
 .Card {
   background-color: white;
@@ -12,4 +13,10 @@
   box-sizing: border-box;
   transition-duration: 0.05s;
   outline: 0 solid $sq_dark_gray;
+
+.Card {
+  border: 1px solid $sq_light_gray;
+  padding: 15px 20px;
+  background-color: white;
+  border-radius: 10px;
 }
