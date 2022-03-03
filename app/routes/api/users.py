@@ -23,10 +23,11 @@ def get(userId=None, user=None):
 
 
 @users.route("/loggedin/", methods=["GET"])
-@auth_required()
+@auth_required(-1)
 def get_logged_in(user=None):
+    print(user)
     if user is None:
-        return {"success": False, "errors": ["No user is logged in"]}, 400
+        return {"success": False, "data": {"user": None}}, 400
     return {"success": True, "data": {"user": user.id}}, 200
 
 @users.route("/<userId>", methods=["PUT"])

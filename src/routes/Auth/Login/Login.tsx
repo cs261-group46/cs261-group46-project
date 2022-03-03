@@ -7,6 +7,7 @@ import TextInput from "../../../components/UI/FormInput/TextInput/TextInput";
 import UserDataContext from "../../../store/UserDataContext";
 import { custom } from "../../../api/api";
 import UseVerifyAuth from "../../../hooks/UseVerifyAuth/UseVerifyAuth";
+import ErrorMessagesContext from "../../../store/ErrorMessagesContext";
 
 interface LoginProps {}
 
@@ -23,6 +24,7 @@ function validatePassword(password: string) {
 const Login: FC<LoginProps> = () => {
   UseVerifyAuth(0, false);
   const userDataCtx = useContext(UserDataContext);
+  const errorsCtx = useContext(ErrorMessagesContext);
 
   const navigate = useNavigate();
 
@@ -54,8 +56,9 @@ const Login: FC<LoginProps> = () => {
       });
       userDataCtx.updateUserId();
       navigate("/dashboard");
-    } catch (errors) {
-      console.log(errors);
+    } catch (error) {
+      const message = errorsCtx.getErrorMessage(error);
+      errorsCtx.setErrorsHandler(message);
     }
 
     // const response = await fetch("/api/auth/login", {

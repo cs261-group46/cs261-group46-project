@@ -1,6 +1,9 @@
 .YourMentees {
-    font-size: 15px;
-    font-family: "Inter", sans-serif;
-    font-weight: bold;
-    color: #646464;
+  font-size: 15px;
+  font-family: "Inter", sans-serif;
+  font-weight: bold;
+  color: #646464;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
 }

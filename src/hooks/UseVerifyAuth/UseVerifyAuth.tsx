@@ -10,9 +10,12 @@ const UseVerifyAuth = (
   const userDataCtx = useContext(UserDataContext);
 
   const verifyAuth = useCallback(async () => {
+
     let userId;
-    if (userDataCtx.userId === null || userDataCtx.userId === undefined) {
+
+    if (userDataCtx.userId === undefined) {
       userId = await userDataCtx.updateUserId();
+      
     } else {
       userId = userDataCtx.userId;
     }
@@ -53,6 +56,7 @@ const UseVerifyAuth = (
   useEffect(() => {
     verifyAuth();
   }, [verifyAuth]);
+
 };
 
 export default UseVerifyAuth;

@@ -141,10 +141,9 @@ const Dashboard: FC<DashboardProps> = () => {
       {pageVisiable === 1 && (
         <div className={styles.Section}>
           <Title text={"Welcome back!"} className={styles.Title} />
+
           <Button icon={"👤"} href={"/profile"}>
-            <p style={{ textDecoration: "none", display: "inline-block" }}>
-              Your Profile
-            </p>
+            Your Profile
           </Button>
 
           {/* <Button icon={"🔔"} href={"/notifications"}>

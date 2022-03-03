@@ -14,21 +14,17 @@ def verify_email(token):
         email = confirm_token(token)
     except:
         # return {"successful": False, "warnings": ["The confirmation link is invalid or has expired."]}
-        flash('The confirmation link is invalid or has expired. Redirecting...')
         return redirect("http://localhost:3000/")
     user = User.query.filter_by(email=email).first()
 
     if user.verified:
-        flash('The account already verified. Redirecting...')
         return redirect("http://localhost:3000/dashboard")
 
     else:
         user.verified = True
-        db.session.add(user)
-        db.session.commit()
+        user.commit()
 
         set_login_token(user)
 
-        flash('You have confirmed your email address. Redirecting...')
         return redirect("http://localhost:3000/setup")
 

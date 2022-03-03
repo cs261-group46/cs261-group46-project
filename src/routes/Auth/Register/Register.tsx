@@ -1,6 +1,7 @@
 import React, {
   FC,
   FormEventHandler,
+  useCallback,
   useContext,
   useEffect,
   useState,
@@ -82,7 +83,8 @@ const Register: FC = () => {
   //   setDepartments(body.result);
   // };
 
-  const getDepartments = async () => {
+  const { setErrorsHandler } = errorsCtx;
+  const getDepartments = useCallback(async () => {
     try {
       const data = await index({
         resource: "departments",
@@ -97,9 +99,9 @@ const Register: FC = () => {
       );
     } catch (errors) {
       const errs = errors as string[];
-      errorsCtx.setErrorsHandler(errs);
+      setErrorsHandler(errs);
     }
-  };
+  }, [setErrorsHandler]);
 
   const showAllErrors = () => {
     firstNameBlurHandler();
