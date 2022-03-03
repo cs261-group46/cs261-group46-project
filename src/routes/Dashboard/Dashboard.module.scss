@@ -1,5 +1,32 @@
-.signup {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+// .signup {
+//   display: flex;
+//   align-items: center;
+//   gap: 1rem;
+// }
+@import "../../variables";
+
+.Section {
+  margin: 10px 0 60px 0;
+  .Title {
+    font-size: 15px;
+  }
+  .NotificationButton {
+    position: relative;
+  }
+  .NotificationCounter {
+    position: absolute;
+    margin: auto;
+    top: 50%;
+    right: 0;
+    background-color: $sq_red;
+    padding: 0 5px;
+    border-radius: 6px;
+    border: 2px solid $sq_cream;
+    transform: translate(50%, -50%);
+  }
+
+  .NotificationButtonToggleIcon {
+    height: 15px;
+    margin-left: 20px;
+  }
 }

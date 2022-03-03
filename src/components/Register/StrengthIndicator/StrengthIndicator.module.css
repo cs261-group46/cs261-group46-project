@@ -1,0 +1,67 @@
+.StrengthIndicator {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  font-size: 15px;
+  font-weight: bold;
+  height: 20px;
+  margin: 10px 0 40px;
+}
+
+.StrengthIndicator span {
+  -ms-flex-item-align: center;
+      -ms-grid-row-align: center;
+      align-self: center;
+}
+
+.StrengthIndicator .Icon {
+  height: 100%;
+  margin: 0 10px;
+}
+
+.StrengthIndicator .Icon .Emoji {
+  height: 100%;
+}
+
+.StrengthIndicator .Indicator {
+  height: 3px;
+  background-color: #646464;
+  width: 100%;
+  -ms-flex-item-align: center;
+      -ms-grid-row-align: center;
+      align-self: center;
+  border-radius: 5px;
+}
+
+.StrengthIndicator .Indicator::before {
+  border-radius: 5px;
+  content: '';
+  display: block;
+  height: 3px;
+}
+
+.StrengthIndicator .Indicator.s0::before {
+  width: 0;
+  background-color: #EA596E;
+}
+
+.StrengthIndicator .Indicator.s25::before {
+  width: 25%;
+  background-color: #EA596E;
+}
+
+.StrengthIndicator .Indicator.s50::before {
+  width: 50%;
+  background-color: #E69845;
+}
+
+.StrengthIndicator .Indicator.s75::before {
+  width: 75%;
+  background-color: #E69845;
+}
+
+.StrengthIndicator .Indicator.s100::before {
+  width: 100%;
+  background-color: #4EB464;
+}
+/*# sourceMappingURL=StrengthIndicator.module.css.map */

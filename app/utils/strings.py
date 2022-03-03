@@ -1,10 +1,12 @@
 import secrets
 import string
 
-chars = string.ascii_lowercase + string.ascii_uppercase + string.digits
 
+def generate_random_string(length: int, allowDigits=True, allowPanctuation=True) -> str:
+    characterSpace = string.ascii_letters
+    if allowDigits:
+        characterSpace += string.digits
+    if allowPanctuation:
+        characterSpace += string.punctuation
 
-def random_string(length: int) -> str:
-    return "".join(secrets.choice(chars) for _ in range(length))
-
-
+    return ''.join(secrets.choice(characterSpace) for _ in range(length))

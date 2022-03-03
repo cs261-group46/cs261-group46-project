@@ -1,44 +1,50 @@
-import React, { FC } from 'react';
+import React, { FC } from "react";
 // import styles from './MenteeSignup.module.scss';
 import MainLayout from "../../../layouts/MainLayout/MainLayout";
 import SearchSelect from "../../../components/UI/FormInput/SearchSelect/SearchSelect";
-import {MultiSelectOptions} from "../../../components/UI/FormInput/SearchSelect/SearchSelect.d"
+import { MultiSelectOptions } from "../../../components/UI/FormInput/SearchSelect/SearchSelect.d";
 import useInput from "../../../hooks/UseInput/UseInput";
 import Button from "../../../components/UI/Button/Button";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 interface MenteeSignupProps {}
 
 const MenteeSignup: FC<MenteeSignupProps> = () => {
-    const {
-        isInputValid: isInterestsInputValid,
-        isValueValid: isInterestsValueValid,
-        changeHandler: interestsChangeHandler,
-        blurHandler: interestsBlurHandler,
-        enteredValue: interests
-    } = useInput<MultiSelectOptions<string>>((value) => value.length > 0, [])
+  const {
+    isInputValid: isInterestsInputValid,
+    isValueValid: isInterestsValueValid,
+    changeHandler: interestsChangeHandler,
+    blurHandler: interestsBlurHandler,
+    enteredValue: interests,
+  } = useInput<MultiSelectOptions<string>>([], (value) => value.length > 0);
 
-    let navigate = useNavigate();
+  let navigate = useNavigate();
 
-    const registrationHandler = () => {
-        if (
-            isInterestsValueValid
-        ) {
-            // sendRegistrationData();
-            navigate("/dashboard");
-        }
-    };
+  const registrationHandler = () => {
+    if (isInterestsValueValid) {
+      // sendRegistrationData();
+      navigate("/dashboard");
+    }
+  };
 
-    return <MainLayout title={"Sign up to be a mentee"}>
+  return (
+    <MainLayout title={"Sign up to be a mentee"}>
+      <SearchSelect
+        id={"interests"}
+        label={"What are you interested in learning?"}
+        isValid={isInterestsInputValid}
+        value={interests}
+        onChange={interestsChangeHandler}
+        onBlur={interestsBlurHandler}
+      />
 
-        <SearchSelect id={"interests"} label={"What are you interested in learning?"} isValid={isInterestsInputValid} value={interests} onChange={interestsChangeHandler} onBlur={interestsBlurHandler}/>
+      <Button icon="👑" onClick={registrationHandler} buttonStyle={"primary"}>
+        Register
+      </Button>
 
-        <Button icon="👑" onClick={registrationHandler} buttonStyle={"primary"}>
-            Register
-        </Button>
-
-        <div data-testid="MenteeSignup"/>
+      <div data-testid="MenteeSignup" />
     </MainLayout>
+  );
 };
 
 export default MenteeSignup;

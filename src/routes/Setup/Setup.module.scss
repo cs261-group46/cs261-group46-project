@@ -1,1 +1,38 @@
-.Setup {}
+@import "../../_variables.scss";
+
+.Setup {
+  h1 {
+    font-weight: 900;
+    font-size: 25pt;
+    color: $sq_black;
+  }
+
+  h2 {
+    font-weight: bold;
+    font-size: 21px;
+    margin-bottom: 10px;
+    margin-top: 30px;
+    display: flex;
+    color: $sq_dark_gray;
+  }
+
+  h3 {
+    font-weight: 700;
+    font-size: 14px;
+    margin-bottom: 50px;
+    margin-top: 40px;
+    display: flex;
+    color: $sq_dark_gray;
+  }
+
+  a {
+    color: $sq_dark_gray;
+    font-weight: bold;
+    font-size: 17px;
+  }
+
+  .together {
+    display: flex;
+    gap: 20px;
+  }
+}

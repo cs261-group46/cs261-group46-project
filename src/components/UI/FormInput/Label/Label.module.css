@@ -1,0 +1,21 @@
+.Label {
+  font-weight: bold;
+  font-size: 17px;
+  margin-bottom: 10px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  height: 20px;
+}
+
+.Label label {
+  -ms-flex-item-align: end;
+      -ms-grid-row-align: end;
+      align-self: end;
+}
+
+.Label .Icon {
+  height: 100%;
+  margin-right: 20px;
+}
+/*# sourceMappingURL=Label.module.css.map */

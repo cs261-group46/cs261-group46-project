@@ -1,0 +1,43 @@
+@import "../../../../../variables";
+
+.DraggableOptions {
+  display: flex;
+  flex-direction: column;
+
+  .clickedwrapper {
+    z-index: 1;
+
+    .clicked {
+      cursor: grabbing;
+    }
+  }
+
+  .DraggableOption {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 51px;
+    border-radius: 10px;
+    border: 1px solid $sq_light_gray;
+    padding: 10px 20px;
+    position: relative;
+    box-sizing: border-box;
+    transition-duration: 0.05s;
+    outline: 0 solid $sq_dark_gray;
+    background-color: $sq_cream;
+    align-items: center;
+    cursor: grab;
+
+    p,
+    button {
+      display: inline;
+      color: #393838;
+    }
+
+    button {
+      background-color: #f7f7f7;
+      border: none;
+    }
+  }
+}

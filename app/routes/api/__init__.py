@@ -1,16 +1,20 @@
-from flask import Blueprint, request, session
+from app.routes.api.mentors import mentors
+from app.routes.api.mentees import mentees
+from app.routes.api.experts import experts
+from app.routes.api.notifications import notifications
+from app.routes.api.topics import topics
+from app.routes.api.departments import departments
+from app.routes.api.auth import auth
+from app.routes.api.users import users
+from flask import Blueprint
 
-blueprint = Blueprint("api", __name__, url_prefix="/api")
+api = Blueprint("api", __name__, url_prefix="/api")
 
-from app.routes.api.users       import blueprint as api_users_module
-from app.routes.api.mentors     import blueprint as api_mentors_module
-from app.routes.api.mentees     import blueprint as api_mentees_module
-from app.routes.api.departments import blueprint as api_department_module
-from app.routes.api.topics      import blueprint as api_topics_module
-
-
-blueprint.register_blueprint(api_users_module)
-blueprint.register_blueprint(api_mentors_module)
-blueprint.register_blueprint(api_mentees_module)
-blueprint.register_blueprint(api_department_module)
-blueprint.register_blueprint(api_topics_module)
+api.register_blueprint(auth)
+api.register_blueprint(departments)
+api.register_blueprint(topics)
+api.register_blueprint(experts)
+api.register_blueprint(mentors)
+api.register_blueprint(users)
+api.register_blueprint(notifications)
+api.register_blueprint(mentees)
