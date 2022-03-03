@@ -39,7 +39,7 @@ const ExpertExpertises: FC<ExpertExpertisesProps> = () => {
           startswith: startsWith,
         },
       });
-      const options: MultiSelectOptions<number> = data.map(
+      const options: MultiSelectOptions<number> = data.topics.map(
         ({ label, id }: { label: string; id: number }) => ({ label, value: id })
       );
       return options;
@@ -65,18 +65,20 @@ const ExpertExpertises: FC<ExpertExpertisesProps> = () => {
   const getExpertises = useCallback(async () => {
     try {
       const data = await get({
-        resource: "experts",
-        entity: userDataCtx.expertId as number,
+        resource: "users",
+        entity: userDataCtx.userId as number,
         args: {
-          fields: "topics",
+          fields: ["expert.id", "expert.topics"],
         },
       });
-      const topicsOptions: MultiSelectOptions<number> = data.expert.topics.map(
-        (topic: { id: number; name: string }) => ({
+
+      console.log(data);
+
+      const topicsOptions: MultiSelectOptions<number> =
+        data.user.expert.topics.map((topic: { id: number; name: string }) => ({
           value: topic.id,
           label: topic.name,
-        })
-      );
+        }));
       expertisesChangeHandler(topicsOptions);
     } catch (errors) {
       console.log(errors);
@@ -130,7 +132,7 @@ const ExpertExpertises: FC<ExpertExpertisesProps> = () => {
           Apply
         </Button>
       </form>
-      <div data-testid={"ExpertExpertises"}/>
+      <div data-testid={"ExpertExpertises"} />
     </DashboardSubpageLayout>
     // <div className={styles.ExpertExpertises} data-testid="ExpertExpertises">
     //   ExpertExpertises Component

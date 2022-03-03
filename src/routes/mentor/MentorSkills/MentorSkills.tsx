@@ -17,6 +17,7 @@ import useInput from "../../../hooks/UseInput/UseInput";
 import UseVerifyAuth from "../../../hooks/UseVerifyAuth/UseVerifyAuth";
 import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
 import UserDataContext from "../../../store/UserDataContext";
+import { TopicWithPriorityType } from "../../../types/Topic";
 
 interface MentorSkillsProps {}
 
@@ -66,18 +67,24 @@ const MentorSkills: FC<MentorSkillsProps> = () => {
   const getSkills = useCallback(async () => {
     try {
       const data = await get({
-        resource: "mentors",
-        entity: userDataCtx.mentorId as number,
+        resource: "users",
+        entity: userDataCtx.userId as number,
         args: {
-          fields: "topics",
+          fields: "mentor.topics",
         },
       });
+
       console.log(data);
 
-      const topicsOptions: MultiSelectOptions<number> = data.mentor.topics.map(
-        (topic: { id: number; name: string }) => ({
-          value: topic.id,
-          label: topic.name,
+      const topics = data.user.mentor.topics.sort(
+        (topic1: TopicWithPriorityType, topic2: TopicWithPriorityType) =>
+          topic1.priority - topic2.priority
+      );
+
+      const topicsOptions: MultiSelectOptions<number> = topics.map(
+        (topic: TopicWithPriorityType) => ({
+          value: topic.topic.id,
+          label: topic.topic.name,
         })
       );
       skillsChangeHandler(topicsOptions);
@@ -93,8 +100,13 @@ const MentorSkills: FC<MentorSkillsProps> = () => {
   const updateSkills = async () => {
     try {
       const requestBody = {
-        skills: enteredSkills.map((skill) => skill.value),
+        skills: enteredSkills.map((skill, index) => ({
+          priority: index,
+          skill: skill.value,
+        })),
       };
+      console.log(enteredSkills);
+
       await update({
         resource: "mentors",
         entity: userDataCtx.mentorId as number,

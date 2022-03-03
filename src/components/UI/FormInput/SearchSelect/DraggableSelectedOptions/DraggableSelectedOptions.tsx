@@ -22,11 +22,6 @@ function DraggableSelectedOptions<T>(
   const ref = useRef(null);
   const refs = useRef<HTMLDivElement[]>([]);
 
-  const mouseDownHandler: (e: MouseEvent) => void = (event) => {
-    if ((event.target as any).localName === "button")
-      event.target?.dispatchEvent(event);
-  };
-
   function calcBounds(index: number): DraggableBounds | undefined {
     const box = refs.current[index]?.getBoundingClientRect();
     const topBox = refs.current[0]?.getBoundingClientRect();
@@ -50,7 +45,6 @@ function DraggableSelectedOptions<T>(
       handle={".handle"}
       nodeRef={ref}
       onStart={() => setCurrentDragged(index)}
-      onMouseDown={mouseDownHandler}
       bounds={calcBounds(index)}
       onStop={() => {
         setCurrentDragged(-1);
@@ -72,9 +66,11 @@ function DraggableSelectedOptions<T>(
         >
           <p>{option.label}</p>
           <button
+            id="remove-button"
             onMouseDown={(event) => {
               event.stopPropagation();
               props.onRemoveSelected(option.value);
+              refs.current.splice(index, 1);
             }}
           >
             X
@@ -106,10 +102,12 @@ function DraggableSelectedOptions<T>(
       data-testid="DraggableSelectedOptions"
       className={styles.DraggableOptions}
     >
+      {props.selected.length > 0 && (
+        <Label htmlFor={""} className={styles.DragLabel}>
+          Drag to rearrange your options in order of priority
+        </Label>
+      )}
       {selection}
-      <Label htmlFor={""}>
-        Drag to rearrange your options in order of priority
-      </Label>
     </div>
   );
 }

@@ -16,9 +16,10 @@ import ViewWorkshops from "./routes/workshops/ViewWorkshops/ViewWorkshops.lazy";
 import ComponentPlaygound from "./routes/ComponentPlaygound/ComponentPlaygound.lazy";
 import PlansOfAction from "./routes/learn/PlansOfAction/PlansOfAction.lazy";
 import UpcomingEvents from "./routes/UpcomingEvents/UpcomingEvents.lazy";
-import { EventProps } from "./routes/UpcomingEvents/Event/Event.d";
+import { EventProps } from "./components/UpcommingEvents/Event/Event.d";
 import YourMentor from "./routes/learn/YourMentor/YourMentor";
-import EditPlansOfAction from "./routes/mentor/EditPlansOfAction/EditPlansOfAction.lazy";
+import ExpertSignup from "./routes/expert/ExpertSignup/ExpertSignup";
+import YourMentees from "./routes/mentor/YourMentees/YourMentees";
 
 function App() {
   return (
@@ -32,11 +33,13 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/setup" element={<Setup />} />
+          <Route path="/calendar" element={<UpcomingEvents />} />
 
           <Route path="/mentor">
             <Route path="become-mentor" element={<MentorSignup />} />
             <Route path="skills" element={<MentorSkills />} />
-            <Route path="set-plans" element={<EditPlansOfAction />} />
+            <Route path="become-mentor" element={<MentorSignup/>}/>
+            <Route path="your-mentees" element={<YourMentees/>}/>
           </Route>
 
           <Route path="/learn">
@@ -49,7 +52,7 @@ function App() {
 
           <Route path="/expert">
             <Route path="skills" element={<ExpertExpertises />} />
-            {/* <Route path="become-expert" element={<MentorSignup/>}/> */}
+            <Route path="become-expert" element={<ExpertSignup />} />
           </Route>
 
           <Route path="/workshops">
@@ -57,7 +60,8 @@ function App() {
           </Route>
           <Route path="/test" element={<ComponentPlaygound />} />
           <Route index element={<Homepage />} />
-          <Route
+
+          {/* <Route
             path="/upcoming-events"
             element={
               <UpcomingEvents
@@ -79,7 +83,7 @@ function App() {
                 }
               />
             }
-          />
+          /> */}
           {/* <Route path='/plans-of-action' element={<PlansOfAction />} /> */}
         </Routes>
       </div>

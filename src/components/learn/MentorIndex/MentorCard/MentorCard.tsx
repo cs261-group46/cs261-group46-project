@@ -12,9 +12,10 @@ interface MentorCardProps {
 }
 
 const MentorCard: FC<MentorCardProps> = (props) => {
-  const skillTags = props.mentor.topics.map((topic) => (
-    <Tag key={topic.id}>{topic.name}</Tag>
-  ));
+  const skillTags = props.mentor.topics.map((topic) => {
+    console.log(topic);
+    return <Tag key={topic.topic.id}>{topic.topic.name}</Tag>;
+  });
 
   const requestMentorHandler = async () => {
     try {

@@ -49,7 +49,9 @@ const YourMentor: FC<YourMentorProps> = () => {
         {mentor && <p>{mentor.id}</p>}
 
         {mentor &&
-          mentor.topics.map((topic) => <Tag key={topic.id}>{topic.name}</Tag>)}
+          mentor.topics.map((topic) => (
+            <Tag key={topic.topic.id}>{topic.topic.name}</Tag>
+          ))}
       </div>
     </DashboardSubpageLayout>
   );

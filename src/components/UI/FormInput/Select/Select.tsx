@@ -28,7 +28,7 @@ function Select<T>(props: PropsWithChildren<SelectProps<T>>) {
     event
   ) => {
     // the pair can be reconstructed from id & value properties
-    props.onChange(props.options[event.target.selectedIndex]);
+    props.onChange(props.options[event.target.selectedIndex - 1]);
   };
 
   const [isInvalidMessageVisible, setInvalidMessageVisible] = useState(false);
@@ -64,10 +64,9 @@ function Select<T>(props: PropsWithChildren<SelectProps<T>>) {
 
       <SystemMessage
         sort="inline"
-        type="warning"
+        type="alert"
         description={`The ${props.label} field seems to be incorrect`}
         visible={isInvalidMessageVisible}
-        onClose={closeInvalidMessageHandler}
       />
     </div>
   );

@@ -50,7 +50,6 @@ function SearchSelect<T>(props: PropsWithChildren<MultiSelectProps<T>>) {
   const type = props.type ?? "span";
 
   const removeSelectedHandler: RemoveSelectedHandler<T> = (selected) => {
-    console.log("is removed");
     const newExpertises = props.value.filter((x) => x.value !== selected);
     props.onChange(newExpertises);
   };

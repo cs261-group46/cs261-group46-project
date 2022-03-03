@@ -4,12 +4,15 @@ import "./index.scss";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { UserDataContextProvider } from "./store/UserDataContext";
+import { ErrorMessagesContextProvider } from "./store/ErrorMessagesContext";
 
 ReactDOM.render(
   <React.StrictMode>
-    <UserDataContextProvider>
-      <App />
-    </UserDataContextProvider>
+    <ErrorMessagesContextProvider>
+      <UserDataContextProvider>
+        <App />
+      </UserDataContextProvider>
+    </ErrorMessagesContextProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

@@ -59,7 +59,10 @@ const MentorSignup: FC<MentorSignupProps> = () => {
   const sendBecomeMentorData = async () => {
     try {
       const requestBody = {
-        skills: enteredSkills.map((skill) => skill.value),
+        skills: enteredSkills.map((skill, index) => ({
+          priority: index,
+          skill: skill.value,
+        })),
         about: enteredAbout,
         capacity: enteredCapacity,
       };
@@ -112,7 +115,7 @@ const MentorSignup: FC<MentorSignupProps> = () => {
     <DashboardSubpageLayout title={"Become a Mentor"}>
       <form onSubmit={submitHandler}>
         <SearchSelect
-          id={"interests"}
+          id={"skills"}
           label={"Mentorship areas"}
           isValid={isSkillsInputValid}
           value={enteredSkills}

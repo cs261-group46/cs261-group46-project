@@ -15,18 +15,22 @@ auth = Blueprint("api_auth", __name__, url_prefix="/auth")
 def register():
 
     data = dict(request.get_json())
-
+    print(data)
     # validate structure of request
     registration_validator.validate(data)
+    print(registration_validator.errors)
     if registration_validator.errors:
         return {
             "success": False,
             "errors": registration_validator.errors.values()
         }, 400
 
+    print("test2")
+
     # check whether email is repeated
-    email_repeated = not User.query.filter_by(email=data.get("email")).first() is None
-    if email_repeated:
+    is_email_repeated = not User.query.filter_by(email=data.get("email")).first() is None
+    print(is_email_repeated)
+    if is_email_repeated:
         return {
             "success": False,
             "errors": ["An account with the given email already exists"]
