@@ -1,4 +1,4 @@
-@import '../../../../variables';
+@import "../../../../variables";
 
 .MultiSelect {
   margin: 20px 0 40px;
@@ -16,8 +16,8 @@
     flex-wrap: wrap;
     gap: 5px;
     background-color: #ffffff;
+    line-height: 15px;
     font-size: 13.3px;
-
     .search,
     .placeholder {
       padding: 5px 10px 5px 0;

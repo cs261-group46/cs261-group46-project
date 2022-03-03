@@ -1,0 +1,25 @@
+.MentorCard {
+  .Name {
+    font-weight: bolder;
+    font-size: 20px;
+  }
+
+  .Details {
+    margin-top: 20px;
+    .Title {
+      margin-top: 40px;
+      margin-bottom: 10px;
+    }
+
+    .Skills {
+      display: flex;
+      flex-wrap: wrap;
+    }
+  }
+  .Buttons {
+    margin-top: 40px;
+    .Button {
+      margin-bottom: 5px;
+    }
+  }
+}

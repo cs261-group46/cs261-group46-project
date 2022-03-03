@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
 @import "_variables.scss";
 
+
 body {
   font-family: "Inter", sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -99,7 +100,7 @@ video {
   padding: 0;
   border: 0;
   font-size: 100%;
-  font: inherit;
+  font: "Inter", inherit;
   vertical-align: baseline;
   box-sizing: border-box;
 }

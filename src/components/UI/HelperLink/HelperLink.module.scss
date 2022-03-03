@@ -1,0 +1,27 @@
+@import "../../../variables";
+
+.HelperLink {
+  p {
+    font-weight: 600;
+    font-size: 15px;
+    display: flex;
+    height: 20px;
+    color: $sq_dark_gray;
+  }
+
+  a,
+  button {
+    color: $sq_red;
+    font-weight: 600;
+    height: 20px;
+    font-size: 15px;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  button {
+    border: none;
+    background-color: transparent;
+    padding: 0;
+  }
+}

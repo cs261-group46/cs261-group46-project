@@ -1,0 +1,38 @@
+.MenteeCard {
+    display: inline-block;
+    position: relative;
+    color: black;
+    font-family: "Inter", sans-serif;
+    font-size: 20px;
+    text-decoration: none;
+    font-style: normal;
+    font-weight: bold;
+    background-color: #FFFFFF;
+    box-sizing: border-box;
+    border-radius: 20px;
+    border: 1px solid #D3D3D3;
+    width: 360px;
+    height: 180px;
+    padding-top: 21px;
+    margin-bottom: 30px;
+    margin-right: 30px;
+    padding-left: 27px;
+    padding-right: 27px;
+
+    &:hover,
+    &:focus-visible {
+      outline: 3px solid #646464;
+    }
+}
+
+.ButtonFloatLeft {
+    position: absolute;
+    left: 27px;
+    bottom: 20px;
+}
+
+.ButtonFloatRight {
+    position: absolute;
+    right: 27px;
+    bottom: 20px;
+}
