@@ -3,6 +3,7 @@ import React, {
   FC,
   useCallback,
   useEffect,
+  useRef,
   useState,
 } from "react";
 import styles from "./EditPlansOfAction.module.scss";
@@ -11,6 +12,7 @@ import { useSearchParams } from "react-router-dom";
 import Button from "../../../components/UI/Button/Button";
 import Icon from "../../../components/UI/Icon/Icon";
 import Title from "../../../components/UI/Title/Title";
+import Draggable from "react-draggable";
 
 interface EditPlansOfActionProps {}
 
@@ -29,6 +31,10 @@ const EditPlansOfAction: FC<EditPlansOfActionProps> = () => {
       ? plansOfAction?.filter((plan) => plan.status === "completed")
       : undefined;
   const [unsavedChanges, setUnsavedChanges] = useState(false);
+  const ref = useRef(null);
+  const childRefs = useRef<HTMLDivElement[]>([]);
+  const completedRef = useRef<HTMLDivElement>(null);
+  const [currentDragged, setCurrentDragged] = useState<string>();
 
   async function dummyFetch(): Promise<PlanOfAction[] | "denied"> {
     return new Promise((resolve) =>
@@ -66,27 +72,6 @@ const EditPlansOfAction: FC<EditPlansOfActionProps> = () => {
     setPlansOfAction(plans);
     console.log("fetched");
   }, []);
-
-  const updatePlanType = (
-    planID: string,
-    event: ChangeEvent<HTMLSelectElement>
-  ) => {
-    if (plansOfAction && plansOfAction !== "denied") {
-      let thisPlan = plansOfAction.filter((plan) => plan.id === planID)[0];
-
-      setPlansOfAction([
-        // remove this from the current plans
-        ...plansOfAction.filter((plan) => plan.id !== planID),
-
-        // to append to the end
-        { ...thisPlan, status: event.target.value as "active" | "completed" },
-
-        // this makes it appear at the end of the list it was moved to
-      ]);
-    }
-
-    setUnsavedChanges(true);
-  };
 
   const updatePlanText = (
     planID: string,
@@ -134,6 +119,8 @@ const EditPlansOfAction: FC<EditPlansOfActionProps> = () => {
 
       const existingPlans = plansOfAction.filter((plan) => !plan.clientOnly);
 
+      // disable when plans are sent
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const plans = {
         new: newPlans,
         existing: existingPlans,
@@ -142,6 +129,55 @@ const EditPlansOfAction: FC<EditPlansOfActionProps> = () => {
       // send this off to the backend
 
       setUnsavedChanges(false);
+    }
+  }
+
+  function reorderList(movedPlan: PlanOfAction) {
+    if (plansOfAction && plansOfAction !== "denied") {
+      const sorted = plansOfAction
+        .map<[number, PlanOfAction]>((plan, index) => {
+          const div = childRefs.current[index];
+
+          return [div?.getBoundingClientRect().top ?? 0, plan];
+        })
+        .sort((a, b) => a[0] - b[0]);
+
+      // now need to find out whether to change category
+      // check whether the box is above completed text
+      const movedPlanBox = plansOfAction
+        .map((plan, index) => {
+          if (plan === movedPlan) {
+            const div = childRefs.current[index];
+
+            return div?.getBoundingClientRect();
+          }
+
+          return null;
+        })
+        .find((maybeBox) => !!maybeBox);
+
+      const dividerBox = completedRef.current?.getBoundingClientRect();
+
+      if (dividerBox && movedPlanBox) {
+        // this will only move up if the item is fully clear of the divider
+        if (movedPlanBox.bottom < dividerBox.top) {
+          movedPlan.status = "active";
+        }
+        // same for moving down
+        if (movedPlanBox.top > dividerBox.bottom) {
+          movedPlan.status = "completed";
+        }
+
+        // means that when placed on the divider, nothing will happen
+      }
+
+      const plans = sorted.map((height) => height[1]);
+
+      // delete all to force a redraw
+      // this resets the moving on ALL
+      // setPlansOfAction([]);
+
+      setPlansOfAction(plans);
     }
   }
 
@@ -167,51 +203,98 @@ const EditPlansOfAction: FC<EditPlansOfActionProps> = () => {
             // else if successfully retrieved
             <div>
               <Button onClick={addNewPlan}>Add New Plan</Button>
-
               {/* yes, there is some code duplication here */}
               {/* however if I try to extract the list to a component it stops keeping focus on input box when i type */}
               <Title text={"Active"} />
               {activePlans &&
                 activePlans.map((plan) => (
-                  <div key={plan.id} className={styles.plan}>
-                    <div className={styles.plantext}>
-                      <Icon className={styles.icon} icon={"📈"} />
-                      <input
-                        type="text"
-                        defaultValue={plan.title}
-                        onChange={updatePlanText.bind(undefined, plan.id)}
-                      />
-                    </div>
-                    <select
-                      defaultValue={plan.status}
-                      onChange={updatePlanType.bind(undefined, plan.id)}
+                  <Draggable
+                    key={plan.id}
+                    nodeRef={ref}
+                    axis={"y"}
+                    position={
+                      currentDragged === plan.id ? undefined : { x: 0, y: 0 }
+                    }
+                    onStart={() => setCurrentDragged(plan.id)}
+                    onStop={() => {
+                      setCurrentDragged(undefined);
+                      reorderList(plan);
+                    }}
+                  >
+                    <div
+                      ref={ref}
+                      className={`${
+                        plan.id === currentDragged && styles.selectedplanwrapper
+                      }`}
                     >
-                      <option value={"active"}>Active</option>
-                      <option value={"completed"}>Completed</option>
-                    </select>
-                  </div>
+                      <div
+                        ref={(el) => {
+                          if (el && plansOfAction)
+                            childRefs.current[plansOfAction.indexOf(plan)] = el;
+                        }}
+                        className={`${styles.plan} ${
+                          plan.id === currentDragged && styles.selectedplan
+                        }`}
+                      >
+                        <div className={styles.plantext}>
+                          <Icon className={styles.icon} icon={"📈"} />
+                          <input
+                            type="text"
+                            defaultValue={plan.title}
+                            onChange={updatePlanText.bind(undefined, plan.id)}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </Draggable>
                 ))}
-              <Title text={"Completed"} />
+              {activePlans && activePlans.length === 0 && <p>None</p>}
+              <div ref={completedRef}>
+                <Title text={"Completed"} />
+              </div>
               {completedPlans &&
                 completedPlans.map((plan) => (
-                  <div key={plan.id} className={styles.plan}>
-                    <div className={styles.plantext}>
-                      <Icon className={styles.icon} icon={"🏆"} />
-                      <input
-                        type="text"
-                        defaultValue={plan.title}
-                        onChange={updatePlanText.bind(undefined, plan.id)}
-                      />
-                    </div>
-                    <select
-                      defaultValue={plan.status}
-                      onChange={updatePlanType.bind(undefined, plan.id)}
+                  <Draggable
+                    key={plan.id}
+                    nodeRef={ref}
+                    axis={"y"}
+                    onStart={() => setCurrentDragged(plan.id)}
+                    position={
+                      currentDragged === plan.id ? undefined : { x: 0, y: 0 }
+                    }
+                    onStop={() => {
+                      setCurrentDragged(undefined);
+                      reorderList(plan);
+                    }}
+                  >
+                    <div
+                      ref={ref}
+                      className={`${
+                        plan.id === currentDragged && styles.selectedplanwrapper
+                      }`}
                     >
-                      <option value={"active"}>Active</option>
-                      <option value={"completed"}>Completed</option>
-                    </select>
-                  </div>
+                      <div
+                        ref={(el) => {
+                          if (el && plansOfAction)
+                            childRefs.current[plansOfAction.indexOf(plan)] = el;
+                        }}
+                        className={`${styles.plan} ${
+                          plan.id === currentDragged && styles.selectedplan
+                        }`}
+                      >
+                        <div className={styles.plantext}>
+                          <Icon className={styles.icon} icon={"🏆"} />
+                          <input
+                            type="text"
+                            defaultValue={plan.title}
+                            onChange={updatePlanText.bind(undefined, plan.id)}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </Draggable>
                 ))}
+              {completedPlans && completedPlans.length === 0 && <p>None</p>}
               <Button
                 buttonStyle={unsavedChanges ? "primary" : "default"}
                 onClick={save}

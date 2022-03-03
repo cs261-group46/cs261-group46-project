@@ -1,6 +1,19 @@
 @import "../../../variables";
 
 .EditPlansOfAction {
+  .selectedplanwrapper {
+    cursor: grabbing;
+    z-index: 1;
+    position: relative;
+    
+    .selectedplan {
+      cursor: grabbing;
+      z-index: 1;
+      outline: 2px solid $sq_dark_gray;
+      border-color: $sq_dark_gray;
+    }
+  }
+
   .plan {
     display: flex;
     flex-direction: column;
@@ -16,6 +29,8 @@
     outline: 0 solid $sq_dark_gray;
     margin-bottom: 1rem;
     width: 100%;
+    cursor: grab;
+    background-color: white;
 
     &:focus-visible, &:hover {
       outline: 2px solid $sq_dark_gray;
