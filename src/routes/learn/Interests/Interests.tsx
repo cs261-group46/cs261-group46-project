@@ -17,6 +17,7 @@ import useInput from "../../../hooks/UseInput/UseInput";
 import UseVerifyAuth from "../../../hooks/UseVerifyAuth/UseVerifyAuth";
 import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
 import UserDataContext from "../../../store/UserDataContext";
+import { TopicWithPriorityType } from "../../../types/Topic";
 
 interface InterestsProps {}
 
@@ -60,6 +61,8 @@ const Interests: FC<InterestsProps> = () => {
 
   const getInterests = useCallback(async () => {
     try {
+      console.log(userDataCtx.userId);
+
       const data = await get({
         resource: "users",
         entity: userDataCtx.userId as number,
@@ -67,10 +70,16 @@ const Interests: FC<InterestsProps> = () => {
           fields: ["topics"],
         },
       });
-      const topicsOptions: MultiSelectOptions<number> = data.user.topics.map(
-        (topic: { id: number; name: string }) => ({
-          value: topic.id,
-          label: topic.name,
+
+      const topics = data.user.topics.sort(
+        (topic1: TopicWithPriorityType, topic2: TopicWithPriorityType) =>
+          topic1.priority - topic2.priority
+      );
+
+      const topicsOptions: MultiSelectOptions<number> = topics.map(
+        (topic: TopicWithPriorityType) => ({
+          value: topic.topic.id,
+          label: topic.topic.name,
         })
       );
       interestsChangeHandler(topicsOptions);
@@ -86,14 +95,18 @@ const Interests: FC<InterestsProps> = () => {
   const updateInterests = async () => {
     try {
       const requestBody = {
-        interests: enteredInterests.map((interest) => interest.value),
+        interests: enteredInterests.map((interest, index) => ({
+          priority: index,
+          interest: interest.value,
+        })),
       };
+      console.log(requestBody);
       await update({
         resource: "users",
         entity: userDataCtx.userId as number,
         body: requestBody,
       });
-      navigate("/dashboard"); // show message instead
+      // navigate("/dashboard"); // show message instead
     } catch (errors) {
       console.log(errors);
     }

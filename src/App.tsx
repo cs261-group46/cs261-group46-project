@@ -16,25 +16,26 @@ import ViewWorkshops from './routes/workshops/ViewWorkshops/ViewWorkshops.lazy';
 import ComponentPlaygound from './routes/ComponentPlaygound/ComponentPlaygound.lazy';
 import PlansOfAction from './routes/learn/PlansOfAction/PlansOfAction.lazy';
 import UpcomingEvents from './routes/UpcomingEvents/UpcomingEvents.lazy';
-import { EventProps } from './routes/UpcomingEvents/Event/Event.d';
+import { EventProps } from './components/UpcommingEvents/Event/Event.d';
 import YourMentor from "./routes/learn/YourMentor/YourMentor";
 
 function App() {
   return (
     <BrowserRouter>
-      <div className='App'>
+      <div className="App">
         <Routes>
-          <Route path='/register'>
-            <Route path='' element={<Register />} />
-            <Route path='verifyemail' element={<VerifyEmail />} />
+          <Route path="/register">
+            <Route path="" element={<Register />} />
+            <Route path="verifyemail" element={<VerifyEmail />} />
           </Route>
-          <Route path='/login' element={<Login />} />
-          <Route path='/dashboard' element={<Dashboard />} />
-          <Route path='/setup' element={<Setup />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/setup" element={<Setup />} />
+          <Route path="/calendar" element={<UpcomingEvents/>} />
 
-          <Route path='/mentor'>
-            <Route path='become-mentor' element={<MentorSignup />} />
-            <Route path='skills' element={<MentorSkills />} />
+          <Route path="/mentor">
+            <Route path="become-mentor" element={<MentorSignup />} />
+            <Route path="skills" element={<MentorSkills />} />
           </Route>
 
           <Route path="/learn">
@@ -45,33 +46,33 @@ function App() {
             <Route path="plans-of-action" element={<PlansOfAction />} />
           </Route>
 
-          <Route path='/expert'>
-            <Route path='skills' element={<ExpertExpertises />} />
+          <Route path="/expert">
+            <Route path="skills" element={<ExpertExpertises />} />
             {/* <Route path="become-expert" element={<MentorSignup/>}/> */}
           </Route>
 
-          <Route path='/workshops'>
+          <Route path="/workshops">
             <Route index element={<ViewWorkshops />} />
           </Route>
-          <Route path='/test' element={<ComponentPlaygound />} />
+          <Route path="/test" element={<ComponentPlaygound />} />
           <Route index element={<Homepage />} />
           <Route
-            path='/upcoming-events'
+            path="/upcoming-events"
             element={
               <UpcomingEvents
                 events={
                   [
                     {
-                      sessionType: 'Group Session',
-                      subject: 'Engineering',
-                      mentee: 'Reiss',
-                      mentor: 'Mohammed',
+                      sessionType: "Group Session",
+                      subject: "Engineering",
+                      mentee: "Reiss",
+                      mentor: "Mohammed",
                     },
                     {
-                      sessionType: 'Workshop',
-                      subject: 'Engineering',
-                      mentee: 'Mohammed',
-                      mentor: 'Reiss',
+                      sessionType: "Workshop",
+                      subject: "Engineering",
+                      mentee: "Mohammed",
+                      mentor: "Reiss",
                     },
                   ] as EventProps[]
                 }

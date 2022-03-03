@@ -1,5 +1,5 @@
 import React, { lazy, Suspense } from 'react';
-import { EventProps } from './Event/Event.d';
+import { EventProps } from '../../components/UpcommingEvents/Event/Event.d';
 
 const LazyUpcomingEvents = lazy(() => import('./UpcomingEvents'));
 

@@ -62,7 +62,7 @@ def get(mentorId, user=None):
     mentor = Mentor.query.filter_by(id=mentorId).first()
 
     if mentor is None:
-        return {"success" : False, "errors": ["Mentor does not exist"]}, 400
+        return {"success": False, "errors": ["Mentor does not exist"]}, 400
 
     schema = MentorSchema(only=fields)
     result = schema.dump(mentor)
@@ -75,12 +75,15 @@ def get(mentorId, user=None):
 def store(user=None):
     data = dict(request.get_json())
     # TODO: VALIDATE
-    selectedTopics = Topic.query.filter(Topic.id.in_(data.get("skills"))).all()
     mentor = Mentor(user_id=user.id, about=data.get("about"),
                     capacity=data.get("capacity")).commit()
 
+    selectedTopics = Topic.query.filter(Topic.id.in_([skill.get("skill") for skill in data.get("skills")])).all()
+    selectedTopicsOrdered = [next(s for s in selectedTopics if s.id == skill.get("skill")) for skill in
+                             sorted(data.get("skills"), key=(lambda i: i.get("priority")))]
+
     count = 1
-    for topic in selectedTopics:
+    for topic in selectedTopicsOrdered:
         mentor_topic = MentorTopic(priority=count)
         mentor_topic.topic = topic
         mentor_topic.mentor = mentor
@@ -108,10 +111,23 @@ def update(mentorId=None, user=None):
     if mentor.user_id != user.id:
         return {"success": False, "errors": ["You don't have the permissions to update a mentor"]}, 401
 
-    selectedTopics = Topic.query.filter(Topic.id.in_(data.get("skills"))).all()
 
-    mentor.topics = selectedTopics
-    mentor.commit()
+    selectedTopics = Topic.query.filter(Topic.id.in_([skill.get("skill") for skill in data.get("skills")])).all()
+    selectedTopicsOrdered = [next(s for s in selectedTopics if s.id == skill.get("skill")) for skill in
+                             sorted(data.get("skills"), key=(lambda i: i.get("priority")))]
+
+    MentorTopic.query.filter_by(mentor_id=mentorId).delete()
+    db.session.commit()
+
+    count = 1
+    for topic in selectedTopicsOrdered:
+        mentor_topic = MentorTopic(priority=count)
+        mentor_topic.topic = topic
+        mentor_topic.mentor = mentor
+        db.session.add(mentor_topic)
+        count += 1
+
+    db.session.commit()
 
     return {"success": True}, 200
 

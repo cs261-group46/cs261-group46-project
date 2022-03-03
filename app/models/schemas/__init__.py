@@ -18,7 +18,7 @@ class UserSchema(ma.SQLAlchemySchema):
     mentor = ma.Nested(lambda: MentorSchema(exclude=["user"]))
     mentee = ma.Nested(lambda: MenteeSchema(exclude=["user"]))
     expert = ma.Nested(lambda: ExpertSchema(exclude=["user"]))
-    topics = ma.Nested(lambda: UserTopicSchema(exclude=["user"]), many=True)
+    topics = ma.Nested(lambda: UserTopicSchema(exclude=["user", "topic.mentors", "topic.experts"]), many=True)
     notifications = ma.Nested(lambda: NotificationSchema(exclude=["user"]), many=True)
     mentorship_requests_sent = ma.Nested(lambda: MentorshipRequestSchema(exclude=["user"]), many=True)
 

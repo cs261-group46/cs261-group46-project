@@ -59,7 +59,10 @@ const MentorSignup: FC<MentorSignupProps> = () => {
   const sendBecomeMentorData = async () => {
     try {
       const requestBody = {
-        skills: enteredSkills.map((skill) => skill.value),
+        skills: enteredSkills.map((skill, index) => ({
+          priority: index,
+          skill: skill.value,
+        })),
         about: enteredAbout,
         capacity: enteredCapacity,
       };

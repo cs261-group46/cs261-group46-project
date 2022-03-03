@@ -1,11 +1,11 @@
-@import '../../../_variables.scss';
+@import "../../../_variables.scss";
 
 .Event {
   .splitCard {
     display: flex;
     justify-content: flex-start;
     flex-direction: row;
-    gap: 15px;
+    gap: 40px;
     // width: 100%;
     // flex-wrap: nowrap;
   }
@@ -13,12 +13,16 @@
   .dateTimeSquare {
     text-align: center;
     align-items: center;
-    background-color: $sq_teal;
+    // background-color: $sq_teal;
     border-radius: 10px;
-    color: white;
-    padding: 10px 7px;
+    // color: white;
+    // padding: 10px 7px;
     font-size: 14px;
     font-weight: bold;
+    align-items: flex-end;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
 
     span {
       font-size: 30px;

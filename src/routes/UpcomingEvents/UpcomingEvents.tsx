@@ -1,13 +1,22 @@
 import React, { FC, useState } from "react";
 import MainLayout from "../../layouts/MainLayout/MainLayout";
 import styles from "./UpcomingEvents.module.scss";
-import Event from "./Event/Event";
+import Event from "../../components/UpcommingEvents/Event/Event";
 import Button from "../../components/UI/Button/Button";
-import { EventProps } from "./Event/Event.d";
+import { EventProps } from "../../components/UpcommingEvents/Event/Event.d";
 
 interface UpcomingEventsProps {
-  events: EventProps[];
+  // events: EventProps[];
 }
+
+const DUMMY_EVENTS: EventProps[] = [
+  {
+    sessionType: "workshop",
+    subject: "Crafting",
+    mentee: "2",
+    mentor: "5",
+  },
+];
 
 const UpcomingEvents: FC<UpcomingEventsProps> = (props) => {
   // UseVerifyAuth();
@@ -21,7 +30,7 @@ const UpcomingEvents: FC<UpcomingEventsProps> = (props) => {
           onClick={() => {
             setFilterEvents(0);
           }}
-          buttonStyle={(filterEvents === 0 && "primary") || undefined}
+          buttonStyle={(filterEvents === 0 && "primary") || "default"}
         >
           All
         </Button>
@@ -30,25 +39,25 @@ const UpcomingEvents: FC<UpcomingEventsProps> = (props) => {
           onClick={() => {
             setFilterEvents(1);
           }}
-          buttonStyle={(filterEvents === 1 && "primary") || undefined}
+          buttonStyle={(filterEvents === 1 && "primary") || "default"}
         >
-          Your Learning
+          Learn
         </Button>
         <Button
           className={styles.lastButton}
           onClick={() => {
             setFilterEvents(2);
           }}
-          buttonStyle={(filterEvents === 2 && "primary") || undefined}
+          buttonStyle={(filterEvents === 2 && "primary") || "default"}
         >
-          Your Mentoring
+          Mentor
         </Button>
       </div>
 
       <div className={styles.container}>
-        {props.events.map((event_props, index) => {
-          return <Event event={event_props} key={index} />;
-        })}
+        {DUMMY_EVENTS.map((event_props, index) => (
+          <Event event={event_props} key={index} />
+        ))}
       </div>
 
       <div data-testid="UpcomingEvents" />

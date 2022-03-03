@@ -1,8 +1,8 @@
 import React, { FC } from "react";
 // import Title from '../../../components/UI/Title/Title';
 import styles from "./Event.module.scss";
-import Card from "../../../components/UI/Card/Card";
-import Icon from "../../../components/UI/Icon/Icon";
+import Card from "../../UI/Card/Card";
+import Icon from "../../UI/Icon/Icon";
 
 import { EventProps } from "./Event.d";
 
@@ -15,7 +15,8 @@ const Event: FC<Props> = (props) => (
     <div className={styles.Event} data-testid={"Event"}>
       <div className={styles.splitCard}>
         <div className={styles.dateTimeSquare}>
-          <span className={styles.span}>5</span> <br /> March <br /> 10AM-11AM
+          <div className={styles.date}>5 March 2022</div>
+          <div className={styles.time}>10am-11am</div>
         </div>
         <div className={styles.details}>
           <div className={styles.sessionType}>
