@@ -1,5 +1,5 @@
-import React, {FC, useEffect, useState} from 'react';
-import styles from './HoursInput.module.scss';
+import React, { FC, useEffect, useState } from "react";
+import styles from "./HoursInput.module.scss";
 import ClockInput from "./ClockInput";
 import Label from "../Label/Label";
 
@@ -30,8 +30,7 @@ function boolsToRanges(input: boolean[]) {
     }
   }
 
-  if (inARange)
-    ranges.push([rangeStart, 24]);
+  if (inARange) ranges.push([rangeStart, 24]);
 
   return ranges;
 }
@@ -41,13 +40,13 @@ function boolsToRanges(input: boolean[]) {
  */
 function hourToString(hour: number) {
   function pad(hour: number) {
-    return hour.toString().padStart(2,"0");
+    return hour.toString().padStart(2, "0");
   }
 
   if (hour === 0) return "12:00AM";
   if (hour > 0 && hour < 12) return `${pad(hour)}:00AM`;
   if (hour === 12) return "12:00PM";
-  if (hour > 12 && hour < 24) return `${pad(hour-12)}:00PM`;
+  if (hour > 12 && hour < 24) return `${pad(hour - 12)}:00PM`;
   if (hour === 24) return "12:00AM";
 }
 
@@ -66,29 +65,50 @@ const HoursInput: FC<HoursInputProps> = (props) => {
     }
   }, [ranges, onChange, stopInfiniteLoop]);
 
-
-  return <div className={styles.HoursInput} data-testid="HoursInput">
-    {/* TODO: add these to props */}
-    <div className={styles.label}>
-      <Label htmlFor={""} icon={""}>
-        {props.label}
-      </Label>
+  return (
+    <div className={styles.HoursInput} data-testid="HoursInput">
+      {/* TODO: add these to props */}
+      <div className={styles.label}>
+        <Label htmlFor={""} icon={""}>
+          {props.label}
+        </Label>
+      </div>
+      <div className={styles.clocks}>
+        {/* for onchange - not the best solution. otherwise it infinitely loops and im not sure why */}
+        <ClockInput
+          value={amTime}
+          onChange={(value) => {
+            setStopInfiniteLoop(false);
+            setAmTime(value);
+          }}
+          onBlur={props.onBlur}
+          width={width}
+          label={"AM"}
+        />
+        <ClockInput
+          value={pmTime}
+          onChange={(value) => {
+            setStopInfiniteLoop(false);
+            setPmTime(value);
+          }}
+          onBlur={props.onBlur}
+          width={width}
+          label={"PM"}
+        />
+      </div>
+      <div className={styles.times}>
+        {/*there are so many edge cases dealing with hours*/}
+        {/*0 hour is really twelve*/}
+        {/*it must flip to pm for the last hour*/}
+        {ranges.map(([from, to]) => (
+          <p key={`(${from},${to})`}>
+            {hourToString(from)} - {hourToString(to)}
+          </p>
+        ))}
+      </div>
     </div>
-    <div className={styles.clocks}>
-      {/* for onchange - not the best solution. otherwise it infinitely loops and im not sure why */}
-      <ClockInput value={amTime} onChange={value => {setStopInfiniteLoop(false); setAmTime(value)}} onBlur={props.onBlur} width={width} label={"AM"}/>
-      <ClockInput value={pmTime} onChange={value => {setStopInfiniteLoop(false); setPmTime(value)}} onBlur={props.onBlur} width={width} label={"PM"}/>
-    </div>
-    <div className={styles.times}>
-      {/*there are so many edge cases dealing with hours*/}
-      {/*0 hour is really twelve*/}
-      {/*it must flip to pm for the last hour*/}
-      {ranges.map(([from, to]) => <p key={`(${from},${to})`}>
-        {hourToString(from)} - {hourToString(to)}
-      </p>)}
-    </div>
-  </div>
-}
+  );
+};
 
 // y = rsin0
 // x = rcos0
