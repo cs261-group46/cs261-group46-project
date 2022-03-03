@@ -19,6 +19,7 @@ import UpcomingEvents from "./routes/UpcomingEvents/UpcomingEvents.lazy";
 import { EventProps } from "./components/UpcommingEvents/Event/Event.d";
 import YourMentor from "./routes/learn/YourMentor/YourMentor";
 import ExpertSignup from "./routes/expert/ExpertSignup/ExpertSignup";
+import YourMentees from "./routes/mentor/YourMentees/YourMentees";
 
 function App() {
   return (
@@ -37,6 +38,8 @@ function App() {
           <Route path="/mentor">
             <Route path="become-mentor" element={<MentorSignup />} />
             <Route path="skills" element={<MentorSkills />} />
+            <Route path="become-mentor" element={<MentorSignup/>}/>
+            <Route path="your-mentees" element={<YourMentees/>}/>
           </Route>
 
           <Route path="/learn">
