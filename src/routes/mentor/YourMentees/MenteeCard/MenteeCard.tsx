@@ -18,15 +18,20 @@ const MenteeCard : FC<MenteeProp> = (props) => {
     //TODO: Given an id, lead to the correct plan of action.
     //TODO: have button send to meeting link instead of dashboard
     return (
-        <Link className={styles.MenteeCard} data-testid='MenteeCard' to="/learn/plans-of-action">    
+        <div className={styles.MenteeCard} data-testid='MenteeCard'>    
             {`${props.firstname} ${props.lastname}`}
             <BarChart completedGoals={props.completedGoal} totalGoals={props.totalGoal}/>
-            <div className={styles.ButtonFloat}>
+            <div className={styles.ButtonFloatLeft}>
                 <Button href={"/dashboard"} buttonStyle="primary" icon={"👥"}> 
-                    View Meetings
+                    Meetings 
                 </Button>
             </div>
-        </Link>
+            <div className={styles.ButtonFloatRight}>
+                <Button href={"/learn/plans-of-action"} icon={"✓"}> 
+                    <span style={{marginLeft: "2px", marginRight: "2px"}}>View Plan</span>
+                </Button>
+            </div>
+        </div>
     )
 }
 

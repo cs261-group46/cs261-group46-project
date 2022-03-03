@@ -38,8 +38,10 @@ const YourMentees: FC<YourMenteeProps> = () => {
     const menteeNum = exampleMentees.length; //TODO: get from database
 
     //TODO: get list of mentees from database, and if they dont have any return a different message (systemmessage?)
-    const menteelist = exampleMentees.map( (mentee) => 
-        <MenteeCard firstname={mentee.firstname} lastname={mentee.lastname} id={mentee.id} completedGoal={mentee.completedGoal} totalGoal={mentee.totalGoal}/> 
+    const menteelist = exampleMentees.map( (mentee) =>
+        <React.Fragment key={mentee.id}> 
+            <MenteeCard firstname={mentee.firstname} lastname={mentee.lastname} id={mentee.id} completedGoal={mentee.completedGoal} totalGoal={mentee.totalGoal}/> 
+        </React.Fragment>
     );
 
     console.log(menteelist)

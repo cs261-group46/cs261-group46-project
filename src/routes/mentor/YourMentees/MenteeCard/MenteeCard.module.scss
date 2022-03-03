@@ -11,7 +11,7 @@
     box-sizing: border-box;
     border-radius: 20px;
     border: 1px solid #D3D3D3;
-    width: 280px;
+    width: 360px;
     height: 180px;
     padding-top: 20px;
     margin-bottom: 30px;
@@ -24,8 +24,14 @@
     }
 }
 
-.ButtonFloat {
+.ButtonFloatLeft {
     position: absolute;
-    left: 49px;
+    left: 27px;
+    bottom: 20px;
+}
+
+.ButtonFloatRight {
+    position: absolute;
+    right: 27px;
     bottom: 20px;
 }
