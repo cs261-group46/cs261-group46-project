@@ -67,14 +67,16 @@ const MentorSkills: FC<MentorSkillsProps> = () => {
   const getSkills = useCallback(async () => {
     try {
       const data = await get({
-        resource: "mentors",
-        entity: userDataCtx.mentorId as number,
+        resource: "users",
+        entity: userDataCtx.userId as number,
         args: {
-          fields: "topics",
+          fields: "mentor.topics",
         },
       });
 
-      const topics = data.mentor.topics.sort(
+      console.log(data);
+
+      const topics = data.user.mentor.topics.sort(
         (topic1: TopicWithPriorityType, topic2: TopicWithPriorityType) =>
           topic1.priority - topic2.priority
       );

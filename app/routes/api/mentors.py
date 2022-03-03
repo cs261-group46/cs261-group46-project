@@ -16,6 +16,7 @@ mentors = Blueprint("api_mentors", __name__, url_prefix="/mentors")
 @mentors.route("/", methods=["GET"])
 @auth_required()
 def index(user=None):
+    print("request received")
     fields = parse_args_list("fields")
     filters = parse_args_list("filters")
     # Need to introduce some filters ?

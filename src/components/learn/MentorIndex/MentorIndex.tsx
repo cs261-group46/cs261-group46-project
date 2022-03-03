@@ -14,7 +14,15 @@ const MentorIndex: FC<MentorIndexProps> = () => {
       const data = await index({
         resource: "mentors",
         args: {
-          fields: ["user", "about", "topics", "first_name"],
+          fields: [
+            "user",
+            "about",
+            "topics.topic",
+            "user.first_name",
+            "user.last_name",
+            "user.department",
+            "user.email",
+          ],
           filters: ["suitable"],
         },
       });
@@ -38,6 +46,7 @@ const MentorIndex: FC<MentorIndexProps> = () => {
   return (
     <div className={styles.MentorIndex} data-testid="MentorIndex">
       {mentorCards}
+      {mentorCards.length === 0 && "Sorry, couldn't find any available mentors"}
     </div>
   );
 };

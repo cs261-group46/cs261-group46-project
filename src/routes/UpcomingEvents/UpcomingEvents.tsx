@@ -1,9 +1,9 @@
 import React, { FC, useState } from "react";
-import MainLayout from "../../layouts/MainLayout/MainLayout";
 import styles from "./UpcomingEvents.module.scss";
 import Event from "../../components/UpcommingEvents/Event/Event";
 import Button from "../../components/UI/Button/Button";
 import { EventProps } from "../../components/UpcommingEvents/Event/Event.d";
+import DashboardSubpageLayout from "../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
 
 interface UpcomingEventsProps {
   // events: EventProps[];
@@ -23,7 +23,7 @@ const UpcomingEvents: FC<UpcomingEventsProps> = (props) => {
   const [filterEvents, setFilterEvents] = useState<number>(0);
 
   return (
-    <MainLayout title={"Upcoming Events"}>
+    <DashboardSubpageLayout title={"Upcoming Events"}>
       <div className={styles.buttonDiv}>
         <Button
           className={styles.firstButton}
@@ -61,7 +61,7 @@ const UpcomingEvents: FC<UpcomingEventsProps> = (props) => {
       </div>
 
       <div data-testid="UpcomingEvents" />
-    </MainLayout>
+    </DashboardSubpageLayout>
   );
 };
 

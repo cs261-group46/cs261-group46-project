@@ -5,7 +5,6 @@ const LazyUpcomingEvents = lazy(() => import('./UpcomingEvents'));
 
 const UpcomingEvents = (
   props: JSX.IntrinsicAttributes & {
-    events: EventProps[];
     children?: React.ReactNode;
   }
 ) => (

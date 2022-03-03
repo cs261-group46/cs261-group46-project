@@ -1,5 +1,6 @@
 import React, { FC, FormEventHandler, useContext } from "react";
-// import styles from './MentorSignup.module.scss';
+import styles from "./ExpertSignup.module.scss";
+
 import {
   MultiSelectOptions,
   SearchPromise,
@@ -15,11 +16,10 @@ import SearchSelect from "../../../components/UI/FormInput/SearchSelect/SearchSe
 import BigTextInput from "../../../components/UI/FormInput/BigTextInput/BigTextInput";
 import UserDataContext from "../../../store/UserDataContext";
 
-interface MentorSignupProps {}
+interface ExpertSignupProps {}
 
-const MentorSignup: FC<MentorSignupProps> = () => {
+const ExpertSignup: FC<ExpertSignupProps> = () => {
   const userDataCtx = useContext(UserDataContext);
-
   useVerifyAuth();
 
   let navigate = useNavigate();
@@ -35,43 +35,22 @@ const MentorSignup: FC<MentorSignupProps> = () => {
     (selectedOptions) => selectedOptions.length > 0
   );
 
-  const {
-    isInputValid: isAboutInputValid,
-    isValueValid: isAboutValueValid,
-    changeHandler: aboutChangeHandler,
-    blurHandler: aboutBlurHandler,
-    enteredValue: enteredAbout,
-  } = useInput<string>("", (about) => about.length > 0 && about.length < 1000);
-
-  const {
-    isInputValid: isCapacityInputValid,
-    isValueValid: isCapacityValueValid,
-    changeHandler: capacityChangeHandler,
-    blurHandler: capacityBlurHandler,
-    enteredValue: enteredCapacity,
-  } = useInput<string>("", (input) => parseInt(input) > 0);
-
   const showAllErrors = () => {
-    aboutBlurHandler();
     skillsBlurHandler();
   };
 
-  const sendBecomeMentorData = async () => {
+  const sendBecomeExpertData = async () => {
     try {
       const requestBody = {
-        skills: enteredSkills.map((skill, index) => ({
-          priority: index,
-          skill: skill.value,
-        })),
-        about: enteredAbout,
-        capacity: enteredCapacity,
+        expertises: enteredSkills.map((skill) => skill.value),
       };
+
       await store({
-        resource: "mentors",
+        resource: "experts",
         body: requestBody,
       });
 
-      userDataCtx.updateMentorId();
+      userDataCtx.updateExpertId();
       navigate("/dashboard"); // show message instead
     } catch (errors) {
       console.log(errors);
@@ -80,8 +59,8 @@ const MentorSignup: FC<MentorSignupProps> = () => {
 
   const submitHandler: FormEventHandler = (event) => {
     event.preventDefault();
-    if (isSkillsValueValid && isAboutValueValid && isCapacityValueValid) {
-      sendBecomeMentorData();
+    if (isSkillsValueValid) {
+      sendBecomeExpertData();
     } else {
       showAllErrors();
     }
@@ -96,9 +75,11 @@ const MentorSignup: FC<MentorSignupProps> = () => {
         },
       });
       const options: MultiSelectOptions<number> = data.topics.map(
-        ({ label, id }: { label: string; id: number }) => ({ label, value: id })
+        ({ label, id }: { label: string; id: number }) => ({
+          label,
+          value: id,
+        })
       );
-      console.log(options);
 
       return options;
     } catch (errors) {
@@ -112,48 +93,26 @@ const MentorSignup: FC<MentorSignupProps> = () => {
   };
 
   return (
-    <DashboardSubpageLayout title={"Become a Mentor"}>
+    <DashboardSubpageLayout title={"Become an Expert"}>
       <form onSubmit={submitHandler}>
         <SearchSelect
-          id={"skills"}
-          label={"Mentorship areas"}
+          id={"expertises"}
+          label={"Areas of Expertises"}
           isValid={isSkillsInputValid}
           value={enteredSkills}
           onChange={skillsChangeHandler}
           onBlur={skillsBlurHandler}
           searchPromise={searchPromise}
-          type={"draggable"}
-        />
-
-        <BigTextInput
-          id={"profile"}
-          label={"About me"}
-          placeholder={"I can play Electric Guitar"}
-          value={enteredAbout}
-          isValid={isAboutInputValid}
-          onChange={aboutChangeHandler}
-          onBlur={aboutBlurHandler}
-        />
-
-        <TextInput
-          id={"capacity"}
-          label={"How many mentees do you want?"}
-          placeholder={"e.g. 5"}
-          value={enteredCapacity}
-          type={"number"}
-          isValid={isCapacityInputValid}
-          onChange={capacityChangeHandler}
-          onBlur={capacityBlurHandler}
         />
 
         <Button icon="👑" type="submit" buttonStyle={"primary"}>
-          Become a Mentor
+          Become an Expert
         </Button>
       </form>
 
-      <div data-testid="MentorSignup" />
+      <div data-testid="ExpertSignup" />
     </DashboardSubpageLayout>
   );
 };
 
-export default MentorSignup;
+export default ExpertSignup;
