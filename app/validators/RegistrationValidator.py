@@ -5,20 +5,20 @@ from cerberus import Validator
 # data_dict.get("department"))
 
 
-
-class RegistrationValidator(Validator):
-    def _validate_are_equal(self, password, field, password_repeat):
-        """ Test password and password_repeat are the same.
-
-        The rule's arguments are validated against this schema:
-        {'type': 'string'}
-        """
-        if password not in self.document:
-            return False
-
-        if self.document[password] != password_repeat:
-            self._error(field, "Passwords don't match")
-
+#
+# class RegistrationValidator(Validator):
+#     def _validate_are_equal(self, password, field, password_repeat):
+#         """ Test password and password_repeat are the same.
+#
+#         The rule's arguments are validated against this schema:
+#         {'type': 'string'}
+#         """
+#         if password not in self.document:
+#             return False
+#
+#         if self.document[password] != password_repeat:
+#             self._error(field, "Passwords don't match")
+#
 
 validationRules = {
     'email': {
@@ -34,12 +34,6 @@ validationRules = {
         'required': True,
         'minlength': 10,
         'maxlength': 126
-    },
-    'password_repeat': {
-        'type': 'string',
-        'required': True,
-        'dependencies': 'password',
-        'are_equal': 'password'
     },
     'first_name': {
         'type': 'string',
@@ -58,7 +52,7 @@ validationRules = {
                 'type': 'integer',
                 'required': True
             },
-            'label': {
+            'name': {
                 'type': 'string',
                 'required': False
             }
@@ -68,4 +62,4 @@ validationRules = {
     }
 }
 
-validator = RegistrationValidator(validationRules)
+validator = Validator(validationRules)

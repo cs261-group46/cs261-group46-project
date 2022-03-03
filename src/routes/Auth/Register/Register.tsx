@@ -1,4 +1,10 @@
-import React, { FC, FormEventHandler, useEffect, useState } from "react";
+import React, {
+  FC,
+  FormEventHandler,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import MainLayout from "../../../layouts/MainLayout/MainLayout";
 import TextInput from "../../../components/UI/FormInput/TextInput/TextInput";
 import PasswordInput from "../../../components/Register/PasswordInput/PasswordInput";
@@ -12,6 +18,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import { custom, index } from "../../../api/api";
 import UseVerifyAuth from "../../../hooks/UseVerifyAuth/UseVerifyAuth";
+import { DepartmentType } from "../../../types/Department";
+import ErrorMessagesContext from "../../../store/ErrorMessagesContext";
 
 function validateEmail(email: string) {
   const re =
@@ -54,11 +62,12 @@ function validateRepeatedPassword(
 }
 
 function validateDepartment(_department: SelectOption<number>) {
-  return _department.id !== -1;
+  return _department.value !== -1;
 }
 
 const Register: FC = () => {
   UseVerifyAuth(0, false);
+  const errorsCtx = useContext(ErrorMessagesContext);
 
   const [departments, setDepartments] = useState<SelectOptions<number>>([]);
   let navigate = useNavigate();
@@ -78,9 +87,17 @@ const Register: FC = () => {
       const data = await index({
         resource: "departments",
       });
-      setDepartments(data.departments);
+      console.log(data);
+
+      setDepartments(
+        data.departments.map((department: DepartmentType) => ({
+          value: department.id,
+          label: department.name,
+        }))
+      );
     } catch (errors) {
-      console.log(errors);
+      const errs = errors as string[];
+      errorsCtx.setErrorsHandler(errs);
     }
   };
 
@@ -110,24 +127,29 @@ const Register: FC = () => {
   };
 
   const sendRegistrationData = async () => {
+    const department = {
+      name: enteredDepartment.label,
+      id: enteredDepartment.value,
+    };
     const body = {
       email: enteredEmail,
       password: enteredPassword,
-      password_repeat: enteredRepeatedPassword,
       first_name: enteredFirstName,
       last_name: enteredLastName,
-      department: enteredDepartment,
+      department: department,
     };
 
     try {
-      custom({
+      await custom({
         endpoint: "/auth/register",
         method: "POST",
         body: body,
       });
+
       navigate("/register/verifyemail");
-    } catch (errors) {
-      console.log(errors);
+    } catch (error) {
+      const message = errorsCtx.getErrorMessage(error);
+      errorsCtx.setErrorsHandler(message);
     }
   };
 
@@ -180,7 +202,7 @@ const Register: FC = () => {
     isValueValid: isValueDeprtmentPasswordValid,
     changeHandler: departmentChangeHandler,
     blurHandler: departmentBlurHandler,
-  } = useInput<SelectOption<number>>({ id: -1 }, validateDepartment);
+  } = useInput<SelectOption<number>>({ value: -1 }, validateDepartment);
 
   return (
     <MainLayout title="Register">

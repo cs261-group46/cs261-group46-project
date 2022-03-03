@@ -1,7 +1,6 @@
 type args = { [key: string]: string | string[] | number };
 type body = { [key: string]: any };
 
-
 function argsToString(args: args) {
   let count = 1;
   let toReturn = "";
@@ -136,6 +135,7 @@ export async function custom(requestData: {
     }
   );
   const data = await response.json();
+  console.log(response.ok);
 
   if (!response.ok) {
     throw new Error(data.errors || ["Unexpected error occurred"]);
