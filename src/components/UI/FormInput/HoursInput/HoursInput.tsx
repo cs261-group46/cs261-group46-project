@@ -1,5 +1,5 @@
-import React, {FC, useEffect, useState} from 'react';
-import styles from './HoursInput.module.scss';
+import React, { FC, useEffect, useState } from "react";
+import styles from "./HoursInput.module.scss";
 import ClockInput from "./ClockInput";
 import Label from "../Label/Label";
 
@@ -12,6 +12,9 @@ interface HoursInputProps {
   onChange: (input: Range[]) => void;
   onBlur: () => void;
   width?: string;
+  allowedRanges?: Range[];
+  maxHours?: number;
+  mustBeConsecutive?: boolean;
 }
 
 function boolsToRanges(input: boolean[]) {
@@ -30,8 +33,7 @@ function boolsToRanges(input: boolean[]) {
     }
   }
 
-  if (inARange)
-    ranges.push([rangeStart, 24]);
+  if (inARange) ranges.push([rangeStart, 24]);
 
   return ranges;
 }
@@ -41,14 +43,51 @@ function boolsToRanges(input: boolean[]) {
  */
 function hourToString(hour: number) {
   function pad(hour: number) {
-    return hour.toString().padStart(2,"0");
+    return hour.toString().padStart(2, "0");
   }
 
   if (hour === 0) return "12:00AM";
   if (hour > 0 && hour < 12) return `${pad(hour)}:00AM`;
   if (hour === 12) return "12:00PM";
-  if (hour > 12 && hour < 24) return `${pad(hour-12)}:00PM`;
+  if (hour > 12 && hour < 24) return `${pad(hour - 12)}:00PM`;
   if (hour === 24) return "12:00AM";
+}
+
+function rangesToHours(ranges: Range[]) {
+  const hours: boolean[] = Array(24).fill(false);
+
+  return ranges.reduce(
+    (acc, range) =>
+      // flip to true if this i is in the range
+      acc.map((value, i) => value || (i >= range[0] && i < range[1])),
+    hours
+  );
+}
+
+function checkConsecutive(amTime: boolean[], pmTime: boolean[]) {
+  const time = amTime.concat(pmTime);
+
+  const result = time.reduce<
+    "start" | "foundrange" | "pastrange" | "notconsecutive"
+  >((acc, val) => {
+    switch (acc) {
+      case "start": // initially look out for the start of a range
+        if (val) return "foundrange";
+        else return "start";
+      case "foundrange": // then once found it, pace it out
+        if (val) return "foundrange";
+        else return "pastrange";
+      case "pastrange": // if see another start of range
+        if (val) return "notconsecutive";
+        else return "pastrange";
+      case "notconsecutive":
+        return "notconsecutive";
+    }
+    // should never reach here
+    return "notconsecutive";
+  }, "start");
+
+  return result !== "notconsecutive";
 }
 
 const HoursInput: FC<HoursInputProps> = (props) => {
@@ -57,7 +96,15 @@ const HoursInput: FC<HoursInputProps> = (props) => {
   const [pmTime, setPmTime] = useState(Array.from(amTime));
   const [stopInfiniteLoop, setStopInfiniteLoop] = useState(false);
   const width = props.width ?? "200px";
-  const ranges = boolsToRanges(amTime.concat(pmTime));
+  const hours = amTime.concat(pmTime);
+  const ranges = boolsToRanges(hours);
+  const hoursLeft = props.maxHours
+    ? props.maxHours - hours.filter((hour) => hour).length
+    : undefined;
+
+  const allowedHours = props.allowedRanges
+    ? rangesToHours(props.allowedRanges)
+    : undefined;
 
   useEffect(() => {
     if (!stopInfiniteLoop) {
@@ -66,29 +113,66 @@ const HoursInput: FC<HoursInputProps> = (props) => {
     }
   }, [ranges, onChange, stopInfiniteLoop]);
 
-
-  return <div className={styles.HoursInput} data-testid="HoursInput">
-    {/* TODO: add these to props */}
-    <div className={styles.label}>
-      <Label htmlFor={""} icon={""}>
-        {props.label}
-      </Label>
+  return (
+    <div className={styles.HoursInput} data-testid="HoursInput">
+      {/* TODO: add these to props */}
+      <div className={styles.label}>
+        <Label htmlFor={""} icon={""}>
+          {props.label}
+        </Label>
+      </div>
+      <div className={styles.clocks}>
+        {/* for onchange - not the best solution. otherwise it infinitely loops and im not sure why */}
+        <ClockInput
+          value={amTime}
+          onChange={(value) => {
+            setStopInfiniteLoop(false);
+            if (props.mustBeConsecutive) {
+              // if need to check for consecutive, ensure it
+              if (checkConsecutive(value, pmTime)) {
+                setAmTime(value);
+              }
+            } else setAmTime(value);
+          }}
+          onBlur={props.onBlur}
+          width={width}
+          label={"AM"}
+          allowedHours={allowedHours ? allowedHours.slice(0, 12) : undefined}
+          hoursLeft={hoursLeft}
+        />
+        <ClockInput
+          value={pmTime}
+          onChange={(value) => {
+            setStopInfiniteLoop(false);
+            if (props.mustBeConsecutive) {
+              // if need to check for consecutive, ensure it
+              if (checkConsecutive(amTime, value)) {
+                setPmTime(value);
+              }
+            } else setPmTime(value);
+          }}
+          onBlur={props.onBlur}
+          width={width}
+          label={"PM"}
+          allowedHours={allowedHours ? allowedHours.slice(12, 23) : undefined}
+          hoursLeft={hoursLeft}
+        />
+      </div>
+      <div className={styles.times}>
+        <p>Hours left: {hoursLeft}</p>
+        {props.mustBeConsecutive && <p>Hours must be consecutive</p>}
+        {/*there are so many edge cases dealing with hours*/}
+        {/*0 hour is really twelve*/}
+        {/*it must flip to pm for the last hour*/}
+        {ranges.map(([from, to]) => (
+          <p key={`(${from},${to})`}>
+            {hourToString(from)} - {hourToString(to)}
+          </p>
+        ))}
+      </div>
     </div>
-    <div className={styles.clocks}>
-      {/* for onchange - not the best solution. otherwise it infinitely loops and im not sure why */}
-      <ClockInput value={amTime} onChange={value => {setStopInfiniteLoop(false); setAmTime(value)}} onBlur={props.onBlur} width={width} label={"AM"}/>
-      <ClockInput value={pmTime} onChange={value => {setStopInfiniteLoop(false); setPmTime(value)}} onBlur={props.onBlur} width={width} label={"PM"}/>
-    </div>
-    <div className={styles.times}>
-      {/*there are so many edge cases dealing with hours*/}
-      {/*0 hour is really twelve*/}
-      {/*it must flip to pm for the last hour*/}
-      {ranges.map(([from, to]) => <p key={`(${from},${to})`}>
-        {hourToString(from)} - {hourToString(to)}
-      </p>)}
-    </div>
-  </div>
-}
+  );
+};
 
 // y = rsin0
 // x = rcos0

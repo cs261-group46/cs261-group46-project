@@ -1,5 +1,5 @@
 import React, { FC, FormEventHandler } from "react";
-import styles from "./CreateWorkshop.module.scss";
+import styles from "./CreateMeeting.module.scss";
 import MainLayout from "../../layouts/MainLayout/MainLayout";
 import SearchSelect from "../../components/UI/FormInput/SearchSelect/SearchSelect";
 import {
@@ -13,19 +13,17 @@ import HoursInput, {
 } from "../../components/UI/FormInput/HoursInput/HoursInput";
 import BigTextInput from "../../components/UI/FormInput/BigTextInput/BigTextInput";
 import TextInput from "../../components/UI/FormInput/TextInput/TextInput";
-import Select from "../../components/UI/FormInput/Select/Select";
-import { SelectOption } from "../../components/UI/FormInput/Select/Select.d";
 import Button from "../../components/UI/Button/Button";
 import UseVerifyAuth from "../../hooks/UseVerifyAuth/UseVerifyAuth";
 
-interface CreateWorkshopProps {}
+interface CreateMeetingProps {}
 
 interface Room {
   id: number;
   label: string;
 }
 
-const CreateWorkshop: FC<CreateWorkshopProps> = () => {
+const CreateMeeting: FC<CreateMeetingProps> = () => {
   UseVerifyAuth();
 
   const {
@@ -62,23 +60,6 @@ const CreateWorkshop: FC<CreateWorkshopProps> = () => {
     blurHandler: descriptionBlurHandler,
   } = useInput<string>("");
 
-  const {
-    enteredValue: capacity,
-    changeHandler: capacityChangeHandler,
-    isInputValid: capacityInputValid,
-    isValueValid: capacityValueValid,
-    blurHandler: capacityBlurHandler,
-  } = useInput<number>(0, (value) => value > 0);
-
-  const {
-    enteredValue: type,
-    changeHandler: typeChangeHandler,
-    blurHandler: typeBlurHandler,
-  } = useInput<SelectOption<string>>(
-    { value: "" },
-    (value) => value.value !== ""
-  );
-
   const searchPromise: SearchPromise<Room> = async (search) => {
     const result = await fetch(`/api/meetings/rooms?startwith=${search}`);
 
@@ -96,12 +77,11 @@ const CreateWorkshop: FC<CreateWorkshopProps> = () => {
     // this will also make errors show if needed
     roomBlurHandler();
     timeBlurHandler();
-    capacityBlurHandler();
   }
 
   const submitHandler: FormEventHandler = (event) => {
     event.preventDefault();
-    if (roomValueValid && timeValueValid && capacityValueValid) {
+    if (roomValueValid && timeValueValid) {
       // send off this event to the backend
     } else {
       showErrors();
@@ -109,10 +89,10 @@ const CreateWorkshop: FC<CreateWorkshopProps> = () => {
   };
 
   return (
-    <MainLayout title={"Create a Workshop"}>
+    <MainLayout title={"Create a Meeting"}>
       <form
-        className={styles.CreateWorkshop}
-        data-testid="CreateWorkshop"
+        className={styles.CreateMeeting}
+        data-testid="CreateMeeting"
         onSubmit={submitHandler}
       >
         <SearchSelect
@@ -152,42 +132,22 @@ const CreateWorkshop: FC<CreateWorkshopProps> = () => {
           onChange={timeChangeHandler}
           onBlur={timeBlurHandler}
           width={"150px"}
+          maxHours={1}
           mustBeConsecutive
+          allowedRanges={[
+            [1, 3],
+            [6, 12],
+          ]}
         />
 
         <BigTextInput
           id={"description"}
-          label={"Description"}
-          placeholder={"Tell attendees what the event is about"}
+          label={"Note to Mentor"}
+          placeholder={"Include what you'd like to talk about in the meeting"}
           value={description}
           isValid={true}
           onChange={descriptionChangeHandler}
           onBlur={descriptionBlurHandler}
-        />
-
-        <TextInput
-          id={"capacity"}
-          label={"Capacity"}
-          placeholder={""}
-          value={capacity.toString()}
-          isValid={capacityInputValid}
-          type={"number"}
-          onChange={(newValue) => capacityChangeHandler(parseInt(newValue))}
-          onBlur={capacityBlurHandler}
-        />
-
-        <Select
-          id={"type"}
-          label={"Meeting Type"}
-          placeholder={"Public or Private?"}
-          options={[
-            { value: "public", label: "Public (visible on Workshops)" },
-            { value: "private", label: "Private (requires a link)" },
-          ]}
-          value={type}
-          isValid={true}
-          onChange={typeChangeHandler}
-          onBlur={typeBlurHandler}
         />
 
         <Button icon="👑" type={"submit"} buttonStyle={"primary"}>
@@ -198,4 +158,4 @@ const CreateWorkshop: FC<CreateWorkshopProps> = () => {
   );
 };
 
-export default CreateWorkshop;
+export default CreateMeeting;
