@@ -22,6 +22,7 @@ import YourMentees from "./routes/mentor/YourMentees/YourMentees";
 import FindMentor from "./routes/learn/FindMentor/FindMentor";
 import CreateWorkshop from "./routes/CreateWorkshop/CreateWorkshop.lazy";
 import YourGroupSessions from "./routes/expert/YourGroupSessions/YourGroupSessions";
+import Profile from "./routes/Profile/Profile";
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/setup" element={<Setup />} />
           <Route path="/calendar" element={<UpcomingEvents />} />
+          <Route path="/profile" element={<Profile />} />
 
           <Route path="/mentor">
             <Route path="become-mentor" element={<MentorSignup />} />

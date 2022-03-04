@@ -1,0 +1,22 @@
+.Profile {
+
+}
+
+.topContainer {
+    width: auto;
+    height: 200px;
+    margin-bottom: 20px;
+    
+    .leftContainer {
+        width: 35%;
+        height: 200px;
+        float:left;
+    }
+
+    .rightContainer {
+        padding-left: 20px;
+        width: 65%;
+        height: 200px;
+        float: right;
+    }
+}
