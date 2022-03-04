@@ -132,6 +132,12 @@ const CreateMeeting: FC<CreateMeetingProps> = () => {
           onChange={timeChangeHandler}
           onBlur={timeBlurHandler}
           width={"150px"}
+          maxHours={1}
+          mustBeConsecutive
+          allowedRanges={[
+            [1, 3],
+            [6, 12],
+          ]}
         />
 
         <BigTextInput
