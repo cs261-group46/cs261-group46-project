@@ -12,6 +12,7 @@ interface HoursInputProps {
   onChange: (input: Range[]) => void;
   onBlur: () => void;
   width?: string;
+  allowedRanges?: Range[];
 }
 
 function boolsToRanges(input: boolean[]) {
@@ -50,6 +51,17 @@ function hourToString(hour: number) {
   if (hour === 24) return "12:00AM";
 }
 
+function rangesToHours(ranges: Range[]) {
+  const hours: boolean[] = Array(24).fill(false);
+
+  return ranges.reduce(
+    (acc, range) =>
+      // flip to true if this i is in the range
+      acc.map((value, i) => value || (i >= range[0] && i < range[1])),
+    hours
+  );
+}
+
 const HoursInput: FC<HoursInputProps> = (props) => {
   const { onChange } = props;
   const [amTime, setAmTime] = useState(Array(12).fill(false));
@@ -57,6 +69,9 @@ const HoursInput: FC<HoursInputProps> = (props) => {
   const [stopInfiniteLoop, setStopInfiniteLoop] = useState(false);
   const width = props.width ?? "200px";
   const ranges = boolsToRanges(amTime.concat(pmTime));
+  const allowedHours = props.allowedRanges
+    ? rangesToHours(props.allowedRanges)
+    : undefined;
 
   useEffect(() => {
     if (!stopInfiniteLoop) {
@@ -84,6 +99,7 @@ const HoursInput: FC<HoursInputProps> = (props) => {
           onBlur={props.onBlur}
           width={width}
           label={"AM"}
+          allowedHours={allowedHours ? allowedHours.slice(0, 12) : undefined}
         />
         <ClockInput
           value={pmTime}
@@ -94,6 +110,7 @@ const HoursInput: FC<HoursInputProps> = (props) => {
           onBlur={props.onBlur}
           width={width}
           label={"PM"}
+          allowedHours={allowedHours ? allowedHours.slice(12, 23) : undefined}
         />
       </div>
       <div className={styles.times}>

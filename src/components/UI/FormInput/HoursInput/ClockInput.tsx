@@ -1,6 +1,7 @@
 import React, { FC, MouseEvent, useState } from "react";
 import styles from "./ClockInput.module.scss";
 import segmentHighlight from "./segment_highlight.svg";
+import segmentBlocked from "./segment_blocked.svg";
 import segment from "./segment.svg";
 import clockFace from "./face.svg";
 
@@ -10,6 +11,7 @@ interface ClockInputProps {
   onBlur: () => void;
   width?: string;
   label?: string;
+  allowedHours?: boolean[];
 }
 
 const ClockInput: FC<ClockInputProps> = (props) => {
@@ -37,6 +39,12 @@ const ClockInput: FC<ClockInputProps> = (props) => {
     );
   };
 
+  const getSrc = (i: number) => {
+    if (props.allowedHours && !props.allowedHours[i]) return segmentBlocked;
+    if (props.value[i]) return segmentHighlight;
+    return segment;
+  };
+
   return (
     <div className={styles.ClockInput}>
       {
@@ -45,18 +53,25 @@ const ClockInput: FC<ClockInputProps> = (props) => {
           .reverse()
           .map((i) => (
             <img
-              src={props.value[i] ? segmentHighlight : segment}
+              src={getSrc(i)}
               width={props.width}
               key={i}
               className={styles.segment}
               alt="Clock Face"
               style={{ rotate: `${i * 30}deg` }}
               onMouseDown={(event) => {
+                const clickedIndex = getClickedIndex(event);
                 setMouseDown(true);
                 // store whether the initial segment was on/off.
-                setInitialClickState(props.value[getClickedIndex(event)]);
+                setInitialClickState(props.value[clickedIndex]);
                 // also flip this val when you click
-                flip(getClickedIndex(event));
+                // if theres a filter set, obey it
+                if (props.allowedHours) {
+                  console.log(props.allowedHours[clickedIndex]);
+                  if (props.allowedHours[clickedIndex]) flip(clickedIndex);
+                }
+                // else just flip it
+                else flip(clickedIndex);
               }}
               onMouseUp={() => {
                 setMouseDown(false);
@@ -67,7 +82,12 @@ const ClockInput: FC<ClockInputProps> = (props) => {
                   const clickedIndex = getClickedIndex(event);
                   // for any segments the same value as what you clicked initially
                   if (props.value[clickedIndex] === initialClickState)
-                    flip(clickedIndex);
+                    if (props.allowedHours) {
+                      console.log(props.allowedHours[clickedIndex]);
+                      if (props.allowedHours[clickedIndex]) flip(clickedIndex);
+                    }
+                    // else just flip it
+                    else flip(clickedIndex);
                 }
               }}
               // need to stop image dragging
