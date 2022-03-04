@@ -13,6 +13,7 @@ interface HoursInputProps {
   onBlur: () => void;
   width?: string;
   allowedRanges?: Range[];
+  maxHours?: number;
 }
 
 function boolsToRanges(input: boolean[]) {
@@ -68,7 +69,13 @@ const HoursInput: FC<HoursInputProps> = (props) => {
   const [pmTime, setPmTime] = useState(Array.from(amTime));
   const [stopInfiniteLoop, setStopInfiniteLoop] = useState(false);
   const width = props.width ?? "200px";
-  const ranges = boolsToRanges(amTime.concat(pmTime));
+  const hours = amTime.concat(pmTime);
+  const ranges = boolsToRanges(hours);
+  const hoursLeft = props.maxHours
+    ? props.maxHours - hours.filter((hour) => hour).length
+    : undefined;
+
+  console.log(hoursLeft);
   const allowedHours = props.allowedRanges
     ? rangesToHours(props.allowedRanges)
     : undefined;
@@ -100,6 +107,7 @@ const HoursInput: FC<HoursInputProps> = (props) => {
           width={width}
           label={"AM"}
           allowedHours={allowedHours ? allowedHours.slice(0, 12) : undefined}
+          hoursLeft={hoursLeft}
         />
         <ClockInput
           value={pmTime}
@@ -111,9 +119,11 @@ const HoursInput: FC<HoursInputProps> = (props) => {
           width={width}
           label={"PM"}
           allowedHours={allowedHours ? allowedHours.slice(12, 23) : undefined}
+          hoursLeft={hoursLeft}
         />
       </div>
       <div className={styles.times}>
+        <p>Hours left: {hoursLeft}</p>
         {/*there are so many edge cases dealing with hours*/}
         {/*0 hour is really twelve*/}
         {/*it must flip to pm for the last hour*/}

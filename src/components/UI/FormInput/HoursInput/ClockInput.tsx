@@ -12,6 +12,7 @@ interface ClockInputProps {
   width?: string;
   label?: string;
   allowedHours?: boolean[];
+  hoursLeft?: number;
 }
 
 const ClockInput: FC<ClockInputProps> = (props) => {
@@ -33,9 +34,14 @@ const ClockInput: FC<ClockInputProps> = (props) => {
 
   const flip = (i: number) => {
     props.onChange(
-      props.value.map((bool, replaceIndex) =>
-        i === replaceIndex ? !bool : bool
-      )
+      props.value.map((bool, replaceIndex) => {
+        if (i === replaceIndex) {
+          // if trying to flip to true but theres no hours left
+          if (!bool && props.hoursLeft !== undefined && props.hoursLeft === 0) {
+            return bool;
+          } else return !bool;
+        } else return bool; // dont affect the other hours
+      })
     );
   };
 
@@ -67,7 +73,6 @@ const ClockInput: FC<ClockInputProps> = (props) => {
                 // also flip this val when you click
                 // if theres a filter set, obey it
                 if (props.allowedHours) {
-                  console.log(props.allowedHours[clickedIndex]);
                   if (props.allowedHours[clickedIndex]) flip(clickedIndex);
                 }
                 // else just flip it
@@ -83,7 +88,6 @@ const ClockInput: FC<ClockInputProps> = (props) => {
                   // for any segments the same value as what you clicked initially
                   if (props.value[clickedIndex] === initialClickState)
                     if (props.allowedHours) {
-                      console.log(props.allowedHours[clickedIndex]);
                       if (props.allowedHours[clickedIndex]) flip(clickedIndex);
                     }
                     // else just flip it
