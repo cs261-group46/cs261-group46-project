@@ -14,6 +14,7 @@ interface HoursInputProps {
   width?: string;
   allowedRanges?: Range[];
   maxHours?: number;
+  mustBeConsecutive?: boolean;
 }
 
 function boolsToRanges(input: boolean[]) {
@@ -63,6 +64,32 @@ function rangesToHours(ranges: Range[]) {
   );
 }
 
+function checkConsecutive(amTime: boolean[], pmTime: boolean[]) {
+  const time = amTime.concat(pmTime);
+
+  const result = time.reduce<
+    "start" | "foundrange" | "pastrange" | "notconsecutive"
+  >((acc, val) => {
+    switch (acc) {
+      case "start": // initially look out for the start of a range
+        if (val) return "foundrange";
+        else return "start";
+      case "foundrange": // then once found it, pace it out
+        if (val) return "foundrange";
+        else return "pastrange";
+      case "pastrange": // if see another start of range
+        if (val) return "notconsecutive";
+        else return "pastrange";
+      case "notconsecutive":
+        return "notconsecutive";
+    }
+    // should never reach here
+    return "notconsecutive";
+  }, "start");
+
+  return result !== "notconsecutive";
+}
+
 const HoursInput: FC<HoursInputProps> = (props) => {
   const { onChange } = props;
   const [amTime, setAmTime] = useState(Array(12).fill(false));
@@ -75,7 +102,6 @@ const HoursInput: FC<HoursInputProps> = (props) => {
     ? props.maxHours - hours.filter((hour) => hour).length
     : undefined;
 
-  console.log(hoursLeft);
   const allowedHours = props.allowedRanges
     ? rangesToHours(props.allowedRanges)
     : undefined;
@@ -101,7 +127,12 @@ const HoursInput: FC<HoursInputProps> = (props) => {
           value={amTime}
           onChange={(value) => {
             setStopInfiniteLoop(false);
-            setAmTime(value);
+            if (props.mustBeConsecutive) {
+              // if need to check for consecutive, ensure it
+              if (checkConsecutive(value, pmTime)) {
+                setAmTime(value);
+              }
+            } else setAmTime(value);
           }}
           onBlur={props.onBlur}
           width={width}
@@ -113,7 +144,12 @@ const HoursInput: FC<HoursInputProps> = (props) => {
           value={pmTime}
           onChange={(value) => {
             setStopInfiniteLoop(false);
-            setPmTime(value);
+            if (props.mustBeConsecutive) {
+              // if need to check for consecutive, ensure it
+              if (checkConsecutive(amTime, value)) {
+                setPmTime(value);
+              }
+            } else setPmTime(value);
           }}
           onBlur={props.onBlur}
           width={width}
@@ -124,6 +160,7 @@ const HoursInput: FC<HoursInputProps> = (props) => {
       </div>
       <div className={styles.times}>
         <p>Hours left: {hoursLeft}</p>
+        {props.mustBeConsecutive && <p>Hours must be consecutive</p>}
         {/*there are so many edge cases dealing with hours*/}
         {/*0 hour is really twelve*/}
         {/*it must flip to pm for the last hour*/}
