@@ -12,7 +12,7 @@ import YourInterests from "./routes/learn/Interests/Interests";
 import MentorSkills from "./routes/mentor/MentorSkills/MentorSkills";
 import ExpertExpertises from "./routes/expert/ExpertExpertises/ExpertExpertises.lazy";
 import Homepage from "./routes/Homepage/Homepage.lazy";
-import ViewWorkshops from "./routes/workshops/ViewWorkshops/ViewWorkshops.lazy";
+import ViewGroupSessions from "./routes/learn/ViewGroupSessions/ViewGroupSessions.lazy";
 import ComponentPlaygound from "./routes/ComponentPlaygound/ComponentPlaygound.lazy";
 import PlansOfAction from "./routes/learn/PlansOfAction/PlansOfAction.lazy";
 import UpcomingEvents from "./routes/UpcomingEvents/UpcomingEvents.lazy";
@@ -21,6 +21,7 @@ import ExpertSignup from "./routes/expert/ExpertSignup/ExpertSignup";
 import YourMentees from "./routes/mentor/YourMentees/YourMentees";
 import FindMentor from "./routes/learn/FindMentor/FindMentor";
 import CreateWorkshop from "./routes/CreateWorkshop/CreateWorkshop.lazy";
+import YourGroupSessions from "./routes/expert/YourGroupSessions/YourGroupSessions";
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function App() {
           <Route path="/learn">
             <Route path="find-mentor" element={<FindMentor />} />
             <Route path="become-mentee" element={<MenteeSignup />} />
+            <Route path="group-sessions" element={<ViewGroupSessions />} />
 
             <Route path="your-mentor" element={<YourMentor />} />
 
@@ -54,14 +56,18 @@ function App() {
           </Route>
 
           <Route path="/expert">
+            <Route path="group-sessions">
+              <Route path="create" element={<CreateWorkshop />} />
+              <Route index element={<YourGroupSessions />} />
+            </Route>
             <Route path="skills" element={<ExpertExpertises />} />
             <Route path="become-expert" element={<ExpertSignup />} />
           </Route>
 
-          <Route path="/workshops">
+          {/* <Route path="/workshops">
             <Route index element={<ViewWorkshops />} />
-            <Route path={"create"} element={<CreateWorkshop/>}/>
-          </Route>
+            <Route path={"create"} element={<CreateWorkshop />} />
+          </Route> */}
           <Route path="/test" element={<ComponentPlaygound />} />
           <Route index element={<Homepage />} />
 

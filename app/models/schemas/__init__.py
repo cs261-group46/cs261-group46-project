@@ -15,7 +15,7 @@ class UserSchema(ma.SQLAlchemySchema):
     permissions = ma.auto_field()
     department = ma.Nested(lambda: DepartmentSchema(exclude=["users"]))
     mentor = ma.Nested(lambda: MentorSchema(exclude=["user"]))
-    mentee = ma.Nested(lambda: MenteeSchema(exclude=["user", "mentor.user"]))
+    mentee = ma.Nested(lambda: MenteeSchema(exclude=["user"]))
     expert = ma.Nested(lambda: ExpertSchema(exclude=["user", "topics.experts", "topics.mentors", "topics.mentees"]))
     notifications = ma.Nested(lambda: NotificationSchema(exclude=["user"]), many=True)
 
@@ -41,7 +41,7 @@ class MenteeSchema(ma.SQLAlchemySchema):
     id = ma.auto_field()
     about = ma.auto_field()
     user = ma.Nested(UserSchema(exclude=["mentee", "mentor", "expert", "notifications", "permissions"]))
-    mentor = ma.Nested(MentorSchema(exclude=["mentees"]))
+    mentor = ma.Nested(MentorSchema(exclude=["mentees", "user.notifications", "user.mentorship_requests_received", "user.permissons", "user.expert", "user.mentor", "user.mentee"]))
     topics = ma.Nested(lambda: MenteeTopicSchema(exclude=["mentee", "topic.experts", "topic.mentees", "topic.mentors"]), many=True)
     mentorship_requests_sent = ma.Nested(lambda: MentorshipRequestSchema(exclude=["mentee", "mentor.mentees"]), many=True)
 

@@ -1,7 +1,10 @@
 @import "../../../variables";
+.YourWorkshops {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
 
-.ViewWorkshops {
-  .workshop {
+  .GroupSession {
     width: 100%;
     border-radius: 10px;
     border: 1px solid $sq_light_gray;
@@ -15,7 +18,8 @@
     align-items: center;
     margin-bottom: 2rem;
 
-    &:focus-visible, &:hover {
+    &:focus-visible,
+    &:hover {
       outline: 2px solid $sq_dark_gray;
       border-color: $sq_dark_gray;
     }
@@ -26,11 +30,11 @@
     justify-content: center;
   }
 
-  .selectedworkshop {
+  .selectedGroupSession {
     position: fixed;
     width: 100%;
     height: 100vh;
-    background-color: rgba(0,0,0,0.2);
+    background-color: rgba(0, 0, 0, 0.2);
     top: 0;
     left: 0;
     display: grid;
@@ -47,7 +51,7 @@
       opacity: 1;
     }
 
-    .workshopcard {
+    .GroupSessioncard {
       grid-column: 2;
       grid-row: 2;
       border-radius: 10px;
@@ -78,4 +82,9 @@
       }
     }
   }
+}
+
+.type {
+  display: flex;
+  flex-wrap: wrap;
 }

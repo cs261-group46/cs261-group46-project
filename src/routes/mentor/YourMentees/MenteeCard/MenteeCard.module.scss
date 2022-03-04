@@ -20,10 +20,6 @@
   //   padding-left: 27px;
   //   padding-right: 27px;
 
-  .BarChart {
-    margin: 35px 0;
-  }
-
   &:hover,
   &:focus-visible {
     outline: 3px solid #646464;
@@ -52,11 +48,13 @@
     color: $sq_black;
     margin: 0;
   }
-
-  .Interests {
-    display: flex;
-    flex-wrap: wrap;
-  }
+}
+.BarChart {
+  margin: 10px 0 !important;
+}
+.Interests {
+  display: flex;
+  flex-wrap: wrap;
 }
 
 // .ButtonFloatLeft {

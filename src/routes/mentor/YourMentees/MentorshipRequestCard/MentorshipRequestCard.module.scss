@@ -1,24 +1,5 @@
 @import "../../../../variables";
 .MentorshipRequestCard {
-  //   display: inline-block;
-  //   position: relative;
-  //   color: black;
-  //   font-family: "Inter", sans-serif;
-  //   font-size: 20px;
-  //   text-decoration: none;
-  //   font-style: normal;
-  //   font-weight: bold;
-  //   background-color: #ffffff;
-  //   box-sizing: border-box;
-  //   border-radius: 20px;
-  //   border: 1px solid #d3d3d3;
-  //   width: 360px;
-  //   padding-top: 21px;
-  //   margin-bottom: 30px;
-  //   margin-right: 30px;
-  //   padding-left: 27px;
-  //   padding-right: 27px;
-
   &:hover,
   &:focus-visible {
     outline: 3px solid $sq_dark_gray;
@@ -47,13 +28,11 @@
     color: $sq_black;
     margin: 0;
   }
-
-  .Interests {
-    display: flex;
-    flex-wrap: wrap;
-  }
 }
-
+.Interests {
+  display: flex;
+  flex-wrap: wrap;
+}
 // .ButtonFloatLeft {
 //   position: absolute;
 //   left: 27px;

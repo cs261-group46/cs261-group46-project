@@ -1,0 +1,46 @@
+@import "../../../variables";
+
+.ContentCard {
+  &:hover,
+  &:focus-visible {
+    outline: 3px solid $sq_dark_gray;
+  }
+
+  .Buttons {
+    .Button {
+      margin: 10px 0;
+    }
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+
+  .Heading {
+    color: $sq_black;
+    font-weight: bold;
+  }
+
+  .Section {
+    margin: 40px 0;
+  }
+  .subtitle {
+    margin: 0px;
+  }
+  .subtext {
+    color: $sq_black;
+    margin: 0;
+    word-wrap: break-word;
+    font-weight: bold;
+  }
+
+  .title {
+    display: flex;
+    margin-bottom: 10px;
+    margin-top: 20px;
+    align-items: center;
+    gap: 15px;
+    .Icon {
+      height: 20px;
+    }
+  }
+}

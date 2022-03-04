@@ -4,7 +4,7 @@ import Icon from "../Icon/Icon";
 import { ButtonStyle } from "./Button.d";
 import { Link } from "react-router-dom";
 
-interface ButtonProps {
+export interface ButtonProps {
   children?: React.ReactNode;
   icon?: React.ReactNode;
   onClick?: () => void;
@@ -44,4 +44,3 @@ const Button: FC<ButtonProps> = (props) => {
 };
 
 export default Button;
-export type { ButtonProps };

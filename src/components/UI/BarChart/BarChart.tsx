@@ -12,7 +12,6 @@ const BarChart: FC<BarChartProp> = (props) => {
 
   return (
     <div className={`${styles.Container} ${props.className ?? ""}`}>
-      <p>Completed Goals - {percentageDone.toFixed(2)}% </p>
       <div
         className={styles.BarChart}
         style={{
@@ -22,6 +21,9 @@ const BarChart: FC<BarChartProp> = (props) => {
       >
         &nbsp;
       </div>
+      <p className={styles.subtext}>
+        Completed Goals - {percentageDone.toFixed(2)}%{" "}
+      </p>
     </div>
   );
 };

@@ -25,9 +25,9 @@
     &:hover {
       cursor: pointer;
     }
-    
+
     .flip {
-      rotate: 180deg;
+      transform: rotate(180deg);
     }
   }
 

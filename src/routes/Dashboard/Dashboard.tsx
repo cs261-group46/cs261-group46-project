@@ -356,8 +356,8 @@ const Dashboard: FC<DashboardProps> = () => {
           )}
 
           {isExpert && (
-            <Button href={"/expert/workshops"} icon={"✏"}>
-              Your Workshops
+            <Button href={"/expert/group-sessions"} icon={"👥"}>
+              Your Group Sessions
             </Button>
           )}
           {isExpert && (
