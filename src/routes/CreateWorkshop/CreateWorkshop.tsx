@@ -152,6 +152,7 @@ const CreateWorkshop: FC<CreateWorkshopProps> = () => {
           onChange={timeChangeHandler}
           onBlur={timeBlurHandler}
           width={"150px"}
+          mustBeConsecutive
         />
 
         <BigTextInput
