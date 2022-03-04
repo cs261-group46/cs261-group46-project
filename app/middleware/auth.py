@@ -45,6 +45,7 @@ def auth_required(required_permission_level=0):
         @wraps(f)
         def decorated(*args, **kwargs):
             token = None
+
             # jwt is passed in the request header
             if 'login_token' in session:
                 token = session['login_token']
@@ -69,12 +70,7 @@ def auth_required(required_permission_level=0):
                 if current_user.permissions < required_permission_level:
                     return {'success': False, 'errors': ['You do not have the permissions to access this resource']}, 401
 
-                login_token = jwt.encode({
-                    'user_id': current_user.id,
-                    'exp': get_login_token_timeout()
-                }, current_app.config['SECRET_KEY'])
-
-                session['login_token'] = login_token
+                set_login_token(current_user)
 
             except:
                 session.pop("login_token")

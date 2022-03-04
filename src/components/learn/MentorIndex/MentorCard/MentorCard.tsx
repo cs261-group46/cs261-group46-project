@@ -1,17 +1,20 @@
-import React, { FC } from "react";
+import React, { FC, useContext } from "react";
 import Card from "../../../UI/Card/Card";
 import styles from "./MentorCard.module.scss";
 import { MentorType } from "../../../../types/Mentor";
 import Title from "../../../UI/Title/Title";
 import Tag from "../../../UI/Tag/Tag";
 import Button from "../../../UI/Button/Button";
-import { custom } from "../../../../api/api";
+import { custom, store } from "../../../../api/api";
+import UserDataContext from "../../../../store/UserDataContext";
 
 interface MentorCardProps {
   mentor: MentorType;
 }
 
 const MentorCard: FC<MentorCardProps> = (props) => {
+  const userDataCtx = useContext(UserDataContext);
+
   const skillTags = props.mentor.topics.map((topic) => {
     console.log(topic);
     return <Tag key={topic.topic.id}>{topic.topic.name}</Tag>;
@@ -20,12 +23,14 @@ const MentorCard: FC<MentorCardProps> = (props) => {
   const requestMentorHandler = async () => {
     try {
       const body = {
-        mentor: props.mentor.id,
+        mentorshiprequest: {
+          mentee: userDataCtx.menteeId,
+          mentor: props.mentor.id,
+        },
       };
 
-      await custom({
-        endpoint: "/mentors/request",
-        method: "POST",
+      await store({
+        resource: "mentorshiprequests",
         body: body,
       });
     } catch (errors) {

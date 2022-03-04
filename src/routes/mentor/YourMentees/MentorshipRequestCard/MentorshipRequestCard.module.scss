@@ -1,6 +1,5 @@
 @import "../../../../variables";
-
-.MenteeCard {
+.MentorshipRequestCard {
   //   display: inline-block;
   //   position: relative;
   //   color: black;
@@ -20,13 +19,9 @@
   //   padding-left: 27px;
   //   padding-right: 27px;
 
-  .BarChart {
-    margin: 35px 0;
-  }
-
   &:hover,
   &:focus-visible {
-    outline: 3px solid #646464;
+    outline: 3px solid $sq_dark_gray;
   }
 
   .Buttons {

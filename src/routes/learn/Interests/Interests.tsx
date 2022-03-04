@@ -67,11 +67,13 @@ const Interests: FC<InterestsProps> = () => {
         resource: "users",
         entity: userDataCtx.userId as number,
         args: {
-          fields: ["topics"],
+          fields: ["mentee.topics"],
         },
       });
 
-      const topics = data.user.topics.sort(
+      console.log(data);
+
+      const topics = data.user.mentee.topics.sort(
         (topic1: TopicWithPriorityType, topic2: TopicWithPriorityType) =>
           topic1.priority - topic2.priority
       );
@@ -102,11 +104,11 @@ const Interests: FC<InterestsProps> = () => {
       };
       console.log(requestBody);
       await update({
-        resource: "users",
-        entity: userDataCtx.userId as number,
+        resource: "mentees",
+        entity: userDataCtx.menteeId as number,
         body: requestBody,
       });
-      // navigate("/dashboard"); // show message instead
+      navigate("/dashboard"); // show message instead
     } catch (errors) {
       console.log(errors);
     }

@@ -21,9 +21,11 @@ const Dashboard: FC<DashboardProps> = () => {
 
   const userDataCtx = useContext(UserDataContext);
   const userId = userDataCtx.userId;
-  const isMentor = !!userDataCtx.mentorId;
-  const isMentee = !!userDataCtx.menteeId;
-  const isExpert = !!userDataCtx.expertId;
+  const [isMentor, updateIsMentor] = useState(false);
+  const [isMentee, updateIsMentee] = useState(false);
+  const [hasMentor, updateHasMentor] = useState(false);
+
+  const [isExpert, updateIsExpert] = useState(false);
 
   const [notificationsLearn, setNotificationsLearn] = useState<
     NotificationType<"learning">[]
@@ -44,18 +46,29 @@ const Dashboard: FC<DashboardProps> = () => {
   const [notificationsExpertVisible, setNotificationsExpertVisible] =
     useState<boolean>(false);
 
-  const getNotifications = useCallback(async () => {
+  const getUserData = useCallback(async () => {
     if (!userId) return;
     try {
       const data = await get({
         resource: "users",
         entity: userId as number,
         args: {
-          fields: ["notifications"],
+          fields: [
+            "notifications",
+            "mentee.id",
+            "mentee.mentor",
+            "mentor",
+            "expert",
+          ],
         },
       });
 
-      console.log(data.user.notifications);
+      console.log(data);
+
+      updateIsExpert(!!data.user.expert);
+      updateIsMentor(!!data.user.mentor);
+      updateIsMentee(!!data.user.mentee);
+      updateHasMentor(data.user.mentee && !!data.user.mentee.mentor);
 
       const mentorNotifications: NotificationType<"mentoring">[] = [];
       const learnNotifications: NotificationType<"learning">[] = [];
@@ -79,15 +92,18 @@ const Dashboard: FC<DashboardProps> = () => {
             );
         }
       );
+
       setNotificationsLearn(learnNotifications);
       setNotificationsMentor(mentorNotifications);
       setNotificationsExpert(expertNotifcations);
-    } catch (errors) {}
+    } catch (errors) {
+      console.log(errors);
+    }
   }, [userId]);
 
   useEffect(() => {
-    getNotifications();
-  }, [getNotifications]);
+    getUserData();
+  }, [getUserData]);
 
   const logoutHandler = async () => {
     try {
@@ -141,10 +157,9 @@ const Dashboard: FC<DashboardProps> = () => {
       {pageVisiable === 1 && (
         <div className={styles.Section}>
           <Title text={"Welcome back!"} className={styles.Title} />
+
           <Button icon={"👤"} href={"/profile"}>
-            <p style={{ textDecoration: "none", display: "inline-block" }}>
-              Your Profile
-            </p>
+            Your Profile
           </Button>
 
           {/* <Button icon={"🔔"} href={"/notifications"}>
@@ -174,6 +189,16 @@ const Dashboard: FC<DashboardProps> = () => {
           <Title text={"Your Learning"} className={styles.Title} />
 
           {!isMentee && (
+            <Button
+              href={"/learn/become-mentee"}
+              buttonStyle="primary"
+              icon={"👨‍🏫"}
+            >
+              Become a Mentee
+            </Button>
+          )}
+
+          {!hasMentor && isMentee && (
             <Button
               href={"/learn/find-mentor"}
               buttonStyle="primary"
@@ -209,13 +234,18 @@ const Dashboard: FC<DashboardProps> = () => {
             </>
           )}
 
-          {isMentee && (
+          {isMentee && hasMentor && (
             <Button href={"/learn/your-mentor"} icon={"👨‍🏫"}>
               Your Mentor
             </Button>
           )}
-
           {isMentee && (
+            <Button href={"/learn/interests"} icon={"💡"}>
+              Your Interests
+            </Button>
+          )}
+
+          {isMentee && hasMentor && (
             <Button href={"/learn/plans-of-action"} icon={"📈"}>
               Plans of Action
             </Button>
@@ -227,10 +257,6 @@ const Dashboard: FC<DashboardProps> = () => {
 
           <Button href={"/learn/group-sessions"} icon={"👥"}>
             Explore Group Sessions
-          </Button>
-
-          <Button href={"/learn/interests"} icon={"💡"}>
-            Your Interests
           </Button>
         </div>
       )}

@@ -25,11 +25,8 @@ def register():
             "errors": registration_validator.errors.values()
         }, 400
 
-    print("test2")
-
     # check whether email is repeated
     is_email_repeated = not User.query.filter_by(email=data.get("email")).first() is None
-    print(is_email_repeated)
     if is_email_repeated:
         return {
             "success": False,
@@ -37,7 +34,7 @@ def register():
         }, 400
 
     # check whether department exists
-    department_not_exists = Department.query.filter_by(id=data.get("department").get('id'), name=data.get("department").get('label')).first() is None
+    department_not_exists = Department.query.filter_by(id=data.get("department").get('id'), name=data.get("department").get('name')).first() is None
 
     if department_not_exists:
         return {
@@ -56,6 +53,8 @@ def register():
     ).commit()
 
     token = generate_confirmation_token(new_user.email)
+
+    # set_login_token(new_user)
 
     verify_url = url_for('verifyemail.verify_email', token=token, _external=True)
     html = render_template(

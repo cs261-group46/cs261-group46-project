@@ -16,10 +16,10 @@ const MainLayout: FC<MainTemplateProps> = (props) => {
   // </div>
   const errorsCtx = useContext(ErrorMessagesContext);
 
-
-  const errors = errorsCtx.errors.map((error) => {
+  const errors = errorsCtx.errors.map((error, i) => {
     return (
       <SystemMessage
+        key={i}
         sort={"inline"}
         type={"warning"}
         description={error.message}

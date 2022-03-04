@@ -14,8 +14,6 @@ class MentorFeedback(db.Model):
     mentor = db.relationship("Mentor", backref="received_feedback", lazy=True)
     mentee = db.relationship("Mentee", backref="feedback_given", lazy=True)
 
-    default_fields = ["score", "feedback", "mentor", "mentee"]
-
     def __repr__(self):
         return f'<MentorFeedback \n Mentor: {self.mentor} \n Mentee: {self.mentee} \n Score: {self.score} \n Feedback: {self.feedback}>'
 

@@ -15,9 +15,6 @@ class MeetingFeedback(db.Model):
     user = db.relationship('User', backref="meeting_feedback", lazy=True)
     meeting = db.relationship('Meeting', backref="feedback", lazy=True)
 
-    default_fields = ["user", "meeting", "feedback"]
-
-
     def __repr__(self):
         return f'<MeetingFeedback \n User: {self.user} \n Meeting: {self.meeting} \n Feedback: {self.feedback}>'
 

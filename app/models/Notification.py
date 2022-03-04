@@ -9,14 +9,12 @@ class Notification(db.Model):
         "notification_level IN ('warning', 'alert', 'info')"))
     notification_type = db.Column(db.String(10), db.CheckConstraint(
         "notification_type IN ('learning', 'mentoring', 'expertise')"))
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), unique=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     description = db.Column(db.Text, nullable=True)
     # solution = db.Column(db.Text, nullable=True)
     sent = db.Column(db.Boolean, default=False)
 
     user = db.relationship("User", backref="notifications", lazy=True)
-
-    default_fields = ["notification_level", "notification_type", "user", "description"]
 
     def __repr__(self):
         return f'<Notification \n NotificationLevel: {self.notification_level} \n NotificationType: {self.notification_type} \n User: {self.user} \n Description: {self.description}>'

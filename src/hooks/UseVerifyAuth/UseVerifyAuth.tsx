@@ -1,5 +1,6 @@
 import { useEffect, useCallback, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { custom } from "../../api/api";
 import UserDataContext from "../../store/UserDataContext";
 
 const UseVerifyAuth = (
@@ -11,11 +12,14 @@ const UseVerifyAuth = (
 
   const verifyAuth = useCallback(async () => {
     let userId;
-    if (userDataCtx.userId === null || userDataCtx.userId === undefined) {
+
+    if (userDataCtx.userId === undefined || userDataCtx.userId === null) {
       userId = await userDataCtx.updateUserId();
     } else {
       userId = userDataCtx.userId;
     }
+
+    console.log(userId);
 
     let permissions;
 

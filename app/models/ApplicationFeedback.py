@@ -13,9 +13,6 @@ class ApplicationFeedback(db.Model):
 
     user = db.relationship('User', backref="application_feedback", lazy=True)
 
-    default_fields = ["user", "feedback"]
-
-
     def __repr__(self):
         return f'<ApplicationFeedback \n User : {self.user} \n Rating: {self.rating} \n Feedback : {self.feedback}>'
 

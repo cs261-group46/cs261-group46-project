@@ -32,8 +32,6 @@ class Meeting(db.Model):
     topics = db.relationship('Topic', secondary=meeting_topics, backref='meetings', lazy=True)
     attendees = db.relationship('User', secondary=meeting_attendees, backref='meetings', lazy=True)
 
-    default_fields = ["title", "host", "topics", "attendees", "room", "capacity", "duration", "meeting_type", "link", "date"]
-
     def __repr__(self):
         return f'<Meeting \n Host: {self.host} \n Title: {self.title} \n Date: {self.date} \n Room: {self.room} \n Link: {self.link} \n MeetingType: {self.meeting_type} \n Duration: {self.duration} \n Capacity: {self.capacity}>'
 

@@ -15,7 +15,7 @@ const MentorIndex: FC<MentorIndexProps> = () => {
         resource: "mentors",
         args: {
           fields: [
-            "user",
+            "id",
             "about",
             "topics.topic",
             "user.first_name",

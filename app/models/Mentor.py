@@ -21,8 +21,6 @@ class Mentor(db.Model):
 
     user = db.relationship("User", backref=db.backref("mentor", uselist=False))
 
-    default_fields = ["user", "about", "score", "topics"]
-
     def __repr__(self):
         return f'<Mentor \n User: {self.user} \n About: {self.about} \n Score: {self.score} \n Topics : {self.topics}>'
 
@@ -31,17 +29,3 @@ class Mentor(db.Model):
         db.session.commit()
         return self
 
-#
-# class MentorSchema(ma.SQLAlchemySchema):
-#     class Meta:
-#         model = Mentor
-#
-#
-#     id = ma.auto_field()
-#     about = ma.auto_field()
-#     score = ma.auto_field()
-#     capacity = ma.auto_field()
-#     # topics
-#     # user
-#     # mentees
-#     # mentorship_requests_received

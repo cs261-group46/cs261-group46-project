@@ -34,26 +34,6 @@ def index(user=None):
     return {"success": True, "data": {"mentors": result}}, 200
 
 
-@mentors.route("/request/", methods=["POST"])
-@auth_required()
-def requestMentor(user=None):
-    data = dict(request.get_json())
-    # TODO: VALIDATE
-    mentor_id = data.get("mentor")
-
-    mentor = Mentor.query.filter_by(id=mentor_id).first()
-
-    MentorshipRequest(mentor_id=mentor.id, user_id=user.id).commit()
-
-    Notification(
-        notification_level="alert",
-        notification_type="mentoring",
-        user_id=mentor.user_id,
-        description="You received a new mentorship request!").commit()
-
-    return {"success": True}, 200
-
-
 @mentors.route("/<mentorId>", methods=["GET"])
 # @auth_required()
 def get(mentorId, user=None):
