@@ -16,11 +16,11 @@ import ViewWorkshops from "./routes/workshops/ViewWorkshops/ViewWorkshops.lazy";
 import ComponentPlaygound from "./routes/ComponentPlaygound/ComponentPlaygound.lazy";
 import PlansOfAction from "./routes/learn/PlansOfAction/PlansOfAction.lazy";
 import UpcomingEvents from "./routes/UpcomingEvents/UpcomingEvents.lazy";
-import { EventProps } from "./components/UpcommingEvents/Event/Event.d";
 import YourMentor from "./routes/learn/YourMentor/YourMentor";
 import ExpertSignup from "./routes/expert/ExpertSignup/ExpertSignup";
 import YourMentees from "./routes/mentor/YourMentees/YourMentees";
 import FindMentor from "./routes/learn/FindMentor/FindMentor";
+import CreateWorkshop from "./routes/CreateWorkshop/CreateWorkshop.lazy";
 
 function App() {
   return (
@@ -60,6 +60,7 @@ function App() {
 
           <Route path="/workshops">
             <Route index element={<ViewWorkshops />} />
+            <Route path={"create"} element={<CreateWorkshop/>}/>
           </Route>
           <Route path="/test" element={<ComponentPlaygound />} />
           <Route index element={<Homepage />} />

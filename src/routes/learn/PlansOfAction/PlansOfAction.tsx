@@ -7,12 +7,6 @@ import PieView from "../../../components/UI/PieView/PieView";
 
 interface PlansOfActionProps {}
 
-interface PlanOfAction {
-    id: string;
-    title: string;
-    status: "active" | "completed";
-}
-
 const PlansOfAction: FC<PlansOfActionProps> = () => {
     const [plansOfAction, setPlansOfAction] = useState<PlanOfAction[]>([]);
     const activePlans = plansOfAction.filter(plan => plan.status === "active");
