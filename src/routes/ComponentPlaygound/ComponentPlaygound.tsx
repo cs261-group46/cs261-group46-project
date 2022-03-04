@@ -32,6 +32,9 @@ const ComponentPlaygound: FC<ComponentPlaygoundProps> = () => {
         value={[]}
         onChange={() => {}}
         onBlur={() => {}}
+        allowedRanges={[[0, 15]]}
+        maxHours={3}
+        mustBeConsecutive
       />
 
       <SearchSelect
