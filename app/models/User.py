@@ -37,9 +37,6 @@ class User(db.Model):
 
     department = db.relationship('Department', backref="users", lazy=True)
 
-    default_fields = ['email', 'first_name', 'last_name', 'department']
-    hidden_fields = ['hashed_password']
-
     def __repr__(self):
         return f'<User \n Email: {self.email} \n FirstName: {self.first_name} \n LastName: {self.last_name}>'
 

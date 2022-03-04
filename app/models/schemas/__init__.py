@@ -1,5 +1,5 @@
 from app import ma, \
-    Mentor, Department, User, Topic, UserTopic, \
+    Mentor, Department, User, Topic, MenteeTopic, \
     Notification, MentorTopic, MentorshipRequest, \
     Mentee, Expert
 
@@ -7,7 +7,6 @@ from app import ma, \
 class UserSchema(ma.SQLAlchemySchema):
     class Meta:
         model = User
-        include_relationships = True
 
     id = ma.auto_field()
     email = ma.auto_field()
@@ -15,12 +14,10 @@ class UserSchema(ma.SQLAlchemySchema):
     last_name = ma.auto_field()
     permissions = ma.auto_field()
     department = ma.Nested(lambda: DepartmentSchema(exclude=["users"]))
-    mentor = ma.Nested(lambda: MentorSchema(exclude=["user", "mentees.user"]))
+    mentor = ma.Nested(lambda: MentorSchema(exclude=["user"]))
     mentee = ma.Nested(lambda: MenteeSchema(exclude=["user", "mentor.user"]))
-    expert = ma.Nested(lambda: ExpertSchema(exclude=["user", "topics.experts", "topics.mentors", "topics.users"]))
-    topics = ma.Nested(lambda: UserTopicSchema(exclude=["user", "topic.mentors", "topic.experts", "topic.users"]), many=True)
+    expert = ma.Nested(lambda: ExpertSchema(exclude=["user", "topics.experts", "topics.mentors", "topics.mentees"]))
     notifications = ma.Nested(lambda: NotificationSchema(exclude=["user"]), many=True)
-    mentorship_requests_sent = ma.Nested(lambda: MentorshipRequestSchema(exclude=["user", "mentor.mentees"]), many=True)
 
 
 class MentorSchema(ma.SQLAlchemySchema):
@@ -32,9 +29,9 @@ class MentorSchema(ma.SQLAlchemySchema):
     score = ma.auto_field()
     capacity = ma.auto_field()
     user = ma.Nested(UserSchema(exclude=["mentor"]))
-    topics = ma.Nested(lambda: MentorTopicSchema(exclude=["mentor", "topic.experts", "topic.users", "topic.mentors"]), many=True)
-    mentees = ma.Nested(lambda: MenteeSchema(exclude=["mentor"]), many=True)
-    mentorship_requests_received = ma.Nested(lambda: MentorshipRequestSchema(exclude=["mentor", "user.expert",  "user.mentee", "user.permissions", "user.notifications", "user.mentor"]), many=True)
+    topics = ma.Nested(lambda: MentorTopicSchema(exclude=["mentor", "topic.experts", "topic.mentees", "topic.mentors"]), many=True)
+    mentees = ma.Nested(lambda: MenteeSchema(exclude=["mentor", "mentorship_requests_sent"]), many=True)
+    mentorship_requests_received = ma.Nested(lambda: MentorshipRequestSchema(exclude=["mentor", "mentee.mentor"]), many=True)
 
 
 class MenteeSchema(ma.SQLAlchemySchema):
@@ -43,8 +40,10 @@ class MenteeSchema(ma.SQLAlchemySchema):
 
     id = ma.auto_field()
     about = ma.auto_field()
-    user = ma.Nested(UserSchema(exclude=["mentee"]))
+    user = ma.Nested(UserSchema(exclude=["mentee", "mentor", "expert", "notifications", "permissions"]))
     mentor = ma.Nested(MentorSchema(exclude=["mentees"]))
+    topics = ma.Nested(lambda: MenteeTopicSchema(exclude=["mentee", "topic.experts", "topic.mentees", "topic.mentors"]), many=True)
+    mentorship_requests_sent = ma.Nested(lambda: MentorshipRequestSchema(exclude=["mentee", "mentor.mentees"]), many=True)
 
 
 class ExpertSchema(ma.SQLAlchemySchema):
@@ -71,18 +70,18 @@ class TopicSchema(ma.SQLAlchemySchema):
 
     id = ma.auto_field()
     name = ma.auto_field()
-    users = ma.Nested(lambda: UserTopicSchema(exclude=["topic"]), many=True)
+    mentees = ma.Nested(lambda: MenteeTopicSchema(exclude=["topic"]), many=True)
     mentors = ma.Nested(lambda: MentorTopicSchema(exclude=["topic"]), many=True)
     experts = ma.Nested(ExpertSchema(exclude=["topics"]), many=True)
 
 
-class UserTopicSchema(ma.SQLAlchemySchema):
+class MenteeTopicSchema(ma.SQLAlchemySchema):
     class Meta:
-        model = UserTopic
+        model = MenteeTopic
 
     priority = ma.auto_field()
-    user = ma.Nested(UserSchema(exclude=["topics"]))
-    topic = ma.Nested(TopicSchema(exclude=["users"]))
+    mentee = ma.Nested(MenteeSchema(exclude=["topics"]))
+    topic = ma.Nested(TopicSchema(exclude=["mentees"]))
     # topic
 
 
@@ -111,9 +110,9 @@ class MentorTopicSchema(ma.SQLAlchemySchema):
 class MentorshipRequestSchema(ma.SQLAlchemySchema):
     class Meta:
         model = MentorshipRequest
-        
+
     id = ma.auto_field()
-    user = ma.Nested(UserSchema(exclude=["mentorship_requests_sent"]))
+    mentee = ma.Nested(MenteeSchema(exclude=["mentorship_requests_sent"]))
     mentor = ma.Nested(MentorSchema(exclude=["mentorship_requests_received"]))
     # user
     # mentor

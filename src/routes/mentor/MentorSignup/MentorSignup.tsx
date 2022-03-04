@@ -51,11 +51,6 @@ const MentorSignup: FC<MentorSignupProps> = () => {
     enteredValue: enteredCapacity,
   } = useInput<string>("", (input) => parseInt(input) > 0);
 
-  const showAllErrors = () => {
-    aboutBlurHandler();
-    skillsBlurHandler();
-  };
-
   const sendBecomeMentorData = async () => {
     try {
       const requestBody = {
@@ -76,6 +71,12 @@ const MentorSignup: FC<MentorSignupProps> = () => {
     } catch (errors) {
       console.log(errors);
     }
+  };
+
+  const showAllErrors = () => {
+    aboutBlurHandler();
+    skillsBlurHandler();
+    capacityBlurHandler();
   };
 
   const submitHandler: FormEventHandler = (event) => {

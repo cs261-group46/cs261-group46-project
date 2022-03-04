@@ -24,7 +24,7 @@ const MentorCard: FC<MentorCardProps> = (props) => {
     try {
       const body = {
         mentorshiprequest: {
-          user: userDataCtx.userId,
+          mentee: userDataCtx.menteeId,
           mentor: props.mentor.id,
         },
       };

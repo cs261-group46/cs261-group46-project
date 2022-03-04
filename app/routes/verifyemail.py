@@ -14,11 +14,11 @@ def verify_email(token):
         email = confirm_token(token)
     except:
         # return {"successful": False, "warnings": ["The confirmation link is invalid or has expired."]}
-        return redirect("http://localhost:3000/")
+        return redirect("http://127.0.0.1:3000/")
     user = User.query.filter_by(email=email).first()
 
     if user.verified:
-        return redirect("http://localhost:3000/dashboard")
+        return redirect("http://127.0.0.1:3000/dashboard")
 
     else:
         user.verified = True
@@ -26,5 +26,5 @@ def verify_email(token):
 
         set_login_token(user)
 
-        return redirect("http://localhost:3000/setup")
+        return redirect("http://127.0.0.1:3000/setup")
 

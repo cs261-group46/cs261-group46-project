@@ -54,6 +54,8 @@ def register():
 
     token = generate_confirmation_token(new_user.email)
 
+    # set_login_token(new_user)
+
     verify_url = url_for('verifyemail.verify_email', token=token, _external=True)
     html = render_template(
         'emails/verify_email.html',

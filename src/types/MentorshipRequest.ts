@@ -3,12 +3,15 @@ import { TopicWithPriorityType } from "./Topic";
 
 export type MentorshipRequestType = {
   id: number;
-  user: {
-    department: DepartmentType;
-    email: string;
-    first_name: string;
-    last_name: string;
-    topics: TopicWithPriorityType;
+  mentee: {
+    about: string;
     id: number;
+    topics: TopicWithPriorityType[];
+    user: {
+      department: DepartmentType;
+      email: string;
+      first_name: string;
+      last_name: string;
+    };
   };
 };

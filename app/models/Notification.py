@@ -16,8 +16,6 @@ class Notification(db.Model):
 
     user = db.relationship("User", backref="notifications", lazy=True)
 
-    default_fields = ["notification_level", "notification_type", "user", "description"]
-
     def __repr__(self):
         return f'<Notification \n NotificationLevel: {self.notification_level} \n NotificationType: {self.notification_type} \n User: {self.user} \n Description: {self.description}>'
 

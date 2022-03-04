@@ -4,18 +4,18 @@ import UseVerifyAuth from "../../../hooks/UseVerifyAuth/UseVerifyAuth";
 import MentorIndex from "../../../components/learn/MentorIndex/MentorIndex";
 import Title from "../../../components/UI/Title/Title";
 
-interface MenteeSignupProps {}
+interface FindMentorProps {}
 
-const MenteeSignup: FC<MenteeSignupProps> = () => {
+const FindMentor: FC<FindMentorProps> = () => {
   UseVerifyAuth();
 
   return (
     <DashboardSubpageLayout title="Find a Mentor">
       <Title text={"Recommended Mentors"} />
       <MentorIndex />
-      <div data-testid="FindMentor"/>
+      <div data-testid="FindMentor" />
     </DashboardSubpageLayout>
   );
 };
 
-export default MenteeSignup;
+export default FindMentor;
