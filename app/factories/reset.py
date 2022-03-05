@@ -4,6 +4,7 @@ from app.factories.mentors_factory import mentors_factory
 from departments_factory import department_factory
 from topics_factory import topics_factory
 from users_factory import users_factory
+from rooms_factory import rooms_factory
 
 db.drop_all()
 db.create_all()
@@ -26,4 +27,8 @@ db.session.commit()
 
 mentees = mentees_factory(users, mentors)
 db.session.add_all(mentees)
+db.session.commit()
+
+rooms = rooms_factory()
+db.session.add_all(rooms)
 db.session.commit()

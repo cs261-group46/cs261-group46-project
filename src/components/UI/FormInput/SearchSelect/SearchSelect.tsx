@@ -9,36 +9,40 @@ import React, {
 import styles from "./SearchSelect.module.scss";
 import Label from "../Label/Label";
 import { debounceTime, Subject } from "rxjs";
-import {
-  AddSelectedHandler,
-  MultiSelectOptions,
-  RemoveSelectedHandler,
-  SearchPromise,
-} from "./SearchSelect.d";
-
 import SelectedOptions from "./SelectedOptions/SelectedOptions";
 import Autocomplete from "./Autocomplete/Autocomplete";
 import SystemMessage from "../../SystemMessage/SystemMessage";
 import DraggableSelectedOptions from "./DraggableSelectedOptions/DraggableSelectedOptions";
 
+export type SearchSelectOption<T> = { label: string; value: T };
+export type SearchSelectOptions<T> = SearchSelectOption<T>[];
+export type RemoveSelectedHandler<T> = (selected: T) => void;
+export type AddSelectedHandler<T> = (selected: SearchSelectOptions<T>) => void;
+export type SetSelectedHandler<T> = (selected: SearchSelectOptions<T>) => void;
+export type SearchPromise<T> = (
+  value: string
+) => Promise<SearchSelectOptions<T>>;
+
 type OptionsType = "span" | "draggable";
 
-interface MultiSelectProps<T> {
+interface SearchSelectProps<T> {
   id: string;
   label: string;
   default?: T;
   isValid: boolean;
   icon?: React.ReactNode;
   searchPromise?: SearchPromise<T>;
-  value: MultiSelectOptions<T>;
+  value: SearchSelectOptions<T>;
   limit?: number;
-  onChange: (input: MultiSelectOptions<T>) => void;
+  onChange: (input: SearchSelectOptions<T>) => void;
   onBlur: () => void;
   type?: OptionsType;
 }
 
-function SearchSelect<T>(props: PropsWithChildren<MultiSelectProps<T>>) {
-  const [searchResults, setSearchResults] = useState<MultiSelectOptions<T>>([]);
+function SearchSelect<T>(props: PropsWithChildren<SearchSelectProps<T>>) {
+  const [searchResults, setSearchResults] = useState<SearchSelectOptions<T>>(
+    []
+  );
   const [currentSearch, setCurrentSearch] = useState("");
   const [focused, setFocused] = useState(false);
   const searchSubject = useMemo(() => new Subject<string>(), []);

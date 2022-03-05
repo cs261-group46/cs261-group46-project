@@ -1,4 +1,4 @@
-from app import db, ma
+from app import db
 
 
 class MenteeTopic(db.Model):

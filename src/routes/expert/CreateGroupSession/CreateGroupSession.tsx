@@ -1,19 +1,11 @@
-import React, {
-  FC,
-  FormEventHandler,
-  useCallback,
-  useContext,
-  useEffect,
-  useLayoutEffect,
-  useState,
-} from "react";
-import styles from "./CreateWorkshop.module.scss";
-import MainLayout from "../../../layouts/MainLayout/MainLayout";
+import React, { FC, FormEventHandler } from "react";
+
+import styles from "./CreateGroupSession.module.scss";
 import SearchSelect from "../../../components/UI/FormInput/SearchSelect/SearchSelect";
 import {
-  MultiSelectOptions,
+  SearchSelectOptions,
   SearchPromise,
-} from "../../../components/UI/FormInput/SearchSelect/SearchSelect.d";
+} from "../../../components/UI/FormInput/SearchSelect/SearchSelect";
 import useInput from "../../../hooks/UseInput/UseInput";
 import DatePicker from "../../../components/UI/FormInput/DatePicker/DatePicker";
 import HoursInput, {
@@ -22,26 +14,24 @@ import HoursInput, {
 import BigTextInput from "../../../components/UI/FormInput/BigTextInput/BigTextInput";
 import TextInput from "../../../components/UI/FormInput/TextInput/TextInput";
 import Select from "../../../components/UI/FormInput/Select/Select";
-import { SelectOption } from "../../../components/UI/FormInput/Select/Select.d";
+
+import { SelectOption } from "../../../components/UI/FormInput/Select/Select";
+
 import Button from "../../../components/UI/Button/Button";
-import UseVerifyAuth from "../../../hooks/UseVerifyAuth/UseVerifyAuth";
 import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
-import UserDataContext from "../../../store/UserDataContext";
 import { useNavigate } from "react-router-dom";
-import { type } from "os";
 import { index, store } from "../../../api/api";
 import { Room } from "../../../types/Room";
-import UseVerifyUserData from "../../../hooks/UseVerifyUserData/UseVerifyUserData";
 import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
 
-interface CreateWorkshopProps {}
+interface CreateGroupSessionProps {}
 
 type Verifier = {
   userId: number | null | undefined;
   expert_id: number | null | undefined;
 };
 
-const CreateWorkshop: FC<CreateWorkshopProps> = () => {
+const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
   const { userId = null } = UseVerifyUser<Verifier>({
     userDataPolicies: [
       {
@@ -65,7 +55,7 @@ const CreateWorkshop: FC<CreateWorkshopProps> = () => {
     blurHandler: roomBlurHandler,
     isInputValid: roomInputValid,
     isValueValid: roomValueValid,
-  } = useInput<MultiSelectOptions<Room>>([], (value) => value.length > 0);
+  } = useInput<SearchSelectOptions<Room>>([], (value) => value.length > 0);
 
   const {
     enteredValue: invites,
@@ -73,10 +63,44 @@ const CreateWorkshop: FC<CreateWorkshopProps> = () => {
     blurHandler: invitesBlurHandler,
     isInputValid: invitesInputValid,
     isValueValid: invitesValueValid,
-  } = useInput<MultiSelectOptions<{ email: string; id: number }>>(
+  } = useInput<SearchSelectOptions<{ email: string; id: number }>>(
     [],
     (value) => value.length > 0
   );
+
+  const getTopics = async (startsWith: string) => {
+    try {
+      const data = await index({
+        resource: "topics",
+        args: {
+          startswith: startsWith,
+        },
+      });
+      const options: SearchSelectOptions<number> = data.topics.map(
+        ({ label, id }: { label: string; id: number }) => ({
+          label,
+          value: id,
+        })
+      );
+
+      return options;
+    } catch (errors) {
+      console.log(errors);
+      return [];
+    }
+  };
+
+  const topicsSearchPromise: SearchPromise<number> = (_search) => {
+    return new Promise((resolve) => resolve(getTopics(_search)));
+  };
+
+  const {
+    enteredValue: topics,
+    changeHandler: topicsChangeHandler,
+    blurHandler: topicsBlurHandler,
+    isInputValid: topicsInputValid,
+    isValueValid: topicsValueValid,
+  } = useInput<SearchSelectOptions<number>>([]);
 
   const {
     enteredValue: link,
@@ -92,13 +116,29 @@ const CreateWorkshop: FC<CreateWorkshopProps> = () => {
     blurHandler: dateBlurHandler,
   } = useInput<Date>(new Date());
 
+  // const {
+  //   enteredValue: time,
+  //   changeHandler: timeChangeHandler,
+  //   blurHandler: timeBlurHandler,
+  //   isInputValid: timeInputValid,
+  //   isValueValid: timeValueValid,
+  // } = useInput<Range[]>([]);
+
   const {
-    enteredValue: time,
-    changeHandler: timeChangeHandler,
-    blurHandler: timeBlurHandler,
-    isInputValid: timeInputValid,
-    isValueValid: timeValueValid,
-  } = useInput<Range[]>([]);
+    enteredValue: startTime,
+    changeHandler: startTimeChangeHandler,
+    blurHandler: startTimeBlurHandler,
+    isInputValid: startTimeInputValid,
+    isValueValid: startTimeValueValid,
+  } = useInput<string>("");
+
+  const {
+    enteredValue: endTime,
+    changeHandler: endTimeChangeHandler,
+    blurHandler: endTimeBlurHandler,
+    isInputValid: endTimeInputValid,
+    isValueValid: endTimeValueValid,
+  } = useInput<string>("");
 
   const {
     enteredValue: description,
@@ -153,13 +193,6 @@ const CreateWorkshop: FC<CreateWorkshopProps> = () => {
     email: string;
     id: number;
   }> = async (search) => {
-    // const result = await fetch(`/api/meetings/rooms?startwith=${search}`);
-    // if (result.ok) {
-    //   const rooms: { result: Room[] } = await result.json();
-    //   return rooms.result.map((room) => ({ label: room.label, value: room }));
-    // }
-    // // else if bad, do nothing
-    // return [];
     try {
       const data = await index({
         resource: "users",
@@ -185,7 +218,8 @@ const CreateWorkshop: FC<CreateWorkshopProps> = () => {
       room: room,
       link: link,
       date: date,
-      time: time,
+      startTime: startTime,
+      endTime: endTime,
       description: description,
       capacity: capacity,
       visibility: visibility,
@@ -213,22 +247,26 @@ const CreateWorkshop: FC<CreateWorkshopProps> = () => {
     invitesBlurHandler();
     visibilityBlurHandler();
     roomBlurHandler();
-    timeBlurHandler();
+    startTimeBlurHandler();
     capacityBlurHandler();
+    endTimeBlurHandler();
+    topicsBlurHandler();
   }
 
   const submitHandler: FormEventHandler = (event) => {
     event.preventDefault();
     if (
       roomValueValid &&
-      timeValueValid &&
+      startTimeValueValid &&
       capacityValueValid &&
       visibilityValueValid &&
       dateValueValid &&
-      timeValueValid &&
+      startTimeValueValid &&
       typeValueValid &&
       (invitesValueValid || visibility.value === "public") &&
-      titleValueValid
+      titleValueValid &&
+      endTimeValueValid &&
+      topicsValueValid
     ) {
       // send off this event to the backend
       sendMeetingData();
@@ -240,8 +278,8 @@ const CreateWorkshop: FC<CreateWorkshopProps> = () => {
   return (
     <DashboardSubpageLayout title={"Create a Group Session"}>
       <form
-        className={styles.CreateWorkshop}
-        data-testid="CreateWorkshop"
+        className={styles.CreateGroupSession}
+        data-testid="CreateGroupSession"
         onSubmit={submitHandler}
       >
         <TextInput
@@ -253,7 +291,24 @@ const CreateWorkshop: FC<CreateWorkshopProps> = () => {
           onChange={titleChangeHandler}
           onBlur={titleBlurHandler}
         />
-
+        <BigTextInput
+          id={"description"}
+          label={"Description"}
+          placeholder={"Tell attendees what the event is about"}
+          value={description}
+          isValid={true}
+          onChange={descriptionChangeHandler}
+          onBlur={descriptionBlurHandler}
+        />
+        <SearchSelect
+          id={"topics"}
+          label={"Topics Covered"}
+          isValid={topicsInputValid}
+          value={topics}
+          onChange={topicsChangeHandler}
+          onBlur={topicsBlurHandler}
+          searchPromise={topicsSearchPromise}
+        />
         <Select
           id={"visibility"}
           label={"Meeting Visibility"}
@@ -299,9 +354,52 @@ const CreateWorkshop: FC<CreateWorkshopProps> = () => {
           onChange={typeChangeHandler}
           onBlur={typeBlurHandler}
         />
+
+        <DatePicker
+          id={"date"}
+          label={"Date"}
+          value={date}
+          isValid={dateInputValid}
+          onChange={dateChangeHandler}
+          onBlur={dateBlurHandler}
+        />
+
+        <TextInput
+          id={"time"}
+          label={"Start time"}
+          isValid={startTimeInputValid}
+          value={startTime}
+          onChange={startTimeChangeHandler}
+          onBlur={startTimeBlurHandler}
+          placeholder={"Please provide the start time of the session"}
+          type="time"
+        />
+
+        <TextInput
+          id={"duration"}
+          label={"End time"}
+          isValid={endTimeInputValid}
+          value={endTime}
+          onChange={endTimeChangeHandler}
+          onBlur={endTimeBlurHandler}
+          placeholder={"Please provide the start time of the session"}
+          type="time"
+        />
+
+        <TextInput
+          id={"capacity"}
+          label={"Capacity"}
+          placeholder={""}
+          value={capacity.toString()}
+          isValid={capacityInputValid}
+          type={"number"}
+          onChange={(newValue) => capacityChangeHandler(parseInt(newValue))}
+          onBlur={capacityBlurHandler}
+        />
+
         <SearchSelect
           id={"room"}
-          label={"Room"}
+          label={"Room - only showing available"}
           isValid={roomInputValid}
           value={room}
           onChange={roomChangeHandler}
@@ -320,46 +418,6 @@ const CreateWorkshop: FC<CreateWorkshopProps> = () => {
           onBlur={linkBlurHandler}
         />
 
-        <DatePicker
-          id={"date"}
-          label={"Date"}
-          value={date}
-          isValid={dateInputValid}
-          onChange={dateChangeHandler}
-          onBlur={dateBlurHandler}
-        />
-
-        <HoursInput
-          label={"Time"}
-          isValid={timeInputValid}
-          value={time}
-          onChange={timeChangeHandler}
-          onBlur={timeBlurHandler}
-          width={"150px"}
-          mustBeConsecutive={true}
-        />
-
-        <BigTextInput
-          id={"description"}
-          label={"Description"}
-          placeholder={"Tell attendees what the event is about"}
-          value={description}
-          isValid={true}
-          onChange={descriptionChangeHandler}
-          onBlur={descriptionBlurHandler}
-        />
-
-        <TextInput
-          id={"capacity"}
-          label={"Capacity"}
-          placeholder={""}
-          value={capacity.toString()}
-          isValid={capacityInputValid}
-          type={"number"}
-          onChange={(newValue) => capacityChangeHandler(parseInt(newValue))}
-          onBlur={capacityBlurHandler}
-        />
-
         <Button icon="👑" type={"submit"} buttonStyle={"primary"}>
           Register
         </Button>
@@ -368,4 +426,4 @@ const CreateWorkshop: FC<CreateWorkshopProps> = () => {
   );
 };
 
-export default CreateWorkshop;
+export default CreateGroupSession;

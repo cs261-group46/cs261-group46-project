@@ -20,20 +20,17 @@ import YourMentor from "./routes/learn/YourMentor/YourMentor";
 import ExpertSignup from "./routes/expert/ExpertSignup/ExpertSignup";
 import YourMentees from "./routes/mentor/YourMentees/YourMentees";
 import FindMentor from "./routes/learn/FindMentor/FindMentor";
-import CreateWorkshop from "./routes/expert/CreateWorkshop/CreateWorkshop.lazy";
+import CreateGroupSession from "./routes/expert/CreateGroupSession/CreateGroupSession.lazy";
 import YourGroupSessions from "./routes/expert/YourGroupSessions/YourGroupSessions";
 import YourProfile from "./routes/YourProfile/YourProfile";
-import UseVerifyUser from "./hooks/UseVerifyUser/UseVerifyUser";
-
 
 function App() {
-
   return (
     <BrowserRouter>
       <div className="App">
         <Routes>
           <Route path="/profile" element={<YourProfile />} />
-          
+
           <Route path="/register">
             <Route path="" element={<Register />} />
             <Route path="verifyemail" element={<VerifyEmail />} />
@@ -63,7 +60,7 @@ function App() {
 
           <Route path="/expert">
             <Route path="group-sessions">
-              <Route path="create" element={<CreateWorkshop />} />
+              <Route path="create" element={<CreateGroupSession />} />
               <Route index element={<YourGroupSessions />} />
             </Route>
             <Route path="skills" element={<ExpertExpertises />} />
@@ -76,8 +73,6 @@ function App() {
           </Route> */}
           <Route path="/test" element={<ComponentPlaygound />} />
           <Route index element={<Homepage />} />
-
-          
         </Routes>
       </div>
     </BrowserRouter>

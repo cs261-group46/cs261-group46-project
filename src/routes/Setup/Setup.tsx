@@ -4,10 +4,10 @@ import Button from "../../components/UI/Button/Button";
 import styles from "./Setup.module.scss";
 import useInput from "../../hooks/UseInput/UseInput";
 import {
-  MultiSelectOption,
-  MultiSelectOptions,
+  SearchSelectOption,
+  SearchSelectOptions,
   SearchPromise,
-} from "../../components/UI/FormInput/SearchSelect/SearchSelect.d";
+} from "../../components/UI/FormInput/SearchSelect/SearchSelect";
 import { Link, useNavigate } from "react-router-dom";
 import UseVerifyAuth from "../../hooks/UseVerifyAuth/UseVerifyAuth";
 import { index, store } from "../../api/api";
@@ -32,7 +32,7 @@ const Setup = () => {
           startswith: startsWith,
         },
       });
-      const options: MultiSelectOptions<number> = data.topics.map(
+      const options: SearchSelectOptions<number> = data.topics.map(
         ({ label, id }: { label: string; id: number }) => ({ label, value: id })
       );
       return options;
@@ -52,7 +52,7 @@ const Setup = () => {
     isValueValid: isValueExpertisesValid,
     changeHandler: expertisesChangeHandler,
     blurHandler: expertisesBlurHandler,
-  } = useInput<MultiSelectOptions<number>>(
+  } = useInput<SearchSelectOptions<number>>(
     [],
     (selectedOptions) => selectedOptions.length > 0
   );
@@ -61,7 +61,7 @@ const Setup = () => {
     try {
       const requestBody = {
         expertises: enteredExpertises.map(
-          (skill: MultiSelectOption<number>) => skill.value
+          (skill: SearchSelectOption<number>) => skill.value
         ),
       };
       await store({

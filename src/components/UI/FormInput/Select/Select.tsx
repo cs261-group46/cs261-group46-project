@@ -2,7 +2,6 @@ import React, { PropsWithChildren, useEffect, useState } from "react";
 import styles from "./Select.module.scss";
 import Label from "../Label/Label";
 import textInputStyles from "../TextInput/TextInput.module.scss";
-import { SelectOptions, SelectOption } from "./Select.d";
 import SystemMessage from "../../SystemMessage/SystemMessage";
 
 interface SelectProps<T> {
@@ -16,6 +15,9 @@ interface SelectProps<T> {
   onChange: (input: SelectOption<T>) => void;
   onBlur: () => void;
 }
+
+export type SelectOption<T> = { value: T; label?: string };
+export type SelectOptions<T> = SelectOption<T>[];
 
 function Select<T>(props: PropsWithChildren<SelectProps<T>>) {
   const options = props.options.map(({ label }, i) => (

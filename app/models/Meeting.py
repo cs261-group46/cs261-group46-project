@@ -11,7 +11,6 @@ meeting_attendees = db.Table('meeting_attendees',
                              db.Column('userID', db.Integer, db.ForeignKey('users.id'), primary_key=True)
                              )
 
-
 class Meeting(db.Model):
     __tablename__ = 'meetings'
 

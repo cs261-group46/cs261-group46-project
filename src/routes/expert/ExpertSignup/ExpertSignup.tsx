@@ -2,9 +2,9 @@ import React, { FC, FormEventHandler, useContext } from "react";
 import styles from "./ExpertSignup.module.scss";
 
 import {
-  MultiSelectOptions,
+  SearchSelectOptions,
   SearchPromise,
-} from "../../../components/UI/FormInput/SearchSelect/SearchSelect.d";
+} from "../../../components/UI/FormInput/SearchSelect/SearchSelect";
 import useInput from "../../../hooks/UseInput/UseInput";
 import Button from "../../../components/UI/Button/Button";
 import { useNavigate } from "react-router-dom";
@@ -34,7 +34,7 @@ const ExpertSignup: FC<ExpertSignupProps> = () => {
     changeHandler: skillsChangeHandler,
     blurHandler: skillsBlurHandler,
     enteredValue: enteredSkills,
-  } = useInput<MultiSelectOptions<number>>(
+  } = useInput<SearchSelectOptions<number>>(
     [],
     (selectedOptions) => selectedOptions.length > 0
   );
@@ -77,7 +77,7 @@ const ExpertSignup: FC<ExpertSignupProps> = () => {
           startswith: startsWith,
         },
       });
-      const options: MultiSelectOptions<number> = data.topics.map(
+      const options: SearchSelectOptions<number> = data.topics.map(
         ({ label, id }: { label: string; id: number }) => ({
           label,
           value: id,
