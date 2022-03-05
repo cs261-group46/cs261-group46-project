@@ -15,14 +15,6 @@ import { MentorType } from "../../types/Mentor";
 
 interface DashboardProps {}
 
-type Verifier = {
-  userId: number | null | undefined;
-  mentor_id: number | null | undefined;
-  mentee_id: number | null | undefined;
-  mentee_mentor_id: number | null | undefined;
-  expert_id: number | null | undefined;
-};
-
 const Dashboard: FC<DashboardProps> = () => {
   const {
     userId = null,
@@ -30,7 +22,13 @@ const Dashboard: FC<DashboardProps> = () => {
     mentee_id: isMentee = null,
     mentee_mentor_id: hasMentor = null,
     expert_id: isExpert = null,
-  } = UseVerifyUser<Verifier>({
+  } = UseVerifyUser<{
+    userId: number | null | undefined;
+    mentor_id: number | null | undefined;
+    mentee_id: number | null | undefined;
+    mentee_mentor_id: number | null | undefined;
+    expert_id: number | null | undefined;
+  }>({
     userDataPolicies: [
       {
         dataPoint: "mentor.id",
@@ -45,14 +43,6 @@ const Dashboard: FC<DashboardProps> = () => {
         dataPoint: "expert.id",
       },
     ],
-  });
-
-  console.log({
-    userId,
-    isMentor,
-    isMentee,
-    hasMentor,
-    isExpert,
   });
 
   const [pageVisiable, setPageVisible] = useState(1);

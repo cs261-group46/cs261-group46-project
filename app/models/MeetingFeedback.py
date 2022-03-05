@@ -1,5 +1,4 @@
 from app import db
-from app.models.BaseModel import BaseModel
 
 
 class MeetingFeedback(db.Model):

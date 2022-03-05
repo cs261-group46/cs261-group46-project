@@ -8,27 +8,48 @@ import React, {
 import { useNavigate } from "react-router-dom";
 import { get, index, update } from "../../../api/api";
 import Button from "../../../components/UI/Button/Button";
-import SearchSelect from "../../../components/UI/FormInput/SearchSelect/SearchSelect";
+import SearchSelect, {
+  SearchSelectOption,
+} from "../../../components/UI/FormInput/SearchSelect/SearchSelect";
 import {
-  MultiSelectOptions,
+  SearchSelectOptions,
   SearchPromise,
-} from "../../../components/UI/FormInput/SearchSelect/SearchSelect.d";
+} from "../../../components/UI/FormInput/SearchSelect/SearchSelect";
 import useInput from "../../../hooks/UseInput/UseInput";
 import UseVerifyAuth from "../../../hooks/UseVerifyAuth/UseVerifyAuth";
+import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
 import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
 import UserDataContext from "../../../store/UserDataContext";
+import { TopicType } from "../../../types/Topic";
 
 interface ExpertExpertisesProps {}
 
-function validateInterests(_experises: MultiSelectOptions<number>) {
+function validateInterests(_experises: SearchSelectOptions<number>) {
   return true;
 }
 
 const ExpertExpertises: FC<ExpertExpertisesProps> = () => {
-  const navigate = useNavigate();
+  const {
+    userId = null,
+    expert_id = null,
+    expert_topics = [],
+  } = UseVerifyUser<{
+    userId: number | null | undefined;
+    expert_id: number | null | undefined;
+    expert_topics: TopicType[] | null | undefined;
+  }>({
+    userDataPolicies: [
+      {
+        dataPoint: "expert.id",
+        redirectOnFail: "/dashboard",
+      },
+      {
+        dataPoint: "expert.topics",
+      },
+    ],
+  });
 
-  const userDataCtx = useContext(UserDataContext);
-  if (!userDataCtx.expertId) navigate("/dashboard");
+  const navigate = useNavigate();
 
   const getTopics = async (startsWith: string) => {
     try {
@@ -38,7 +59,7 @@ const ExpertExpertises: FC<ExpertExpertisesProps> = () => {
           startswith: startsWith,
         },
       });
-      const options: MultiSelectOptions<number> = data.topics.map(
+      const options: SearchSelectOptions<number> = data.topics.map(
         ({ label, id }: { label: string; id: number }) => ({ label, value: id })
       );
       return options;
@@ -59,43 +80,51 @@ const ExpertExpertises: FC<ExpertExpertisesProps> = () => {
     isValueValid: isValueExpertisesValid,
     changeHandler: expertisesChangeHandler,
     blurHandler: expertisesBlurHandler,
-  } = useInput<MultiSelectOptions<number>>([], validateInterests);
+  } = useInput<SearchSelectOptions<number>>([], validateInterests);
 
-  const getExpertises = useCallback(async () => {
-    try {
-      const data = await get({
-        resource: "users",
-        entity: userDataCtx.userId as number,
-        args: {
-          fields: ["expert.id", "expert.topics"],
-        },
-      });
+  // const getExpertises = useCallback(async () => {
+  //   try {
+  //     const data = await get({
+  //       resource: "users",
+  //       entity: userDataCtx.userId as number,
+  //       args: {
+  //         fields: ["expert.id", "expert.topics"],
+  //       },
+  //     });
 
-      console.log(data);
+  //     console.log(data);
 
-      const topicsOptions: MultiSelectOptions<number> =
-        data.user.expert.topics.map((topic: { id: number; name: string }) => ({
-          value: topic.id,
-          label: topic.name,
-        }));
-      expertisesChangeHandler(topicsOptions);
-    } catch (errors) {
-      console.log(errors);
-    }
-  }, [expertisesChangeHandler, userDataCtx.expertId]);
+  //     const topicsOptions: SearchSelectOptions<number> =
+  //       data.user.expert.topics.map((topic: { id: number; name: string }) => ({
+  //         value: topic.id,
+  //         label: topic.name,
+  //       }));
+  //     expertisesChangeHandler(topicsOptions);
+  //   } catch (errors) {
+  //     console.log(errors);
+  //   }
+  // }, [expertisesChangeHandler, userDataCtx.expertId]);
 
   useEffect(() => {
-    getExpertises();
-  }, [getExpertises]);
+    const topicsOptions: SearchSelectOptions<number> = expert_topics
+      ? expert_topics.map((topic: { id: number; name: string }) => ({
+          value: topic.id,
+          label: topic.name,
+        }))
+      : [];
+    expertisesChangeHandler(topicsOptions);
+  }, [expert_topics, expertisesChangeHandler]);
 
   const updateExpertises = async () => {
     try {
       const requestBody = {
-        expertises: enteredExpertises.map((expertise) => expertise.value),
+        expertises: enteredExpertises.map(
+          (expertise: SearchSelectOption<number>) => expertise.value
+        ),
       };
       await update({
         resource: "experts",
-        entity: userDataCtx.expertId as number,
+        entity: expert_id as number,
         body: requestBody,
       });
       navigate("/dashboard"); // show message instead

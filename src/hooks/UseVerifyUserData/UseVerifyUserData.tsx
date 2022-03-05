@@ -18,8 +18,6 @@ const UseVerifyUserData = () => {
           throw new Error("Verification Failed");
         }
 
-        console.log(dataPoint);
-
         const data = await get({
           resource: "users",
           entity: userId,
@@ -27,11 +25,10 @@ const UseVerifyUserData = () => {
             fields: [dataPoint],
           },
         });
-        console.log(data);
 
         // https://stackoverflow.com/questions/6393943/convert-a-javascript-string-in-dot-notation-into-an-object-reference
-        const val = dataPoint.split(".").reduce((o, i) => o[i], data.user);
-        console.log(val);
+        const val =
+          dataPoint.split(".").reduce((o, i) => o[i], data.user) || data;
 
         if (val !== undefined) return val;
         else {

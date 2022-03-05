@@ -1,5 +1,4 @@
 from app import db, ma
-from app.models.BaseModel import BaseModel
 
 # mentors_topics = db.Table('mentors_topics',
 #                           db.Column('mentor_id', db.Integer, db.ForeignKey(

@@ -1,21 +1,7 @@
-from email.policy import default
 from uuid import uuid4
 from sqlalchemy.dialects.postgresql import UUID
 from app import db, ma
 from datetime import datetime
-from app.models.BaseModel import BaseModel
-
-
-# users_topics = db.Table('users_topics',
-#                         db.Column('user_id', db.Integer, db.ForeignKey(
-#                             'users.id'), primary_key=True),
-#                         db.Column('topic_id', db.Integer, db.ForeignKey(
-#                             'topics.id'), primary_key=True),
-#                         db.Column('priority', db.Integer)
-#                         )
-
-
-
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -29,9 +15,6 @@ class User(db.Model):
     account_creation_date = db.Column(db.DateTime, default=datetime.now())
     verified = db.Column(db.Boolean, default=False)
     permissions = db.Column(db.Integer, default=0)
-    # topics = db.relationship(
-    #     'Topic', secondary=users_topics, backref='users', lazy=True)
-
     department_id = db.Column(db.Integer, db.ForeignKey(
         'departments.id'), nullable=False)
 

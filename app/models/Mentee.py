@@ -1,5 +1,4 @@
 from app import db, ma
-from app.models.BaseModel import BaseModel
 
 
 class Mentee(db.Model):

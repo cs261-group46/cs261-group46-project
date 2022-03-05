@@ -33,7 +33,7 @@ function UseVerifyUser<T extends { [key: string]: any }>({
     });
 
     for (const { dataPoint, redirectOnFail } of userDataPolicies) {
-      if (dataPoint && id) {
+      if ((dataPoint || dataPoint === "") && id) {
         const returnedData = await dataVerifier({
           dataPoint,
           userId: id,
@@ -41,7 +41,14 @@ function UseVerifyUser<T extends { [key: string]: any }>({
         });
 
         const transformDataPoint = dataPoint.replace(/\./g, "_");
-        userDataDict = { ...userDataDict, [transformDataPoint]: returnedData };
+        console.log(transformDataPoint === "");
+        console.log(returnedData);
+
+        userDataDict = {
+          ...userDataDict,
+          [transformDataPoint.length === 0 ? "user" : transformDataPoint]:
+            returnedData,
+        };
       }
     }
     userDataDict = {

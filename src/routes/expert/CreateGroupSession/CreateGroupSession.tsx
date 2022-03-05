@@ -26,13 +26,11 @@ import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
 
 interface CreateGroupSessionProps {}
 
-type Verifier = {
-  userId: number | null | undefined;
-  expert_id: number | null | undefined;
-};
-
 const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
-  const { userId = null } = UseVerifyUser<Verifier>({
+  const { userId = null } = UseVerifyUser<{
+    userId: number | null | undefined;
+    expert_id: number | null | undefined;
+  }>({
     userDataPolicies: [
       {
         dataPoint: "expert.id",
@@ -40,6 +38,8 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
       },
     ],
   });
+
+  const navigate = useNavigate();
 
   const {
     enteredValue: title,
@@ -114,7 +114,7 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
     isValueValid: dateValueValid,
     changeHandler: dateChangeHandler,
     blurHandler: dateBlurHandler,
-  } = useInput<Date>(new Date());
+  } = useInput<Date>(new Date(), (date) => date >= new Date());
 
   // const {
   //   enteredValue: time,
@@ -138,7 +138,14 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
     blurHandler: endTimeBlurHandler,
     isInputValid: endTimeInputValid,
     isValueValid: endTimeValueValid,
-  } = useInput<string>("");
+  } = useInput<string>("", (e) => {
+    const start = new Date("1970-01-01T" + startTime + "Z");
+    const end = new Date("1970-01-01T" + e + "Z");
+    console.log(start);
+    console.log(end);
+
+    return start < end;
+  });
 
   const {
     enteredValue: description,
@@ -176,17 +183,21 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
     (value) => value.value === "group session" || value.value === "workshop"
   );
 
-  const roomSearchPromise: SearchPromise<Room> = async (search) => {
-    const result = await fetch(`/api/meetings/rooms?startwith=${search}`);
-
-    if (result.ok) {
-      const rooms: { result: Room[] } = await result.json();
-
-      return rooms.result.map((room) => ({ label: room.name, value: room }));
+  const roomsSearchPromise: SearchPromise<Room> = async (search) => {
+    try {
+      const data = await index({
+        resource: "rooms",
+        args: {
+          startswith: search,
+        },
+      });
+      return data.rooms.map((room: Room) => ({
+        label: room.name,
+        value: room,
+      }));
+    } catch (errors) {
+      console.log(errors);
     }
-
-    // else if bad, do nothing
-    return [];
   };
 
   const invitesSearchPromise: SearchPromise<{
@@ -201,13 +212,12 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
           startswith: search,
         },
       });
-      console.log(data);
       return data.users.map((user: { email: string; id: number }) => ({
         label: user.email,
-        value: user.id,
+        value: user,
       }));
     } catch (errors) {
-      console.log("errors");
+      console.log(errors);
     }
   };
 
@@ -215,7 +225,7 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
     const body = {
       title: title,
       host: userId,
-      room: room,
+      room: room[0].value,
       link: link,
       date: date,
       startTime: startTime,
@@ -224,7 +234,7 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
       capacity: capacity,
       visibility: visibility,
       type: type,
-      invites: invites,
+      invites: invites.map((invite) => invite.value),
     };
 
     try {
@@ -232,6 +242,7 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
         resource: "meetings",
         body: body,
       });
+      navigate("/expert/group-sessions");
     } catch (errors) {
       console.log(errors);
     }
@@ -404,7 +415,7 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
           value={room}
           onChange={roomChangeHandler}
           onBlur={roomBlurHandler}
-          searchPromise={roomSearchPromise}
+          searchPromise={roomsSearchPromise}
           limit={1}
         />
 
@@ -419,7 +430,7 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
         />
 
         <Button icon="👑" type={"submit"} buttonStyle={"primary"}>
-          Register
+          Create
         </Button>
       </form>
     </DashboardSubpageLayout>

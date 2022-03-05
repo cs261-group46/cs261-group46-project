@@ -8,6 +8,7 @@ from app.routes.api.auth import auth
 from app.routes.api.users import users
 from app.routes.api.mentorshiprequests import mentorshiprequests
 from app.routes.api.meetings import meetings
+from app.routes.api.rooms import rooms
 
 from flask import Blueprint
 
@@ -23,3 +24,4 @@ api.register_blueprint(notifications)
 api.register_blueprint(mentees)
 api.register_blueprint(mentorshiprequests)
 api.register_blueprint(meetings)
+api.register_blueprint(rooms)

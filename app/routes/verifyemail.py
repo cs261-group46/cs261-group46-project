@@ -15,7 +15,12 @@ def verify_email(token):
     except:
         # return {"successful": False, "warnings": ["The confirmation link is invalid or has expired."]}
         return redirect("http://127.0.0.1:3000/")
-    user = User.query.filter_by(email=email).first()
+
+    try:
+        user = User.query.filter_by(email=email).first()
+    except:
+        return redirect("http://127.0.0.1:3000/")
+
 
     if user.verified:
         return redirect("http://127.0.0.1:3000/dashboard")

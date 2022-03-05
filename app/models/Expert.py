@@ -1,5 +1,4 @@
 from app import db, ma
-from app.models.BaseModel import BaseModel
 
 experts_topics = db.Table('experts_topics',
                           db.Column('expert_id', db.Integer, db.ForeignKey(

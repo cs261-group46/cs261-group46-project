@@ -9,12 +9,16 @@ interface ContentCardProps {
   heading: string;
   className?: string;
 
-  sections: ({
-    title: string;
-    content: React.ReactNode;
-    className?: string;
-    icon?: React.ReactNode;
-  } | null)[];
+  sections: (
+    | {
+        title: string;
+        content: React.ReactNode;
+        className?: string;
+        icon?: React.ReactNode;
+      }
+    | null
+    | false
+  )[];
 
   buttons?: ButtonProps[];
 }

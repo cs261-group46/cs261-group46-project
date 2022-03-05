@@ -8,111 +8,78 @@ import styles from "./YourProfile.module.scss";
 import { MentorType } from "../../types/Mentor";
 import Tag from "../../components/UI/Tag/Tag";
 import ContentCard from "../../components/UI/ContentCard/ContentCard";
-import { FullUserType } from "../../types/UserType";
+import { FullUserType } from "../../types/User";
+import UseVerifyUser from "../../hooks/UseVerifyUser/UseVerifyUser";
 
 interface YourProfileProps {}
 
 const YourProfile: FC<YourProfileProps> = () => {
-  const navigate = useNavigate();
-  const userDataCtx = useContext(UserDataContext);
-  const [user, updateUser] = useState<FullUserType>();
+  const { userId = null, user = null } = UseVerifyUser<{
+    userId: number | null | undefined;
+    user: FullUserType | null | undefined;
+  }>({
+    userDataPolicies: [
+      {
+        dataPoint: "",
+      },
+    ],
+  });
 
-  useEffect(() => {
-    if (!userDataCtx.menteeId) {
-      navigate("/dashboard");
-    }
-  }, [navigate, userDataCtx.menteeId]);
-
-  const getMentor = useCallback(async () => {
-    try {
-      const data = await get({
-        resource: "users",
-        entity: userDataCtx.userId as number,
-        args: {
-          fields: [
-            "id",
-            "first_name",
-            "last_name",
-            "email",
-            "department",
-            "mentor.topics",
-            "mentor.capacity",
-            "mentor.score",
-            "mentor.about",
-            "mentee.topics",
-            "mentee.about",
-            "expert",
-            "mentee.mentor.first_name",
-            "mentee.mentor.last_name",
-          ],
-        },
-      });
-
-      console.log(data);
-
-      updateUser(data.user);
-    } catch (errors) {
-      console.log(errors);
-    }
-  }, [userDataCtx.userId]);
-
-  useEffect(() => {
-    getMentor();
-  }, [getMentor]);
+  console.log(user);
 
   return (
     <DashboardSubpageLayout title="Your Profile">
       <div className={styles.YourProfile} data-testid="YourProfile">
         {user && (
           <ContentCard
-            heading={`${user.first_name} ${user.last_name}`}
+            heading={`${user.user.first_name} ${user.user.last_name}`}
             sections={[
               {
                 title: "Email",
                 icon: "✉️",
-                content: user.email,
+                content: user.user.email,
               },
               {
                 title: "Department",
-                content: user.department.name,
+                content: user.user.department.name,
               },
-              user.mentor && {
+              user.user.mentor && {
                 title: "Mentor-About",
-                content: user.mentor.about,
+                content: user.user.mentor.about,
               },
-              user.mentor && {
+              user.user.mentor && {
                 title: "Mentorship Areas",
                 className: styles.Tags,
-                content: user.mentor.topics.map((topic) => (
+                content: user.user.mentor.topics.map((topic) => (
                   <Tag key={topic.topic.id}>{topic.topic.name}</Tag>
                 )),
               },
-              user.mentor && {
+              user.user.mentor && {
                 title: "Capacity",
-                content: user.mentor.capacity,
+                content: user.user.mentor.capacity,
               },
-              user.expert && {
+              user.user.expert && {
                 title: "Areas of Expertise",
                 className: styles.Tags,
-                content: user.expert.topics.map((topic) => (
+                content: user.user.expert.topics.map((topic) => (
                   <Tag key={topic.id}>{topic.name}</Tag>
                 )),
               },
-              user.mentee && {
+              user.user.mentee && {
                 title: "Areas of Interests",
                 className: styles.Tags,
-                content: user.mentee.topics.map((topic) => (
+                content: user.user.mentee.topics.map((topic) => (
                   <Tag key={topic.topic.id}>{topic.topic.name}</Tag>
                 )),
               },
-              user.mentee && {
+              user.user.mentee && {
                 title: "Mentee-About",
-                content: user.mentee.about,
+                content: user.user.mentee.about,
               },
-              user.mentee &&
-                user.mentee.mentor && {
+              user.user.mentee &&
+                user.user.mentee.mentor && {
                   title: "Your Mentor",
-                  content: `${user.mentee.mentor.first_name} ${user.mentee.mentor.last_name}`,
+                  content: `${user.user.mentee.mentor.first_name} ${user.user.mentee.mentor.last_name}`,
                 },
             ]}
           />

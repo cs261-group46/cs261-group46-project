@@ -1,6 +1,4 @@
-from app import db, ma
-from app.models.BaseModel import BaseModel
-
+from app import db
 
 class Topic(db.Model):
     __tablename__ = 'topics'

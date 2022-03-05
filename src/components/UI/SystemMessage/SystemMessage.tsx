@@ -53,6 +53,7 @@ const SystemMessage: FC<SystemMessageProps> = (props) => {
           {props.onClose && <span onClick={closeHandler}>&#10006;</span>}
           <h1>{props.type}</h1>
           <p>{props.description}</p>
+          {props.children}
         </div>
       </div>,
       document.getElementById("modal-root")!

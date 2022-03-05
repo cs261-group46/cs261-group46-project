@@ -21,6 +21,10 @@ function validatePassword(password: string) {
   return password.length > 0;
 }
 
+type Verifier = {
+  userId: number | null | undefined;
+};
+
 const Login: FC<LoginProps> = () => {
   const userDataCtx = useContext(UserDataContext);
   const errorsCtx = useContext(ErrorMessagesContext);

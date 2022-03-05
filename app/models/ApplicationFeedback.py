@@ -1,7 +1,5 @@
 from sqlalchemy.dialects.postgresql import UUID
 from app import db
-from app.models.BaseModel import BaseModel
-
 
 class ApplicationFeedback(db.Model):
     __tablename__ = "application_feedback"
