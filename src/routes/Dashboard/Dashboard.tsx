@@ -10,22 +10,61 @@ import { NotificationType } from "../../types/Notification";
 import Notifications from "../../components/Notifications/Notifications";
 import Icon from "../../components/UI/Icon/Icon";
 import { useNavigate } from "react-router-dom";
+import UseVerifyUser from "../../hooks/UseVerifyUser/UseVerifyUser";
+import { MentorType } from "../../types/Mentor";
 
 interface DashboardProps {}
 
+type Verifier = {
+  userId: number | null | undefined;
+  mentor_id: number | null | undefined;
+  mentee_id: number | null | undefined;
+  mentee_mentor_id: number | null | undefined;
+  expert_id: number | null | undefined;
+};
+
 const Dashboard: FC<DashboardProps> = () => {
-  UseVerifyAuth();
+  const {
+    userId = null,
+    mentor_id: isMentor = null,
+    mentee_id: isMentee = null,
+    mentee_mentor_id: hasMentor = null,
+    expert_id: isExpert = null,
+  } = UseVerifyUser<Verifier>({
+    userDataPolicies: [
+      {
+        dataPoint: "mentor.id",
+      },
+      {
+        dataPoint: "mentee.id",
+      },
+      {
+        dataPoint: "mentee.mentor.id",
+      },
+      {
+        dataPoint: "expert.id",
+      },
+    ],
+  });
+
+  console.log({
+    userId,
+    isMentor,
+    isMentee,
+    hasMentor,
+    isExpert,
+  });
 
   const [pageVisiable, setPageVisible] = useState(1);
   const navigate = useNavigate();
 
-  const userDataCtx = useContext(UserDataContext);
-  const userId = userDataCtx.userId;
-  const [isMentor, updateIsMentor] = useState(false);
-  const [isMentee, updateIsMentee] = useState(false);
-  const [hasMentor, updateHasMentor] = useState(false);
+  // const userDataCtx = useContext(UserDataContext);
+  // const userId = userDataCtx.userId;
+  // const [isMentor, updateIsMentor] = useState(false);
+  // const [isMentee, updateIsMentee] = useState(false);
+  // const [hasMentor, updateHasMentor] = useState(false);
 
-  const [isExpert, updateIsExpert] = useState(false);
+  // const [isExpert, updateIsExpert] = useState(false);
 
   const [notificationsLearn, setNotificationsLearn] = useState<
     NotificationType<"learning">[]
@@ -53,22 +92,9 @@ const Dashboard: FC<DashboardProps> = () => {
         resource: "users",
         entity: userId as number,
         args: {
-          fields: [
-            "notifications",
-            "mentee.id",
-            "mentee.mentor",
-            "mentor",
-            "expert",
-          ],
+          fields: ["notifications"],
         },
       });
-
-      console.log(data);
-
-      updateIsExpert(!!data.user.expert);
-      updateIsMentor(!!data.user.mentor);
-      updateIsMentee(!!data.user.mentee);
-      updateHasMentor(data.user.mentee && !!data.user.mentee.mentor);
 
       const mentorNotifications: NotificationType<"mentoring">[] = [];
       const learnNotifications: NotificationType<"learning">[] = [];
@@ -111,7 +137,6 @@ const Dashboard: FC<DashboardProps> = () => {
         endpoint: "/auth/logout",
         method: "GET",
       });
-      userDataCtx.updateUserId();
       navigate("/login");
     } catch (errors) {}
   };

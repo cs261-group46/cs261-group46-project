@@ -1,62 +1,66 @@
-import { useEffect, useCallback, useContext } from "react";
+import { useEffect, useCallback, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { custom } from "../../api/api";
+import { custom, get } from "../../api/api";
 import UserDataContext from "../../store/UserDataContext";
+import UseVerifyUserData from "../UseVerifyUserData/UseVerifyUserData";
 
-const UseVerifyAuth = (
-  minPermissionLevel: number | undefined = 0,
-  isProtected = true
-) => {
+interface AuthVerifierProps {
+  minPermissionLevel?: number;
+  isProtected?: boolean;
+}
+
+const UseVerifyAuth = () => {
   const navigate = useNavigate();
-  const userDataCtx = useContext(UserDataContext);
 
-  const verifyAuth = useCallback(async () => {
-    let userId;
+  const userDataVerifier = UseVerifyUserData();
 
-    if (userDataCtx.userId === undefined || userDataCtx.userId === null) {
-      userId = await userDataCtx.updateUserId();
-    } else {
-      userId = userDataCtx.userId;
-    }
+  const verifyAuth = useCallback(
+    async ({
+      minPermissionLevel = 0,
+      isProtected = true,
+    }: AuthVerifierProps) => {
+      try {
+        const { user: userId } = await custom({
+          endpoint: "/users/loggedin",
+          method: "GET",
+        });
 
-    console.log(userId);
+        if (!userId) {
+          throw new Error("User not logged in");
+        }
 
-    let permissions;
+        const permissions: number | null = await userDataVerifier({
+          dataPoint: "permissions",
+          userId,
+          redirectOnFail: "/dashboard",
+        });
 
-    if (userDataCtx.permissions === null) {
-      permissions = await userDataCtx.updatePermissions();
-    } else {
-      permissions = userDataCtx.permissions;
-    }
-    // console.log(userId);
 
-    try {
-      if (!userId) {
-        throw new Error("User not logged in");
+        if (permissions === null || permissions < minPermissionLevel) {
+          navigate("/dashboard");
+          return null;
+        }
+
+        // make sure its not in a testing environment - this will break
+        if (!isProtected && process.env.JEST_WORKER_ID === undefined) {
+          navigate("/dashboard");
+          return null;
+        }
+
+        return userId;
+      } catch (errors) {
+        // make sure its not in a testing environment - this will break
+        if (isProtected && process.env.JEST_WORKER_ID === undefined) {
+          navigate("/login");
+          return null;
+        }
+        return null;
       }
+    },
+    [navigate, userDataVerifier]
+  );
 
-      if (permissions == null || permissions < minPermissionLevel) {
-        navigate("/dashboard");
-      }
-
-      // userDataCtx.updateMentorId();
-      // userDataCtx.updateExpertId();
-      // userDataCtx.updateMenteeId();
-
-      // make sure its not in a testing environment - this will break
-      if (!isProtected && process.env.JEST_WORKER_ID === undefined)
-        navigate("/dashboard");
-    } catch (errors) {
-      console.log(errors);
-      // make sure its not in a testing environment - this will break
-      if (isProtected && process.env.JEST_WORKER_ID === undefined)
-        navigate("/login");
-    }
-  }, [isProtected, minPermissionLevel, navigate, userDataCtx]);
-
-  useEffect(() => {
-    verifyAuth();
-  }, [verifyAuth]);
+  return verifyAuth;
 };
 
 export default UseVerifyAuth;

@@ -27,7 +27,6 @@ function validateInterests(_experises: MultiSelectOptions<number>) {
 }
 
 const MenteeSignup: FC<MenteeSignupProps> = () => {
-  UseVerifyAuth();
   const navigate = useNavigate();
   const userDataCtx = useContext(UserDataContext);
 

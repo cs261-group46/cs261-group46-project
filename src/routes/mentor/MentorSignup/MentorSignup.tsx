@@ -20,7 +20,6 @@ interface MentorSignupProps {}
 const MentorSignup: FC<MentorSignupProps> = () => {
   const userDataCtx = useContext(UserDataContext);
 
-  useVerifyAuth();
 
   let navigate = useNavigate();
 

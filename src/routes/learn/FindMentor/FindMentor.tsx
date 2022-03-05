@@ -3,12 +3,28 @@ import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpage
 import UseVerifyAuth from "../../../hooks/UseVerifyAuth/UseVerifyAuth";
 import MentorIndex from "../../../components/learn/MentorIndex/MentorIndex";
 import Title from "../../../components/UI/Title/Title";
+import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
 
 interface FindMentorProps {}
+type Verifier = {
+  mentee_id: number | null | undefined;
+  mentee_mentor_id: number | null | undefined;
+};
 
 const FindMentor: FC<FindMentorProps> = () => {
-  UseVerifyAuth();
-
+  const { mentee_id: isMentee = null, mentee_mentor_id: hasMentor = null } =
+    UseVerifyUser<Verifier>({
+      userDataPolicies: [
+        {
+          dataPoint: "mentee.id",
+          redirectOnFail: "/dashboard",
+        },
+        {
+          dataPoint: "mentee.mentor.id",
+        },
+      ],
+    });
+    console.log(isMentee);
   return (
     <DashboardSubpageLayout title="Find a Mentor">
       <Title text={"Recommended Mentors"} />

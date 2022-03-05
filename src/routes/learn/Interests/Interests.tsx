@@ -26,7 +26,6 @@ function validateInterests(_experises: MultiSelectOptions<number>) {
 }
 
 const Interests: FC<InterestsProps> = () => {
-  UseVerifyAuth();
   const navigate = useNavigate();
   const userDataCtx = useContext(UserDataContext);
 

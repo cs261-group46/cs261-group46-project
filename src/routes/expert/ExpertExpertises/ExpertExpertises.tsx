@@ -25,7 +25,6 @@ function validateInterests(_experises: MultiSelectOptions<number>) {
 }
 
 const ExpertExpertises: FC<ExpertExpertisesProps> = () => {
-  UseVerifyAuth();
   const navigate = useNavigate();
 
   const userDataCtx = useContext(UserDataContext);

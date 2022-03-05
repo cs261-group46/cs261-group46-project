@@ -12,6 +12,7 @@ import Button from "../../../components/UI/Button/Button";
 import MentorshipRequestCard from "./MentorshipRequestCard/MentorshipRequestCard";
 import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
 import { MenteeType } from "../../../types/Mentee";
+import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
 
 interface YourMenteeProps {}
 
@@ -39,33 +40,58 @@ const exampleMentees = [
   },
 ];
 
-const YourMentees: FC<YourMenteeProps> = () => {
-  UseVerifyAuth();
-  const userDataCtx = useContext(UserDataContext);
+type Verifier = {
+  userId: number | null | undefined;
+  mentor_id: number | null | undefined;
+  mentor_mentees: any | null | undefined;
+  mentor_mentorship_requests_received: any | null | undefined;
+};
 
-  const [mentees, setMentees] = useState([]);
-  const [mentorshipRequests, setMentorshipRequests] = useState([]);
+const YourMentees: FC<YourMenteeProps> = () => {
+  // const userDataCtx = useContext(UserDataContext);
+
+  const {
+    userId = null,
+    mentor_mentees: mentees = [],
+    mentor_mentorship_requests_received: mentorshipRequests = [],
+  } = UseVerifyUser<Verifier>({
+    userDataPolicies: [
+      {
+        dataPoint: "mentor.id",
+        redirectOnFail: "/dashboard",
+      },
+      {
+        dataPoint: "mentor.mentees",
+      },
+      {
+        dataPoint: "mentor.mentorship_requests_received",
+      },
+    ],
+  });
+
+  // const [mentees, setMentees] = useState([]);
+  // const [mentorshipRequests, setMentorshipRequests] = useState([]);
 
   const [filterEvents, setFilterEvents] = useState<number>(0);
 
-  const getMentees = useCallback(async () => {
-    try {
-      const data = await get({
-        resource: "users",
-        entity: userDataCtx.userId as number,
-        args: {
-          fields: ["mentor.mentees", "mentor.mentorship_requests_received"],
-        },
-      });
-      console.log(data);
-      setMentees(data.user.mentor.mentees);
-      setMentorshipRequests(data.user.mentor.mentorship_requests_received);
-    } catch (error) {}
-  }, [userDataCtx.userId]);
+  // const getMentees = useCallback(async () => {
+  //   try {
+  //     const data = await get({
+  //       resource: "users",
+  //       entity: userId as number,
+  //       args: {
+  //         fields: ["mentor.mentees", "mentor.mentorship_requests_received"],
+  //       },
+  //     });
+  //     console.log(data);
+  //     setMentees(data.user.mentor.mentees);
+  //     setMentorshipRequests(data.user.mentor.mentorship_requests_received);
+  //   } catch (error) {}
+  // }, [userId]);
 
-  useEffect(() => {
-    getMentees();
-  }, [getMentees]);
+  // useEffect(() => {
+  //   getMentees();
+  // }, [getMentees]);
 
   //   const menteeNum = exampleMentees.length; //TODO: get from database
 

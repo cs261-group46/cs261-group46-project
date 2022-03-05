@@ -9,9 +9,7 @@ import { ErrorMessagesContextProvider } from "./store/ErrorMessagesContext";
 ReactDOM.render(
   <React.StrictMode>
     <ErrorMessagesContextProvider>
-      <UserDataContextProvider>
-        <App />
-      </UserDataContextProvider>
+      <App />
     </ErrorMessagesContextProvider>
   </React.StrictMode>,
   document.getElementById("root")

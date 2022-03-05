@@ -4,6 +4,7 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
 } from "react";
 import { useNavigate } from "react-router-dom";
 import { get, index, update } from "../../../api/api";
@@ -15,6 +16,7 @@ import {
 } from "../../../components/UI/FormInput/SearchSelect/SearchSelect.d";
 import useInput from "../../../hooks/UseInput/UseInput";
 import UseVerifyAuth from "../../../hooks/UseVerifyAuth/UseVerifyAuth";
+import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
 import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
 import UserDataContext from "../../../store/UserDataContext";
 import { TopicWithPriorityType } from "../../../types/Topic";
@@ -26,11 +28,23 @@ function validateInterests(_experises: MultiSelectOptions<number>) {
 }
 
 const MentorSkills: FC<MentorSkillsProps> = () => {
-  const userDataCtx = useContext(UserDataContext);
-  UseVerifyAuth();
-  const navigate = useNavigate();
+  const { mentor_id = null, mentor_topics = [] } = UseVerifyUser<{
+    userId: number | null | undefined;
+    mentor_id: number | null | undefined;
+    mentor_topics: TopicWithPriorityType[] | null | undefined;
+  }>({
+    userDataPolicies: [
+      {
+        dataPoint: "mentor.id",
+        redirectOnFail: "/dashboard",
+      },
+      {
+        dataPoint: "mentor.topics",
+      },
+    ],
+  });
 
-  if (!userDataCtx.mentorId) navigate("/dashboard");
+  const navigate = useNavigate();
 
   const getTopics = async (startsWith: string) => {
     try {
@@ -50,7 +64,6 @@ const MentorSkills: FC<MentorSkillsProps> = () => {
       return [];
     }
   };
-  // return data;
 
   const searchPromise: SearchPromise<number> = (_search) => {
     return new Promise((resolve) => resolve(getTopics(_search)));
@@ -64,38 +77,26 @@ const MentorSkills: FC<MentorSkillsProps> = () => {
     blurHandler: skillsBlurHandler,
   } = useInput<MultiSelectOptions<number>>([], validateInterests);
 
-  const getSkills = useCallback(async () => {
-    try {
-      const data = await get({
-        resource: "users",
-        entity: userDataCtx.userId as number,
-        args: {
-          fields: "mentor.topics",
-        },
-      });
-
-      console.log(data);
-
-      const topics = data.user.mentor.topics.sort(
-        (topic1: TopicWithPriorityType, topic2: TopicWithPriorityType) =>
-          topic1.priority - topic2.priority
-      );
-
-      const topicsOptions: MultiSelectOptions<number> = topics.map(
-        (topic: TopicWithPriorityType) => ({
-          value: topic.topic.id,
-          label: topic.topic.name,
-        })
-      );
-      skillsChangeHandler(topicsOptions);
-    } catch (errors) {
-      console.log(errors);
-    }
-  }, [skillsChangeHandler, userDataCtx.mentorId]);
+  const topics = useMemo(
+    () =>
+      mentor_topics
+        ? mentor_topics.sort(
+            (topic1: TopicWithPriorityType, topic2: TopicWithPriorityType) =>
+              topic1.priority - topic2.priority
+          )
+        : [],
+    [JSON.stringify(mentor_topics)]
+  );
 
   useEffect(() => {
-    getSkills();
-  }, [getSkills]);
+    const topicsOptions: MultiSelectOptions<number> = topics.map(
+      (topic: TopicWithPriorityType) => ({
+        value: topic.topic.id,
+        label: topic.topic.name,
+      })
+    );
+    skillsChangeHandler(topicsOptions);
+  }, [skillsChangeHandler, topics]);
 
   const updateSkills = async () => {
     try {
@@ -105,11 +106,10 @@ const MentorSkills: FC<MentorSkillsProps> = () => {
           skill: skill.value,
         })),
       };
-      console.log(enteredSkills);
 
       await update({
         resource: "mentors",
-        entity: userDataCtx.mentorId as number,
+        entity: mentor_id as number,
         body: requestBody,
       });
       navigate("/dashboard"); // show message instead

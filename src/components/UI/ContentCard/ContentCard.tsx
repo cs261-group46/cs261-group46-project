@@ -9,12 +9,12 @@ interface ContentCardProps {
   heading: string;
   className?: string;
 
-  sections: {
+  sections: ({
     title: string;
     content: React.ReactNode;
     className?: string;
     icon?: React.ReactNode;
-  }[];
+  } | null)[];
 
   buttons?: ButtonProps[];
 }
@@ -23,17 +23,23 @@ const ContentCard: FC<ContentCardProps> = (props) => (
   <Card className={`${styles.ContentCard} ${props.className ?? ""}`}>
     <div className={styles.Heading}>{props.heading}</div>
 
-    {props.sections.map((section, i) => (
-      <div key={i} className={styles.Section}>
-        <div className={styles.title}>
-          {section.icon && <Icon icon={section.icon} className={styles.Icon} />}
-          <Title className={styles.subtitle} text={`${section.title}:`} />
-        </div>
-        <div className={`${styles.subtext} ${section.className ?? ""}`}>
-          {section.content}
-        </div>
-      </div>
-    ))}
+    {props.sections.map((section, i) => {
+      return (
+        section && (
+          <div key={i} className={styles.Section}>
+            <div className={styles.title}>
+              {section.icon && (
+                <Icon icon={section.icon} className={styles.Icon} />
+              )}
+              <Title className={styles.subtitle} text={`${section.title}:`} />
+            </div>
+            <div className={`${styles.subtext} ${section.className ?? ""}`}>
+              {section.content}
+            </div>
+          </div>
+        )
+      );
+    })}
 
     <div className={styles.Buttons}>
       {props.buttons &&

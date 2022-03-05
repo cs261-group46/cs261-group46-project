@@ -20,14 +20,20 @@ import YourMentor from "./routes/learn/YourMentor/YourMentor";
 import ExpertSignup from "./routes/expert/ExpertSignup/ExpertSignup";
 import YourMentees from "./routes/mentor/YourMentees/YourMentees";
 import FindMentor from "./routes/learn/FindMentor/FindMentor";
-import CreateWorkshop from "./routes/CreateWorkshop/CreateWorkshop.lazy";
+import CreateWorkshop from "./routes/expert/CreateWorkshop/CreateWorkshop.lazy";
 import YourGroupSessions from "./routes/expert/YourGroupSessions/YourGroupSessions";
+import YourProfile from "./routes/YourProfile/YourProfile";
+import UseVerifyUser from "./hooks/UseVerifyUser/UseVerifyUser";
+
 
 function App() {
+
   return (
     <BrowserRouter>
       <div className="App">
         <Routes>
+          <Route path="/profile" element={<YourProfile />} />
+          
           <Route path="/register">
             <Route path="" element={<Register />} />
             <Route path="verifyemail" element={<VerifyEmail />} />
@@ -71,30 +77,7 @@ function App() {
           <Route path="/test" element={<ComponentPlaygound />} />
           <Route index element={<Homepage />} />
 
-          {/* <Route
-            path="/upcoming-events"
-            element={
-              <UpcomingEvents
-                events={
-                  [
-                    {
-                      sessionType: "Group Session",
-                      subject: "Engineering",
-                      mentee: "Reiss",
-                      mentor: "Mohammed",
-                    },
-                    {
-                      sessionType: "Workshop",
-                      subject: "Engineering",
-                      mentee: "Mohammed",
-                      mentor: "Reiss",
-                    },
-                  ] as EventProps[]
-                }
-              />
-            }
-          /> */}
-          {/* <Route path='/plans-of-action' element={<PlansOfAction />} /> */}
+          
         </Routes>
       </div>
     </BrowserRouter>

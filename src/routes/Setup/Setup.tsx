@@ -17,7 +17,6 @@ import UserDataContext from "../../store/UserDataContext";
 const Setup = () => {
   const userDataCtx = useContext(UserDataContext);
 
-  UseVerifyAuth();
   const navigate = useNavigate();
   const [showExpertise, setShowExpertise] = useState(0);
 

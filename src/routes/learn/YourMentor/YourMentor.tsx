@@ -8,43 +8,55 @@ import styles from "./YourMentor.module.scss";
 import { MentorType } from "../../../types/Mentor";
 import Tag from "../../../components/UI/Tag/Tag";
 import ContentCard from "../../../components/UI/ContentCard/ContentCard";
+import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
 
 interface YourMentorProps {}
 
+type Verifier = {
+  mentee_mentor: MentorType;
+};
+
 const YourMentor: FC<YourMentorProps> = () => {
-  UseVerifyAuth();
-  const navigate = useNavigate();
-  const userDataCtx = useContext(UserDataContext);
-  const [mentor, updateMentor] = useState<MentorType>();
+  // const navigate = useNavigate();
+  // const userDataCtx = useContext(UserDataContext);
+  // const [mentor, updateMentor] = useState<MentorType>();
 
-  useEffect(() => {
-    if (!userDataCtx.menteeId) {
-      navigate("/dashboard");
-    }
-  }, [navigate, userDataCtx.menteeId]);
+  // useEffect(() => {
+  //   if (!userDataCtx.menteeId) {
+  //     navigate("/dashboard");
+  //   }
+  // }, [navigate, userDataCtx.menteeId]);
 
-  const getMentor = useCallback(async () => {
-    try {
-      const data = await get({
-        resource: "users",
-        entity: userDataCtx.menteeId as number,
-        args: {
-          fields: ["mentee.mentor"],
-        },
-      });
+  // const getMentor = useCallback(async () => {
+  //   try {
+  //     const data = await get({
+  //       resource: "users",
+  //       entity: userDataCtx.userId as number,
+  //       args: {
+  //         fields: ["mentee.mentor"],
+  //       },
+  //     });
 
-      console.log(data);
-      
+  //     console.log(data);
 
-      updateMentor(data.user.mentee.mentor);
-    } catch (errors) {
-      console.log(errors);
-    }
-  }, [userDataCtx.menteeId]);
+  //     updateMentor(data.user.mentee.mentor);
+  //   } catch (errors) {
+  //     console.log(errors);
+  //   }
+  // }, [userDataCtx.menteeId]);
 
-  useEffect(() => {
-    getMentor();
-  }, [getMentor]);
+  // useEffect(() => {
+  //   getMentor();
+  // }, [getMentor]);
+
+  const { mentee_mentor: mentor = null } = UseVerifyUser<Verifier>({
+    userDataPolicies: [
+      {
+        dataPoint: "mentee.mentor",
+        redirectOnFail: "/dashboard",
+      },
+    ],
+  });
 
   return (
     <DashboardSubpageLayout title="Your Mentor">

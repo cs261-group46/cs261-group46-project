@@ -24,8 +24,6 @@ interface Room {
 }
 
 const CreateMeeting: FC<CreateMeetingProps> = () => {
-  UseVerifyAuth();
-
   const {
     enteredValue: room,
     changeHandler: roomChangeHandler,

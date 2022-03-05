@@ -22,7 +22,6 @@ function validatePassword(password: string) {
 }
 
 const Login: FC<LoginProps> = () => {
-  UseVerifyAuth(0, false);
   const userDataCtx = useContext(UserDataContext);
   const errorsCtx = useContext(ErrorMessagesContext);
 

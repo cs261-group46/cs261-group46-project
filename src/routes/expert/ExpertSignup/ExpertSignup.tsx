@@ -15,12 +15,16 @@ import { index, store } from "../../../api/api";
 import SearchSelect from "../../../components/UI/FormInput/SearchSelect/SearchSelect";
 import BigTextInput from "../../../components/UI/FormInput/BigTextInput/BigTextInput";
 import UserDataContext from "../../../store/UserDataContext";
+import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
 
 interface ExpertSignupProps {}
 
+type Verifier = {
+  userId: number | null | undefined;
+};
+
 const ExpertSignup: FC<ExpertSignupProps> = () => {
-  const userDataCtx = useContext(UserDataContext);
-  useVerifyAuth();
+  UseVerifyUser<Verifier>({});
 
   let navigate = useNavigate();
 
@@ -50,7 +54,6 @@ const ExpertSignup: FC<ExpertSignupProps> = () => {
         body: requestBody,
       });
 
-      userDataCtx.updateExpertId();
       navigate("/dashboard"); // show message instead
     } catch (errors) {
       console.log(errors);

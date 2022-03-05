@@ -67,7 +67,6 @@ function validateDepartment(_department: SelectOption<number>) {
 }
 
 const Register: FC = () => {
-  UseVerifyAuth(0, false);
   const errorsCtx = useContext(ErrorMessagesContext);
 
   const [departments, setDepartments] = useState<SelectOptions<number>>([]);
