@@ -3,6 +3,7 @@ import DashboardSubpageLayout from "../../layouts/MainLayout/DashboardSubpageLay
 import Tag from "../../components/UI/Tag/Tag";
 import styles from "./Profile.module.scss";
 import Title from "../../components/UI/Title/Title";
+import Avatar from "../../components/UI/Avatar/Avatar";
 
 
 interface ProfileProp {
@@ -10,13 +11,11 @@ interface ProfileProp {
 }
 
 
-const alltopics = ["Trading", "Money", "Economy"];
-
 const topicList = (topics : string[], titleText : string) => (
     <React.Fragment>
         <Title text={titleText} />
             {topics.map( (topic : string) => (
-                <Tag>
+                <Tag key={topic}>
                     {topic}
                 </Tag>
             ))}
@@ -28,35 +27,36 @@ const Profile: FC<ProfileProp> = () => {
 
     const isMentor = true;
     const isExpert = true;
-
+    const alltopics = ["Trading", "Money", "Economy"];
+    
     return (
-        <DashboardSubpageLayout title={"My Profile"}>
+        <DashboardSubpageLayout title='My Profile'>
             <div className = {styles.topContainer}>
                 <div className={styles.leftContainer}>
-                    profile pic goes here 
+                    <Avatar/> {/*Remove this whole top container (and right container styling) if we are not using images */}
                 </div>
                 <div className={styles.rightContainer}>
-                    <Title text="Name"/>
+                    <Title text='Name'/>
                     <Tag>
                         John Smith
                     </Tag>
-                    <Title text="Email"/>
+                    <Title text='Email'/>
                     <Tag>
-                        <span style={{textTransform: "none"}}>johnsmith@gmail.com</span>
+                        <span style={{textTransform: 'none'}}>johnsmith@gmail.com</span>
                     </Tag>
                 </div>
             </div>
-            <Title text="Department"/>
+            <Title text='Department'/>
             <Tag>
                 Computer Science
             </Tag>
 
             <br></br>
-            {isMentor && topicList(alltopics, "Mentor Topics")}
+            {isMentor && topicList(alltopics, 'Mentor Topics')}
             
             <br></br>
-            {isExpert && topicList(alltopics, "Expertise")}
-
+            {isExpert && topicList(alltopics, 'Expertise')}
+            <div data-testid='Profile' />
         </DashboardSubpageLayout>
     )
 }
