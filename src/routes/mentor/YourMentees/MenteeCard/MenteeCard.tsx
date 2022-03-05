@@ -1,11 +1,7 @@
 import React, { FC } from "react";
 import styles from "./MenteeCard.module.scss";
-import Button from "../../../../components/UI/Button/Button";
-import { Link } from "react-router-dom";
 import BarChart from "../../../../components/UI/BarChart/BarChart";
-import Card from "../../../../components/UI/Card/Card";
 import { MenteeType } from "../../../../types/Mentee";
-import Title from "../../../../components/UI/Title/Title";
 import Tag from "../../../../components/UI/Tag/Tag";
 import ContentCard from "../../../../components/UI/ContentCard/ContentCard";
 

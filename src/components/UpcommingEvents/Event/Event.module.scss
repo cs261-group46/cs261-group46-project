@@ -12,7 +12,6 @@
 
   .dateTimeSquare {
     text-align: center;
-    align-items: center;
     // background-color: $sq_teal;
     border-radius: 10px;
     // color: white;
@@ -22,7 +21,7 @@
     align-items: flex-end;
     display: flex;
     flex-direction: column;
-    justify-content: end;
+    justify-content: flex-end;
 
     span {
       font-size: 30px;
