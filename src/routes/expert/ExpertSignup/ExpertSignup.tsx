@@ -1,5 +1,4 @@
 import React, { FC, FormEventHandler, useContext } from "react";
-import styles from "./ExpertSignup.module.scss";
 
 import {
   MultiSelectOptions,
@@ -8,12 +7,10 @@ import {
 import useInput from "../../../hooks/UseInput/UseInput";
 import Button from "../../../components/UI/Button/Button";
 import { useNavigate } from "react-router-dom";
-import TextInput from "../../../components/UI/FormInput/TextInput/TextInput";
 import useVerifyAuth from "../../../hooks/UseVerifyAuth/UseVerifyAuth";
 import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
 import { index, store } from "../../../api/api";
 import SearchSelect from "../../../components/UI/FormInput/SearchSelect/SearchSelect";
-import BigTextInput from "../../../components/UI/FormInput/BigTextInput/BigTextInput";
 import UserDataContext from "../../../store/UserDataContext";
 
 interface ExpertSignupProps {}

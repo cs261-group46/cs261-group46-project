@@ -91,7 +91,7 @@ const MentorSkills: FC<MentorSkillsProps> = () => {
     } catch (errors) {
       console.log(errors);
     }
-  }, [skillsChangeHandler, userDataCtx.mentorId]);
+  }, [skillsChangeHandler, userDataCtx.userId]);
 
   useEffect(() => {
     getSkills();

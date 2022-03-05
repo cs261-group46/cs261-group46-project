@@ -5,7 +5,7 @@ import { MentorType } from "../../../../types/Mentor";
 import Title from "../../../UI/Title/Title";
 import Tag from "../../../UI/Tag/Tag";
 import Button from "../../../UI/Button/Button";
-import { custom, store } from "../../../../api/api";
+import { store } from "../../../../api/api";
 import UserDataContext from "../../../../store/UserDataContext";
 
 interface MentorCardProps {

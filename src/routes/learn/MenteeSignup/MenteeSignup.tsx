@@ -1,12 +1,6 @@
-import React, {
-  FC,
-  FormEventHandler,
-  useCallback,
-  useContext,
-  useEffect,
-} from "react";
+import React, { FC, FormEventHandler, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { get, index, store, update } from "../../../api/api";
+import { index, store } from "../../../api/api";
 import Button from "../../../components/UI/Button/Button";
 import BigTextInput from "../../../components/UI/FormInput/BigTextInput/BigTextInput";
 import SearchSelect from "../../../components/UI/FormInput/SearchSelect/SearchSelect";
@@ -18,7 +12,6 @@ import useInput from "../../../hooks/UseInput/UseInput";
 import UseVerifyAuth from "../../../hooks/UseVerifyAuth/UseVerifyAuth";
 import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
 import UserDataContext from "../../../store/UserDataContext";
-import { TopicWithPriorityType } from "../../../types/Topic";
 
 interface MenteeSignupProps {}
 
