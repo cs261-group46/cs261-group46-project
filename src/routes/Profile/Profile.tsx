@@ -22,13 +22,20 @@ const topicList = (topics : string[], titleText : string) => (
     </React.Fragment>
 );
 
-
 const Profile: FC<ProfileProp> = () => {
 
     const isMentor = true;
     const isExpert = true;
     const alltopics = ["Trading", "Money", "Economy"];
-    
+    const user = {
+        firstname : "John",
+        lastname : "Smith",
+        email : "johnsmith@gmail.com",
+        department : "Computer Science",
+        mentorTopic : alltopics,
+        expertTopic : alltopics,
+    }
+
     return (
         <DashboardSubpageLayout title='My Profile'>
             <div className = {styles.topContainer}>
@@ -38,24 +45,24 @@ const Profile: FC<ProfileProp> = () => {
                 <div className={styles.rightContainer}>
                     <Title text='Name'/>
                     <Tag>
-                        John Smith
+                        {`${user.firstname} ${user.lastname}`}
                     </Tag>
                     <Title text='Email'/>
                     <Tag>
-                        <span style={{textTransform: 'none'}}>johnsmith@gmail.com</span>
+                        <span style={{textTransform: 'none'}}>{user.email}</span>
                     </Tag>
                 </div>
             </div>
             <Title text='Department'/>
             <Tag>
-                Computer Science
+                {user.department}
             </Tag>
 
             <br></br>
-            {isMentor && topicList(alltopics, 'Mentor Topics')}
+            {isMentor && topicList(user.mentorTopic, 'Mentor Topics')}
             
             <br></br>
-            {isExpert && topicList(alltopics, 'Expertise')}
+            {isExpert && topicList(user.expertTopic, 'Expertise')}
             <div data-testid='Profile' />
         </DashboardSubpageLayout>
     )
