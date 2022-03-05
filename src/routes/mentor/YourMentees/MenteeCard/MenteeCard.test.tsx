@@ -27,7 +27,7 @@ describe("<MenteeCard />", () => {
       </BrowserRouter>
     );
 
-    const menteecard = screen.getByTestId("MenteeCard");
+    const menteecard = screen.getByTestId("ContentCard");
 
     expect(menteecard).toBeInTheDocument();
   });
