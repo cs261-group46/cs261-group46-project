@@ -83,7 +83,7 @@ const ExpertExpertises: FC<ExpertExpertisesProps> = () => {
     } catch (errors) {
       console.log(errors);
     }
-  }, [expertisesChangeHandler, userDataCtx.expertId]);
+  }, [expertisesChangeHandler, userDataCtx.userId]);
 
   useEffect(() => {
     getExpertises();
