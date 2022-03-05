@@ -1,7 +1,5 @@
 import React, { FC, useCallback, useContext, useEffect, useState } from "react";
 import styles from "./YourMentees.module.scss";
-import MainLayout from "../../../layouts/MainLayout/MainLayout";
-import UseLogin from "../../../hooks/UseLogin/UseLogin";
 import Title from "../../../components/UI/Title/Title";
 import MenteeCard from "./MenteeCard/MenteeCard";
 import UseVerifyAuth from "../../../hooks/UseVerifyAuth/UseVerifyAuth";
@@ -16,29 +14,29 @@ import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
 
 interface YourMenteeProps {}
 
-const exampleMentees = [
-  {
-    firstname: "John",
-    lastname: "Smith",
-    completedGoal: 10,
-    totalGoal: 10,
-    id: 4,
-  },
-  {
-    firstname: "Kai",
-    lastname: "Smith",
-    completedGoal: 2,
-    totalGoal: 7,
-    id: 5,
-  },
-  {
-    firstname: "Amy",
-    lastname: "Smith",
-    completedGoal: 6,
-    totalGoal: 10,
-    id: 6,
-  },
-];
+// const exampleMentees = [
+//   {
+//     firstname: "John",
+//     lastname: "Smith",
+//     completedGoal: 10,
+//     totalGoal: 10,
+//     id: 4,
+//   },
+//   {
+//     firstname: "Kai",
+//     lastname: "Smith",
+//     completedGoal: 2,
+//     totalGoal: 7,
+//     id: 5,
+//   },
+//   {
+//     firstname: "Amy",
+//     lastname: "Smith",
+//     completedGoal: 6,
+//     totalGoal: 10,
+//     id: 6,
+//   },
+// ];
 
 type Verifier = {
   userId: number | null | undefined;

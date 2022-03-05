@@ -25,7 +25,9 @@ interface ContentCardProps {
 
 const ContentCard: FC<ContentCardProps> = (props) => (
   <Card className={`${styles.ContentCard} ${props.className ?? ""}`}>
-    <div className={styles.Heading}>{props.heading}</div>
+    <div className={styles.Heading} data-testid={"ContentCard"}>
+      {props.heading}
+    </div>
 
     {props.sections.map((section, i) => {
       return (

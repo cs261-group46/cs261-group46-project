@@ -77,6 +77,7 @@ const MentorSkills: FC<MentorSkillsProps> = () => {
     blurHandler: skillsBlurHandler,
   } = useInput<MultiSelectOptions<number>>([], validateInterests);
 
+<<<<<<< HEAD
   const topics = useMemo(
     () =>
       mentor_topics
@@ -87,6 +88,36 @@ const MentorSkills: FC<MentorSkillsProps> = () => {
         : [],
     [JSON.stringify(mentor_topics)]
   );
+=======
+  const getSkills = useCallback(async () => {
+    try {
+      const data = await get({
+        resource: "users",
+        entity: userDataCtx.userId as number,
+        args: {
+          fields: "mentor.topics",
+        },
+      });
+
+      console.log(data);
+
+      const topics = data.user.mentor.topics.sort(
+        (topic1: TopicWithPriorityType, topic2: TopicWithPriorityType) =>
+          topic1.priority - topic2.priority
+      );
+
+      const topicsOptions: MultiSelectOptions<number> = topics.map(
+        (topic: TopicWithPriorityType) => ({
+          value: topic.topic.id,
+          label: topic.topic.name,
+        })
+      );
+      skillsChangeHandler(topicsOptions);
+    } catch (errors) {
+      console.log(errors);
+    }
+  }, [skillsChangeHandler, userDataCtx.userId]);
+>>>>>>> f47ff9505f81784699b4533a6953b0bd794cd6ea
 
   useEffect(() => {
     const topicsOptions: MultiSelectOptions<number> = topics.map(

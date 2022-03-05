@@ -110,10 +110,23 @@ const ExpertExpertises: FC<ExpertExpertisesProps> = () => {
       ? expert_topics.map((topic: { id: number; name: string }) => ({
           value: topic.id,
           label: topic.name,
+<<<<<<< HEAD
         }))
       : [];
     expertisesChangeHandler(topicsOptions);
   }, [expert_topics, expertisesChangeHandler]);
+=======
+        }));
+      expertisesChangeHandler(topicsOptions);
+    } catch (errors) {
+      console.log(errors);
+    }
+  }, [expertisesChangeHandler, userDataCtx.userId]);
+
+  useEffect(() => {
+    getExpertises();
+  }, [getExpertises]);
+>>>>>>> f47ff9505f81784699b4533a6953b0bd794cd6ea
 
   const updateExpertises = async () => {
     try {

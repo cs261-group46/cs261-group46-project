@@ -72,10 +72,6 @@ const Register: FC = () => {
   const [departments, setDepartments] = useState<SelectOptions<number>>([]);
   let navigate = useNavigate();
 
-  useEffect(() => {
-    getDepartments();
-  }, []);
-
   // const fetchDepartments = async () => {
   //   const dep = await fetch("/api/departments");
   //   const body = await dep.json();
@@ -101,6 +97,10 @@ const Register: FC = () => {
       setErrorsHandler(errs);
     }
   }, [setErrorsHandler]);
+
+  useEffect(() => {
+    getDepartments();
+  }, [getDepartments]);
 
   const showAllErrors = () => {
     firstNameBlurHandler();

@@ -1,7 +1,6 @@
-import React, { lazy, Suspense } from 'react';
-import { EventProps } from '../../components/UpcommingEvents/Event/Event.d';
+import React, { lazy, Suspense } from "react";
 
-const LazyUpcomingEvents = lazy(() => import('./UpcomingEvents'));
+const LazyUpcomingEvents = lazy(() => import("./UpcomingEvents"));
 
 const UpcomingEvents = (
   props: JSX.IntrinsicAttributes & {

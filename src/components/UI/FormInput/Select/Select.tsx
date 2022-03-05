@@ -69,6 +69,7 @@ function Select<T>(props: PropsWithChildren<SelectProps<T>>) {
         type="alert"
         description={`The ${props.label} field seems to be incorrect`}
         visible={isInvalidMessageVisible}
+        onClose={closeInvalidMessageHandler}
       />
     </div>
   );
