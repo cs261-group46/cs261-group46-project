@@ -3,9 +3,9 @@ import styles from "./CreateMeeting.module.scss";
 import MainLayout from "../../layouts/MainLayout/MainLayout";
 import SearchSelect from "../../components/UI/FormInput/SearchSelect/SearchSelect";
 import {
-  MultiSelectOptions,
+  SearchSelectOptions,
   SearchPromise,
-} from "../../components/UI/FormInput/SearchSelect/SearchSelect.d";
+} from "../../components/UI/FormInput/SearchSelect/SearchSelect";
 import useInput from "../../hooks/UseInput/UseInput";
 import DatePicker from "../../components/UI/FormInput/DatePicker/DatePicker";
 import HoursInput, {
@@ -30,7 +30,7 @@ const CreateMeeting: FC<CreateMeetingProps> = () => {
     blurHandler: roomBlurHandler,
     isInputValid: roomInputValid,
     isValueValid: roomValueValid,
-  } = useInput<MultiSelectOptions<Room>>([], (value) => value.length > 0);
+  } = useInput<SearchSelectOptions<Room>>([], (value) => value.length > 0);
 
   const {
     enteredValue: invite,

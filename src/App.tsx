@@ -14,7 +14,6 @@ import ExpertExpertises from "./routes/expert/ExpertExpertises/ExpertExpertises.
 import Homepage from "./routes/Homepage/Homepage.lazy";
 import ViewGroupSessions from "./routes/learn/ViewGroupSessions/ViewGroupSessions.lazy";
 import ComponentPlaygound from "./routes/ComponentPlaygound/ComponentPlaygound.lazy";
-import PlansOfAction from "./routes/learn/PlansOfAction/PlansOfAction.lazy";
 import UpcomingEvents from "./routes/UpcomingEvents/UpcomingEvents.lazy";
 import YourMentor from "./routes/learn/YourMentor/YourMentor";
 import ExpertSignup from "./routes/expert/ExpertSignup/ExpertSignup";
