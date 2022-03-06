@@ -1,9 +1,6 @@
 import { useEffect, useCallback, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-<<<<<<< HEAD
 import { custom, get } from "../../api/api";
-=======
->>>>>>> f47ff9505f81784699b4533a6953b0bd794cd6ea
 import UserDataContext from "../../store/UserDataContext";
 import UseVerifyUserData from "../UseVerifyUserData/UseVerifyUserData";
 
@@ -37,7 +34,6 @@ const UseVerifyAuth = () => {
           userId,
           redirectOnFail: "/dashboard",
         });
-
 
         if (permissions === null || permissions < minPermissionLevel) {
           navigate("/dashboard");

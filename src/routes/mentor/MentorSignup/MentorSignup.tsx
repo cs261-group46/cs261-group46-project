@@ -1,9 +1,9 @@
 import React, { FC, FormEventHandler, useContext } from "react";
 // import styles from './MentorSignup.module.scss';
 import {
-  MultiSelectOptions,
+  SearchSelectOptions,
   SearchPromise,
-} from "../../../components/UI/FormInput/SearchSelect/SearchSelect.d";
+} from "../../../components/UI/FormInput/SearchSelect/SearchSelect";
 import useInput from "../../../hooks/UseInput/UseInput";
 import Button from "../../../components/UI/Button/Button";
 import { useNavigate } from "react-router-dom";
@@ -20,7 +20,6 @@ interface MentorSignupProps {}
 const MentorSignup: FC<MentorSignupProps> = () => {
   const userDataCtx = useContext(UserDataContext);
 
-
   let navigate = useNavigate();
 
   const {
@@ -29,7 +28,7 @@ const MentorSignup: FC<MentorSignupProps> = () => {
     changeHandler: skillsChangeHandler,
     blurHandler: skillsBlurHandler,
     enteredValue: enteredSkills,
-  } = useInput<MultiSelectOptions<number>>(
+  } = useInput<SearchSelectOptions<number>>(
     [],
     (selectedOptions) => selectedOptions.length > 0
   );
@@ -95,7 +94,7 @@ const MentorSignup: FC<MentorSignupProps> = () => {
           startswith: startsWith,
         },
       });
-      const options: MultiSelectOptions<number> = data.topics.map(
+      const options: SearchSelectOptions<number> = data.topics.map(
         ({ label, id }: { label: string; id: number }) => ({ label, value: id })
       );
       console.log(options);

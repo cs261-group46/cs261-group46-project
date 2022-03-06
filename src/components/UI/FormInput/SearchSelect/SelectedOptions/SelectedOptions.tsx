@@ -1,9 +1,9 @@
 import React, { PropsWithChildren } from "react";
 import styles from "./SelectedOptions.module.scss";
-import { MultiSelectOptions, RemoveSelectedHandler } from "../SearchSelect.d";
+import { SearchSelectOptions, RemoveSelectedHandler } from "../SearchSelect";
 
 interface SelectedOptionsProps<T> {
-  selected: MultiSelectOptions<T>;
+  selected: SearchSelectOptions<T>;
   onRemoveSelected: RemoveSelectedHandler<T>;
 }
 

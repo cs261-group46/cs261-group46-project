@@ -29,12 +29,7 @@ function validateInterests(_experises: SearchSelectOptions<number>) {
 }
 
 const ExpertExpertises: FC<ExpertExpertisesProps> = () => {
-  const {
-    userId = null,
-    expert_id = null,
-    expert_topics = [],
-  } = UseVerifyUser<{
-    userId: number | null | undefined;
+  const { expert_id = null, expert_topics = [] } = UseVerifyUser<{
     expert_id: number | null | undefined;
     expert_topics: TopicType[] | null | undefined;
   }>({
@@ -82,51 +77,15 @@ const ExpertExpertises: FC<ExpertExpertisesProps> = () => {
     blurHandler: expertisesBlurHandler,
   } = useInput<SearchSelectOptions<number>>([], validateInterests);
 
-  // const getExpertises = useCallback(async () => {
-  //   try {
-  //     const data = await get({
-  //       resource: "users",
-  //       entity: userDataCtx.userId as number,
-  //       args: {
-  //         fields: ["expert.id", "expert.topics"],
-  //       },
-  //     });
-
-  //     console.log(data);
-
-  //     const topicsOptions: SearchSelectOptions<number> =
-  //       data.user.expert.topics.map((topic: { id: number; name: string }) => ({
-  //         value: topic.id,
-  //         label: topic.name,
-  //       }));
-  //     expertisesChangeHandler(topicsOptions);
-  //   } catch (errors) {
-  //     console.log(errors);
-  //   }
-  // }, [expertisesChangeHandler, userDataCtx.expertId]);
-
   useEffect(() => {
     const topicsOptions: SearchSelectOptions<number> = expert_topics
       ? expert_topics.map((topic: { id: number; name: string }) => ({
           value: topic.id,
           label: topic.name,
-<<<<<<< HEAD
         }))
       : [];
     expertisesChangeHandler(topicsOptions);
   }, [expert_topics, expertisesChangeHandler]);
-=======
-        }));
-      expertisesChangeHandler(topicsOptions);
-    } catch (errors) {
-      console.log(errors);
-    }
-  }, [expertisesChangeHandler, userDataCtx.userId]);
-
-  useEffect(() => {
-    getExpertises();
-  }, [getExpertises]);
->>>>>>> f47ff9505f81784699b4533a6953b0bd794cd6ea
 
   const updateExpertises = async () => {
     try {

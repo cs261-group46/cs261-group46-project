@@ -116,14 +116,6 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
     blurHandler: dateBlurHandler,
   } = useInput<Date>(new Date(), (date) => date >= new Date());
 
-  // const {
-  //   enteredValue: time,
-  //   changeHandler: timeChangeHandler,
-  //   blurHandler: timeBlurHandler,
-  //   isInputValid: timeInputValid,
-  //   isValueValid: timeValueValid,
-  // } = useInput<Range[]>([]);
-
   const {
     enteredValue: startTime,
     changeHandler: startTimeChangeHandler,

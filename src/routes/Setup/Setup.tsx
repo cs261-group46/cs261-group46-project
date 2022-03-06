@@ -87,11 +87,11 @@ const Setup = () => {
   return (
     <MainLayout title="Setup">
       <div className={styles.Setup} data-testid={"Setup"}>
-        <h1>Would you like to be an expert?</h1>
-        <h2>Experts can organise group workshops.</h2>
+        <h1 className={styles.h1}>Would you like to be an expert?</h1>
+        <h2 className={styles.h2}>Experts can organise group workshops.</h2>
         {showExpertise === 0 && (
           <>
-            <h3>You can change your choice later.</h3>
+            <h3 className={styles.h3}>You can change your choice later.</h3>
             <div className={styles.together}>
               <Button icon="✅" onClick={increment} buttonStyle={"primary"}>
                 Yes

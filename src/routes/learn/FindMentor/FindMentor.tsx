@@ -12,7 +12,7 @@ type Verifier = {
 };
 
 const FindMentor: FC<FindMentorProps> = () => {
-  const { mentee_id: isMentee = null, mentee_mentor_id: hasMentor = null } =
+  const { mentee_id, mentee_mentor_id: hasMentor = null } =
     UseVerifyUser<Verifier>({
       userDataPolicies: [
         {
@@ -24,7 +24,7 @@ const FindMentor: FC<FindMentorProps> = () => {
         },
       ],
     });
-    console.log(isMentee);
+  console.log(mentee_id);
   return (
     <DashboardSubpageLayout title="Find a Mentor">
       <Title text={"Recommended Mentors"} />

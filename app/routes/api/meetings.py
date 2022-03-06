@@ -38,8 +38,12 @@ meetings = Blueprint("api_meetings", __name__, url_prefix="/meetings")
 
 @meetings.route("/<meetingID>", methods=["DELETE"])
 @auth_required()
-def delete(meetingID, user=None):
+def delete(meetingID=None, user=None):
     # TODO : VALIDATE
+    meeting = Meeting.query.filter_by(id=meetingID).first()
+
+    if meeting is None:
+        return {"success": False, "errors": ["The requested meeting doesn't exist."]}
 
 
 
@@ -62,7 +66,7 @@ def store(user=None):
 
 
     if data.get("visibility").get("value") == "public":
-        users = User.query.all()
+        users = User.query.filter(User.id != user.id).all()
         Meeting(host_id=data.get("host"), title=data.get("title"), date=start_date_time, room_id=room_id,
                 link=data.get("link"), meeting_type=meeting_type, duration=duration, capacity=data.get("capacity")).commit()
         for user in users:
@@ -78,7 +82,7 @@ def store(user=None):
             Notification(notification_level="info", notification_type="learning", user=user,
                          description="An expert invited you to a private meeting that might interest you!").commit()
     else:
-        return {"success" : False, "errors" : ["If you wish to make the meeting private, please make sure to provide the emails of invited."]}
+        return {"success": False, "errors": ["If you wish to make the meeting private, please make sure to provide the emails of invited."]}, 400
 
 
 

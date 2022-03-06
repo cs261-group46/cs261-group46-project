@@ -41,8 +41,6 @@ function UseVerifyUser<T extends { [key: string]: any }>({
         });
 
         const transformDataPoint = dataPoint.replace(/\./g, "_");
-        console.log(transformDataPoint === "");
-        console.log(returnedData);
 
         userDataDict = {
           ...userDataDict,
