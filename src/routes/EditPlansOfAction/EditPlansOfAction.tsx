@@ -7,8 +7,7 @@ import React, {
   useState,
 } from "react";
 import styles from "./EditPlansOfAction.module.scss";
-import MainLayout from "../../layouts/MainLayout/MainLayout";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Button from "../../components/UI/Button/Button";
 import Icon from "../../components/UI/Icon/Icon";
 import Title from "../../components/UI/Title/Title";
@@ -39,9 +38,8 @@ const EditPlansOfAction: FC<EditPlansOfActionProps> = () => {
     ],
   });
 
-  const [validated, setValidated] = useState(false);
+  const [, setValidated] = useState(false);
   const [plansLoaded, setPlansLoaded] = useState(false);
-
   let { menteeId } = useParams();
   const navigate = useNavigate();
 
@@ -301,6 +299,15 @@ const EditPlansOfAction: FC<EditPlansOfActionProps> = () => {
                             onMouseDown={(e) => e.stopPropagation()}
                             onChange={updatePlanText.bind(undefined, plan.id)}
                           />
+                          <button
+                            id="remove-button"
+                            onMouseDown={(event) => {
+                              event.stopPropagation();
+                              removePlan(plan);
+                            }}
+                          >
+                            X
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -348,6 +355,15 @@ const EditPlansOfAction: FC<EditPlansOfActionProps> = () => {
                             defaultValue={plan.title}
                             onChange={updatePlanText.bind(undefined, plan.id)}
                           />
+                          <button
+                            id="remove-button"
+                            onMouseDown={(event) => {
+                              event.stopPropagation();
+                              removePlan(plan);
+                            }}
+                          >
+                            X
+                          </button>
                         </div>
                       </div>
                     </div>

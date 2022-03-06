@@ -63,6 +63,12 @@
           border-color: $sq_dark_gray;
         }
       }
+
+      button {
+        background-color: #f7f7f7;
+        border: none;
+        cursor: pointer;
+      }
     }
 
     select {

@@ -3,8 +3,9 @@ import styles from "./ComponentPlaygound.module.scss";
 import PageStepper from "../../components/UI/PageStepper/PageStepper";
 import PieView from "../../components/UI/PieView/PieView";
 import HoursInput from "../../components/UI/FormInput/HoursInput/HoursInput";
-import SearchSelect from "../../components/UI/FormInput/SearchSelect/SearchSelect";
-import { MultiSelectOptions } from "../../components/UI/FormInput/SearchSelect/SearchSelect.d";
+import SearchSelect, {
+  SearchSelectOptions,
+} from "../../components/UI/FormInput/SearchSelect/SearchSelect";
 import useInput from "../../hooks/UseInput/UseInput";
 
 interface ComponentPlaygoundProps {}
@@ -15,7 +16,7 @@ const ComponentPlaygound: FC<ComponentPlaygoundProps> = () => {
     enteredValue: searchValue,
     changeHandler: searchChange,
     blurHandler: searchBlur,
-  } = useInput<MultiSelectOptions<string>>([], () => true);
+  } = useInput<SearchSelectOptions<string>>([], () => true);
 
   return (
     <div className={styles.ComponentPlaygound} data-testid="ComponentPlaygound">

@@ -25,6 +25,7 @@ import YourGroupSessions from "./routes/expert/YourGroupSessions/YourGroupSessio
 import YourProfile from "./routes/YourProfile/YourProfile";
 import Profile from "./routes/Profile/Profile";
 import EditPlansOfAction from "./routes/EditPlansOfAction/EditPlansOfAction";
+import SiteFeedback from "./routes/SiteFeedback/SiteFeedback.lazy";
 
 function App() {
   return (
@@ -72,6 +73,7 @@ function App() {
             <Route path="skills" element={<ExpertExpertises />} />
             <Route path="become-expert" element={<ExpertSignup />} />
           </Route>
+          <Route path="/feedback" element={<SiteFeedback />} />
 
           {/* <Route path="/workshops">
             <Route index element={<ViewWorkshops />} />
