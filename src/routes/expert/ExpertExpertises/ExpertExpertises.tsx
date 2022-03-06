@@ -85,7 +85,7 @@ const ExpertExpertises: FC<ExpertExpertisesProps> = () => {
         }))
       : [];
     expertisesChangeHandler(topicsOptions);
-  }, [expert_topics, expertisesChangeHandler]);
+  }, [JSON.stringify(expert_topics), expertisesChangeHandler]);
 
   const updateExpertises = async () => {
     try {

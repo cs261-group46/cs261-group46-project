@@ -1,4 +1,4 @@
-import React, { FC, FormEventHandler } from "react";
+import React, { FC, FormEventHandler, useCallback } from "react";
 
 import styles from "./CreateGroupSession.module.scss";
 import SearchSelect from "../../../components/UI/FormInput/SearchSelect/SearchSelect";
@@ -175,22 +175,25 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
     (value) => value.value === "group session" || value.value === "workshop"
   );
 
-  const roomsSearchPromise: SearchPromise<Room> = async (search) => {
-    try {
-      const data = await index({
-        resource: "rooms",
-        args: {
-          startswith: search,
-        },
-      });
-      return data.rooms.map((room: Room) => ({
-        label: room.name,
-        value: room,
-      }));
-    } catch (errors) {
-      console.log(errors);
-    }
-  };
+  const roomsSearchPromise: SearchPromise<Room> = useCallback(
+    async (search) => {
+      try {
+        const data = await index({
+          resource: "rooms",
+          args: {
+            startswith: search,
+          },
+        });
+        return data.rooms.map((room: Room) => ({
+          label: room.name,
+          value: room,
+        }));
+      } catch (errors) {
+        console.log(errors);
+      }
+    },
+    []
+  );
 
   const invitesSearchPromise: SearchPromise<{
     email: string;
