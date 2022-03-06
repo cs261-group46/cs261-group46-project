@@ -16,15 +16,13 @@ describe("<Notifications />", () => {
   const removeNotification = (notification: NotificationType<string>) =>
     notificationsList.splice(notificationsList.indexOf(notification));
 
-  const notificationsElement = (
-    <Notifications
-      notifications={notificationsList}
-      onRemove={removeNotification}
-    />
-  );
-
   test("it should mount", () => {
-    render(notificationsElement);
+    render(
+      <Notifications
+        notifications={notificationsList}
+        onRemove={removeNotification}
+      />
+    );
 
     const notifications = screen.getByTestId("Notifications");
 
@@ -32,7 +30,12 @@ describe("<Notifications />", () => {
   });
 
   it("should display notification test", () => {
-    render(notificationsElement);
+    render(
+      <Notifications
+        notifications={notificationsList}
+        onRemove={removeNotification}
+      />
+    );
 
     const notifications = screen.getByTestId("Notifications");
 
@@ -40,11 +43,27 @@ describe("<Notifications />", () => {
   });
 
   it("should not display notification when function is called", () => {
+    const { rerender } = render(
+      <Notifications
+        notifications={notificationsList}
+        onRemove={removeNotification}
+      />
+    );
+
+    var notifications = screen.getByTestId("Notifications");
+
+    expect(notifications).toHaveTextContent("Test Notification");
+
     removeNotification(testNotification);
 
-    render(notificationsElement);
+    rerender(
+      <Notifications
+        notifications={notificationsList}
+        onRemove={removeNotification}
+      />
+    );
 
-    const notifications = screen.getByTestId("Notifications");
+    notifications = screen.getByTestId("Notifications");
 
     expect(notifications).not.toHaveTextContent("Test Notification");
   });
