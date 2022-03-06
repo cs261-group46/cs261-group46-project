@@ -68,7 +68,7 @@ function SearchSelect<T>(props: PropsWithChildren<SearchSelectProps<T>>) {
   };
 
   useEffect(() => {
-    searchSubject.pipe(debounceTime(300)).subscribe(async (debounced) => {
+    searchSubject.pipe(debounceTime(200)).subscribe(async (debounced) => {
       if (searchPromise) {
         const result = await searchPromise(debounced);
         setSearchResults(result);

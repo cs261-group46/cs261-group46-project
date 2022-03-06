@@ -11,4 +11,5 @@ export type MenteeType = {
     first_name: string;
     last_name: string;
   };
+  plans_of_action: [];
 };

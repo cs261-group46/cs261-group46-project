@@ -1,5 +1,5 @@
 from flask import Blueprint, request
-from app import Mentee, Topic, MenteeTopic, db
+from app import Mentee, Topic, MenteeTopic, db, PlanOfAction
 from app.middleware.auth import auth_required
 from app.models.schemas import MenteeSchema
 from app.utils.request import parse_args_list
@@ -43,26 +43,43 @@ def update(menteeId=None, user=None):
     if mentee is None:
         return {"success": False, "errors": ["Requested user not found."]}, 400
 
-    if mentee.user.id != user.id:
-        return {"success": False, "errors": ["You don't have the permissions to update a user"]}, 401
+    if data.get("interests"):
+        if mentee.user.id != user.id:
+            return {"success": False, "errors": ["You don't have the permissions to update a mentee"]}, 401
+        selectedTopics = Topic.query.filter(Topic.id.in_([interest.get("interest") for interest in data.get("interests")])).all()
+        selectedTopicsOrdered = [next(s for s in selectedTopics if s.id == interest.get("interest")) for interest in sorted(data.get("interests"), key=(lambda i: i.get("priority")))]
 
-    selectedTopics = Topic.query.filter(Topic.id.in_([interest.get("interest") for interest in data.get("interests")])).all()
-    selectedTopicsOrdered = [next(s for s in selectedTopics if s.id == interest.get("interest")) for interest in sorted(data.get("interests"), key=(lambda i: i.get("priority")))]
+        MenteeTopic.query.filter_by(mentee_id=menteeId).delete()
+        db.session.commit()
 
-    MenteeTopic.query.filter_by(mentee_id=menteeId).delete()
-    db.session.commit()
+        count = 1
+        for topic in selectedTopicsOrdered:
+            mentee_topic = MenteeTopic(priority=count)
+            mentee_topic.topic = topic
+            mentee_topic.mentee = mentee
+            db.session.add(mentee_topic)
+            count += 1
 
-    count = 1
-    for topic in selectedTopicsOrdered:
-        mentee_topic = MenteeTopic(priority=count)
-        mentee_topic.topic = topic
-        mentee_topic.mentee = mentee
-        db.session.add(mentee_topic)
-        count += 1
+        db.session.commit()
+        return {"success": True}, 200
+    elif data.get("plansofaction"):
+        if (mentee.user.id != user.id) and (mentee.mentor.user.id != user.id):
+            return {"success": False, "errors": ["You don't have the permissions to update a mentee"]}, 401
 
-    db.session.commit()
+        PlanOfAction.query.filter_by(mentee_id=menteeId).delete()
+        db.session.commit()
 
-    return {"success": True}, 200
+        for plan in data.get("plansofaction"):
+            plan_of_action = PlanOfAction(title=plan.get("title"), status=plan.get("status"), mentee_id=mentee.id)
+            db.session.add(plan_of_action)
+
+        db.session.commit()
+
+        return {"success": True}, 200
+
+    return {"success": False, "errors": ["The indicated data could not be updated"]}, 400
+
+
 
 
 @mentees.route("/<menteeId>", methods=["GET"])

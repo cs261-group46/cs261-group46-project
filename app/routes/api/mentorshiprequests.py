@@ -67,11 +67,24 @@ def update(mentorshiprequestId=None, user=None):
     if mentee is None:
         return {"success": False, "errors": ["Mentee doesn't exist"]}, 401
 
+    # notification_level = db.Column(db.String(10), db.CheckConstraint(
+    #     "notification_level IN ('warning', 'alert', 'info')"))
+    # notification_type = db.Column(db.String(10), db.CheckConstraint(
+    #     "notification_type IN ('learning', 'mentoring', 'expertise')"))
+    # user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    # description = db.Column(db.Text, nullable=True)
+
     if not isAccepted:
+        message = f'Your mentorship request for {mentorship_request.mentor.user.first_name} {mentorship_request.mentor.user.last_name} was declined.'
+        Notification(notification_level="alert", notification_type="learning", user_id=mentee.user.id, description=message)
         db.session.delete(mentorship_request)
         db.session.commit()
         return {"success": True, "infos": ["You have successfully declined the mentorship request"]}, 200
 
+
+    message = f'Your mentorship request for {mentorship_request.mentor.user.first_name} {mentorship_request.mentor.user.last_name} was accepted!'
+    Notification(notification_level="alert", notification_type="learning", user_id=mentee.user.id,
+                 description=message)
 
     mentee.mentor_id = mentorship_request.mentor_id
     mentee.commit()

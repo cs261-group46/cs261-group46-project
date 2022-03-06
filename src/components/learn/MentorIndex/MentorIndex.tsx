@@ -27,8 +27,6 @@ const MentorIndex: FC<MentorIndexProps> = () => {
         },
       });
 
-      console.log(data);
-
       setMentors(data.mentors);
     } catch (errors) {
       console.log(errors);
