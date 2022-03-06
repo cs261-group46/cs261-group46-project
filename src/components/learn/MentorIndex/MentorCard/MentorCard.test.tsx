@@ -2,6 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
 import MentorCard from "./MentorCard";
+import { BrowserRouter } from "react-router-dom";
 
 const mentor = {
   id: 0,
@@ -12,7 +13,7 @@ const mentor = {
       id: 0,
       name: "test0",
     },
-    first_name: "test",
+    first_name: "test1",
     last_name: "test2",
     email: "test3@gmail.com",
   },
@@ -20,7 +21,11 @@ const mentor = {
 
 describe("<MentorCard />", () => {
   test("it should mount", () => {
-    render(<MentorCard mentor={mentor} />);
+    render(
+      <BrowserRouter>
+        <MentorCard mentor={mentor} />
+      </BrowserRouter>
+    );
 
     const mentorCard = screen.getByTestId("MentorCard");
 
@@ -28,7 +33,11 @@ describe("<MentorCard />", () => {
   });
 
   it("contains the mentors first name", () => {
-    render(<MentorCard mentor={mentor} />);
+    render(
+      <BrowserRouter>
+        <MentorCard mentor={mentor} />
+      </BrowserRouter>
+    );
 
     const mentorCard = screen.getByTestId("MentorCard");
 
@@ -36,7 +45,11 @@ describe("<MentorCard />", () => {
   });
 
   it("contains the mentors last name", () => {
-    render(<MentorCard mentor={mentor} />);
+    render(
+      <BrowserRouter>
+        <MentorCard mentor={mentor} />
+      </BrowserRouter>
+    );
 
     const mentorCard = screen.getByTestId("MentorCard");
 
@@ -44,7 +57,11 @@ describe("<MentorCard />", () => {
   });
 
   it("contains the mentors email", () => {
-    render(<MentorCard mentor={mentor} />);
+    render(
+      <BrowserRouter>
+        <MentorCard mentor={mentor} />
+      </BrowserRouter>
+    );
 
     const mentorCard = screen.getByTestId("MentorCard");
 
@@ -52,7 +69,11 @@ describe("<MentorCard />", () => {
   });
 
   it("contains the mentors department", () => {
-    render(<MentorCard mentor={mentor} />);
+    render(
+      <BrowserRouter>
+        <MentorCard mentor={mentor} />
+      </BrowserRouter>
+    );
 
     const mentorCard = screen.getByTestId("MentorCard");
 
