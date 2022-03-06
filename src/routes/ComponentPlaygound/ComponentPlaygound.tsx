@@ -7,6 +7,7 @@ import SearchSelect, {
   SearchSelectOptions,
 } from "../../components/UI/FormInput/SearchSelect/SearchSelect";
 import useInput from "../../hooks/UseInput/UseInput";
+import StarPicker from "../../components/UI/FormInput/StarPicker/StarPicker";
 
 interface ComponentPlaygoundProps {}
 
@@ -17,6 +18,12 @@ const ComponentPlaygound: FC<ComponentPlaygoundProps> = () => {
     changeHandler: searchChange,
     blurHandler: searchBlur,
   } = useInput<SearchSelectOptions<string>>([], () => true);
+
+  const {
+    enteredValue: starsValue,
+    changeHandler: starsChange,
+    blurHandler: starsBlur,
+  } = useInput<number | undefined>(undefined, (value) => value !== undefined);
 
   return (
     <div className={styles.ComponentPlaygound} data-testid="ComponentPlaygound">
@@ -64,6 +71,15 @@ const ComponentPlaygound: FC<ComponentPlaygoundProps> = () => {
             )
           )
         }
+      />
+
+      <StarPicker
+        id={"stars"}
+        label={"Some Stars"}
+        value={starsValue}
+        isValid={true}
+        onChange={starsChange}
+        onBlur={starsBlur}
       />
     </div>
   );
