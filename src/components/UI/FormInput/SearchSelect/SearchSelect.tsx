@@ -17,7 +17,7 @@ import DraggableSelectedOptions from "./DraggableSelectedOptions/DraggableSelect
 export type SearchSelectOption<T> = { label: string; value: T };
 export type SearchSelectOptions<T> = SearchSelectOption<T>[];
 export type RemoveSelectedHandler<T> = (selected: T) => void;
-export type AddSelectedHandler<T> = (selected: SearchSelectOptions<T>) => void;
+export type AddSelectedHandler<T> = (selected: SearchSelectOption<T>) => void;
 export type SetSelectedHandler<T> = (selected: SearchSelectOptions<T>) => void;
 export type SearchPromise<T> = (
   value: string

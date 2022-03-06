@@ -1,16 +1,16 @@
 import React, { PropsWithChildren, useRef, useState } from "react";
 import styles from "./DraggableSelectedOptions.module.scss";
 import {
-  MultiSelectOptions,
-  MultiSelectOption,
+  SearchSelectOptions,
+  SearchSelectOption,
   RemoveSelectedHandler,
   SetSelectedHandler,
-} from "../SearchSelect.d";
+} from "../SearchSelect";
 import Draggable, { DraggableBounds } from "react-draggable";
 import Label from "../../Label/Label";
 
 interface SelectedOptionsProps<T> {
-  selected: MultiSelectOptions<T>;
+  selected: SearchSelectOptions<T>;
   onRemoveSelected: RemoveSelectedHandler<T>;
   onSetSelected: SetSelectedHandler<T>;
 }
@@ -82,7 +82,7 @@ function DraggableSelectedOptions<T>(
 
   function reorderList() {
     const sorted = props.selected
-      .map<[number, MultiSelectOption<T>]>((option, index) => {
+      .map<[number, SearchSelectOption<T>]>((option, index) => {
         const div = refs.current[index];
 
         return [div?.getBoundingClientRect().top ?? 0, option];

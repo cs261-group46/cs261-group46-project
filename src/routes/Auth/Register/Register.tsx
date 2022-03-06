@@ -15,10 +15,9 @@ import useInput from "../../../hooks/UseInput/UseInput";
 import {
   SelectOption,
   SelectOptions,
-} from "../../../components/UI/FormInput/Select/Select.d";
+} from "../../../components/UI/FormInput/Select/Select";
 import { useNavigate } from "react-router-dom";
 import { custom, index } from "../../../api/api";
-import UseVerifyAuth from "../../../hooks/UseVerifyAuth/UseVerifyAuth";
 import { DepartmentType } from "../../../types/Department";
 import ErrorMessagesContext from "../../../store/ErrorMessagesContext";
 
@@ -66,11 +65,19 @@ function validateDepartment(_department: SelectOption<number>) {
   return _department.value !== -1;
 }
 
+type Verifier = {
+  userId: number | null | undefined;
+};
+
 const Register: FC = () => {
   const errorsCtx = useContext(ErrorMessagesContext);
 
   const [departments, setDepartments] = useState<SelectOptions<number>>([]);
   let navigate = useNavigate();
+
+  useEffect(() => {
+    getDepartments();
+  }, []);
 
   // const fetchDepartments = async () => {
   //   const dep = await fetch("/api/departments");
@@ -97,10 +104,6 @@ const Register: FC = () => {
       setErrorsHandler(errs);
     }
   }, [setErrorsHandler]);
-
-  useEffect(() => {
-    getDepartments();
-  }, [getDepartments]);
 
   const showAllErrors = () => {
     firstNameBlurHandler();

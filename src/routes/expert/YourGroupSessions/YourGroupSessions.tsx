@@ -164,10 +164,10 @@ const YourGroupSessions: FC<YourGroupSessionsProps> = () => {
 
   const removeHandler = async (meetingId: number) => {
     try {
-      // await destroy({
-      //   resource: "meeting",
-      //   entity: meetingId,
-      // });
+      await destroy({
+        resource: "meeting",
+        entity: meetingId,
+      });
     } catch (errors) {
       console.log(errors);
     }

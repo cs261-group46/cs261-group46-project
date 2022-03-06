@@ -10,9 +10,9 @@ import { get, index, update } from "../../../api/api";
 import Button from "../../../components/UI/Button/Button";
 import SearchSelect from "../../../components/UI/FormInput/SearchSelect/SearchSelect";
 import {
-  MultiSelectOptions,
+  SearchSelectOptions,
   SearchPromise,
-} from "../../../components/UI/FormInput/SearchSelect/SearchSelect.d";
+} from "../../../components/UI/FormInput/SearchSelect/SearchSelect";
 import useInput from "../../../hooks/UseInput/UseInput";
 import UseVerifyAuth from "../../../hooks/UseVerifyAuth/UseVerifyAuth";
 import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
@@ -21,7 +21,7 @@ import { TopicWithPriorityType } from "../../../types/Topic";
 
 interface InterestsProps {}
 
-function validateInterests(_experises: MultiSelectOptions<number>) {
+function validateInterests(_experises: SearchSelectOptions<number>) {
   return true;
 }
 
@@ -37,7 +37,7 @@ const Interests: FC<InterestsProps> = () => {
           startswith: startsWith,
         },
       });
-      const options: MultiSelectOptions<number> = data.topics.map(
+      const options: SearchSelectOptions<number> = data.topics.map(
         ({ label, id }: { label: string; id: number }) => ({ label, value: id })
       );
       return options;
@@ -56,7 +56,7 @@ const Interests: FC<InterestsProps> = () => {
     isValueValid: isValueInterestsValid,
     changeHandler: interestsChangeHandler,
     blurHandler: interestsBlurHandler,
-  } = useInput<MultiSelectOptions<number>>([], validateInterests);
+  } = useInput<SearchSelectOptions<number>>([], validateInterests);
 
   const getInterests = useCallback(async () => {
     try {
@@ -77,7 +77,7 @@ const Interests: FC<InterestsProps> = () => {
           topic1.priority - topic2.priority
       );
 
-      const topicsOptions: MultiSelectOptions<number> = topics.map(
+      const topicsOptions: SearchSelectOptions<number> = topics.map(
         (topic: TopicWithPriorityType) => ({
           value: topic.topic.id,
           label: topic.topic.name,

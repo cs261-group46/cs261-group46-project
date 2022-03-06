@@ -19,7 +19,7 @@ const Dashboard: FC<DashboardProps> = () => {
   const {
     userId = null,
     mentor_id: isMentor = null,
-    mentee_id: isMentee = null,
+    mentee_id = null,
     mentee_mentor_id: hasMentor = null,
     expert_id: isExpert = null,
   } = UseVerifyUser<{
@@ -51,7 +51,7 @@ const Dashboard: FC<DashboardProps> = () => {
   // const userDataCtx = useContext(UserDataContext);
   // const userId = userDataCtx.userId;
   // const [isMentor, updateIsMentor] = useState(false);
-  // const [isMentee, updateIsMentee] = useState(false);
+  // const [mentee_id, updateIsMentee] = useState(false);
   // const [hasMentor, updateHasMentor] = useState(false);
 
   // const [isExpert, updateIsExpert] = useState(false);
@@ -203,7 +203,7 @@ const Dashboard: FC<DashboardProps> = () => {
         <div className={styles.Section}>
           <Title text={"Your Learning"} className={styles.Title} />
 
-          {!isMentee && (
+          {!mentee_id && (
             <Button
               href={"/learn/become-mentee"}
               buttonStyle="primary"
@@ -213,7 +213,7 @@ const Dashboard: FC<DashboardProps> = () => {
             </Button>
           )}
 
-          {!hasMentor && isMentee && (
+          {!hasMentor && mentee_id && (
             <Button
               href={"/learn/find-mentor"}
               buttonStyle="primary"
@@ -233,7 +233,7 @@ const Dashboard: FC<DashboardProps> = () => {
               >
                 Recent Notifications
                 <div className={styles.NotificationCounter}>
-                  {notificationsMentor.length}
+                  {notificationsLearn.length}
                 </div>
                 <Icon
                   className={styles.NotificationButtonToggleIcon}
@@ -249,19 +249,19 @@ const Dashboard: FC<DashboardProps> = () => {
             </>
           )}
 
-          {isMentee && hasMentor && (
+          {mentee_id && hasMentor && (
             <Button href={"/learn/your-mentor"} icon={"👨‍🏫"}>
               Your Mentor
             </Button>
           )}
-          {isMentee && (
+          {mentee_id && (
             <Button href={"/learn/interests"} icon={"💡"}>
               Your Interests
             </Button>
           )}
 
-          {isMentee && hasMentor && (
-            <Button href={"/learn/plans-of-action"} icon={"📈"}>
+          {mentee_id && hasMentor && (
+            <Button href={`/plans-of-action/${mentee_id}`} icon={"📈"}>
               Plans of Action
             </Button>
           )}
@@ -354,7 +354,7 @@ const Dashboard: FC<DashboardProps> = () => {
               >
                 Recent Notifications
                 <div className={styles.NotificationCounter}>
-                  {notificationsMentor.length}
+                  {notificationsExpert.length}
                 </div>
                 <Icon
                   className={styles.NotificationButtonToggleIcon}

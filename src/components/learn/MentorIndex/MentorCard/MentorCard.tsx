@@ -7,13 +7,26 @@ import Tag from "../../../UI/Tag/Tag";
 import Button from "../../../UI/Button/Button";
 import { store } from "../../../../api/api";
 import UserDataContext from "../../../../store/UserDataContext";
+import UseVerifyUser from "../../../../hooks/UseVerifyUser/UseVerifyUser";
 
 interface MentorCardProps {
   mentor: MentorType;
 }
 
 const MentorCard: FC<MentorCardProps> = (props) => {
-  const userDataCtx = useContext(UserDataContext);
+  const { mentee_id = null } = UseVerifyUser<{
+    mentee_id: number | null | undefined;
+  }>({
+    userDataPolicies: [
+      {
+        dataPoint: "mentee.id",
+        redirectOnFail: "/dashboard",
+      },
+      {
+        dataPoint: "mentee.mentor.id",
+      },
+    ],
+  });
 
   const skillTags = props.mentor.topics.map((topic) => {
     console.log(topic);
@@ -24,7 +37,7 @@ const MentorCard: FC<MentorCardProps> = (props) => {
     try {
       const body = {
         mentorshiprequest: {
-          mentee: userDataCtx.menteeId,
+          mentee: mentee_id,
           mentor: props.mentor.id,
         },
       };

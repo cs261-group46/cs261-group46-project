@@ -11,9 +11,9 @@ import { get, index, update } from "../../../api/api";
 import Button from "../../../components/UI/Button/Button";
 import SearchSelect from "../../../components/UI/FormInput/SearchSelect/SearchSelect";
 import {
-  MultiSelectOptions,
+  SearchSelectOptions,
   SearchPromise,
-} from "../../../components/UI/FormInput/SearchSelect/SearchSelect.d";
+} from "../../../components/UI/FormInput/SearchSelect/SearchSelect";
 import useInput from "../../../hooks/UseInput/UseInput";
 import UseVerifyAuth from "../../../hooks/UseVerifyAuth/UseVerifyAuth";
 import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
@@ -23,7 +23,7 @@ import { TopicWithPriorityType } from "../../../types/Topic";
 
 interface MentorSkillsProps {}
 
-function validateInterests(_experises: MultiSelectOptions<number>) {
+function validateInterests(_experises: SearchSelectOptions<number>) {
   return true;
 }
 
@@ -55,7 +55,7 @@ const MentorSkills: FC<MentorSkillsProps> = () => {
         },
       });
 
-      const options: MultiSelectOptions<number> = data.topics.map(
+      const options: SearchSelectOptions<number> = data.topics.map(
         ({ label, id }: { label: string; id: number }) => ({ label, value: id })
       );
       return options;
@@ -75,9 +75,8 @@ const MentorSkills: FC<MentorSkillsProps> = () => {
     isValueValid: isValueSkillsValid,
     changeHandler: skillsChangeHandler,
     blurHandler: skillsBlurHandler,
-  } = useInput<MultiSelectOptions<number>>([], validateInterests);
+  } = useInput<SearchSelectOptions<number>>([], validateInterests);
 
-<<<<<<< HEAD
   const topics = useMemo(
     () =>
       mentor_topics
@@ -88,39 +87,9 @@ const MentorSkills: FC<MentorSkillsProps> = () => {
         : [],
     [JSON.stringify(mentor_topics)]
   );
-=======
-  const getSkills = useCallback(async () => {
-    try {
-      const data = await get({
-        resource: "users",
-        entity: userDataCtx.userId as number,
-        args: {
-          fields: "mentor.topics",
-        },
-      });
-
-      console.log(data);
-
-      const topics = data.user.mentor.topics.sort(
-        (topic1: TopicWithPriorityType, topic2: TopicWithPriorityType) =>
-          topic1.priority - topic2.priority
-      );
-
-      const topicsOptions: MultiSelectOptions<number> = topics.map(
-        (topic: TopicWithPriorityType) => ({
-          value: topic.topic.id,
-          label: topic.topic.name,
-        })
-      );
-      skillsChangeHandler(topicsOptions);
-    } catch (errors) {
-      console.log(errors);
-    }
-  }, [skillsChangeHandler, userDataCtx.userId]);
->>>>>>> f47ff9505f81784699b4533a6953b0bd794cd6ea
 
   useEffect(() => {
-    const topicsOptions: MultiSelectOptions<number> = topics.map(
+    const topicsOptions: SearchSelectOptions<number> = topics.map(
       (topic: TopicWithPriorityType) => ({
         value: topic.topic.id,
         label: topic.topic.name,

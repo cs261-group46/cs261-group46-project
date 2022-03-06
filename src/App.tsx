@@ -25,6 +25,7 @@ import YourGroupSessions from "./routes/expert/YourGroupSessions/YourGroupSessio
 
 import YourProfile from "./routes/YourProfile/YourProfile";
 import Profile from "./routes/Profile/Profile";
+import EditPlansOfAction from "./routes/EditPlansOfAction/EditPlansOfAction";
 
 function App() {
   return (
@@ -32,6 +33,10 @@ function App() {
       <div className="App">
         <Routes>
           <Route path="/profile" element={<YourProfile />} />
+          <Route
+            path="/plans-of-action/:menteeId"
+            element={<EditPlansOfAction />}
+          />
 
           <Route path="/register">
             <Route path="" element={<Register />} />
@@ -58,7 +63,6 @@ function App() {
             <Route path="your-mentor" element={<YourMentor />} />
 
             <Route path="interests" element={<YourInterests />} />
-            <Route path="plans-of-action" element={<PlansOfAction />} />
           </Route>
 
           <Route path="/expert">

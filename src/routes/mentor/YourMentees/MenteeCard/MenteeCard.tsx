@@ -64,7 +64,7 @@ const MenteeCard: FC<MenteeProp> = (props) => {
           buttonStyle: "default",
           children: "View Plan",
           icon: "📈",
-          href: "/learn/plans-of-action",
+          href: `/plans-of-action/${props.mentee.id}`,
         },
       ]}
     />

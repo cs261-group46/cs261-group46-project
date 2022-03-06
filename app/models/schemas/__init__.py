@@ -1,7 +1,7 @@
 from app import ma, \
     Mentor, Department, User, Topic, MenteeTopic, \
     Notification, MentorTopic, MentorshipRequest, \
-    Mentee, Expert, Meeting, Room, MentorFeedback, MenteeFeedback, MeetingFeedback
+    Mentee, Expert, Meeting, Room, MentorFeedback, MenteeFeedback, MeetingFeedback, PlanOfAction
 
 
 class UserSchema(ma.SQLAlchemySchema):
@@ -52,6 +52,26 @@ class MenteeSchema(ma.SQLAlchemySchema):
     mentorship_requests_sent = ma.Nested(lambda: MentorshipRequestSchema(exclude=["mentee", "mentor.mentees"]), many=True)
     feedback_given = ma.Nested(lambda: MenteeFeedbackSchema(exclude=["mentee"]), many=True)
     received_feedback = ma.Nested(lambda: MentorFeedbackSchema(exclude=["mentee"]), many=True)
+    plans_of_action = ma.Nested(lambda: PlanOfActionSchema(many=True))
+
+class PlanOfActionSchema(ma.SQLAlchemySchema):
+    class Meta:
+        model = PlanOfAction
+
+    id = ma.auto_field()
+    status = ma.auto_field()
+    title = ma.auto_field()
+    # mentee = ma.Nested(MenteeSchema(exclude=["plans_of_action", "received_feedback", "feedback_given", "mentorship_requests_sent", ]))
+# id = db.Column(db.Integer, primary_key=True)
+#     status = db.Column(db.String(10), db.CheckConstraint(
+#         "status IN ('active', 'completed')"))
+#
+#     mentee_id = db.Column(db.Integer, db.ForeignKey('mentees.id'), nullable=False)
+#     description = db.Column(db.String(500), nullable=False)
+#     # solution = db.Column(db.Text, nullable=True)
+#
+#     mentee = db.relationship("Mentee", backref="plans_of_action", lazy=True)
+#
 
 
 class ExpertSchema(ma.SQLAlchemySchema):
