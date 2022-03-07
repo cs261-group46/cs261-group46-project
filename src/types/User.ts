@@ -18,8 +18,10 @@ export type FullUserType = {
       topics: TopicWithPriorityType[];
       about: string;
       mentor: {
-        first_name: string;
-        last_name: string;
+        user: {
+          first_name: string;
+          last_name: string;
+        };
       } | null;
     } | null;
   };

@@ -6,6 +6,9 @@ import PageStepper from "../../../components/UI/PageStepper/PageStepper";
 import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
 import ContentCard from "../../../components/UI/ContentCard/ContentCard";
 import Tag from "../../../components/UI/Tag/Tag";
+import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
+import { MeetingType } from "../../../types/Meeting";
+import { UserType } from "../../../types/User";
 
 interface ViewGroupSessionsProps {}
 
@@ -23,144 +26,160 @@ interface GroupSessionType {
   description: string;
 }
 
+const getDateString = (date: Date, duration: number) => {
+  let start = date;
+  let end = new Date(
+    new Date(start).setTime(start.getTime() + duration * 60 * 1000)
+  );
+
+  return (
+    <>
+      {start.toDateString()}
+      <br />
+      {`${start.getUTCHours().toString().padStart(2, "0")}:${start
+        .getMinutes()
+        .toString()
+        .padStart(2, "0")} - ${end
+        .getUTCHours()
+        .toString()
+        .padStart(2, "0")}:${end.getMinutes().toString().padStart(2, "0")}`}
+    </>
+  );
+
+  // return `${start.toDateString()}
+  //             ${start.getUTCHours().toString().padStart(2, "0")}:${start
+  //   .getMinutes()
+  //   .toString()
+  //   .padStart(2, "0")} -
+  //             ${end.getUTCHours().toString().padStart(2, "0")}:${end
+  //   .getMinutes()
+  //   .toString()
+  //   .padStart(2, "0")}`;
+};
+
 const ViewGroupSessions: FC<ViewGroupSessionsProps> = () => {
-  const [groupSessions, setGroupSessions] = useState<GroupSessionType[]>();
+  const [groupSessions, setGroupSessions] = useState<MeetingType[]>();
   const pageSize = 3;
   const [page, setPage] = useState(0);
   const hasPages = (groupSessions?.length ?? 0) > 0;
   const pageAmount = Math.ceil((groupSessions?.length ?? 0) / pageSize);
-  const groupSessionsOnPage: GroupSessionType[] =
+  const groupSessionsOnPage: MeetingType[] =
     groupSessions?.slice(page * pageSize, (page + 1) * pageSize) ?? [];
   const [selectedWorkshop, setSelectedWorkshop] = useState<GroupSessionType>();
 
-  async function dummyRequest(): Promise<GroupSessionType[]> {
-    // some code to feign an API request taking 500ms & returning the below object
-    return new Promise((resolve) =>
-      setTimeout(
-        () =>
-          resolve([
-            {
-              id: "1",
-              host: "me",
-              title: "Introduction to Python",
-              date: new Date(),
-              room_name: "CS0.01",
-              duration: 120,
-              capacity: 10,
-              signups: 2,
-              type: "workshop",
-              headline: "Learn python in 5 minutes",
-              description:
-                "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui dicta minus molestiae vel beatae natus eveniet ratione temporibus aperiam harum alias officiis assumenda officia quibusdam deleniti eos cupiditate dolore doloribus! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui dicta minus molestiae vel beatae natus eveniet ratione temporibus aperiam harum alias officiis assumenda officia quibusdam deleniti eos cupiditate dolore doloribus!",
-            },
-            {
-              id: "2",
-              host: "somebody else",
-              title: "Introduction to C++",
-              date: new Date(),
-              room_name: "CS0.04",
-              duration: 5,
-              capacity: 100,
-              signups: 80,
-              type: "group session",
-              headline: "Learn c++ in 5 minutes",
-              description:
-                "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui dicta minus molestiae vel beatae natus eveniet ratione temporibus aperiam harum alias officiis assumenda officia quibusdam deleniti eos cupiditate dolore doloribus!",
-            },
-            {
-              id: "3",
-              host: "me",
-              title: "Introduction to Python II",
-              date: new Date(),
-              room_name: "CS0.01",
-              duration: 120,
-              capacity: 10,
-              signups: 2,
-              type: "workshop",
-              headline: "Learn python in 10 minutes",
-              description:
-                "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui dicta minus molestiae vel beatae natus eveniet ratione temporibus aperiam harum alias officiis assumenda officia quibusdam deleniti eos cupiditate dolore doloribus!",
-            },
-            {
-              id: "4",
-              host: "somebody else",
-              title: "Introduction to C++ II",
-              date: new Date(),
-              room_name: "CS0.04",
-              duration: 5,
-              capacity: 100,
-              signups: 80,
-              type: "workshop",
-              headline: "Learn c++ in 10 minutes",
-              description:
-                "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui dicta minus molestiae vel beatae natus eveniet ratione temporibus aperiam harum alias officiis assumenda officia quibusdam deleniti eos cupiditate dolore doloribus!",
-            },
-            {
-              id: "5",
-              host: "somebody else",
-              title: "Introduction to C++ III",
-              date: new Date(),
-              room_name: "CS0.04",
-              duration: 5,
-              capacity: 100,
-              signups: 80,
-              type: "workshop",
-              headline: "Learn c++ in 15 minutes",
-              description:
-                "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui dicta minus molestiae vel beatae natus eveniet ratione temporibus aperiam harum alias officiis assumenda officia quibusdam deleniti eos cupiditate dolore doloribus! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui dicta minus molestiae vel beatae natus eveniet ratione temporibus aperiam harum alias officiis assumenda officia quibusdam deleniti eos cupiditate dolore doloribus!",
-            },
-          ]),
-        500
-      )
-    );
-  }
+  const { userId = null, meetings_invited = [] } = UseVerifyUser<{
+    userId: number | null | undefined;
+    meetings_invited: MeetingType[] | null | undefined;
+  }>({
+    userDataPolicies: [
+      {
+        dataPoint: "meetings_invited",
+      },
+    ],
+  });
 
-  const getDateString = (date: Date, duration: number) => {
-    let start = date;
-    let end = new Date(
-      new Date(start).setTime(start.getTime() + duration * 60 * 1000)
-    );
-
-    return (
-      <>
-        {start.toDateString()}
-        <br />
-        {`${start.getUTCHours().toString().padStart(2, "0")}:${start
-          .getMinutes()
-          .toString()
-          .padStart(2, "0")} - ${end
-          .getUTCHours()
-          .toString()
-          .padStart(2, "0")}:${end.getMinutes().toString().padStart(2, "0")}`}
-      </>
-    );
-
-    // return `${start.toDateString()}
-    //             ${start.getUTCHours().toString().padStart(2, "0")}:${start
-    //   .getMinutes()
-    //   .toString()
-    //   .padStart(2, "0")} -
-    //             ${end.getUTCHours().toString().padStart(2, "0")}:${end
-    //   .getMinutes()
-    //   .toString()
-    //   .padStart(2, "0")}`;
-  };
+  // async function dummyRequest(): Promise<GroupSessionType[]> {
+  //   // some code to feign an API request taking 500ms & returning the below object
+  //   return new Promise((resolve) =>
+  //     setTimeout(
+  //       () =>
+  //         resolve([
+  //           {
+  //             id: "1",
+  //             host: "me",
+  //             title: "Introduction to Python",
+  //             date: new Date(),
+  //             room_name: "CS0.01",
+  //             duration: 120,
+  //             capacity: 10,
+  //             signups: 2,
+  //             type: "workshop",
+  //             headline: "Learn python in 5 minutes",
+  //             description:
+  //               "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui dicta minus molestiae vel beatae natus eveniet ratione temporibus aperiam harum alias officiis assumenda officia quibusdam deleniti eos cupiditate dolore doloribus! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui dicta minus molestiae vel beatae natus eveniet ratione temporibus aperiam harum alias officiis assumenda officia quibusdam deleniti eos cupiditate dolore doloribus!",
+  //           },
+  //           {
+  //             id: "2",
+  //             host: "somebody else",
+  //             title: "Introduction to C++",
+  //             date: new Date(),
+  //             room_name: "CS0.04",
+  //             duration: 5,
+  //             capacity: 100,
+  //             signups: 80,
+  //             type: "group session",
+  //             headline: "Learn c++ in 5 minutes",
+  //             description:
+  //               "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui dicta minus molestiae vel beatae natus eveniet ratione temporibus aperiam harum alias officiis assumenda officia quibusdam deleniti eos cupiditate dolore doloribus!",
+  //           },
+  //           {
+  //             id: "3",
+  //             host: "me",
+  //             title: "Introduction to Python II",
+  //             date: new Date(),
+  //             room_name: "CS0.01",
+  //             duration: 120,
+  //             capacity: 10,
+  //             signups: 2,
+  //             type: "workshop",
+  //             headline: "Learn python in 10 minutes",
+  //             description:
+  //               "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui dicta minus molestiae vel beatae natus eveniet ratione temporibus aperiam harum alias officiis assumenda officia quibusdam deleniti eos cupiditate dolore doloribus!",
+  //           },
+  //           {
+  //             id: "4",
+  //             host: "somebody else",
+  //             title: "Introduction to C++ II",
+  //             date: new Date(),
+  //             room_name: "CS0.04",
+  //             duration: 5,
+  //             capacity: 100,
+  //             signups: 80,
+  //             type: "workshop",
+  //             headline: "Learn c++ in 10 minutes",
+  //             description:
+  //               "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui dicta minus molestiae vel beatae natus eveniet ratione temporibus aperiam harum alias officiis assumenda officia quibusdam deleniti eos cupiditate dolore doloribus!",
+  //           },
+  //           {
+  //             id: "5",
+  //             host: "somebody else",
+  //             title: "Introduction to C++ III",
+  //             date: new Date(),
+  //             room_name: "CS0.04",
+  //             duration: 5,
+  //             capacity: 100,
+  //             signups: 80,
+  //             type: "workshop",
+  //             headline: "Learn c++ in 15 minutes",
+  //             description:
+  //               "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui dicta minus molestiae vel beatae natus eveniet ratione temporibus aperiam harum alias officiis assumenda officia quibusdam deleniti eos cupiditate dolore doloribus! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui dicta minus molestiae vel beatae natus eveniet ratione temporibus aperiam harum alias officiis assumenda officia quibusdam deleniti eos cupiditate dolore doloribus!",
+  //           },
+  //         ]),
+  //       500
+  //     )
+  //   );
+  // }
 
   const joinHandler = () => {};
 
-  const fetchGroupSessions = useCallback(async () => {
-    const fetchedGroupSessions = await dummyRequest();
-    setGroupSessions(fetchedGroupSessions);
-  }, [setGroupSessions]);
+  // const fetchGroupSessions = useCallback(async () => {
+  //   // const fetchedGroupSessions = await dummyRequest();
+  // }, [setGroupSessions]);
 
   useEffect(() => {
-    fetchGroupSessions();
-  }, [fetchGroupSessions]);
+    // fetchGroupSessions();
+    if (meetings_invited)
+      setGroupSessions(
+        meetings_invited.filter(
+          (meeting) => meeting.meeting_type !== "one on one meeting"
+        )
+      );
+  }, [JSON.stringify(meetings_invited)]);
 
   return (
     <DashboardSubpageLayout title={"Group Sessions"}>
       <div className={styles.ViewGroupSessions} data-testid="ViewGroupSessions">
-        {groupSessions ? (
+        {groupSessions && groupSessions.length > 0 ? (
           groupSessionsOnPage.map((groupSession) => {
             return (
               <ContentCard
@@ -169,29 +188,30 @@ const ViewGroupSessions: FC<ViewGroupSessionsProps> = () => {
                 sections={[
                   {
                     title: "Host",
-                    content: groupSession.host,
+                    content: `${groupSession.host?.first_name} ${groupSession.host?.last_name}`,
                   },
                   {
                     title: "When",
                     content: getDateString(
-                      groupSession.date,
+                      new Date(groupSession.date),
                       groupSession.duration
                     ),
                   },
                   {
                     title: "Where",
-                    content: groupSession.room_name,
+                    content: groupSession.room.name,
                   },
                   {
                     title: "Capacity",
                     content: `${
-                      groupSession.capacity - groupSession.signups
+                      groupSession.capacity -
+                      (groupSession.attendees as UserType[]).length
                     } / ${groupSession.capacity} slots left`,
                   },
                   {
                     className: styles.type,
                     title: "Type",
-                    content: <Tag>{groupSession.type}</Tag>,
+                    content: <Tag>{groupSession.meeting_type}</Tag>,
                   },
                 ]}
                 buttons={[

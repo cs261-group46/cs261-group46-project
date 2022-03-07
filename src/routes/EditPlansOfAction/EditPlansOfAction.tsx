@@ -38,7 +38,7 @@ const EditPlansOfAction: FC<EditPlansOfActionProps> = () => {
     ],
   });
 
-  const [, setValidated] = useState(false);
+  const [validated, setValidated] = useState(false);
   const [plansLoaded, setPlansLoaded] = useState(false);
   let { menteeId } = useParams();
   const navigate = useNavigate();
@@ -57,17 +57,15 @@ const EditPlansOfAction: FC<EditPlansOfActionProps> = () => {
           },
         });
 
-        if (
-          mentee_id !== Number.parseInt(menteeId) &&
-          mentor_id !== data.mentee.mentor.id
-        ) {
+        if (mentor_id !== data.mentee.mentor.id) {
           return navigate("/dashboard");
         }
-
         setValidated(true);
       } catch (errors) {
         console.log(errors);
       }
+    } else {
+      setValidated(true);
     }
   }, [menteeId, mentee_id, mentor_id, navigate]);
 
@@ -112,6 +110,9 @@ const EditPlansOfAction: FC<EditPlansOfActionProps> = () => {
               })
             )
           : 0;
+
+      console.log(greatestId);
+
       setTempId(greatestId + 1);
       setPlansLoaded(true);
     } catch (errors) {
@@ -246,6 +247,14 @@ const EditPlansOfAction: FC<EditPlansOfActionProps> = () => {
 
     setPlansOfAction(plans);
   }
+
+  const removePlan = (plan: PlanOfAction) => {
+    setPlansOfAction((prevPlans) => prevPlans.filter((p) => p.id !== plan.id));
+    setUnsavedChanges(true);
+  };
+
+  console.log("valid" + validated);
+  console.log("loaded" + plansLoaded);
 
   return (
     <DashboardSubpageLayout title={"Set Plans of Action"}>

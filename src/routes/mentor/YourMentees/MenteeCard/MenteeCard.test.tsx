@@ -22,6 +22,7 @@ describe("<MenteeCard />", () => {
               first_name: "",
               last_name: "",
             },
+            plans_of_action: [],
           }}
         />
       </BrowserRouter>

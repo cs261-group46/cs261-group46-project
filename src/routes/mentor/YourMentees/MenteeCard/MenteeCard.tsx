@@ -18,7 +18,10 @@ interface MenteeProp {
 const MenteeCard: FC<MenteeProp> = (props) => {
   //TODO: Given an id, lead to the correct plan of action.
   //TODO: have button send to meeting link instead of dashboard
-  console.log(props.mentee);
+  const completedPlans = props.mentee.plans_of_action.filter(
+    (plan) => plan.status === "completed"
+  );
+
   return (
     <ContentCard
       heading={`${props.mentee.user.first_name} ${props.mentee.user.last_name}`}
@@ -45,13 +48,16 @@ const MenteeCard: FC<MenteeProp> = (props) => {
         },
         {
           title: "Plan of Action progress",
-          content: (
-            <BarChart
-              className={styles.BarChart}
-              completedGoals={20}
-              totalGoals={100}
-            />
-          ),
+          content:
+            props.mentee.plans_of_action.length > 0 ? (
+              <BarChart
+                className={styles.BarChart}
+                completedGoals={completedPlans.length}
+                totalGoals={props.mentee.plans_of_action.length}
+              />
+            ) : (
+              "No plans of action set"
+            ),
         },
       ]}
       buttons={[
@@ -59,7 +65,7 @@ const MenteeCard: FC<MenteeProp> = (props) => {
           buttonStyle: "primary",
           children: "Meetings",
           icon: "👥",
-          href: "/dashboard",
+          href: `/meetings/${props.mentee.id}`,
         },
         {
           buttonStyle: "default",

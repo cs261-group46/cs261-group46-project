@@ -14,7 +14,6 @@ import ExpertExpertises from "./routes/expert/ExpertExpertises/ExpertExpertises.
 import Homepage from "./routes/Homepage/Homepage.lazy";
 import ViewGroupSessions from "./routes/learn/ViewGroupSessions/ViewGroupSessions.lazy";
 import ComponentPlaygound from "./routes/ComponentPlaygound/ComponentPlaygound.lazy";
-import PlansOfAction from "./routes/learn/PlansOfAction/PlansOfAction.lazy";
 import UpcomingEvents from "./routes/UpcomingEvents/UpcomingEvents.lazy";
 import YourMentor from "./routes/learn/YourMentor/YourMentor";
 import ExpertSignup from "./routes/expert/ExpertSignup/ExpertSignup";
@@ -27,25 +26,34 @@ import YourProfile from "./routes/YourProfile/YourProfile";
 import Profile from "./routes/Profile/Profile";
 import EditPlansOfAction from "./routes/EditPlansOfAction/EditPlansOfAction";
 import SiteFeedback from "./routes/SiteFeedback/SiteFeedback.lazy";
+import Meetings from "./routes/meetings/Meetings/Meetings";
+import CreateMeeting from "./routes/meetings/CreateMeeting/CreateMeeting";
 
 function App() {
   return (
     <BrowserRouter>
       <div className="App">
         <Routes>
-          <Route path="/profile" element={<YourProfile />} />
-          <Route
-            path="/plans-of-action/:menteeId"
-            element={<EditPlansOfAction />}
-          />
-
           <Route path="/register">
             <Route path="" element={<Register />} />
             <Route path="verifyemail" element={<VerifyEmail />} />
           </Route>
           <Route path="/login" element={<Login />} />
-          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/setup" element={<Setup />} />
+
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/profile" element={<YourProfile />} />
+
+          <Route
+            path="/plans-of-action/:menteeId"
+            element={<EditPlansOfAction />}
+          />
+          <Route
+            path="/meetings/:menteeId/create"
+            element={<CreateMeeting />}
+          />
+          <Route path="/meetings/:menteeId" element={<Meetings />} />
+
           <Route path="/calendar" element={<UpcomingEvents />} />
           <Route path="/profile2" element={<Profile />} />
 
@@ -57,12 +65,10 @@ function App() {
           </Route>
 
           <Route path="/learn">
-            <Route path="find-mentor" element={<FindMentor />} />
             <Route path="become-mentee" element={<MenteeSignup />} />
-            <Route path="group-sessions" element={<ViewGroupSessions />} />
-
+            <Route path="find-mentor" element={<FindMentor />} />
             <Route path="your-mentor" element={<YourMentor />} />
-
+            <Route path="group-sessions" element={<ViewGroupSessions />} />
             <Route path="interests" element={<YourInterests />} />
           </Route>
 

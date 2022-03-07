@@ -133,9 +133,6 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
   } = useInput<string>("", (e) => {
     const start = new Date("1970-01-01T" + startTime + "Z");
     const end = new Date("1970-01-01T" + e + "Z");
-    console.log(start);
-    console.log(end);
-
     return start < end;
   });
 
@@ -227,8 +224,8 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
       endTime: endTime,
       description: description,
       capacity: capacity,
-      visibility: visibility,
-      type: type,
+      visibility: visibility.value,
+      type: type.value,
       invites: invites.map((invite) => invite.value),
     };
 
@@ -415,7 +412,7 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
         />
 
         <TextInput
-          id={"invite"}
+          id={"link"}
           label={"Meeting Link - for online events"}
           placeholder={"Please provide the meeting link"}
           value={link}
