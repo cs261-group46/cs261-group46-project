@@ -11,6 +11,7 @@ interface UseVerifyUserProps {
 type userDataPolicy = {
   dataPoint: string;
   redirectOnFail?: string | null;
+  redirectOnSuccess?: string | null;
 };
 
 function UseVerifyUser<T extends { [key: string]: any }>({
@@ -32,12 +33,17 @@ function UseVerifyUser<T extends { [key: string]: any }>({
       isProtected,
     });
 
-    for (const { dataPoint, redirectOnFail } of userDataPolicies) {
+    for (const {
+      dataPoint,
+      redirectOnFail,
+      redirectOnSuccess,
+    } of userDataPolicies) {
       if ((dataPoint || dataPoint === "") && id) {
         const returnedData = await dataVerifier({
           dataPoint,
           userId: id,
           redirectOnFail,
+          redirectOnSuccess,
         });
 
         const transformDataPoint = dataPoint.replace(/\./g, "_");
@@ -65,10 +71,9 @@ function UseVerifyUser<T extends { [key: string]: any }>({
 
   useEffect(() => {
     verify();
-    console.log("verifying");
   }, [verify]);
 
-  return userData;
+  return { ...userData, stateChangingHandler: setUserData };
 }
 
 export default UseVerifyUser;

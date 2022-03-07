@@ -55,7 +55,10 @@ const ExpertExpertises: FC<ExpertExpertisesProps> = () => {
         },
       });
       const options: SearchSelectOptions<number> = data.topics.map(
-        ({ label, id }: { label: string; id: number }) => ({ label, value: id })
+        ({ name, id }: { name: string; id: number }) => ({
+          label: name,
+          value: id,
+        })
       );
       return options;
     } catch (errors) {

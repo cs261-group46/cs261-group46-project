@@ -1,13 +1,6 @@
-import React, {
-  FC,
-  FormEventHandler,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-} from "react";
+import React, { FC, FormEventHandler, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { get, index, update } from "../../../api/api";
+import { index, update } from "../../../api/api";
 import Button from "../../../components/UI/Button/Button";
 import SearchSelect from "../../../components/UI/FormInput/SearchSelect/SearchSelect";
 import {
@@ -15,10 +8,8 @@ import {
   SearchPromise,
 } from "../../../components/UI/FormInput/SearchSelect/SearchSelect";
 import useInput from "../../../hooks/UseInput/UseInput";
-import UseVerifyAuth from "../../../hooks/UseVerifyAuth/UseVerifyAuth";
 import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
 import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
-import UserDataContext from "../../../store/UserDataContext";
 import { TopicWithPriorityType } from "../../../types/Topic";
 
 interface MentorSkillsProps {}
@@ -31,7 +22,7 @@ const MentorSkills: FC<MentorSkillsProps> = () => {
   const { mentor_id = null, mentor_topics = [] } = UseVerifyUser<{
     userId: number | null | undefined;
     mentor_id: number | null | undefined;
-    mentor_topics: TopicWithPriorityType[] | null | undefined;
+    mentor_topics: TopicWithPriorityType[] | [];
   }>({
     userDataPolicies: [
       {
@@ -56,7 +47,10 @@ const MentorSkills: FC<MentorSkillsProps> = () => {
       });
 
       const options: SearchSelectOptions<number> = data.topics.map(
-        ({ label, id }: { label: string; id: number }) => ({ label, value: id })
+        ({ name, id }: { name: string; id: number }) => ({
+          label: name,
+          value: id,
+        })
       );
       return options;
     } catch (errors) {
@@ -65,9 +59,9 @@ const MentorSkills: FC<MentorSkillsProps> = () => {
     }
   };
 
-  const searchPromise: SearchPromise<number> = (_search) => {
+  const searchPromise: SearchPromise<number> = useCallback((_search) => {
     return new Promise((resolve) => resolve(getTopics(_search)));
-  };
+  }, []);
 
   const {
     enteredValue: enteredSkills,
@@ -77,32 +71,28 @@ const MentorSkills: FC<MentorSkillsProps> = () => {
     blurHandler: skillsBlurHandler,
   } = useInput<SearchSelectOptions<number>>([], validateInterests);
 
-  const topics = useMemo(
-    () =>
-      mentor_topics
-        ? mentor_topics.sort(
-            (topic1: TopicWithPriorityType, topic2: TopicWithPriorityType) =>
-              topic1.priority - topic2.priority
-          )
-        : [],
-    [JSON.stringify(mentor_topics)]
-  );
-
   useEffect(() => {
-    const topicsOptions: SearchSelectOptions<number> = topics.map(
+    const topicsSorted: TopicWithPriorityType[] = mentor_topics
+      ? mentor_topics.sort(
+          (topic1: TopicWithPriorityType, topic2: TopicWithPriorityType) =>
+            topic1.priority - topic2.priority
+        )
+      : [];
+
+    const topicsOptions: SearchSelectOptions<number> = topicsSorted.map(
       (topic: TopicWithPriorityType) => ({
         value: topic.topic.id,
         label: topic.topic.name,
       })
     );
     skillsChangeHandler(topicsOptions);
-  }, [skillsChangeHandler, topics]);
+  }, [JSON.stringify(mentor_topics), skillsChangeHandler]);
 
   const updateSkills = async () => {
     try {
       const requestBody = {
         skills: enteredSkills.map((skill, index) => ({
-          priority: index,
+          priority: index + 1,
           skill: skill.value,
         })),
       };

@@ -48,14 +48,6 @@ const Dashboard: FC<DashboardProps> = () => {
   const [pageVisiable, setPageVisible] = useState(1);
   const navigate = useNavigate();
 
-  // const userDataCtx = useContext(UserDataContext);
-  // const userId = userDataCtx.userId;
-  // const [isMentor, updateIsMentor] = useState(false);
-  // const [mentee_id, updateIsMentee] = useState(false);
-  // const [hasMentor, updateHasMentor] = useState(false);
-
-  // const [isExpert, updateIsExpert] = useState(false);
-
   const [notificationsLearn, setNotificationsLearn] = useState<
     NotificationType<"learning">[]
   >([]);
@@ -249,7 +241,7 @@ const Dashboard: FC<DashboardProps> = () => {
             </>
           )}
 
-          {mentee_id && hasMentor && (
+          {mentee_id && (
             <Button href={"/learn/your-mentor"} icon={"👨‍🏫"}>
               Your Mentor
             </Button>

@@ -36,10 +36,8 @@ const MentorCard: FC<MentorCardProps> = (props) => {
   const requestMentorHandler = async () => {
     try {
       const body = {
-        mentorshiprequest: {
-          mentee: mentee_id,
-          mentor: props.mentor.id,
-        },
+        mentee: mentee_id,
+        mentor: props.mentor.id,
       };
 
       await store({

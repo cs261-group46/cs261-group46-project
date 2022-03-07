@@ -9,9 +9,8 @@ import {
   SearchPromise,
 } from "../../../components/UI/FormInput/SearchSelect/SearchSelect";
 import useInput from "../../../hooks/UseInput/UseInput";
-import UseVerifyAuth from "../../../hooks/UseVerifyAuth/UseVerifyAuth";
+import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
 import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
-import UserDataContext from "../../../store/UserDataContext";
 
 interface MenteeSignupProps {}
 
@@ -20,8 +19,19 @@ function validateInterests(_experises: SearchSelectOptions<number>) {
 }
 
 const MenteeSignup: FC<MenteeSignupProps> = () => {
+  const { userId = null, mentee_id = null } = UseVerifyUser<{
+    userId: number | null | undefined;
+    mentee_id: number | null | undefined;
+  }>({
+    userDataPolicies: [
+      {
+        dataPoint: "mentee.id",
+        redirectOnSuccess: "/dashboard",
+      },
+    ],
+  });
+
   const navigate = useNavigate();
-  const userDataCtx = useContext(UserDataContext);
 
   const getTopics = async (startsWith: string) => {
     try {
@@ -32,7 +42,10 @@ const MenteeSignup: FC<MenteeSignupProps> = () => {
         },
       });
       const options: SearchSelectOptions<number> = data.topics.map(
-        ({ label, id }: { label: string; id: number }) => ({ label, value: id })
+        ({ name, id }: { name: string; id: number }) => ({
+          label: name,
+          value: id,
+        })
       );
       return options;
     } catch (errors) {
@@ -60,45 +73,13 @@ const MenteeSignup: FC<MenteeSignupProps> = () => {
     enteredValue: enteredAbout,
   } = useInput<string>("", (about) => about.length > 0 && about.length < 1000);
 
-  // const getInterests = useCallback(async () => {
-  //   try {
-  //     console.log(userDataCtx.userId);
-
-  //     const data = await get({
-  //       resource: "users",
-  //       entity: userDataCtx.userId as number,
-  //       args: {
-  //         fields: ["mentee.topics"],
-  //       },
-  //     });
-
-  //     const topics = data.user.topics.sort(
-  //       (topic1: TopicWithPriorityType, topic2: TopicWithPriorityType) =>
-  //         topic1.priority - topic2.priority
-  //     );
-
-  //     const topicsOptions: SearchSelectOptions<number> = topics.map(
-  //       (topic: TopicWithPriorityType) => ({
-  //         value: topic.topic.id,
-  //         label: topic.topic.name,
-  //       })
-  //     );
-  //     interestsChangeHandler(topicsOptions);
-  //   } catch (errors) {
-  //     console.log(errors);
-  //   }
-  // }, [interestsChangeHandler, userDataCtx.userId]);
-
-  // useEffect(() => {
-  //   getInterests();
-  // }, [getInterests]);
-
   const sendBecomeMenteeData = async () => {
     try {
       const requestBody = {
-        skills: enteredInterests.map((interest, index) => ({
-          priority: index,
-          skill: interest.value,
+        user_id: userId,
+        interests: enteredInterests.map((interest, index) => ({
+          priority: index + 1,
+          interest: interest.value,
         })),
         about: enteredAbout,
       };
@@ -108,32 +89,11 @@ const MenteeSignup: FC<MenteeSignupProps> = () => {
         body: requestBody,
       });
 
-      userDataCtx.updateMenteeId();
       navigate("/dashboard"); // show message instead
     } catch (errors) {
       console.log(errors);
     }
   };
-
-  // const storeMentee = async () => {
-  //   try {
-  //     const requestBody = {
-  //       interests: enteredInterests.map((interest, index) => ({
-  //         priority: index,
-  //         interest: interest.value,
-  //       })),
-  //     };
-  //     console.log(requestBody);
-  //     await update({
-  //       resource: "users",
-  //       entity: userDataCtx.userId as number,
-  //       body: requestBody,
-  //     });
-  //     // navigate("/dashboard"); // show message instead
-  //   } catch (errors) {
-  //     console.log(errors);
-  //   }
-  // };
 
   const showAllErrors = () => {
     aboutBlurHandler();

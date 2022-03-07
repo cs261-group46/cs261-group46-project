@@ -159,25 +159,6 @@ const EditPlansOfAction: FC<EditPlansOfActionProps> = () => {
     setUnsavedChanges(true);
   };
 
-  // async function save() {
-  //   if (plansOfAction) {
-  //     const newPlans = plansOfAction
-  //       .filter((plan) => plan.clientOnly)
-  //       .map((plan) => ({ id: plan.id, status: plan.status }));
-
-  //     const existingPlans = plansOfAction.filter((plan) => !plan.clientOnly);
-
-  //     // disable when plans are sent
-  //     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  //     const plans = {
-  //       new: newPlans,
-  //       existing: existingPlans,
-  //     };
-
-  //     // send this off to the backend
-  //   }
-  // }
-
   const savePlans = async () => {
     try {
       const requestBody = {
@@ -252,9 +233,6 @@ const EditPlansOfAction: FC<EditPlansOfActionProps> = () => {
     setPlansOfAction((prevPlans) => prevPlans.filter((p) => p.id !== plan.id));
     setUnsavedChanges(true);
   };
-
-  console.log("valid" + validated);
-  console.log("loaded" + plansLoaded);
 
   return (
     <DashboardSubpageLayout title={"Set Plans of Action"}>

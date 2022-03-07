@@ -16,12 +16,18 @@ import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
 
 interface ExpertSignupProps {}
 
-type Verifier = {
-  userId: number | null | undefined;
-};
-
 const ExpertSignup: FC<ExpertSignupProps> = () => {
-  UseVerifyUser<Verifier>({});
+  const { userId = null, expert_id = null } = UseVerifyUser<{
+    userId: number | null | undefined;
+    expert_id: number | null | undefined;
+  }>({
+    userDataPolicies: [
+      {
+        dataPoint: "expert.id",
+        redirectOnSuccess: "/dashboard",
+      },
+    ],
+  });
 
   let navigate = useNavigate();
 
@@ -44,6 +50,7 @@ const ExpertSignup: FC<ExpertSignupProps> = () => {
     try {
       const requestBody = {
         expertises: enteredSkills.map((skill) => skill.value),
+        user_id: userId,
       };
 
       await store({
@@ -75,8 +82,8 @@ const ExpertSignup: FC<ExpertSignupProps> = () => {
         },
       });
       const options: SearchSelectOptions<number> = data.topics.map(
-        ({ label, id }: { label: string; id: number }) => ({
-          label,
+        ({ name, id }: { name: string; id: number }) => ({
+          label: name,
           value: id,
         })
       );

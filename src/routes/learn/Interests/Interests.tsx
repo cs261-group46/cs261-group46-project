@@ -1,12 +1,6 @@
-import React, {
-  FC,
-  FormEventHandler,
-  useCallback,
-  useContext,
-  useEffect,
-} from "react";
+import React, { FC, FormEventHandler, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { get, index, update } from "../../../api/api";
+import { index, update } from "../../../api/api";
 import Button from "../../../components/UI/Button/Button";
 import SearchSelect from "../../../components/UI/FormInput/SearchSelect/SearchSelect";
 import {
@@ -14,9 +8,8 @@ import {
   SearchPromise,
 } from "../../../components/UI/FormInput/SearchSelect/SearchSelect";
 import useInput from "../../../hooks/UseInput/UseInput";
-import UseVerifyAuth from "../../../hooks/UseVerifyAuth/UseVerifyAuth";
+import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
 import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
-import UserDataContext from "../../../store/UserDataContext";
 import { TopicWithPriorityType } from "../../../types/Topic";
 
 interface InterestsProps {}
@@ -26,8 +19,23 @@ function validateInterests(_experises: SearchSelectOptions<number>) {
 }
 
 const Interests: FC<InterestsProps> = () => {
+  const { mentee_id = null, mentee_topics = [] } = UseVerifyUser<{
+    userId: number | null | undefined;
+    mentee_id: number | null | undefined;
+    mentee_topics: TopicWithPriorityType[] | [];
+  }>({
+    userDataPolicies: [
+      {
+        dataPoint: "mentee.id",
+        redirectOnFail: "/dashboard",
+      },
+      {
+        dataPoint: "mentee.topics",
+      },
+    ],
+  });
+
   const navigate = useNavigate();
-  const userDataCtx = useContext(UserDataContext);
 
   const getTopics = async (startsWith: string) => {
     try {
@@ -38,7 +46,10 @@ const Interests: FC<InterestsProps> = () => {
         },
       });
       const options: SearchSelectOptions<number> = data.topics.map(
-        ({ label, id }: { label: string; id: number }) => ({ label, value: id })
+        ({ name, id }: { name: string; id: number }) => ({
+          label: name,
+          value: id,
+        })
       );
       return options;
     } catch (errors) {
@@ -46,9 +57,9 @@ const Interests: FC<InterestsProps> = () => {
       return [];
     }
   };
-  const searchPromise: SearchPromise<number> = (_search) => {
+  const searchPromise: SearchPromise<number> = useCallback((_search) => {
     return new Promise((resolve) => resolve(getTopics(_search)));
-  };
+  }, []);
 
   const {
     enteredValue: enteredInterests,
@@ -58,53 +69,35 @@ const Interests: FC<InterestsProps> = () => {
     blurHandler: interestsBlurHandler,
   } = useInput<SearchSelectOptions<number>>([], validateInterests);
 
-  const getInterests = useCallback(async () => {
-    try {
-      console.log(userDataCtx.userId);
-
-      const data = await get({
-        resource: "users",
-        entity: userDataCtx.userId as number,
-        args: {
-          fields: ["mentee.topics"],
-        },
-      });
-
-      console.log(data);
-
-      const topics = data.user.mentee.topics.sort(
-        (topic1: TopicWithPriorityType, topic2: TopicWithPriorityType) =>
-          topic1.priority - topic2.priority
-      );
-
-      const topicsOptions: SearchSelectOptions<number> = topics.map(
-        (topic: TopicWithPriorityType) => ({
-          value: topic.topic.id,
-          label: topic.topic.name,
-        })
-      );
-      interestsChangeHandler(topicsOptions);
-    } catch (errors) {
-      console.log(errors);
-    }
-  }, [interestsChangeHandler, userDataCtx.userId]);
-
   useEffect(() => {
-    getInterests();
-  }, [getInterests]);
+    const topicsSorted = mentee_topics
+      ? mentee_topics.sort(
+          (topic1: TopicWithPriorityType, topic2: TopicWithPriorityType) =>
+            topic1.priority - topic2.priority
+        )
+      : [];
+
+    const topicsOptions: SearchSelectOptions<number> = topicsSorted.map(
+      (topic: TopicWithPriorityType) => ({
+        value: topic.topic.id,
+        label: topic.topic.name,
+      })
+    );
+    interestsChangeHandler(topicsOptions);
+  }, [JSON.stringify(mentee_topics), interestsChangeHandler]);
 
   const updateInterests = async () => {
     try {
       const requestBody = {
         interests: enteredInterests.map((interest, index) => ({
-          priority: index,
+          priority: index + 1,
           interest: interest.value,
         })),
       };
-      console.log(requestBody);
+
       await update({
         resource: "mentees",
-        entity: userDataCtx.menteeId as number,
+        entity: mentee_id as number,
         body: requestBody,
       });
       navigate("/dashboard"); // show message instead

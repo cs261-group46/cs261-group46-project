@@ -8,17 +8,26 @@ import useInput from "../../../hooks/UseInput/UseInput";
 import Button from "../../../components/UI/Button/Button";
 import { useNavigate } from "react-router-dom";
 import TextInput from "../../../components/UI/FormInput/TextInput/TextInput";
-import useVerifyAuth from "../../../hooks/UseVerifyAuth/UseVerifyAuth";
 import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
 import { index, store } from "../../../api/api";
 import SearchSelect from "../../../components/UI/FormInput/SearchSelect/SearchSelect";
 import BigTextInput from "../../../components/UI/FormInput/BigTextInput/BigTextInput";
-import UserDataContext from "../../../store/UserDataContext";
+import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
 
 interface MentorSignupProps {}
 
 const MentorSignup: FC<MentorSignupProps> = () => {
-  const userDataCtx = useContext(UserDataContext);
+  const { userId = null, mentor_id = null } = UseVerifyUser<{
+    userId: number | null | undefined;
+    mentor_id: number | null | undefined;
+  }>({
+    userDataPolicies: [
+      {
+        dataPoint: "mentor.id",
+        redirectOnSuccess: "/dashboard",
+      },
+    ],
+  });
 
   let navigate = useNavigate();
 
@@ -53,18 +62,18 @@ const MentorSignup: FC<MentorSignupProps> = () => {
     try {
       const requestBody = {
         skills: enteredSkills.map((skill, index) => ({
-          priority: index,
+          priority: index + 1,
           skill: skill.value,
         })),
         about: enteredAbout,
-        capacity: enteredCapacity,
+        capacity: parseInt(enteredCapacity),
+        user_id: userId,
       };
       await store({
         resource: "mentors",
         body: requestBody,
       });
 
-      userDataCtx.updateMentorId();
       navigate("/dashboard"); // show message instead
     } catch (errors) {
       console.log(errors);
@@ -95,9 +104,11 @@ const MentorSignup: FC<MentorSignupProps> = () => {
         },
       });
       const options: SearchSelectOptions<number> = data.topics.map(
-        ({ label, id }: { label: string; id: number }) => ({ label, value: id })
+        ({ name, id }: { name: string; id: number }) => ({
+          label: name,
+          value: id,
+        })
       );
-      console.log(options);
 
       return options;
     } catch (errors) {

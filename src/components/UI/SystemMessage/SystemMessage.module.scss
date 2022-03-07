@@ -12,9 +12,10 @@
   margin: 10px 0;
   position: relative;
 
-  p {
+  .p {
     color: $sq_black;
     font-size: 15px;
+    line-height: 25px;
   }
 }
 
@@ -47,13 +48,13 @@
 .information {
   border-radius: 15px;
 
-  h1 {
+  .h1 {
     font-size: 20px;
     text-transform: capitalize;
     margin: 0px 0 30px 0;
   }
 
-  span {
+  .span {
     position: absolute;
     display: block;
     top: 0;
@@ -69,10 +70,10 @@
   background-color: #fff3f6;
   border: 2px solid $sq_red;
 
-  h1,
-  a:link,
-  a:visited,
-  span {
+  .h1,
+  .a:link,
+  .a:visited,
+  .span {
     color: $sq_red;
   }
 }
@@ -82,10 +83,10 @@
   background-color: #fffcf1;
   border: 2px solid $sq_orange;
 
-  h1,
-  a:link,
-  a:visited,
-  span {
+  .h1,
+  .a:link,
+  .a:visited,
+  .span {
     color: $sq_orange;
   }
 }
@@ -95,10 +96,10 @@
   background-color: #f1fbff;
   border: 2px solid $sq_teal;
 
-  h1,
-  a:link,
-  a:visited,
-  span {
+  .h1,
+  .a:link,
+  .a:visited,
+  .span {
     color: $sq_teal;
   }
 }

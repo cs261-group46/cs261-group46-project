@@ -30,9 +30,13 @@ const SystemMessage: FC<SystemMessageProps> = (props) => {
         }
         data-testid="SystemMessage"
       >
-        {props.onClose && <span onClick={closeHandler}>&#10006;</span>}
-        <h1>{props.type}</h1>
-        <p>{props.description}</p>
+        {props.onClose && (
+          <span className={styles.span} onClick={closeHandler}>
+            &#10006;
+          </span>
+        )}
+        <h1 className={styles.h1}>{props.type}</h1>
+        <p className={styles.p}>{props.description}</p>
       </div>
     );
   } else if (props.sort === "popup" && props.visible) {
@@ -50,9 +54,13 @@ const SystemMessage: FC<SystemMessageProps> = (props) => {
           }
           data-testid="SystemMessage"
         >
-          {props.onClose && <span onClick={closeHandler}>&#10006;</span>}
-          <h1>{props.type}</h1>
-          <p>{props.description}</p>
+          {props.onClose && (
+            <span className={styles.span} onClick={closeHandler}>
+              &#10006;
+            </span>
+          )}
+          <h1 className={styles.h1}>{props.type}</h1>
+          <p className={styles.p}>{props.description}</p>
           {props.children}
         </div>
       </div>,

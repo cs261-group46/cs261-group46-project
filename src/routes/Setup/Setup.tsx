@@ -9,13 +9,22 @@ import {
   SearchPromise,
 } from "../../components/UI/FormInput/SearchSelect/SearchSelect";
 import { Link, useNavigate } from "react-router-dom";
-import UseVerifyAuth from "../../hooks/UseVerifyAuth/UseVerifyAuth";
 import { index, store } from "../../api/api";
 import SearchSelect from "../../components/UI/FormInput/SearchSelect/SearchSelect";
-import UserDataContext from "../../store/UserDataContext";
+import UseVerifyUser from "../../hooks/UseVerifyUser/UseVerifyUser";
 
 const Setup = () => {
-  const userDataCtx = useContext(UserDataContext);
+  const { userId = null, expert_id = null } = UseVerifyUser<{
+    userId: number | null | undefined;
+    expert_id: number | null | undefined;
+  }>({
+    userDataPolicies: [
+      {
+        dataPoint: "expert.id",
+        redirectOnSuccess: "/dashboard",
+      },
+    ],
+  });
 
   const navigate = useNavigate();
   const [showExpertise, setShowExpertise] = useState(0);
@@ -33,7 +42,10 @@ const Setup = () => {
         },
       });
       const options: SearchSelectOptions<number> = data.topics.map(
-        ({ label, id }: { label: string; id: number }) => ({ label, value: id })
+        ({ name, id }: { name: string; id: number }) => ({
+          label: name,
+          value: id,
+        })
       );
       return options;
     } catch (errors) {
@@ -60,6 +72,7 @@ const Setup = () => {
   const storeExpertises = async () => {
     try {
       const requestBody = {
+        user_id: userId,
         expertises: enteredExpertises.map(
           (skill: SearchSelectOption<number>) => skill.value
         ),
@@ -68,7 +81,6 @@ const Setup = () => {
         resource: "experts",
         body: requestBody,
       });
-      userDataCtx.updateExpertId();
       navigate("/dashboard"); // show message instead
     } catch (errors) {
       console.log(errors);

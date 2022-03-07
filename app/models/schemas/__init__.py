@@ -32,9 +32,9 @@ class MentorSchema(ma.SQLAlchemySchema):
     about = ma.auto_field()
     score = ma.auto_field()
     capacity = ma.auto_field()
-    user = ma.Nested(UserSchema(exclude=["mentor"]))
-    topics = ma.Nested(lambda: MentorTopicSchema(exclude=["mentor", "topic.experts", "topic.mentees", "topic.mentors"]), many=True)
-    mentees = ma.Nested(lambda: MenteeSchema(exclude=["mentor", "mentorship_requests_sent"]), many=True)
+    user = ma.Nested(UserSchema(exclude=["mentor", "notifications", "permissions", "expert",  "mentee", "meeting_feedback", "meetings_attending", "meetings_hosted", "meetings_invited"]))
+    topics = ma.Nested(lambda: MentorTopicSchema(exclude=["mentor"]), many=True)
+    mentees = ma.Nested(lambda: MenteeSchema(exclude=["mentor", "mentorship_requests_sent", "feedback_given", "received_feedback"]), many=True)
     mentorship_requests_received = ma.Nested(lambda: MentorshipRequestSchema(exclude=["mentor", "mentee.mentor"]), many=True)
     received_feedback = ma.Nested(lambda: MentorFeedbackSchema(exclude=["mentor"]), many=True)
     feedback_given = ma.Nested(lambda: MenteeFeedbackSchema(exclude=["mentor"]), many=True)
@@ -46,8 +46,8 @@ class MenteeSchema(ma.SQLAlchemySchema):
 
     id = ma.auto_field()
     about = ma.auto_field()
-    user = ma.Nested(UserSchema(exclude=["mentee", "mentor", "expert", "notifications", "permissions"]))
-    mentor = ma.Nested(MentorSchema(exclude=["mentees", "mentorship_requests_received", "user.notifications", "user.permissions", "user.expert", "user.mentor", "user.mentee"]))
+    user = ma.Nested(UserSchema(exclude=["mentee", "mentor", "expert", "notifications", "permissions", "meeting_feedback", "meetings_attending", "meetings_hosted", "meetings_invited"]))
+    mentor = ma.Nested(MentorSchema(exclude=["mentees", "mentorship_requests_received", "feedback_given", "received_feedback"]))
     topics = ma.Nested(lambda: MenteeTopicSchema(exclude=["mentee", "topic.experts", "topic.mentees", "topic.mentors"]), many=True)
     mentorship_requests_sent = ma.Nested(lambda: MentorshipRequestSchema(exclude=["mentee", "mentor.mentees"]), many=True)
     feedback_given = ma.Nested(lambda: MenteeFeedbackSchema(exclude=["mentee"]), many=True)
@@ -110,7 +110,7 @@ class MenteeTopicSchema(ma.SQLAlchemySchema):
 
     priority = ma.auto_field()
     mentee = ma.Nested(MenteeSchema(exclude=["topics"]))
-    topic = ma.Nested(TopicSchema(exclude=["mentees"]))
+    topic = ma.Nested(TopicSchema(exclude=["mentees", "meetings", "mentors", "experts"]))
 
 
 class RoomSchema(ma.SQLAlchemySchema):
@@ -133,7 +133,7 @@ class MeetingSchema(ma.SQLAlchemySchema):
     meeting_type = ma.auto_field()
     duration = ma.auto_field()
     capacity = ma.auto_field()
-    host = ma.Nested(UserSchema(exclude=["notifications","mentor.mentees", "mentor.mentorship_requests_received", "mentor.topics", "mentor.received_feedback", "mentor.feedback_given", "mentee.mentor", "mentee.topics", "mentee.mentorship_requests_sent", "mentee.feedback_given", "mentee.received_feedback", "mentee.plans_of_action", "expert", "meetings_hosted", "meetings_attending", "meeting_feedback", "meetings_invited", "permissions"]))
+    host = ma.Nested(UserSchema(exclude=["notifications", "mentee", "mentor", "expert", "meetings_hosted", "meetings_attending", "meeting_feedback", "meetings_invited", "permissions"]))
     attendees = ma.Nested(UserSchema(exclude=["meetings_invited", "mentor", "mentee", "expert", "permissions", "notifications", "meetings_hosted", "meetings_attending", "meeting_feedback"]), many=True)
     invited = ma.Nested(UserSchema(exclude=["meetings_invited", "mentor", "mentee", "expert", "permissions", "notifications", "meetings_hosted", "meetings_attending", "meeting_feedback"]), many=True)
     topics = ma.Nested(TopicSchema(exclude=["meetings", "experts", "mentors", "mentees"]), many=True)
@@ -157,7 +157,7 @@ class MentorTopicSchema(ma.SQLAlchemySchema):
         model = MentorTopic
 
     priority = ma.auto_field()
-    topic = ma.Nested(TopicSchema(exclude=["mentors"]))
+    topic = ma.Nested(TopicSchema(exclude=["mentors", "meetings", "mentees", "experts"]))
     mentor = ma.Nested(MentorSchema(exclude=["topics"]))
 
 
@@ -176,8 +176,8 @@ class MentorFeedbackSchema(ma.SQLAlchemySchema):
 
     score = ma.auto_field()
     feedback = ma.auto_field()
-    mentee = ma.Nested(MenteeSchema(exclude=["feedback_given"]))
-    mentor = ma.Nested(MentorSchema(exclude=["received_feedback"]))
+    mentee = ma.Nested(MenteeSchema(exclude=["received_feedback", "feedback_given", "mentor", "topics", "mentorship_requests_sent", "plans_of_action"]))
+    mentor = ma.Nested(MentorSchema(exclude=["feedback_given", "received_feedback", "capacity", "topics", "mentees", "mentorship_requests_received"]))
 
 
 class MenteeFeedbackSchema(ma.SQLAlchemySchema):
@@ -186,8 +186,8 @@ class MenteeFeedbackSchema(ma.SQLAlchemySchema):
 
     score = ma.auto_field()
     feedback = ma.auto_field()
-    mentee = ma.Nested(MenteeSchema(exclude=["received_feedback"]))
-    mentor = ma.Nested(MentorSchema(exclude=["feedback_given"]))
+    mentee = ma.Nested(MenteeSchema(exclude=["received_feedback", "feedback_given", "mentor", "topics", "mentorship_requests_sent", "plans_of_action"]))
+    mentor = ma.Nested(MentorSchema(exclude=["feedback_given", "received_feedback", "capacity", "topics", "mentees", "mentorship_requests_received"]))
 
 
 class MeetingFeedbackSchema(ma.SQLAlchemySchema):
@@ -197,6 +197,3 @@ class MeetingFeedbackSchema(ma.SQLAlchemySchema):
     feedback = ma.auto_field()
     user = ma.Nested(UserSchema(exclude=["meeting_feedback"]))
     meeting = ma.Nested(MeetingSchema(exclude=["feedback"]))
-
-
-# Application Feedback

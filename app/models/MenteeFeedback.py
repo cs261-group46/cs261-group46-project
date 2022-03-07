@@ -7,8 +7,8 @@ class MenteeFeedback(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     mentor_id = db.Column(db.Integer, db.ForeignKey('mentors.id'), nullable=False)
     mentee_id = db.Column(db.Integer, db.ForeignKey('mentees.id'), nullable=False)
-    score = db.Column(db.Integer, nullable=False)
-    feedback = db.Column(db.Text, nullable=False)
+    score = db.Column(db.Integer, nullable=True)
+    feedback = db.Column(db.Text, nullable=True)
     weight = db.Column(db.Float, nullable=False)
 
     mentee = db.relationship("Mentee", backref="received_feedback", lazy=True)

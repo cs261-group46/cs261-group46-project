@@ -4,6 +4,7 @@ import BarChart from "../../../../components/UI/BarChart/BarChart";
 import { MenteeType } from "../../../../types/Mentee";
 import Tag from "../../../../components/UI/Tag/Tag";
 import ContentCard from "../../../../components/UI/ContentCard/ContentCard";
+import { destroy, update } from "../../../../api/api";
 
 //Probably need to pass mentor id along
 interface MenteeProp {
@@ -21,6 +22,21 @@ const MenteeCard: FC<MenteeProp> = (props) => {
   const completedPlans = props.mentee.plans_of_action.filter(
     (plan) => plan.status === "completed"
   );
+
+  const terminateMentorshipHandler = async (menteeId: number) => {
+    try {
+      const body = {
+        mentor: -1,
+      };
+      await update({
+        entity: menteeId,
+        resource: "mentees",
+        body: body,
+      });
+    } catch (errors) {
+      console.log(errors);
+    }
+  };
 
   return (
     <ContentCard
@@ -72,6 +88,12 @@ const MenteeCard: FC<MenteeProp> = (props) => {
           children: "View Plan",
           icon: "📈",
           href: `/plans-of-action/${props.mentee.id}`,
+        },
+        {
+          buttonStyle: "default",
+          children: "Terminate Partnership",
+          icon: "📈",
+          onClick: terminateMentorshipHandler.bind(null, props.mentee.id),
         },
       ]}
     />

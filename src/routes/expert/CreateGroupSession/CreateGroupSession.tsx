@@ -77,8 +77,8 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
         },
       });
       const options: SearchSelectOptions<number> = data.topics.map(
-        ({ label, id }: { label: string; id: number }) => ({
-          label,
+        ({ name, id }: { name: string; id: number }) => ({
+          label: name,
           value: id,
         })
       );
