@@ -133,27 +133,13 @@ class MeetingSchema(ma.SQLAlchemySchema):
     meeting_type = ma.auto_field()
     duration = ma.auto_field()
     capacity = ma.auto_field()
-    host = ma.Nested(UserSchema(exclude=["meetings_hosted", "meetings_attending", "meeting_feedback", "meetings_invited", "permissions", "mentor.topics"]))
+    host = ma.Nested(UserSchema(exclude=["notifications","mentor.mentees", "mentor.mentorship_requests_received", "mentor.topics", "mentor.received_feedback", "mentor.feedback_given", "mentee.mentor", "mentee.topics", "mentee.mentorship_requests_sent", "mentee.feedback_given", "mentee.received_feedback", "mentee.plans_of_action", "expert", "meetings_hosted", "meetings_attending", "meeting_feedback", "meetings_invited", "permissions"]))
     attendees = ma.Nested(UserSchema(exclude=["meetings_invited", "mentor", "mentee", "expert", "permissions", "notifications", "meetings_hosted", "meetings_attending", "meeting_feedback"]), many=True)
     invited = ma.Nested(UserSchema(exclude=["meetings_invited", "mentor", "mentee", "expert", "permissions", "notifications", "meetings_hosted", "meetings_attending", "meeting_feedback"]), many=True)
     topics = ma.Nested(TopicSchema(exclude=["meetings", "experts", "mentors", "mentees"]), many=True)
     room = ma.Nested(RoomSchema(exclude=["meetings"]))
     feedback = ma.Nested(lambda: MeetingFeedbackSchema(exclude=["meeting"]))
 
- # = ma.auto_field()
- #    email = ma.auto_field()
- #    first_name = ma.auto_field()
- #    last_name = ma.auto_field()
- #    permissions = ma.auto_field()
- #    department = ma.Nested(lambda: DepartmentSchema(exclude=["users"]))
- #    mentor = ma.Nested(lambda: MentorSchema(exclude=["user"]))
- #    mentee = ma.Nested(lambda: MenteeSchema(exclude=["user"]))
- #    expert = ma.Nested(lambda: ExpertSchema(exclude=["user", "topics.experts", "topics.mentors", "topics.mentees"]))
- #    notifications = ma.Nested(lambda: NotificationSchema(exclude=["user"]), many=True)
- #    meetings_hosted = ma.Nested(lambda: MeetingSchema(exclude=["host"]), many=True)
- #    meetings_attending = ma.Nested(lambda: MeetingSchema(exclude=["attendees"]), many=True)
- #    meeting_feedback = ma.Nested(lambda: MeetingFeedbackSchema(exclude=["user"]), many=True)
- #    meetings_invited = ma.Nested(lambda: MeetingSchema(exclude=["invited"]), many=True)
 
 class NotificationSchema(ma.SQLAlchemySchema):
     class Meta:

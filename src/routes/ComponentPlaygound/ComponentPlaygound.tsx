@@ -3,9 +3,11 @@ import styles from "./ComponentPlaygound.module.scss";
 import PageStepper from "../../components/UI/PageStepper/PageStepper";
 import PieView from "../../components/UI/PieView/PieView";
 import HoursInput from "../../components/UI/FormInput/HoursInput/HoursInput";
-import SearchSelect from "../../components/UI/FormInput/SearchSelect/SearchSelect";
-import { MultiSelectOptions } from "../../components/UI/FormInput/SearchSelect/SearchSelect.d";
+import SearchSelect, {
+  SearchSelectOptions,
+} from "../../components/UI/FormInput/SearchSelect/SearchSelect";
 import useInput from "../../hooks/UseInput/UseInput";
+import StarPicker from "../../components/UI/FormInput/StarPicker/StarPicker";
 
 interface ComponentPlaygoundProps {}
 
@@ -15,7 +17,13 @@ const ComponentPlaygound: FC<ComponentPlaygoundProps> = () => {
     enteredValue: searchValue,
     changeHandler: searchChange,
     blurHandler: searchBlur,
-  } = useInput<MultiSelectOptions<string>>([], () => true);
+  } = useInput<SearchSelectOptions<string>>([], () => true);
+
+  const {
+    enteredValue: starsValue,
+    changeHandler: starsChange,
+    blurHandler: starsBlur,
+  } = useInput<number | undefined>(2, (value) => value !== undefined);
 
   return (
     <div className={styles.ComponentPlaygound} data-testid="ComponentPlaygound">
@@ -64,6 +72,20 @@ const ComponentPlaygound: FC<ComponentPlaygoundProps> = () => {
           )
         }
       />
+
+      <StarPicker
+        type={"interactive"}
+        id={"stars"}
+        label={"Some Stars"}
+        value={starsValue}
+        isValid={true}
+        onChange={starsChange}
+        onBlur={starsBlur}
+      />
+
+      <p>
+        Rating: <StarPicker type={"inline"} value={3} size={"32"} />
+      </p>
     </div>
   );
 };

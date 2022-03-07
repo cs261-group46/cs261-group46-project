@@ -7,15 +7,14 @@ import React, {
   useState,
 } from "react";
 import styles from "./EditPlansOfAction.module.scss";
-import MainLayout from "../../layouts/MainLayout/MainLayout";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Button from "../../components/UI/Button/Button";
 import Icon from "../../components/UI/Icon/Icon";
 import Title from "../../components/UI/Title/Title";
 import Draggable from "react-draggable";
 import UseVerifyUser from "../../hooks/UseVerifyUser/UseVerifyUser";
 import DashboardSubpageLayout from "../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
-import { get } from "../../api/api";
+import { get, update } from "../../api/api";
 
 interface EditPlansOfActionProps {}
 
@@ -40,6 +39,7 @@ const EditPlansOfAction: FC<EditPlansOfActionProps> = () => {
   });
 
   const [validated, setValidated] = useState(false);
+  const [plansLoaded, setPlansLoaded] = useState(false);
   let { menteeId } = useParams();
   const navigate = useNavigate();
 
@@ -57,17 +57,15 @@ const EditPlansOfAction: FC<EditPlansOfActionProps> = () => {
           },
         });
 
-        if (
-          mentee_id !== Number.parseInt(menteeId) &&
-          mentor_id !== data.mentee.mentor.id
-        ) {
+        if (mentor_id !== data.mentee.mentor.id) {
           return navigate("/dashboard");
         }
-
         setValidated(true);
       } catch (errors) {
         console.log(errors);
       }
+    } else {
+      setValidated(true);
     }
   }, [menteeId, mentee_id, mentor_id, navigate]);
 
@@ -103,13 +101,20 @@ const EditPlansOfAction: FC<EditPlansOfActionProps> = () => {
 
       setPlansOfAction(data.mentee.plans_of_action);
 
-      const greatestId = Math.max.apply(
-        Math,
-        data.mentee.plans_of_action.map(function (plan: PlanOfAction) {
-          return plan.id;
-        })
-      );
+      const greatestId =
+        data.mentee.plans_of_action.length > 0
+          ? Math.max.apply(
+              Math,
+              data.mentee.plans_of_action.map(function (plan: PlanOfAction) {
+                return plan.id;
+              })
+            )
+          : 0;
+
+      console.log(greatestId);
+
       setTempId(greatestId + 1);
+      setPlansLoaded(true);
     } catch (errors) {
       console.log(errors);
     }
@@ -154,28 +159,41 @@ const EditPlansOfAction: FC<EditPlansOfActionProps> = () => {
     setUnsavedChanges(true);
   };
 
-  async function save() {
-    if (plansOfAction) {
-      const newPlans = plansOfAction
-        .filter((plan) => plan.clientOnly)
-        .map((plan) => ({ id: plan.id, status: plan.status }));
+  // async function save() {
+  //   if (plansOfAction) {
+  //     const newPlans = plansOfAction
+  //       .filter((plan) => plan.clientOnly)
+  //       .map((plan) => ({ id: plan.id, status: plan.status }));
 
-      const existingPlans = plansOfAction.filter((plan) => !plan.clientOnly);
+  //     const existingPlans = plansOfAction.filter((plan) => !plan.clientOnly);
 
-      // disable when plans are sent
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const plans = {
-        new: newPlans,
-        existing: existingPlans,
+  //     // disable when plans are sent
+  //     // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  //     const plans = {
+  //       new: newPlans,
+  //       existing: existingPlans,
+  //     };
+
+  //     // send this off to the backend
+  //   }
+  // }
+
+  const savePlans = async () => {
+    try {
+      const requestBody = {
+        plansofaction: plansOfAction,
       };
-
-      // send this off to the backend
+      await update({
+        resource: "mentees",
+        entity: Number.parseInt(menteeId as string),
+        body: requestBody,
+      });
 
       setUnsavedChanges(false);
+    } catch (errors) {
+      console.log(errors);
     }
-  }
-
-  const savePlans = () => {};
+  };
 
   function reorderList(movedPlan: PlanOfAction) {
     const sorted = plansOfAction
@@ -205,11 +223,17 @@ const EditPlansOfAction: FC<EditPlansOfActionProps> = () => {
     if (dividerBox && movedPlanBox) {
       // this will only move up if the item is fully clear of the divider
       if (movedPlanBox.bottom < dividerBox.top) {
-        movedPlan.status = "active";
+        if (movedPlan.status === "completed") {
+          movedPlan.status = "active";
+          setUnsavedChanges(true);
+        }
       }
       // same for moving down
       if (movedPlanBox.top > dividerBox.bottom) {
-        movedPlan.status = "completed";
+        if (movedPlan.status === "active") {
+          movedPlan.status = "completed";
+          setUnsavedChanges(true);
+        }
       }
 
       // means that when placed on the divider, nothing will happen
@@ -224,12 +248,20 @@ const EditPlansOfAction: FC<EditPlansOfActionProps> = () => {
     setPlansOfAction(plans);
   }
 
+  const removePlan = (plan: PlanOfAction) => {
+    setPlansOfAction((prevPlans) => prevPlans.filter((p) => p.id !== plan.id));
+    setUnsavedChanges(true);
+  };
+
+  console.log("valid" + validated);
+  console.log("loaded" + plansLoaded);
+
   return (
     <DashboardSubpageLayout title={"Set Plans of Action"}>
       <div className={styles.EditPlansOfAction} data-testid="EditPlansOfAction">
         {
           // if plans have loaded
-          plansOfAction && (
+          validated && plansLoaded ? (
             // else if successfully retrieved
             <div>
               <Button onClick={addNewPlan}>Add New Plan</Button>
@@ -244,7 +276,10 @@ const EditPlansOfAction: FC<EditPlansOfActionProps> = () => {
                     position={
                       currentDragged === plan.id ? undefined : { x: 0, y: 0 }
                     }
-                    onStart={() => setCurrentDragged(plan.id)}
+                    onStart={() => {
+                      console.log("this click fires as well");
+                      setCurrentDragged(plan.id);
+                    }}
                     onStop={() => {
                       setCurrentDragged(undefined);
                       reorderList(plan);
@@ -270,8 +305,18 @@ const EditPlansOfAction: FC<EditPlansOfActionProps> = () => {
                           <input
                             type="text"
                             defaultValue={plan.title}
+                            onMouseDown={(e) => e.stopPropagation()}
                             onChange={updatePlanText.bind(undefined, plan.id)}
                           />
+                          <button
+                            id="remove-button"
+                            onMouseDown={(event) => {
+                              event.stopPropagation();
+                              removePlan(plan);
+                            }}
+                          >
+                            X
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -315,9 +360,19 @@ const EditPlansOfAction: FC<EditPlansOfActionProps> = () => {
                           <Icon className={styles.icon} icon={"🏆"} />
                           <input
                             type="text"
+                            onClick={(e) => e.preventDefault()}
                             defaultValue={plan.title}
                             onChange={updatePlanText.bind(undefined, plan.id)}
                           />
+                          <button
+                            id="remove-button"
+                            onMouseDown={(event) => {
+                              event.stopPropagation();
+                              removePlan(plan);
+                            }}
+                          >
+                            X
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -326,11 +381,13 @@ const EditPlansOfAction: FC<EditPlansOfActionProps> = () => {
               {completedPlans && completedPlans.length === 0 && <p>None</p>}
               <Button
                 buttonStyle={unsavedChanges ? "primary" : "default"}
-                onClick={save}
+                onClick={savePlans}
               >
                 Save
               </Button>
             </div>
+          ) : (
+            <div className={styles.Loader}>Fetching data...</div>
           )
         }
       </div>

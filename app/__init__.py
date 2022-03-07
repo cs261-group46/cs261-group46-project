@@ -27,8 +27,7 @@ from flask_marshmallow import Marshmallow
 # App setup #
 #############
 
-app = Flask(__name__, static_folder="../build/static/",
-            static_url_path="/static")
+app = Flask(__name__, static_folder="../build/static/", static_url_path="/static")
 app.config.from_file("config.json", load=json.load)
 
 db = SQLAlchemy(app)

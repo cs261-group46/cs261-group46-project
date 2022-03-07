@@ -44,7 +44,6 @@ const YourGroupSessions: FC<YourGroupSessionsProps> = () => {
   });
 
   const [showWarning, setShowWarning] = useState(false);
-  console.log(meetings_hosted);
   const expert_meetings_hosted = meetings_hosted
     ? meetings_hosted.filter(
         (meeting) => meeting.meeting_type !== "one on one meeting"
@@ -165,7 +164,7 @@ const YourGroupSessions: FC<YourGroupSessionsProps> = () => {
   const removeHandler = async (meetingId: number) => {
     try {
       await destroy({
-        resource: "meeting",
+        resource: "meetings",
         entity: meetingId,
       });
     } catch (errors) {
@@ -185,9 +184,10 @@ const YourGroupSessions: FC<YourGroupSessionsProps> = () => {
   return (
     <DashboardSubpageLayout title={"Group Sessions"}>
       <Button href="/expert/group-sessions/create">Create a Session</Button>
-      <div className={styles.YourWorkshops} data-testid="YourWorkshops">
+      <div className={styles.YourGroupSessions} data-testid="YourGroupSessions">
         {groupSessionsOnPage ? (
           groupSessionsOnPage.map((meeting) => {
+            if (!meeting.attendees) meeting.attendees = [];
             return (
               <>
                 <ContentCard
