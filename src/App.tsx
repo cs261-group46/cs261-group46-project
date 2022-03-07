@@ -28,7 +28,7 @@ import EditPlansOfAction from "./routes/EditPlansOfAction/EditPlansOfAction";
 import SiteFeedback from "./routes/SiteFeedback/SiteFeedback.lazy";
 import Meetings from "./routes/meetings/Meetings/Meetings";
 import CreateMeeting from "./routes/meetings/CreateMeeting/CreateMeeting";
-import MentorFeedback from "./routes/MentorFeedback/MentorFeedback.lazy";
+import MentorFeedback from "./routes/learn/MentorFeedback/MentorFeedback.lazy";
 
 function App() {
   return (

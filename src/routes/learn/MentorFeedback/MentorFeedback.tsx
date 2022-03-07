@@ -1,12 +1,12 @@
 import React, { FC, FormEventHandler } from "react";
 import styles from "./MentorFeedback.module.scss";
-import MainLayout from "../../layouts/MainLayout/MainLayout";
-import BigTextInput from "../../components/UI/FormInput/BigTextInput/BigTextInput";
-import useInput from "../../hooks/UseInput/UseInput";
-import Button from "../../components/UI/Button/Button";
-import StarPicker from "../../components/UI/FormInput/StarPicker/StarPicker";
-import UseVerifyUser from "../../hooks/UseVerifyUser/UseVerifyUser";
-import { MentorType } from "../../types/Mentor";
+import MainLayout from "../../../layouts/MainLayout/MainLayout";
+import BigTextInput from "../../../components/UI/FormInput/BigTextInput/BigTextInput";
+import useInput from "../../../hooks/UseInput/UseInput";
+import Button from "../../../components/UI/Button/Button";
+import StarPicker from "../../../components/UI/FormInput/StarPicker/StarPicker";
+import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
+import { MentorType } from "../../../types/Mentor";
 
 interface MentorFeedbackProps {}
 
