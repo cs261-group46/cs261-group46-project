@@ -28,6 +28,7 @@ import EditPlansOfAction from "./routes/EditPlansOfAction/EditPlansOfAction";
 import SiteFeedback from "./routes/SiteFeedback/SiteFeedback.lazy";
 import Meetings from "./routes/meetings/Meetings/Meetings";
 import CreateMeeting from "./routes/meetings/CreateMeeting/CreateMeeting";
+import MentorFeedback from "./routes/MentorFeedback/MentorFeedback.lazy";
 
 function App() {
   return (
@@ -70,6 +71,7 @@ function App() {
             <Route path="your-mentor" element={<YourMentor />} />
             <Route path="group-sessions" element={<ViewGroupSessions />} />
             <Route path="interests" element={<YourInterests />} />
+            <Route path="give-feedback" element={<MentorFeedback />} />
           </Route>
 
           <Route path="/expert">
