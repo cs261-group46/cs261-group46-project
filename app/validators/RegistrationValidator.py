@@ -30,7 +30,7 @@ validationRules = {
     },
     'password': {
         'type': 'string',
-        # 'regex': '"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"',    # TODO: Create regex for it
+        'regex': '(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)',    # TODO: Create regex for it (https://stackoverflow.com/questions/1559751/regex-to-make-sure-that-the-string-contains-at-least-one-lower-case-char-upper)
         'required': True,
         'minlength': 10,
         'maxlength': 126

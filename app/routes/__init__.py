@@ -16,6 +16,7 @@ def index(error):
         file_contents = file.read()
     return file_contents
 
+
 @app.after_request
 @auth_required(-1)
 def after_request(response, user=None):
