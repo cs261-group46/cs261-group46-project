@@ -66,3 +66,14 @@ def get_logged_in(user=None):
     if user is None:
         return {"success": False, "data": {"user": None}}, 400
     return {"success": True, "data": {"user": user.id}}, 200
+<<<<<<< HEAD
+=======
+
+
+@users.route("/delete_account")
+@auth_required
+def delete_account(user: User):
+    user.delete()
+    db.session.commit()
+    return {"successful": True}
+>>>>>>> 581ec2dbc6e50072a57f5e73c41388e71d1fb955
