@@ -10,7 +10,7 @@ from app.utils.request import parse_args_list
 users = Blueprint("api_users", __name__, url_prefix="/users")
 
 @users.route("/", methods=["GET"])
-@auth_required()
+@auth_required
 def index(user=None):
     fields = parse_args_list("fields")
     start_with = None
@@ -41,7 +41,7 @@ def index(user=None):
 
 
 @users.route("/<userId>", methods=["GET"])
-@auth_required()
+@auth_required
 def get(userId=None, user=None):
     fields = parse_args_list("fields")
     if len(fields) == 1 and fields[0] == '':
@@ -61,9 +61,16 @@ def get(userId=None, user=None):
 
 
 @users.route("/loggedin/", methods=["GET"])
-@auth_required()
+@auth_required
 def get_logged_in(user=None):
     if user is None:
         return {"success": False, "data": {"user": None}}, 400
     return {"success": True, "data": {"user": user.id}}, 200
 
+
+@users.route("/delete_account")
+@auth_required
+def delete_account(user: User):
+    user.delete()
+    db.session.commit()
+    return {"successful": True}
