@@ -7,6 +7,7 @@ describe("<StarPicker />", () => {
   test("it should mount", () => {
     render(
       <StarPicker
+        type={"interactive"}
         label={"test"}
         isValid={true}
         value={undefined}
