@@ -1,4 +1,4 @@
-import React, { FC, FormEventHandler } from "react";
+import React, { FC, FormEventHandler, Fragment } from "react";
 import styles from "./MentorFeedback.module.scss";
 import MainLayout from "../../../layouts/MainLayout/MainLayout";
 import BigTextInput from "../../../components/UI/FormInput/BigTextInput/BigTextInput";
@@ -56,37 +56,40 @@ const MentorFeedback: FC<MentorFeedbackProps> = () => {
 
   return (
     <MainLayout title={"Feedback"}>
-      {mentor && (
-        <form
-          className={styles.MentorFeedback}
-          data-testid="MentorFeedback"
-          onSubmit={submitHandler}
-        >
-          Please enter your feedback for your time with {mentor.user.first_name}
-          .
-          <BigTextInput
-            id={"feedback"}
-            label={"General Comments"}
-            placeholder={"Were they able to provide good support?"}
-            value={feedbackValue}
-            isValid={isFeedbackInputValid}
-            onChange={feedbackChangeHandler}
-            onBlur={feedbackBlurHandler}
-          />
-          <StarPicker
-            type={"interactive"}
-            id={"feedback"}
-            label={"Rating"}
-            value={starsValue}
-            isValid={isStarsInputValid}
-            onChange={starsChangeHandler}
-            onBlur={starsBlurHandler}
-          />
-          <Button icon="👑" type={"submit"} buttonStyle={"primary"}>
-            Submit
-          </Button>
-        </form>
-      )}
+      <form
+        className={styles.MentorFeedback}
+        data-testid="MentorFeedback"
+        onSubmit={submitHandler}
+      >
+        {mentor && (
+          <Fragment>
+            Please enter your feedback for your time with{" "}
+            {mentor.user.first_name}
+            .
+            <BigTextInput
+              id={"feedback"}
+              label={"General Comments"}
+              placeholder={"Were they able to provide good support?"}
+              value={feedbackValue}
+              isValid={isFeedbackInputValid}
+              onChange={feedbackChangeHandler}
+              onBlur={feedbackBlurHandler}
+            />
+            <StarPicker
+              type={"interactive"}
+              id={"feedback"}
+              label={"Rating"}
+              value={starsValue}
+              isValid={isStarsInputValid}
+              onChange={starsChangeHandler}
+              onBlur={starsBlurHandler}
+            />
+            <Button icon="👑" type={"submit"} buttonStyle={"primary"}>
+              Submit
+            </Button>
+          </Fragment>
+        )}
+      </form>
     </MainLayout>
   );
 };

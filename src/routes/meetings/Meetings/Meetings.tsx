@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useMemo, useState } from "react";
+import React, { FC, useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { destroy, get, update } from "../../../api/api";
 import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
@@ -273,7 +273,7 @@ const Meetings: FC<MeetingsProps> = () => {
           Invites
         </Button>
       </div>
-      <div className={styles.YourGroupSessions} data-testid="YourGroupSessions">
+      <div className={styles.YourGroupSessions} data-testid="Meetings">
         {page === 1 &&
           confirmed_meetings.length > 0 &&
           confirmed_meetings.map((meeting, index) => {
