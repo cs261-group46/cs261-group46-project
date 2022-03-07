@@ -48,13 +48,16 @@ const MenteeCard: FC<MenteeProp> = (props) => {
         },
         {
           title: "Plan of Action progress",
-          content: (
-            <BarChart
-              className={styles.BarChart}
-              completedGoals={completedPlans.length}
-              totalGoals={props.mentee.plans_of_action.length}
-            />
-          ),
+          content:
+            props.mentee.plans_of_action.length > 0 ? (
+              <BarChart
+                className={styles.BarChart}
+                completedGoals={completedPlans.length}
+                totalGoals={props.mentee.plans_of_action.length}
+              />
+            ) : (
+              "No plans of action set"
+            ),
         },
       ]}
       buttons={[
@@ -62,7 +65,7 @@ const MenteeCard: FC<MenteeProp> = (props) => {
           buttonStyle: "primary",
           children: "Meetings",
           icon: "👥",
-          href: "/dashboard",
+          href: `/meetings/${props.mentee.id}`,
         },
         {
           buttonStyle: "default",

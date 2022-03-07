@@ -12,10 +12,6 @@ import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
 
 interface YourMentorProps {}
 
-type Verifier = {
-  mentee_mentor: MentorType;
-};
-
 const YourMentor: FC<YourMentorProps> = () => {
   // const navigate = useNavigate();
   // const userDataCtx = useContext(UserDataContext);
@@ -49,10 +45,17 @@ const YourMentor: FC<YourMentorProps> = () => {
   //   getMentor();
   // }, [getMentor]);
 
-  const { mentee_mentor: mentor = null } = UseVerifyUser<Verifier>({
+  const { mentee_mentor: mentor = null, mentee_id = null } = UseVerifyUser<{
+    mentee_mentor: MentorType | null | undefined;
+    mentee_id: number | null | undefined;
+  }>({
     userDataPolicies: [
       {
         dataPoint: "mentee.mentor",
+        redirectOnFail: "/dashboard",
+      },
+      {
+        dataPoint: "mentee.id",
         redirectOnFail: "/dashboard",
       },
     ],
@@ -61,7 +64,7 @@ const YourMentor: FC<YourMentorProps> = () => {
   return (
     <DashboardSubpageLayout title="Your Mentor">
       <div className={styles.YourMentor} data-testid="YourMentor">
-        {mentor && (
+        {mentor && mentee_id && (
           <ContentCard
             heading={`${mentor.user.first_name} ${mentor.user.last_name}`}
             sections={[
@@ -84,6 +87,14 @@ const YourMentor: FC<YourMentorProps> = () => {
                 content: mentor.topics.map((topic) => (
                   <Tag key={topic.topic.id}>{topic.topic.name}</Tag>
                 )),
+              },
+            ]}
+            buttons={[
+              {
+                buttonStyle: "primary",
+                children: "Meetings",
+                icon: "👥",
+                href: `/meetings/${mentee_id}`,
               },
             ]}
           />

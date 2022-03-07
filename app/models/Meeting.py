@@ -1,11 +1,11 @@
 from app import db
 
 
-meeting_topics = db.Table('meeting_topics',
+meetings_topics = db.Table('meetings_topics',
                           db.Column('meetingID', db.Integer, db.ForeignKey('meetings.id'), primary_key=True),
                           db.Column('topicID', db.Integer, db.ForeignKey('topics.id'), primary_key=True)
                           )
-meetings_attendees = db.Table('meeting_attendees',
+meetings_attendees = db.Table('meetings_attendees',
                              db.Column('meetingID', db.Integer, db.ForeignKey('meetings.id'), primary_key=True),
                              db.Column('userID', db.Integer, db.ForeignKey('users.id'), primary_key=True)
                              )
@@ -32,7 +32,7 @@ class Meeting(db.Model):
 
     room = db.relationship("Room", backref="meetings", lazy=True)
     host = db.relationship("User", backref="meetings_hosted", lazy=True)
-    topics = db.relationship('Topic', secondary=meeting_topics, backref='meetings', lazy=True)
+    topics = db.relationship('Topic', secondary=meetings_topics, backref='meetings', lazy=True)
     invited = db.relationship('User', secondary=meetings_invited, backref='meetings_invited', lazy=True)
     attendees = db.relationship('User', secondary=meetings_attendees, backref='meetings_attending', lazy=True)
 

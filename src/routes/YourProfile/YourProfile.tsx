@@ -44,7 +44,7 @@ const YourProfile: FC<YourProfileProps> = () => {
                 content: user.user.department.name,
               },
               user.user.mentor && {
-                title: "Mentor-About",
+                title: "About your mentorship",
                 content: user.user.mentor.about,
               },
               user.user.mentor && {
@@ -73,13 +73,13 @@ const YourProfile: FC<YourProfileProps> = () => {
                 )),
               },
               user.user.mentee && {
-                title: "Mentee-About",
+                title: "About you as a mentee",
                 content: user.user.mentee.about,
               },
               user.user.mentee &&
                 user.user.mentee.mentor && {
                   title: "Your Mentor",
-                  content: `${user.user.mentee.mentor.first_name} ${user.user.mentee.mentor.last_name}`,
+                  content: `${user.user.mentee.mentor.user.first_name} ${user.user.mentee.mentor.user.last_name}`,
                 },
             ]}
           />
