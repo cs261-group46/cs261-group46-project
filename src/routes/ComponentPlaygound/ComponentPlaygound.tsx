@@ -23,7 +23,7 @@ const ComponentPlaygound: FC<ComponentPlaygoundProps> = () => {
     enteredValue: starsValue,
     changeHandler: starsChange,
     blurHandler: starsBlur,
-  } = useInput<number | undefined>(undefined, (value) => value !== undefined);
+  } = useInput<number | undefined>(2, (value) => value !== undefined);
 
   return (
     <div className={styles.ComponentPlaygound} data-testid="ComponentPlaygound">
@@ -74,6 +74,7 @@ const ComponentPlaygound: FC<ComponentPlaygoundProps> = () => {
       />
 
       <StarPicker
+        type={"interactive"}
         id={"stars"}
         label={"Some Stars"}
         value={starsValue}
@@ -81,6 +82,10 @@ const ComponentPlaygound: FC<ComponentPlaygoundProps> = () => {
         onChange={starsChange}
         onBlur={starsBlur}
       />
+
+      <p>
+        Rating: <StarPicker type={"inline"} value={3} size={"32"} />
+      </p>
     </div>
   );
 };
