@@ -1,7 +1,7 @@
 from flask import Blueprint, request
 from sqlalchemy import func
 
-from app import User
+from app import User, db
 from app.middleware.auth import auth_required
 from app.models.schemas import UserSchema
 from app.utils.marshmallow_helpers import get_results
@@ -66,14 +66,23 @@ def get_logged_in(user=None):
     if user is None:
         return {"success": False, "data": {"user": None}}, 400
     return {"success": True, "data": {"user": user.id}}, 200
-<<<<<<< HEAD
-=======
 
 
-@users.route("/delete_account")
+@users.route("/<userId>")
 @auth_required
-def delete_account(user: User):
-    user.delete()
+def destroy(userId=None, user=None):
+
+    try:
+        return_user = User.query.filter_by(id=userId).first()
+    except:
+        return {"success": False, "errors": ["An unexpected error occurred"]}, 400
+
+    if return_user is None:
+        return {"success": False, "errors": ["The user doesn't exist"]}, 400
+
+    if user.id != return_user.id:
+        return {"success": False, "errors": ["You don't have the permissions to delete the user."]}, 401
+
+    db.session.delete(user)
     db.session.commit()
-    return {"successful": True}
->>>>>>> 581ec2dbc6e50072a57f5e73c41388e71d1fb955
+    return {"success": True}
