@@ -1,4 +1,11 @@
-import React, { FC, useCallback, useContext, useEffect, useState } from "react";
+import React, {
+  FC,
+  Fragment,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { useNavigate } from "react-router-dom";
 import { get, update } from "../../../api/api";
 import UseVerifyAuth from "../../../hooks/UseVerifyAuth/UseVerifyAuth";
@@ -9,11 +16,12 @@ import { MentorType } from "../../../types/Mentor";
 import Tag from "../../../components/UI/Tag/Tag";
 import ContentCard from "../../../components/UI/ContentCard/ContentCard";
 import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
+import LoadingSpinner from "../../../components/UI/LoadingSpinner/LoadingSpinner";
 
 interface YourMentorProps {}
 
 const YourMentor: FC<YourMentorProps> = () => {
-  const { mentee_mentor = null, mentee_id = null } = UseVerifyUser<{
+  const { mentee_mentor = undefined, mentee_id = undefined } = UseVerifyUser<{
     mentee_mentor: MentorType | null | undefined;
     mentee_id: number | null | undefined;
   }>({
@@ -88,7 +96,12 @@ const YourMentor: FC<YourMentorProps> = () => {
             ]}
           />
         ) : (
-          <p>You don't have a mentor at the moment. </p>
+          <Fragment>
+            {mentee_id === undefined && <LoadingSpinner />}
+            {mentee_id === null && (
+              <p>You don't have a mentor at the moment. </p>
+            )}
+          </Fragment>
         )}
       </div>
     </DashboardSubpageLayout>

@@ -8,6 +8,7 @@ import MentorshipRequestCard from "./MentorshipRequestCard/MentorshipRequestCard
 import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
 import { MenteeType } from "../../../types/Mentee";
 import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
+import LoadingSpinner from "../../../components/UI/LoadingSpinner/LoadingSpinner";
 
 interface YourMenteeProps {}
 
@@ -21,8 +22,8 @@ type Verifier = {
 const YourMentees: FC<YourMenteeProps> = () => {
   const {
     userId = null,
-    mentor_mentees: mentees = [],
-    mentor_mentorship_requests_received: mentorshipRequests = [],
+    mentor_mentees: mentees = undefined,
+    mentor_mentorship_requests_received: mentorshipRequests = undefined,
   } = UseVerifyUser<Verifier>({
     userDataPolicies: [
       {
@@ -40,11 +41,11 @@ const YourMentees: FC<YourMenteeProps> = () => {
 
   const [filterEvents, setFilterEvents] = useState<number>(0);
 
-  const menteeList = mentees.map((mentee) => (
+  const menteeList = mentees?.map((mentee) => (
     <MenteeCard key={mentee.id} mentee={mentee} />
   ));
 
-  const mentorshipRequestsList = mentorshipRequests.map((req) => (
+  const mentorshipRequestsList = mentorshipRequests?.map((req) => (
     <MentorshipRequestCard key={req.mentee.id} mentorshipRequest={req} />
   ));
 
@@ -74,13 +75,17 @@ const YourMentees: FC<YourMenteeProps> = () => {
       {filterEvents === 0 && (
         <>
           <div className={styles.YourMentees}>
-            {menteeList.length === 0 ? (
-              "You currently don't have any mentees"
+            {menteeList ? (
+              menteeList.length === 0 ? (
+                "You currently don't have any mentees"
+              ) : (
+                <>
+                  <Title text={`No. of Mentees: ${menteeList.length}`} />
+                  {menteeList}
+                </>
+              )
             ) : (
-              <>
-                <Title text={`No. of Mentees: ${menteeList.length}`} />
-                {menteeList}
-              </>
+              <LoadingSpinner />
             )}
           </div>
         </>
@@ -89,15 +94,19 @@ const YourMentees: FC<YourMenteeProps> = () => {
       {filterEvents === 1 && (
         <>
           <div className={styles.YourMentees}>
-            {mentorshipRequestsList.length === 0 ? (
-              "You currently don't have any mentorship requests"
+            {mentorshipRequestsList ? (
+              mentorshipRequestsList.length === 0 ? (
+                "You currently don't have any mentorship requests"
+              ) : (
+                <>
+                  <Title
+                    text={`No. of Mentorship Requests : ${mentorshipRequestsList.length}`}
+                  />
+                  {mentorshipRequestsList}
+                </>
+              )
             ) : (
-              <>
-                <Title
-                  text={`No. of Mentorship Requests : ${mentorshipRequestsList.length}`}
-                />
-                {mentorshipRequestsList}
-              </>
+              <LoadingSpinner />
             )}
           </div>
         </>

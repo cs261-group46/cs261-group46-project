@@ -3,11 +3,12 @@ import { index } from "../../../api/api";
 import MentorCard from "./MentorCard/MentorCard";
 import styles from "./MentorIndex.module.scss";
 import { MentorType } from "../../../types/Mentor";
+import LoadingSpinner from "../../UI/LoadingSpinner/LoadingSpinner";
 
 interface MentorIndexProps {}
 
 const MentorIndex: FC<MentorIndexProps> = () => {
-  const [mentors, setMentors] = useState<MentorType[]>([]);
+  const [mentors, setMentors] = useState<MentorType[]>();
 
   const indexMentors = async () => {
     try {
@@ -37,14 +38,17 @@ const MentorIndex: FC<MentorIndexProps> = () => {
     indexMentors();
   }, []);
 
-  const mentorCards = mentors.map((mentor) => (
+  const mentorCards = mentors?.map((mentor) => (
     <MentorCard key={mentor.id} mentor={mentor} />
   ));
 
   return (
     <div className={styles.MentorIndex} data-testid="MentorIndex">
       {mentorCards}
-      {mentorCards.length === 0 && "Sorry, couldn't find any available mentors"}
+      {mentorCards &&
+        mentorCards.length === 0 &&
+        "Sorry, couldn't find any available mentors"}
+      {mentorCards === undefined && <LoadingSpinner />}
     </div>
   );
 };
