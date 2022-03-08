@@ -49,7 +49,7 @@ const LoadingSpinner: FC<LoadingSpinnerProps> = (props) => {
   return (
     <div
       className={`${styles.LoadingSpinner} ${
-        type === "inline" && styles.inline
+        type === "inline" ? styles.inline : styles.centered
       }`}
       data-testid="LoadingSpinner"
     >
