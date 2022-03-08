@@ -11,9 +11,15 @@ function SelectedOptions<T>(props: PropsWithChildren<SelectedOptionsProps<T>>) {
   const selected = props.selected.map((option, index) => (
     <span className={styles.SelectedOption} key={index}>
       <p>{option.label}</p>
-      <button onClick={props.onRemoveSelected.bind(null, option.value)}>
+      <input
+        type="button"
+        onClick={(e) => {
+          e.stopPropagation();
+          props.onRemoveSelected.bind(null, option.value);
+        }}
+      >
         X
-      </button>
+      </input>
     </span>
   ));
 

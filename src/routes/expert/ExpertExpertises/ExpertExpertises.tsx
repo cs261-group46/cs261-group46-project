@@ -24,8 +24,8 @@ import { TopicType } from "../../../types/Topic";
 
 interface ExpertExpertisesProps {}
 
-function validateInterests(_experises: SearchSelectOptions<number>) {
-  return true;
+function validateInterests(_expertises: SearchSelectOptions<number>) {
+  return _expertises.length > 0;
 }
 
 const ExpertExpertises: FC<ExpertExpertisesProps> = () => {
