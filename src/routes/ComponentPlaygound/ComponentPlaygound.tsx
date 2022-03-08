@@ -88,7 +88,7 @@ const ComponentPlaygound: FC<ComponentPlaygoundProps> = () => {
         Rating: <StarPicker type={"inline"} value={3} size={"32"} />
       </p>
 
-      <LoadingSpinner />
+      <LoadingSpinner size={50} />
     </div>
   );
 };
