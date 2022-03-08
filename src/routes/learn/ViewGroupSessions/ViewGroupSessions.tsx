@@ -57,7 +57,10 @@ const ViewGroupSessions: FC<ViewGroupSessionsProps> = () => {
     groupSessions?.slice(page * pageSize, (page + 1) * pageSize) ?? [];
   const [selectedWorkshop, setSelectedWorkshop] = useState<GroupSessionType>();
 
-  const { userId = null, meetings_invited = [] } = UseVerifyUser<{
+  const {
+    // userId,
+    meetings_invited = [],
+  } = UseVerifyUser<{
     userId: number | null | undefined;
     meetings_invited: MeetingType[] | null | undefined;
   }>({

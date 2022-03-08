@@ -1,12 +1,6 @@
-import React, {
-  FC,
-  FormEventHandler,
-  useCallback,
-  useContext,
-  useEffect,
-} from "react";
+import React, { FC, FormEventHandler, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { get, index, update } from "../../../api/api";
+import { index, update } from "../../../api/api";
 import Button from "../../../components/UI/Button/Button";
 import SearchSelect, {
   SearchSelectOption,
@@ -16,10 +10,8 @@ import {
   SearchPromise,
 } from "../../../components/UI/FormInput/SearchSelect/SearchSelect";
 import useInput from "../../../hooks/UseInput/UseInput";
-import UseVerifyAuth from "../../../hooks/UseVerifyAuth/UseVerifyAuth";
 import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
 import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
-import UserDataContext from "../../../store/UserDataContext";
 import { TopicType } from "../../../types/Topic";
 
 interface ExpertExpertisesProps {}

@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useMemo, useState } from "react";
+import React, { FC, useMemo, useState } from "react";
 import styles from "./YourGroupSessions.module.scss";
 import Button from "../../../components/UI/Button/Button";
 import PageStepper from "../../../components/UI/PageStepper/PageStepper";
@@ -34,7 +34,10 @@ const getDateString = (date: Date, duration: number) => {
 };
 
 const YourGroupSessions: FC<YourGroupSessionsProps> = () => {
-  const { expert_id = null, meetings_hosted = [] } = UseVerifyUser<{
+  const {
+    // expert_id,
+    meetings_hosted = [],
+  } = UseVerifyUser<{
     expert_id: number | null | undefined;
     meetings_hosted: MeetingType[] | null | undefined;
   }>({
@@ -71,8 +74,7 @@ const YourGroupSessions: FC<YourGroupSessionsProps> = () => {
   const groupSessionsOnPage: MeetingType[] =
     expert_meetings_hosted?.slice(page * pageSize, (page + 1) * pageSize) ?? [];
 
-  const [selectedGroupSessions, setSelectedGroupSessions] =
-    useState<MeetingType>();
+  const [selectedGroupSessions] = useState<MeetingType>();
 
   const editHandler = () => {};
 

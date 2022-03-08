@@ -20,7 +20,7 @@ type Verifier = {
 
 const YourMentees: FC<YourMenteeProps> = () => {
   const {
-    userId = null,
+    // userId,
     mentor_mentees: mentees = [],
     mentor_mentorship_requests_received: mentorshipRequests = [],
   } = UseVerifyUser<Verifier>({

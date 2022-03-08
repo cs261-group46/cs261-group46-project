@@ -1,4 +1,4 @@
-import React, { FC, FormEventHandler, useContext } from "react";
+import React, { FC, FormEventHandler } from "react";
 // import styles from './MentorSignup.module.scss';
 import {
   SearchSelectOptions,
@@ -17,7 +17,10 @@ import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
 interface MentorSignupProps {}
 
 const MentorSignup: FC<MentorSignupProps> = () => {
-  const { userId = null, mentor_id = null } = UseVerifyUser<{
+  const {
+    userId = null,
+    // mentor_id = null
+  } = UseVerifyUser<{
     userId: number | null | undefined;
     mentor_id: number | null | undefined;
   }>({

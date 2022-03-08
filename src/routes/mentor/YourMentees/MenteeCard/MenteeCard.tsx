@@ -4,7 +4,7 @@ import BarChart from "../../../../components/UI/BarChart/BarChart";
 import { MenteeType } from "../../../../types/Mentee";
 import Tag from "../../../../components/UI/Tag/Tag";
 import ContentCard from "../../../../components/UI/ContentCard/ContentCard";
-import { destroy, update } from "../../../../api/api";
+import { update } from "../../../../api/api";
 
 //Probably need to pass mentor id along
 interface MenteeProp {

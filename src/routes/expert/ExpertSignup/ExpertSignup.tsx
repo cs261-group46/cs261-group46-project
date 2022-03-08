@@ -1,4 +1,4 @@
-import React, { FC, FormEventHandler, useContext } from "react";
+import React, { FC, FormEventHandler } from "react";
 
 import {
   SearchSelectOptions,
@@ -7,17 +7,18 @@ import {
 import useInput from "../../../hooks/UseInput/UseInput";
 import Button from "../../../components/UI/Button/Button";
 import { useNavigate } from "react-router-dom";
-import useVerifyAuth from "../../../hooks/UseVerifyAuth/UseVerifyAuth";
 import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
 import { index, store } from "../../../api/api";
 import SearchSelect from "../../../components/UI/FormInput/SearchSelect/SearchSelect";
-import UserDataContext from "../../../store/UserDataContext";
 import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
 
 interface ExpertSignupProps {}
 
 const ExpertSignup: FC<ExpertSignupProps> = () => {
-  const { userId = null, expert_id = null } = UseVerifyUser<{
+  const {
+    userId = null,
+    // expert_id
+  } = UseVerifyUser<{
     userId: number | null | undefined;
     expert_id: number | null | undefined;
   }>({
