@@ -9,6 +9,7 @@ import Tag from "../../../components/UI/Tag/Tag";
 import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
 import { MeetingType } from "../../../types/Meeting";
 import { UserType } from "../../../types/User";
+import { update } from "../../../api/api";
 
 interface ViewGroupSessionsProps {}
 
@@ -71,14 +72,38 @@ const ViewGroupSessions: FC<ViewGroupSessionsProps> = () => {
     ],
   });
 
-  const joinHandler = () => {};
+  const joinHandler = async (groupSessionId: number) => {
+    try {
+      const body = {
+        confirmed: true,
+        user_id: userId,
+      };
+      await update({
+        resource: "meetings",
+        entity: groupSessionId,
+        body: body,
+      });
+    } catch (errors) {
+      console.log(errors);
+    }
+  };
 
   useEffect(() => {
     if (meetings_invited)
       setGroupSessions(
-        meetings_invited.filter(
-          (meeting) => meeting.meeting_type !== "one on one meeting"
-        )
+        meetings_invited
+          .filter(
+            (meeting) =>
+              meeting.meeting_type !== "one on one meeting" &&
+              meeting.attendees.length < meeting.capacity
+          )
+          .sort(function (a, b) {
+            // Turn your strings into dates, and then subtract them
+            // to get a value that is either negative, positive, or zero.
+            const a_date = new Date(a.date);
+            const b_date = new Date(b.date);
+            return b_date.getTime() - a_date.getTime();
+          })
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(meetings_invited)]);
@@ -88,6 +113,15 @@ const ViewGroupSessions: FC<ViewGroupSessionsProps> = () => {
       <div className={styles.ViewGroupSessions} data-testid="ViewGroupSessions">
         {groupSessions && groupSessions.length > 0 ? (
           groupSessionsOnPage.map((groupSession) => {
+            console.log(groupSession);
+
+            const host = (
+              <div>
+                {groupSession.host?.first_name} {groupSession.host?.last_name}
+                <br />
+                {groupSession.host?.email}
+              </div>
+            );
             return (
               <ContentCard
                 key={groupSession.id}
@@ -95,7 +129,7 @@ const ViewGroupSessions: FC<ViewGroupSessionsProps> = () => {
                 sections={[
                   {
                     title: "Host",
-                    content: `${groupSession.host?.first_name} ${groupSession.host?.last_name}`,
+                    content: host,
                   },
                   {
                     title: "When",
@@ -107,6 +141,13 @@ const ViewGroupSessions: FC<ViewGroupSessionsProps> = () => {
                   {
                     title: "Where",
                     content: groupSession.room.name,
+                  },
+                  {
+                    className: styles.tags,
+                    title: "Topics Covered",
+                    content: groupSession.topics.map((topic) => (
+                      <Tag key={topic.id}>{topic.name}</Tag>
+                    )),
                   },
                   {
                     title: "Capacity",
@@ -124,7 +165,7 @@ const ViewGroupSessions: FC<ViewGroupSessionsProps> = () => {
                 buttons={[
                   {
                     buttonStyle: "primary",
-                    onClick: joinHandler,
+                    onClick: joinHandler.bind(null, groupSession.id),
                     children: "Join",
                   },
                 ]}

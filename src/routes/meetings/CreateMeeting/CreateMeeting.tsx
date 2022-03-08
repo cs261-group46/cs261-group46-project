@@ -134,7 +134,7 @@ const CreateMeeting: FC<CreateMeetingProps> = () => {
     blurHandler: roomBlurHandler,
     isInputValid: roomInputValid,
     isValueValid: roomValueValid,
-  } = useInput<SearchSelectOptions<Room>>([], (value) => value.length > 0);
+  } = useInput<SearchSelectOptions<Room>>([], (value) => value.length === 1);
 
   const {
     enteredValue: link,
@@ -179,7 +179,7 @@ const CreateMeeting: FC<CreateMeetingProps> = () => {
     blurHandler: descriptionBlurHandler,
     isInputValid: descriptionInputValid,
     isValueValid: descriptionValueValid,
-  } = useInput<string>("");
+  } = useInput<string>("", (d) => d.length < 1000);
 
   const roomsSearchPromise: SearchPromise<Room> = useCallback(
     async (search) => {
@@ -205,7 +205,7 @@ const CreateMeeting: FC<CreateMeetingProps> = () => {
     const body = {
       title: title,
       host: userId,
-      room: room[0].value,
+      room: room[0].value.id,
       link: link,
       date: date,
       startTime: startTime,

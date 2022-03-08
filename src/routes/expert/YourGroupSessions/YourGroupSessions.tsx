@@ -35,8 +35,8 @@ const getDateString = (date: Date, duration: number) => {
 
 const YourGroupSessions: FC<YourGroupSessionsProps> = () => {
   const {
-    // expert_id,
-    meetings_hosted = [],
+    // expert_id
+    meetings_hosted = []
   } = UseVerifyUser<{
     expert_id: number | null | undefined;
     meetings_hosted: MeetingType[] | null | undefined;
@@ -85,6 +85,13 @@ const YourGroupSessions: FC<YourGroupSessionsProps> = () => {
         resource: "meetings",
         entity: meetingId,
       });
+
+      stateChangingHandler((prevState) => ({
+        ...prevState,
+        meetings_hosted: prevState.meetings_hosted.filter(
+          (m) => m.id !== meetingId
+        ),
+      }));
     } catch (errors) {
       console.log(errors);
     }
@@ -155,7 +162,10 @@ const YourGroupSessions: FC<YourGroupSessionsProps> = () => {
                   >
                     <Button
                       buttonStyle="primary"
-                      onClick={removeHandler.bind(null, meeting.id)}
+                      onClick={() => {
+                        setShowWarning(false);
+                        removeHandler(meeting.id);
+                      }}
                     >
                       Confirm
                     </Button>

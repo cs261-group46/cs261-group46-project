@@ -1,4 +1,4 @@
-import React, { FC, FormEventHandler } from "react";
+import React, { FC } from "react";
 
 import {
   SearchSelectOptions,
@@ -65,8 +65,7 @@ const ExpertSignup: FC<ExpertSignupProps> = () => {
     }
   };
 
-  const submitHandler: FormEventHandler = (event) => {
-    event.preventDefault();
+  const submitHandler = () => {
     if (isSkillsValueValid) {
       sendBecomeExpertData();
     } else {
@@ -102,21 +101,19 @@ const ExpertSignup: FC<ExpertSignupProps> = () => {
 
   return (
     <DashboardSubpageLayout title={"Become an Expert"}>
-      <form onSubmit={submitHandler}>
-        <SearchSelect
-          id={"expertises"}
-          label={"Areas of Expertises"}
-          isValid={isSkillsInputValid}
-          value={enteredSkills}
-          onChange={skillsChangeHandler}
-          onBlur={skillsBlurHandler}
-          searchPromise={searchPromise}
-        />
+      <SearchSelect
+        id={"expertises"}
+        label={"Areas of Expertises"}
+        isValid={isSkillsInputValid}
+        value={enteredSkills}
+        onChange={skillsChangeHandler}
+        onBlur={skillsBlurHandler}
+        searchPromise={searchPromise}
+      />
 
-        <Button icon="👑" type="submit" buttonStyle={"primary"}>
-          Become an Expert
-        </Button>
-      </form>
+      <Button icon="👑" onClick={submitHandler} buttonStyle={"primary"}>
+        Become an Expert
+      </Button>
 
       <div data-testid="ExpertSignup" />
     </DashboardSubpageLayout>

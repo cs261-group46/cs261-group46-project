@@ -1,4 +1,4 @@
-import React, { FC, FormEventHandler } from "react";
+import React, { FC } from "react";
 import { useNavigate } from "react-router-dom";
 import { index, store } from "../../../api/api";
 import Button from "../../../components/UI/Button/Button";
@@ -14,8 +14,8 @@ import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpage
 
 interface MenteeSignupProps {}
 
-function validateInterests(_experises: SearchSelectOptions<number>) {
-  return true;
+function validateInterests(_interests: SearchSelectOptions<number>) {
+  return _interests.length > 0;
 }
 
 const MenteeSignup: FC<MenteeSignupProps> = () => {
@@ -103,8 +103,7 @@ const MenteeSignup: FC<MenteeSignupProps> = () => {
     interestsBlurHandler();
   };
 
-  const submitHandler: FormEventHandler = (event) => {
-    event.preventDefault();
+  const submitHandler = () => {
     if (isValueInterestsValid && isAboutValueValid) {
       sendBecomeMenteeData();
     } else {
@@ -114,33 +113,31 @@ const MenteeSignup: FC<MenteeSignupProps> = () => {
 
   return (
     <DashboardSubpageLayout title="Your Interests">
-      <form onSubmit={submitHandler}>
-        <SearchSelect
-          id="interests"
-          label="Fields of Interests"
-          value={enteredInterests}
-          isValid={isInputInterestsValid}
-          onChange={interestsChangeHandler}
-          onBlur={interestsBlurHandler}
-          icon="💪"
-          searchPromise={searchPromise}
-          type={"draggable"}
-        />
+      <SearchSelect
+        id="interests"
+        label="Fields of Interests"
+        value={enteredInterests}
+        isValid={isInputInterestsValid}
+        onChange={interestsChangeHandler}
+        onBlur={interestsBlurHandler}
+        icon="💪"
+        searchPromise={searchPromise}
+        type={"draggable"}
+      />
 
-        <BigTextInput
-          id={"profile"}
-          label={"About me"}
-          placeholder={"I can play Electric Guitar"}
-          value={enteredAbout}
-          isValid={isAboutInputValid}
-          onChange={aboutChangeHandler}
-          onBlur={aboutBlurHandler}
-        />
+      <BigTextInput
+        id={"profile"}
+        label={"About me"}
+        placeholder={"I can play Electric Guitar"}
+        value={enteredAbout}
+        isValid={isAboutInputValid}
+        onChange={aboutChangeHandler}
+        onBlur={aboutBlurHandler}
+      />
 
-        <Button icon="➡️" buttonStyle="primary" type="submit">
-          Apply
-        </Button>
-      </form>
+      <Button icon="➡️" buttonStyle="primary" onClick={submitHandler}>
+        Apply
+      </Button>
       <div data-testid={"Interests"} />
     </DashboardSubpageLayout>
   );

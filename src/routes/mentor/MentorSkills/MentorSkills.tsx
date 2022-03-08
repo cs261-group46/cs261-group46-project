@@ -1,4 +1,4 @@
-import React, { FC, FormEventHandler, useCallback, useEffect } from "react";
+import React, { FC, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { index, update } from "../../../api/api";
 import Button from "../../../components/UI/Button/Button";
@@ -14,8 +14,8 @@ import { TopicWithPriorityType } from "../../../types/Topic";
 
 interface MentorSkillsProps {}
 
-function validateInterests(_experises: SearchSelectOptions<number>) {
-  return true;
+function validateInterests(_skills: SearchSelectOptions<number>) {
+  return _skills.length > 0;
 }
 
 const MentorSkills: FC<MentorSkillsProps> = () => {
@@ -109,8 +109,7 @@ const MentorSkills: FC<MentorSkillsProps> = () => {
     }
   };
 
-  const submitHandler: FormEventHandler = (event) => {
-    event.preventDefault();
+  const submitHandler = () => {
     if (isValueSkillsValid) {
       updateSkills();
     } else {
@@ -120,23 +119,21 @@ const MentorSkills: FC<MentorSkillsProps> = () => {
 
   return (
     <DashboardSubpageLayout title="Your Mentorship Areas">
-      <form onSubmit={submitHandler}>
-        <SearchSelect
-          id="skills"
-          label="Areas of Mentorship"
-          value={enteredSkills}
-          isValid={isInputSkillsValid}
-          onChange={skillsChangeHandler}
-          onBlur={skillsBlurHandler}
-          icon="💪"
-          searchPromise={searchPromise}
-          type={"draggable"}
-        />
+      <SearchSelect
+        id="skills"
+        label="Areas of Mentorship"
+        value={enteredSkills}
+        isValid={isInputSkillsValid}
+        onChange={skillsChangeHandler}
+        onBlur={skillsBlurHandler}
+        icon="💪"
+        searchPromise={searchPromise}
+        type={"draggable"}
+      />
 
-        <Button icon="➡️" buttonStyle="primary" type="submit">
-          Apply
-        </Button>
-      </form>
+      <Button icon="➡️" buttonStyle="primary" onClick={submitHandler}>
+        Apply
+      </Button>
       <div data-testid={"MentorSkills"} />
     </DashboardSubpageLayout>
     // <div className={styles.MentorSkills} data-testid="MentorSkills">

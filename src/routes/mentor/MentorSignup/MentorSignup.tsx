@@ -1,4 +1,4 @@
-import React, { FC, FormEventHandler } from "react";
+import React, { FC } from "react";
 // import styles from './MentorSignup.module.scss';
 import {
   SearchSelectOptions,
@@ -89,8 +89,7 @@ const MentorSignup: FC<MentorSignupProps> = () => {
     capacityBlurHandler();
   };
 
-  const submitHandler: FormEventHandler = (event) => {
-    event.preventDefault();
+  const submitHandler = () => {
     if (isSkillsValueValid && isAboutValueValid && isCapacityValueValid) {
       sendBecomeMentorData();
     } else {
@@ -126,43 +125,41 @@ const MentorSignup: FC<MentorSignupProps> = () => {
 
   return (
     <DashboardSubpageLayout title={"Become a Mentor"}>
-      <form onSubmit={submitHandler}>
-        <SearchSelect
-          id={"skills"}
-          label={"Mentorship areas"}
-          isValid={isSkillsInputValid}
-          value={enteredSkills}
-          onChange={skillsChangeHandler}
-          onBlur={skillsBlurHandler}
-          searchPromise={searchPromise}
-          type={"draggable"}
-        />
+      <SearchSelect
+        id={"skills"}
+        label={"Mentorship areas"}
+        isValid={isSkillsInputValid}
+        value={enteredSkills}
+        onChange={skillsChangeHandler}
+        onBlur={skillsBlurHandler}
+        searchPromise={searchPromise}
+        type={"draggable"}
+      />
 
-        <BigTextInput
-          id={"profile"}
-          label={"About me"}
-          placeholder={"I can play Electric Guitar"}
-          value={enteredAbout}
-          isValid={isAboutInputValid}
-          onChange={aboutChangeHandler}
-          onBlur={aboutBlurHandler}
-        />
+      <BigTextInput
+        id={"profile"}
+        label={"About me"}
+        placeholder={"I can play Electric Guitar"}
+        value={enteredAbout}
+        isValid={isAboutInputValid}
+        onChange={aboutChangeHandler}
+        onBlur={aboutBlurHandler}
+      />
 
-        <TextInput
-          id={"capacity"}
-          label={"How many mentees do you want?"}
-          placeholder={"e.g. 5"}
-          value={enteredCapacity}
-          type={"number"}
-          isValid={isCapacityInputValid}
-          onChange={capacityChangeHandler}
-          onBlur={capacityBlurHandler}
-        />
+      <TextInput
+        id={"capacity"}
+        label={"How many mentees do you want?"}
+        placeholder={"e.g. 5"}
+        value={enteredCapacity}
+        type={"number"}
+        isValid={isCapacityInputValid}
+        onChange={capacityChangeHandler}
+        onBlur={capacityBlurHandler}
+      />
 
-        <Button icon="👑" type="submit" buttonStyle={"primary"}>
-          Become a Mentor
-        </Button>
-      </form>
+      <Button icon="👑" onClick={submitHandler} buttonStyle={"primary"}>
+        Become a Mentor
+      </Button>
 
       <div data-testid="MentorSignup" />
     </DashboardSubpageLayout>

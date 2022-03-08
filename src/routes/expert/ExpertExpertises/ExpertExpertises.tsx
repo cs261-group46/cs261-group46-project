@@ -1,4 +1,4 @@
-import React, { FC, FormEventHandler, useEffect } from "react";
+import React, { FC, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { index, update } from "../../../api/api";
 import Button from "../../../components/UI/Button/Button";
@@ -16,8 +16,8 @@ import { TopicType } from "../../../types/Topic";
 
 interface ExpertExpertisesProps {}
 
-function validateInterests(_experises: SearchSelectOptions<number>) {
-  return true;
+function validateInterests(_expertises: SearchSelectOptions<number>) {
+  return _expertises.length > 0;
 }
 
 const ExpertExpertises: FC<ExpertExpertisesProps> = () => {
@@ -101,8 +101,7 @@ const ExpertExpertises: FC<ExpertExpertisesProps> = () => {
     }
   };
 
-  const submitHandler: FormEventHandler = (event) => {
-    event.preventDefault();
+  const submitHandler = () => {
     if (isValueExpertisesValid) {
       updateExpertises();
     } else {
@@ -112,22 +111,20 @@ const ExpertExpertises: FC<ExpertExpertisesProps> = () => {
 
   return (
     <DashboardSubpageLayout title="Your Fields of Expertise">
-      <form onSubmit={submitHandler}>
-        <SearchSelect
-          id="expertises"
-          label="Fields of Expertise"
-          value={enteredExpertises}
-          isValid={isInputExpertisesValid}
-          onChange={expertisesChangeHandler}
-          onBlur={expertisesBlurHandler}
-          icon="💪"
-          searchPromise={searchPromise}
-        />
+      <SearchSelect
+        id="expertises"
+        label="Fields of Expertise"
+        value={enteredExpertises}
+        isValid={isInputExpertisesValid}
+        onChange={expertisesChangeHandler}
+        onBlur={expertisesBlurHandler}
+        icon="💪"
+        searchPromise={searchPromise}
+      />
 
-        <Button icon="➡️" buttonStyle="primary" type="submit">
-          Apply
-        </Button>
-      </form>
+      <Button icon="➡️" buttonStyle="primary" onClick={submitHandler}>
+        Apply
+      </Button>
       <div data-testid={"ExpertExpertises"} />
     </DashboardSubpageLayout>
     // <div className={styles.ExpertExpertises} data-testid="ExpertExpertises">
