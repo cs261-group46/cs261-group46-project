@@ -14,8 +14,8 @@ import { TopicWithPriorityType } from "../../../types/Topic";
 
 interface InterestsProps {}
 
-function validateInterests(_experises: SearchSelectOptions<number>) {
-  return true;
+function validateInterests(_interests: SearchSelectOptions<number>) {
+  return _interests.length > 0;
 }
 
 const Interests: FC<InterestsProps> = () => {
@@ -106,8 +106,7 @@ const Interests: FC<InterestsProps> = () => {
     }
   };
 
-  const submitHandler: FormEventHandler = (event) => {
-    event.preventDefault();
+  const submitHandler = () => {
     if (isValueInterestsValid) {
       updateInterests();
     } else {
@@ -117,23 +116,21 @@ const Interests: FC<InterestsProps> = () => {
 
   return (
     <DashboardSubpageLayout title="Your Interests">
-      <form onSubmit={submitHandler}>
-        <SearchSelect
-          id="interests"
-          label="Fields of Interests"
-          value={enteredInterests}
-          isValid={isInputInterestsValid}
-          onChange={interestsChangeHandler}
-          onBlur={interestsBlurHandler}
-          icon="💪"
-          searchPromise={searchPromise}
-          type={"draggable"}
-        />
+      <SearchSelect
+        id="interests"
+        label="Fields of Interests"
+        value={enteredInterests}
+        isValid={isInputInterestsValid}
+        onChange={interestsChangeHandler}
+        onBlur={interestsBlurHandler}
+        icon="💪"
+        searchPromise={searchPromise}
+        type={"draggable"}
+      />
 
-        <Button icon="➡️" buttonStyle="primary" type="submit">
-          Apply
-        </Button>
-      </form>
+      <Button icon="➡️" buttonStyle="primary" onClick={submitHandler}>
+        Apply
+      </Button>
       <div data-testid={"Interests"} />
     </DashboardSubpageLayout>
     // <div className={styles.Interests} data-testid="Interests">

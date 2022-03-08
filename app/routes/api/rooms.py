@@ -29,7 +29,7 @@ def index(user=None):
         schema = RoomSchema(only=fields, many=True, exclude=["meetings"])
         result = schema.dump(return_rooms)
 
-        return {"success": True, "data": {"topics": result}}, 200
+        return {"success": True, "data": {"rooms": result}}, 200
 
     except:
         return {"success": False, "errors": ["An unexpected error occurred"]}, 400

@@ -1,4 +1,11 @@
-import React, { FC, useCallback, useEffect, useMemo, useState } from "react";
+import React, {
+  FC,
+  Fragment,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import styles from "./YourGroupSessions.module.scss";
 import Button from "../../../components/UI/Button/Button";
 import PageStepper from "../../../components/UI/PageStepper/PageStepper";
@@ -9,6 +16,7 @@ import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
 import { MeetingType } from "../../../types/Meeting";
 import { destroy } from "../../../api/api";
 import SystemMessage from "../../../components/UI/SystemMessage/SystemMessage";
+import LoadingSpinner from "../../../components/UI/LoadingSpinner/LoadingSpinner";
 
 interface YourGroupSessionsProps {}
 
@@ -34,9 +42,13 @@ const getDateString = (date: Date, duration: number) => {
 };
 
 const YourGroupSessions: FC<YourGroupSessionsProps> = () => {
-  const { expert_id = null, meetings_hosted = [] } = UseVerifyUser<{
-    expert_id: number | null | undefined;
-    meetings_hosted: MeetingType[] | null | undefined;
+  const {
+    expert_id = null,
+    meetings_hosted = [],
+    stateChangingHandler,
+  } = UseVerifyUser<{
+    expert_id: number | null;
+    meetings_hosted: MeetingType[] | [];
   }>({
     userDataPolicies: [
       {
@@ -82,6 +94,13 @@ const YourGroupSessions: FC<YourGroupSessionsProps> = () => {
         resource: "meetings",
         entity: meetingId,
       });
+
+      stateChangingHandler((prevState) => ({
+        ...prevState,
+        meetings_hosted: prevState.meetings_hosted.filter(
+          (m) => m.id !== meetingId
+        ),
+      }));
     } catch (errors) {
       console.log(errors);
     }
@@ -92,78 +111,84 @@ const YourGroupSessions: FC<YourGroupSessionsProps> = () => {
       <Button href="/expert/group-sessions/create">Create a Session</Button>
       <div className={styles.YourGroupSessions} data-testid="YourGroupSessions">
         {groupSessionsOnPage ? (
-          groupSessionsOnPage.map((meeting) => {
-            if (!meeting.attendees) meeting.attendees = [];
-            return (
-              <>
-                <ContentCard
-                  key={meeting.id}
-                  heading={meeting.title}
-                  sections={[
-                    {
-                      title: "When",
-                      content: getDateString(
-                        new Date(meeting.date),
-                        meeting.duration
-                      ),
-                    },
-                    {
-                      title: "Where",
-                      content: meeting.room.name,
-                    },
-                    {
-                      title: "Capacity",
-                      content: `${
-                        meeting.capacity - meeting.attendees.length
-                      } / ${meeting.capacity} slots left`,
-                    },
-                    {
-                      className: styles.tags,
-                      title: "Type",
-                      content: <Tag>{meeting.meeting_type}</Tag>,
-                    },
-                    meeting.topics.length > 0 && {
-                      className: styles.tags,
-                      title: "Topics",
-                      content: meeting.topics.map((topic) => (
-                        <Tag key={topic.id}>{topic.name}</Tag>
-                      )),
-                    },
-                  ]}
-                  buttons={[
-                    {
-                      buttonStyle: "primary",
-                      onClick: editHandler,
-                      children: "Edit",
-                    },
-                    {
-                      onClick: setShowWarning.bind(null, true),
-                      children: "Remove",
-                    },
-                  ]}
-                />
-                {showWarning && (
-                  <SystemMessage
-                    sort={"popup"}
-                    type={"alert"}
-                    description={`Are you sure you want to delete the ${meeting.title} session?`}
-                    visible={showWarning}
-                    onClose={setShowWarning.bind(null, false)}
-                  >
-                    <Button
-                      buttonStyle="primary"
-                      onClick={removeHandler.bind(null, meeting.id)}
+          <Fragment>
+            {groupSessionsOnPage.map((meeting) => {
+              if (!meeting.attendees) meeting.attendees = [];
+              return (
+                <>
+                  <ContentCard
+                    key={meeting.id}
+                    heading={meeting.title}
+                    sections={[
+                      {
+                        title: "When",
+                        content: getDateString(
+                          new Date(meeting.date),
+                          meeting.duration
+                        ),
+                      },
+                      {
+                        title: "Where",
+                        content: meeting.room.name,
+                      },
+                      {
+                        title: "Capacity",
+                        content: `${
+                          meeting.capacity - meeting.attendees.length
+                        } / ${meeting.capacity} slots left`,
+                      },
+                      {
+                        className: styles.tags,
+                        title: "Type",
+                        content: <Tag>{meeting.meeting_type}</Tag>,
+                      },
+                      meeting.topics.length > 0 && {
+                        className: styles.tags,
+                        title: "Topics",
+                        content: meeting.topics.map((topic) => (
+                          <Tag key={topic.id}>{topic.name}</Tag>
+                        )),
+                      },
+                    ]}
+                    buttons={[
+                      {
+                        buttonStyle: "primary",
+                        onClick: editHandler,
+                        children: "Edit",
+                      },
+                      {
+                        onClick: setShowWarning.bind(null, true),
+                        children: "Remove",
+                      },
+                    ]}
+                  />
+                  {showWarning && (
+                    <SystemMessage
+                      sort={"popup"}
+                      type={"alert"}
+                      description={`Are you sure you want to delete the ${meeting.title} session?`}
+                      visible={showWarning}
+                      onClose={setShowWarning.bind(null, false)}
                     >
-                      Confirm
-                    </Button>
-                    <Button onClick={setShowWarning.bind(null, false)}>
-                      Cancel
-                    </Button>
-                  </SystemMessage>
-                )}
-              </>
-            );
-          })
+                      <Button
+                        buttonStyle="primary"
+                        onClick={() => {
+                          setShowWarning(false);
+                          removeHandler(meeting.id);
+                        }}
+                      >
+                        Confirm
+                      </Button>
+                      <Button onClick={setShowWarning.bind(null, false)}>
+                        Cancel
+                      </Button>
+                    </SystemMessage>
+                  )}
+                </>
+              );
+            })}
+            {groupSessionsOnPage.length === 0 && <LoadingSpinner />}
+          </Fragment>
         ) : (
           // else not loaded yet
           <p>You have no group sessions</p>

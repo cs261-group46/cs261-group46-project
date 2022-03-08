@@ -6,8 +6,9 @@ export type MeetingType = {
   host?: {
     first_name: string;
     last_name: string;
+    email: string;
   };
-  attendees?: UserType[];
+  attendees: UserType[];
   capacity: number;
   date: string;
   duration: number;

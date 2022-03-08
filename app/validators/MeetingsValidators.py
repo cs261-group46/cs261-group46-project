@@ -57,6 +57,11 @@ storeValidationRules = {
         'type': 'string',
         'maxlength': 100
     },
+    'description': {
+        'required': True,
+        'maxlength': 500,
+        'type': 'string',
+    },
     'startTime': {
         "required": True,
         'type': 'string',
@@ -69,14 +74,8 @@ storeValidationRules = {
     },
     'room': {
         'required': True,
-        'type': 'dict',
-        'schema': {
-            'id': {
-                "required": True,
-                'type': 'integer',
-                'min': 1
-            }
-        }
+        'type': 'integer',
+        'min': 1,
     },
     'type': {
         "required": True,
@@ -126,6 +125,15 @@ storeValidationRules = {
     'capacity': {
         "type": "integer",
         'required': False,
+    },
+    'topics': {
+        'type': 'list',
+        'required': False,
+        'schema': {
+            'type': 'integer',
+            'required': True,
+            'min': 1
+        }
     },
     'as': {
         'required': False,

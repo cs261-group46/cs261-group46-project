@@ -18,26 +18,23 @@ mentors = Blueprint("api_mentors", __name__, url_prefix="/mentors")
 @mentors.route("/", methods=["GET"])
 @auth_required
 def index(user=None):
-    try:
-        filters = parse_args_list("filters")
-        if filters is None or (len(filters) == 1 and filters[0] == ''):
-            filters = None
+    filters = parse_args_list("filters")
+    if filters is None or (len(filters) == 1 and filters[0] == ''):
+        filters = None
 
-        mentors = Mentor.query.all()
+    mentors = Mentor.query.all()
 
-        if "suitable" in filters:
-            mentors = get_mentors(mentors, user)
+    if "suitable" in filters:
+        mentors = get_mentors(mentors, user)
 
-        fields = parse_args_list("fields")
-        if fields is None or (len(fields) == 1 and fields[0] == ''):
-            fields = None
+    fields = parse_args_list("fields")
+    if fields is None or (len(fields) == 1 and fields[0] == ''):
+        fields = None
 
-        schema = MentorSchema(only=fields, many=True)
-        result = schema.dump(mentors)
+    schema = MentorSchema(only=fields, many=True)
+    result = schema.dump(mentors)
 
-        return {"success": True, "data": {"mentors": result}}, 200
-    except:
-        return {"success": False, "errors": ["An unexpected error occurred"]}, 400
+    return {"success": True, "data": {"mentors": result}}, 200
 
 
 # @mentors.route("/<mentorId>", methods=["GET"])

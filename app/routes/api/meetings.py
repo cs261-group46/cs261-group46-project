@@ -1,7 +1,7 @@
 import datetime
 
 from flask import Blueprint, request
-from app import db, Meeting, User, Notification
+from app import db, Meeting, User, Notification, Topic
 from app.middleware.auth import auth_required
 from datetime import datetime
 
@@ -31,7 +31,7 @@ def update(meetingID=None, user=None):
         if data.get("user_id") != user.id:
             return {"success": False, "errors": ["You don't have the permission to accept others meeting invites"]}, 401
 
-        if data.get("confirmed"):
+        if data.get("confirmed") and len(meeting.attendees) < meeting.capacity:
             meeting.invited.remove(user)
 
             meeting.attendees.append(user)
@@ -108,22 +108,39 @@ def store(user=None):
             return {"success": False, "errors": ["Start date and time needs to be in the future"]}, 400
 
 
-        room_id = data.get("room").get("id")
+        room_id = data.get("room")
         meeting_type = data.get("type")
 
         if data.get("visibility") == "public":
             users = User.query.filter(User.id != user.id).all()
-            Meeting(host_id=data.get("host"), title=data.get("title"), date=start_date_time, room_id=room_id,
+            meeting = Meeting(host_id=data.get("host"), title=data.get("title"), date=start_date_time, room_id=room_id,
                     link=data.get("link"), meeting_type=meeting_type, duration=duration, capacity=data.get("capacity"), invited=users).commit()
+
+            for t in data.get("topics"):
+                topic = Topic.query.filter_by(id=t).first()
+                if topic:
+                    meeting.topics.append(topic)
+
+            meeting.commit()
+
+
             for user in users:
                 Notification(notification_level="info", notification_type="learning", user=user,
                              description="An expert scheduled a meeting that might interest you!").commit()
 
         elif data.get("visibility") == "private" and len(data.get("invites")) > 0:
             users = User.query.filter(User.id.in_([invite.get("id") for invite in data.get("invites")])).filter(User.email.in_([invite.get("email") for invite in data.get("invites")])).all()
-            Meeting(host_id=data.get("host"), title=data.get("title"), date=start_date_time, room_id=room_id,
+            meeting = Meeting(host_id=data.get("host"), title=data.get("title"), date=start_date_time, room_id=room_id,
                     link=data.get("link"), meeting_type=meeting_type, duration=duration, capacity=data.get("capacity"),
                     invited=users).commit()
+
+            for t in data.get("topics"):
+                topic = Topic.query.filter_by(id=t).first()
+                if topic:
+                    meeting.topics.append(topic)
+
+            meeting.commit()
+
             for user in users:
                 if meeting_type == "one on one meeting":
 
