@@ -89,6 +89,10 @@ const ComponentPlaygound: FC<ComponentPlaygoundProps> = () => {
       </p>
 
       <LoadingSpinner size={50} />
+
+      <p>
+        Data: <LoadingSpinner size={10} type={"inline"} />
+      </p>
     </div>
   );
 };

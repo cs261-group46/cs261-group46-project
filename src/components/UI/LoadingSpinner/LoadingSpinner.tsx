@@ -11,6 +11,7 @@ interface LoadingDot {
 }
 
 const LoadingSpinner: FC<LoadingSpinnerProps> = (props) => {
+  const type = props.type ?? "centered";
   const size = props.size ?? 100;
 
   const loaderLength = 3;
@@ -46,7 +47,12 @@ const LoadingSpinner: FC<LoadingSpinnerProps> = (props) => {
   }, [animate]);
 
   return (
-    <div className={styles.LoadingSpinner} data-testid="LoadingSpinner">
+    <div
+      className={`${styles.LoadingSpinner} ${
+        type === "inline" && styles.inline
+      }`}
+      data-testid="LoadingSpinner"
+    >
       {dots &&
         dots.map((dot) => (
           <svg
