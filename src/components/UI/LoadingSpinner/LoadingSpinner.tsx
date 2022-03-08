@@ -12,7 +12,7 @@ interface LoadingDot {
 
 const LoadingSpinner: FC<LoadingSpinnerProps> = (props) => {
   const type = props.type ?? "centered";
-  const size = props.size ?? 100;
+  const size = props.size ?? 25;
 
   const loaderLength = 3;
   const requestRef = useRef<number>(0);
@@ -49,7 +49,7 @@ const LoadingSpinner: FC<LoadingSpinnerProps> = (props) => {
   return (
     <div
       className={`${styles.LoadingSpinner} ${
-        type === "inline" && styles.inline
+        type === "inline" ? styles.inline : styles.centered
       }`}
       data-testid="LoadingSpinner"
     >

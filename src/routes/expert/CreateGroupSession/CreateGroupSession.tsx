@@ -1,6 +1,6 @@
-import React, { FC, FormEventHandler, useCallback } from "react";
+import React, { FC, useCallback } from "react";
 
-import styles from "./CreateGroupSession.module.scss";
+// import styles from "./CreateGroupSession.module.scss";
 import SearchSelect from "../../../components/UI/FormInput/SearchSelect/SearchSelect";
 import {
   SearchSelectOptions,
@@ -8,9 +8,6 @@ import {
 } from "../../../components/UI/FormInput/SearchSelect/SearchSelect";
 import useInput from "../../../hooks/UseInput/UseInput";
 import DatePicker from "../../../components/UI/FormInput/DatePicker/DatePicker";
-import HoursInput, {
-  Range,
-} from "../../../components/UI/FormInput/HoursInput/HoursInput";
 import BigTextInput from "../../../components/UI/FormInput/BigTextInput/BigTextInput";
 import TextInput from "../../../components/UI/FormInput/TextInput/TextInput";
 import Select from "../../../components/UI/FormInput/Select/Select";
@@ -273,7 +270,6 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
       capacityValueValid &&
       visibilityValueValid &&
       dateValueValid &&
-      startTimeValueValid &&
       typeValueValid &&
       (invitesValueValid || visibility.value === "public") &&
       titleValueValid &&
