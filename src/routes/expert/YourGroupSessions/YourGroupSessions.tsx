@@ -60,6 +60,7 @@ const YourGroupSessions: FC<YourGroupSessionsProps> = () => {
             (meeting) => meeting.meeting_type !== "one on one meeting"
           )
         : [],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [JSON.stringify(meetings_hosted)]
   );
 

@@ -86,6 +86,7 @@ const MentorSkills: FC<MentorSkillsProps> = () => {
       })
     );
     skillsChangeHandler(topicsOptions);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(mentor_topics), skillsChangeHandler]);
 
   const updateSkills = async () => {

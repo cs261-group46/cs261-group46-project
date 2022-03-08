@@ -25,49 +25,54 @@ function UseVerifyUser<T extends { [key: string]: any }>({
 
   const dataVerifier = UseVerifyUserData();
 
-  const verify = useCallback(async () => {
-    let userDataDict = {};
+  const verify = useCallback(
+    async () => {
+      let userDataDict = {};
 
-    const id = await authVerifier({
-      minPermissionLevel,
-      isProtected,
-    });
+      const id = await authVerifier({
+        minPermissionLevel,
+        isProtected,
+      });
 
-    for (const {
-      dataPoint,
-      redirectOnFail,
-      redirectOnSuccess,
-    } of userDataPolicies) {
-      if ((dataPoint || dataPoint === "") && id) {
-        const returnedData = await dataVerifier({
-          dataPoint,
-          userId: id,
-          redirectOnFail,
-          redirectOnSuccess,
-        });
+      for (const {
+        dataPoint,
+        redirectOnFail,
+        redirectOnSuccess,
+      } of userDataPolicies) {
+        if ((dataPoint || dataPoint === "") && id) {
+          const returnedData = await dataVerifier({
+            dataPoint,
+            userId: id,
+            redirectOnFail,
+            redirectOnSuccess,
+          });
 
-        const transformDataPoint = dataPoint.replace(/\./g, "_");
+          const transformDataPoint = dataPoint.replace(/\./g, "_");
 
-        userDataDict = {
-          ...userDataDict,
-          [transformDataPoint.length === 0 ? "user" : transformDataPoint]:
-            returnedData,
-        };
+          userDataDict = {
+            ...userDataDict,
+            [transformDataPoint.length === 0 ? "user" : transformDataPoint]:
+              returnedData,
+          };
+        }
       }
-    }
-    userDataDict = {
-      ...userDataDict,
-      userId: id,
-    };
+      userDataDict = {
+        ...userDataDict,
+        userId: id,
+      };
 
-    setUserData(userDataDict as T);
-  }, [
-    authVerifier,
-    dataVerifier,
-    isProtected,
-    minPermissionLevel,
-    JSON.stringify(userDataPolicies),
-  ]);
+      setUserData(userDataDict as T);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [
+      authVerifier,
+      dataVerifier,
+      isProtected,
+      minPermissionLevel,
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      JSON.stringify(userDataPolicies),
+    ]
+  );
 
   useEffect(() => {
     verify();

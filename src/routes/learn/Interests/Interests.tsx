@@ -84,6 +84,7 @@ const Interests: FC<InterestsProps> = () => {
       })
     );
     interestsChangeHandler(topicsOptions);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(mentee_topics), interestsChangeHandler]);
 
   const updateInterests = async () => {

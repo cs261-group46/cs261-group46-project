@@ -113,6 +113,7 @@ const Meetings: FC<MeetingsProps> = () => {
       });
       return prevMeetings;
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(mentormentee_meetings_attending)]);
 
   useEffect(() => {
@@ -131,6 +132,7 @@ const Meetings: FC<MeetingsProps> = () => {
       });
       return prevMeetings;
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(mentormentee_meetings_hosted)]);
 
   const [validated, setValidated] = useState(false);

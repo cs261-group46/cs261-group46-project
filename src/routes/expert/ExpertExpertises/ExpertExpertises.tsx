@@ -80,6 +80,7 @@ const ExpertExpertises: FC<ExpertExpertisesProps> = () => {
         }))
       : [];
     expertisesChangeHandler(topicsOptions);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(expert_topics), expertisesChangeHandler]);
 
   const updateExpertises = async () => {
