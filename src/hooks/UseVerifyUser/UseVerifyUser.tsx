@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import UseVerifyAuth from "../UseVerifyAuth/UseVerifyAuth";
 import UseVerifyUserData from "../UseVerifyUserData/UseVerifyUserData";
 

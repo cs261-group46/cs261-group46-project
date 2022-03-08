@@ -1,4 +1,4 @@
-import React, { FormEventHandler, useContext, useState } from "react";
+import React, { FormEventHandler, useState } from "react";
 import MainLayout from "../../layouts/MainLayout/MainLayout";
 import Button from "../../components/UI/Button/Button";
 import styles from "./Setup.module.scss";
@@ -14,7 +14,10 @@ import SearchSelect from "../../components/UI/FormInput/SearchSelect/SearchSelec
 import UseVerifyUser from "../../hooks/UseVerifyUser/UseVerifyUser";
 
 const Setup = () => {
-  const { userId = null, expert_id = null } = UseVerifyUser<{
+  const {
+    userId = null,
+    // expert_id
+  } = UseVerifyUser<{
     userId: number | null | undefined;
     expert_id: number | null | undefined;
   }>({

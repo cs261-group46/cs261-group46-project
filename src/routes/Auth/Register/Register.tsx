@@ -65,9 +65,9 @@ function validateDepartment(_department: SelectOption<number>) {
   return _department.value !== -1;
 }
 
-type Verifier = {
-  userId: number | null | undefined;
-};
+// type Verifier = {
+//   userId: number | null | undefined;
+// };
 
 const Register: FC = () => {
   const errorsCtx = useContext(ErrorMessagesContext);

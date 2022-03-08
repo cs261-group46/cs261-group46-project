@@ -6,7 +6,6 @@ import Button from "../../../components/UI/Button/Button";
 import TextInput from "../../../components/UI/FormInput/TextInput/TextInput";
 import UserDataContext from "../../../store/UserDataContext";
 import { custom } from "../../../api/api";
-import UseVerifyAuth from "../../../hooks/UseVerifyAuth/UseVerifyAuth";
 import ErrorMessagesContext from "../../../store/ErrorMessagesContext";
 
 interface LoginProps {}
@@ -21,9 +20,9 @@ function validatePassword(password: string) {
   return password.length > 0;
 }
 
-type Verifier = {
-  userId: number | null | undefined;
-};
+// type Verifier = {
+//   userId: number | null | undefined;
+// };
 
 const Login: FC<LoginProps> = () => {
   const userDataCtx = useContext(UserDataContext);

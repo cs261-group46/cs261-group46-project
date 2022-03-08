@@ -1,17 +1,14 @@
-import React, { FC, useCallback, useContext, useEffect, useState } from "react";
+import React, { FC, useCallback, useEffect, useState } from "react";
 import styles from "./Dashboard.module.scss";
 import MainLayout from "../../layouts/MainLayout/MainLayout";
 import Button from "../../components/UI/Button/Button";
 import Title from "../../components/UI/Title/Title";
-import UseVerifyAuth from "../../hooks/UseVerifyAuth/UseVerifyAuth";
-import UserDataContext from "../../store/UserDataContext";
 import { custom, get } from "../../api/api";
 import { NotificationType } from "../../types/Notification";
 import Notifications from "../../components/Notifications/Notifications";
 import Icon from "../../components/UI/Icon/Icon";
 import { useNavigate } from "react-router-dom";
 import UseVerifyUser from "../../hooks/UseVerifyUser/UseVerifyUser";
-import { MentorType } from "../../types/Mentor";
 
 interface DashboardProps {}
 

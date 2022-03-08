@@ -1,4 +1,4 @@
-import React, { FC, useContext } from "react";
+import React, { FC } from "react";
 import Card from "../../../UI/Card/Card";
 import styles from "./MentorCard.module.scss";
 import { MentorType } from "../../../../types/Mentor";
@@ -6,7 +6,6 @@ import Title from "../../../UI/Title/Title";
 import Tag from "../../../UI/Tag/Tag";
 import Button from "../../../UI/Button/Button";
 import { store } from "../../../../api/api";
-import UserDataContext from "../../../../store/UserDataContext";
 import UseVerifyUser from "../../../../hooks/UseVerifyUser/UseVerifyUser";
 
 interface MentorCardProps {

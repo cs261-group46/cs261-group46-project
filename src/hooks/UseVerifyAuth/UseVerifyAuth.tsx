@@ -1,7 +1,6 @@
-import { useEffect, useCallback, useContext, useState } from "react";
+import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { custom, get } from "../../api/api";
-import UserDataContext from "../../store/UserDataContext";
+import { custom } from "../../api/api";
 import UseVerifyUserData from "../UseVerifyUserData/UseVerifyUserData";
 
 interface AuthVerifierProps {

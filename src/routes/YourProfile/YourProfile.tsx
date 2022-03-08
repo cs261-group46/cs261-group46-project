@@ -9,7 +9,10 @@ import UseVerifyUser from "../../hooks/UseVerifyUser/UseVerifyUser";
 interface YourProfileProps {}
 
 const YourProfile: FC<YourProfileProps> = () => {
-  const { userId = null, user = null } = UseVerifyUser<{
+  const {
+    // userId
+    user = null,
+  } = UseVerifyUser<{
     userId: number | null | undefined;
     user: FullUserType | null | undefined;
   }>({

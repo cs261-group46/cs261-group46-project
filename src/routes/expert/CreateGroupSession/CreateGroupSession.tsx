@@ -8,9 +8,6 @@ import {
 } from "../../../components/UI/FormInput/SearchSelect/SearchSelect";
 import useInput from "../../../hooks/UseInput/UseInput";
 import DatePicker from "../../../components/UI/FormInput/DatePicker/DatePicker";
-import HoursInput, {
-  Range,
-} from "../../../components/UI/FormInput/HoursInput/HoursInput";
 import BigTextInput from "../../../components/UI/FormInput/BigTextInput/BigTextInput";
 import TextInput from "../../../components/UI/FormInput/TextInput/TextInput";
 import Select from "../../../components/UI/FormInput/Select/Select";
