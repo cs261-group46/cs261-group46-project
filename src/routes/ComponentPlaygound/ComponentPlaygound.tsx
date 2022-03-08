@@ -8,6 +8,7 @@ import SearchSelect, {
 } from "../../components/UI/FormInput/SearchSelect/SearchSelect";
 import useInput from "../../hooks/UseInput/UseInput";
 import StarPicker from "../../components/UI/FormInput/StarPicker/StarPicker";
+import LoadingSpinner from "../../components/UI/LoadingSpinner/LoadingSpinner";
 
 interface ComponentPlaygoundProps {}
 
@@ -85,6 +86,12 @@ const ComponentPlaygound: FC<ComponentPlaygoundProps> = () => {
 
       <p>
         Rating: <StarPicker type={"inline"} value={3} size={"32"} />
+      </p>
+
+      <LoadingSpinner size={50} />
+
+      <p>
+        Data: <LoadingSpinner size={10} type={"inline"} />
       </p>
     </div>
   );
