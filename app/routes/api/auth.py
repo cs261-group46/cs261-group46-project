@@ -1,8 +1,9 @@
 from flask import Blueprint, request, session, url_for, render_template
+
+from app.utils.cerberus_helpers import get_errors
 from app.utils.email import send_email
-from app.validators.RegistrationValidator import validator as registration_validator
-from app.validators.LoginValidator import validator as login_validator
-from app import db, User, Department
+from app.validators.AuthValidators import loginValidator, registerValidator
+from app import User, Department
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.utils.auth import set_login_token
 from app.utils.email_confirm_token import generate_confirmation_token
@@ -13,16 +14,13 @@ auth = Blueprint("api_auth", __name__, url_prefix="/auth")
 
 @auth.route("/register/", methods=["POST"])
 def register():
-
     data = dict(request.get_json())
-    print(data)
     # validate structure of request
-    registration_validator.validate(data)
-    print(registration_validator.errors)
-    if registration_validator.errors:
+    registerValidator.validate(data)
+    if registerValidator.errors:
         return {
             "success": False,
-            "errors": registration_validator.errors.values()
+            "errors": get_errors(registerValidator)
         }, 400
 
     # check whether email is repeated
@@ -54,8 +52,6 @@ def register():
 
     token = generate_confirmation_token(new_user.email)
 
-    # set_login_token(new_user)
-
     verify_url = url_for('verifyemail.verify_email', token=token, _external=True)
     html = render_template(
         'emails/verify_email.html',
@@ -72,22 +68,14 @@ def register():
     return {"success": True}, 200
 
 
-# @auth.route("/verify", methods=["GET"])
-# def verify():
-#     permission = request.args.get('permission')
-#     is_logged_in = verify_auth(int(permission))
-#
-#     return {"isLoggedIn": is_logged_in}
-
-
 @auth.route("/login/", methods=["POST"])
 def login():
     data = dict(request.get_json())
-    login_validator.validate(data)
-    if login_validator.errors:
+    loginValidator.validate(data)
+    if loginValidator.errors:
         return {
             "success": False,
-            "errors": login_validator.errors.values()
+            "errors":  get_errors(loginValidator)
         }, 400
 
     # check whether email is repeated
@@ -111,7 +99,7 @@ def login():
 
 
 @auth.route("/logout/", methods=["GET"])
-@auth_required()
-def logout(user=None):
+@auth_required
+def logout(user: User):
     session.pop('login_token')
     return {"success": True}, 200

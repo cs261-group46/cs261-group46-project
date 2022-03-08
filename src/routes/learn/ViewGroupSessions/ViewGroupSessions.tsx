@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import styles from "./ViewGroupSessions.module.scss";
 import Title from "../../../components/UI/Title/Title";
 import Button from "../../../components/UI/Button/Button";
@@ -45,16 +45,6 @@ const getDateString = (date: Date, duration: number) => {
         .padStart(2, "0")}:${end.getMinutes().toString().padStart(2, "0")}`}
     </>
   );
-
-  // return `${start.toDateString()}
-  //             ${start.getUTCHours().toString().padStart(2, "0")}:${start
-  //   .getMinutes()
-  //   .toString()
-  //   .padStart(2, "0")} -
-  //             ${end.getUTCHours().toString().padStart(2, "0")}:${end
-  //   .getMinutes()
-  //   .toString()
-  //   .padStart(2, "0")}`;
 };
 
 const ViewGroupSessions: FC<ViewGroupSessionsProps> = () => {
@@ -78,96 +68,9 @@ const ViewGroupSessions: FC<ViewGroupSessionsProps> = () => {
     ],
   });
 
-  // async function dummyRequest(): Promise<GroupSessionType[]> {
-  //   // some code to feign an API request taking 500ms & returning the below object
-  //   return new Promise((resolve) =>
-  //     setTimeout(
-  //       () =>
-  //         resolve([
-  //           {
-  //             id: "1",
-  //             host: "me",
-  //             title: "Introduction to Python",
-  //             date: new Date(),
-  //             room_name: "CS0.01",
-  //             duration: 120,
-  //             capacity: 10,
-  //             signups: 2,
-  //             type: "workshop",
-  //             headline: "Learn python in 5 minutes",
-  //             description:
-  //               "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui dicta minus molestiae vel beatae natus eveniet ratione temporibus aperiam harum alias officiis assumenda officia quibusdam deleniti eos cupiditate dolore doloribus! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui dicta minus molestiae vel beatae natus eveniet ratione temporibus aperiam harum alias officiis assumenda officia quibusdam deleniti eos cupiditate dolore doloribus!",
-  //           },
-  //           {
-  //             id: "2",
-  //             host: "somebody else",
-  //             title: "Introduction to C++",
-  //             date: new Date(),
-  //             room_name: "CS0.04",
-  //             duration: 5,
-  //             capacity: 100,
-  //             signups: 80,
-  //             type: "group session",
-  //             headline: "Learn c++ in 5 minutes",
-  //             description:
-  //               "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui dicta minus molestiae vel beatae natus eveniet ratione temporibus aperiam harum alias officiis assumenda officia quibusdam deleniti eos cupiditate dolore doloribus!",
-  //           },
-  //           {
-  //             id: "3",
-  //             host: "me",
-  //             title: "Introduction to Python II",
-  //             date: new Date(),
-  //             room_name: "CS0.01",
-  //             duration: 120,
-  //             capacity: 10,
-  //             signups: 2,
-  //             type: "workshop",
-  //             headline: "Learn python in 10 minutes",
-  //             description:
-  //               "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui dicta minus molestiae vel beatae natus eveniet ratione temporibus aperiam harum alias officiis assumenda officia quibusdam deleniti eos cupiditate dolore doloribus!",
-  //           },
-  //           {
-  //             id: "4",
-  //             host: "somebody else",
-  //             title: "Introduction to C++ II",
-  //             date: new Date(),
-  //             room_name: "CS0.04",
-  //             duration: 5,
-  //             capacity: 100,
-  //             signups: 80,
-  //             type: "workshop",
-  //             headline: "Learn c++ in 10 minutes",
-  //             description:
-  //               "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui dicta minus molestiae vel beatae natus eveniet ratione temporibus aperiam harum alias officiis assumenda officia quibusdam deleniti eos cupiditate dolore doloribus!",
-  //           },
-  //           {
-  //             id: "5",
-  //             host: "somebody else",
-  //             title: "Introduction to C++ III",
-  //             date: new Date(),
-  //             room_name: "CS0.04",
-  //             duration: 5,
-  //             capacity: 100,
-  //             signups: 80,
-  //             type: "workshop",
-  //             headline: "Learn c++ in 15 minutes",
-  //             description:
-  //               "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui dicta minus molestiae vel beatae natus eveniet ratione temporibus aperiam harum alias officiis assumenda officia quibusdam deleniti eos cupiditate dolore doloribus! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui dicta minus molestiae vel beatae natus eveniet ratione temporibus aperiam harum alias officiis assumenda officia quibusdam deleniti eos cupiditate dolore doloribus!",
-  //           },
-  //         ]),
-  //       500
-  //     )
-  //   );
-  // }
-
   const joinHandler = () => {};
 
-  // const fetchGroupSessions = useCallback(async () => {
-  //   // const fetchedGroupSessions = await dummyRequest();
-  // }, [setGroupSessions]);
-
   useEffect(() => {
-    // fetchGroupSessions();
     if (meetings_invited)
       setGroupSessions(
         meetings_invited.filter(

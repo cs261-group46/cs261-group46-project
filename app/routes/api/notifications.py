@@ -1,4 +1,4 @@
-from flask import Blueprint, request
+from flask import Blueprint
 from app import Notification, db
 from app.middleware.auth import auth_required
 from app.models.schemas import NotificationSchema
@@ -9,26 +9,37 @@ notifications = Blueprint("api_notifications", __name__,
 
 
 @notifications.route("/", methods=["GET"])
-@auth_required()
+@auth_required
 def index(user=None):
-    fields = parse_args_list("fields")
+    try:
+        fields = parse_args_list("fields")
+        if fields is None or (len(fields) == 1 and fields[0] == ''):
+            fields = None
 
-    schema = NotificationSchema(only=fields, many=True)
-    result = schema.dump(user.notifications)
+        schema = NotificationSchema(only=fields, many=True)
+        result = schema.dump(user.notifications)
 
-    return {"success": True, "data": {"notifications": result}}, 200
+        return {"success": True, "data": {"notifications": result}}, 200
+    except:
+        return {"success": False, "errors": ["An unexpected error occurred"]}, 400
 
 
 @notifications.route("/<notificationId>", methods=["DELETE"])
-@auth_required()
+@auth_required
 def destory(user=None, notificationId=None):
-    # TODO : Validate
+    try:
+        notification = Notification.query.filter_by(id=notificationId).first()
 
-    notification = Notification.query.filter_by(id=notificationId).first()
+        if notification is None:
+            return {"success": False, "errors": ["The requested notification does not exist."]}, 400
 
-    if (notification.user_id != user.id):
-        return {"success": False, "errors": ["You don't have the permission to delete this notification."]}, 401
+        if notification.user_id != user.id:
+            return {"success": False, "errors": ["You don't have the permission to delete this notification."]}, 401
 
-    db.session.delete(notification)
-    db.session.commit()
-    return {"success": True}, 200
+        db.session.delete(notification)
+        db.session.commit()
+        return {"success": True}, 200
+
+    except:
+        return {"success": False, "errors": ["An unexpected error occurred"]}, 400
+

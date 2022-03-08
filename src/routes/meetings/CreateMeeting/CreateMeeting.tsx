@@ -104,7 +104,6 @@ const CreateMeeting: FC<CreateMeetingProps> = () => {
             fields: ["mentor.user.email", "mentor.user.id"],
           },
         });
-        console.log(data);
 
         setTheirsData({
           email: data.mentee.mentor.user.email,
@@ -262,86 +261,88 @@ const CreateMeeting: FC<CreateMeetingProps> = () => {
 
   return (
     <MainLayout title={"Create a Meeting"}>
-      <form
-        className={styles.CreateMeeting}
-        data-testid="CreateMeeting"
-        onSubmit={submitHandler}
-      >
-        <TextInput
-          id={"title"}
-          label={"Session Title"}
-          placeholder={"Please provide the title of your group session."}
-          value={title}
-          isValid={titleInputValid}
-          onChange={titleChangeHandler}
-          onBlur={titleBlurHandler}
-        />
-        <DatePicker
-          id={"date"}
-          label={"Date"}
-          value={date}
-          isValid={dateInputValid}
-          onChange={dateChangeHandler}
-          onBlur={dateBlurHandler}
-        />
+      {validated && (
+        <form
+          className={styles.CreateMeeting}
+          data-testid="CreateMeeting"
+          onSubmit={submitHandler}
+        >
+          <TextInput
+            id={"title"}
+            label={"Session Title"}
+            placeholder={"Please provide the title of your group session."}
+            value={title}
+            isValid={titleInputValid}
+            onChange={titleChangeHandler}
+            onBlur={titleBlurHandler}
+          />
+          <DatePicker
+            id={"date"}
+            label={"Date"}
+            value={date}
+            isValid={dateInputValid}
+            onChange={dateChangeHandler}
+            onBlur={dateBlurHandler}
+          />
 
-        <TextInput
-          id={"time"}
-          label={"Start time"}
-          isValid={startTimeInputValid}
-          value={startTime}
-          onChange={startTimeChangeHandler}
-          onBlur={startTimeBlurHandler}
-          placeholder={"Please provide the start time of the session"}
-          type="time"
-        />
+          <TextInput
+            id={"time"}
+            label={"Start time"}
+            isValid={startTimeInputValid}
+            value={startTime}
+            onChange={startTimeChangeHandler}
+            onBlur={startTimeBlurHandler}
+            placeholder={"Please provide the start time of the session"}
+            type="time"
+          />
 
-        <TextInput
-          id={"duration"}
-          label={"End time"}
-          isValid={endTimeInputValid}
-          value={endTime}
-          onChange={endTimeChangeHandler}
-          onBlur={endTimeBlurHandler}
-          placeholder={"Please provide the start time of the session"}
-          type="time"
-        />
+          <TextInput
+            id={"duration"}
+            label={"End time"}
+            isValid={endTimeInputValid}
+            value={endTime}
+            onChange={endTimeChangeHandler}
+            onBlur={endTimeBlurHandler}
+            placeholder={"Please provide the start time of the session"}
+            type="time"
+          />
 
-        <SearchSelect
-          id={"room"}
-          label={"Room"}
-          isValid={roomInputValid}
-          value={room}
-          onChange={roomChangeHandler}
-          onBlur={roomBlurHandler}
-          searchPromise={roomsSearchPromise}
-          limit={1}
-        />
+          <SearchSelect
+            id={"room"}
+            label={"Room"}
+            isValid={roomInputValid}
+            value={room}
+            onChange={roomChangeHandler}
+            onBlur={roomBlurHandler}
+            searchPromise={roomsSearchPromise}
+            limit={1}
+          />
 
-        <BigTextInput
-          id={"description"}
-          label={`Note to ${theirsPosition}`}
-          placeholder={"Include what you'd like to talk about in the meeting"}
-          value={description}
-          isValid={descriptionInputValid}
-          onChange={descriptionChangeHandler}
-          onBlur={descriptionBlurHandler}
-        />
+          <BigTextInput
+            id={"description"}
+            label={`Note to ${theirsPosition}`}
+            placeholder={"Include what you'd like to talk about in the meeting"}
+            value={description}
+            isValid={descriptionInputValid}
+            onChange={descriptionChangeHandler}
+            onBlur={descriptionBlurHandler}
+          />
 
-        <TextInput
-          id={"link"}
-          label={"Meeting Link - for online events"}
-          placeholder={"Please provide the meeting link"}
-          value={link}
-          isValid={true}
-          onChange={linkChangeHandler}
-          onBlur={linkBlurHandler}
-        />
+          <TextInput
+            id={"link"}
+            label={"Meeting Link - for online events"}
+            placeholder={"Please provide the meeting link"}
+            value={link}
+            isValid={true}
+            onChange={linkChangeHandler}
+            onBlur={linkBlurHandler}
+          />
 
-        <Button icon="👑" type={"submit"} buttonStyle={"primary"}>
-          Create Meeting
-        </Button>
-      </form>
+          <Button icon="👑" type={"submit"} buttonStyle={"primary"}>
+            Create Meeting
+          </Button>
+        </form>
+      )}
     </MainLayout>
   );
 };

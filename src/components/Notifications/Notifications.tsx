@@ -10,7 +10,11 @@ interface NotificationsProps {
 
 const Notifications: FC<NotificationsProps> = (props) => {
   const notifications = props.notifications.map((notification) => (
-    <Notification onRemove={props.onRemove} notification={notification} />
+    <Notification
+      key={notification.id}
+      onRemove={props.onRemove}
+      notification={notification}
+    />
   ));
 
   return (

@@ -1,12 +1,7 @@
-import React, { FC, useCallback, useContext, useEffect, useState } from "react";
+import React, { FC, useState } from "react";
 import styles from "./YourMentees.module.scss";
-import MainLayout from "../../../layouts/MainLayout/MainLayout";
-import UseLogin from "../../../hooks/UseLogin/UseLogin";
 import Title from "../../../components/UI/Title/Title";
 import MenteeCard from "./MenteeCard/MenteeCard";
-import UseVerifyAuth from "../../../hooks/UseVerifyAuth/UseVerifyAuth";
-import { get } from "../../../api/api";
-import UserDataContext from "../../../store/UserDataContext";
 import { MentorshipRequestType } from "../../../types/MentorshipRequest";
 import Button from "../../../components/UI/Button/Button";
 import MentorshipRequestCard from "./MentorshipRequestCard/MentorshipRequestCard";
@@ -16,35 +11,11 @@ import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
 
 interface YourMenteeProps {}
 
-const exampleMentees = [
-  {
-    firstname: "John",
-    lastname: "Smith",
-    completedGoal: 10,
-    totalGoal: 10,
-    id: 4,
-  },
-  {
-    firstname: "Kai",
-    lastname: "Smith",
-    completedGoal: 2,
-    totalGoal: 7,
-    id: 5,
-  },
-  {
-    firstname: "Amy",
-    lastname: "Smith",
-    completedGoal: 6,
-    totalGoal: 10,
-    id: 6,
-  },
-];
-
 type Verifier = {
   userId: number | null | undefined;
   mentor_id: number | null | undefined;
-  mentor_mentees: any | null | undefined;
-  mentor_mentorship_requests_received: any | null | undefined;
+  mentor_mentees: MenteeType[] | [];
+  mentor_mentorship_requests_received: MentorshipRequestType[] | [];
 };
 
 const YourMentees: FC<YourMenteeProps> = () => {
@@ -69,15 +40,13 @@ const YourMentees: FC<YourMenteeProps> = () => {
 
   const [filterEvents, setFilterEvents] = useState<number>(0);
 
-  const menteeList = mentees.map((mentee: MenteeType) => (
+  const menteeList = mentees.map((mentee) => (
     <MenteeCard key={mentee.id} mentee={mentee} />
   ));
 
-  const mentorshipRequestsList = mentorshipRequests.map(
-    (req: MentorshipRequestType) => (
-      <MentorshipRequestCard key={req.mentee.id} mentorshipRequest={req} />
-    )
-  );
+  const mentorshipRequestsList = mentorshipRequests.map((req) => (
+    <MentorshipRequestCard key={req.mentee.id} mentorshipRequest={req} />
+  ));
 
   return (
     <DashboardSubpageLayout title="Your Mentees">

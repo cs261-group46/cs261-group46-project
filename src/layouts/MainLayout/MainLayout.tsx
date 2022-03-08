@@ -11,9 +11,6 @@ interface MainTemplateProps {
 }
 
 const MainLayout: FC<MainTemplateProps> = (props) => {
-  // <div className={styles.MainTemplate} data-testid="MainTemplate">
-  //   MainTemplate Component
-  // </div>
   const errorsCtx = useContext(ErrorMessagesContext);
 
   const errors = errorsCtx.errors.map((error, i) => {

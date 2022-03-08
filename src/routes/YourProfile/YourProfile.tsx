@@ -1,11 +1,6 @@
-import React, { FC, useCallback, useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { get } from "../../api/api";
-import UseVerifyAuth from "../../hooks/UseVerifyAuth/UseVerifyAuth";
+import React, { FC } from "react";
 import DashboardSubpageLayout from "../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
-import UserDataContext from "../../store/UserDataContext";
 import styles from "./YourProfile.module.scss";
-import { MentorType } from "../../types/Mentor";
 import Tag from "../../components/UI/Tag/Tag";
 import ContentCard from "../../components/UI/ContentCard/ContentCard";
 import { FullUserType } from "../../types/User";

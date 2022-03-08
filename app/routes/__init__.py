@@ -4,7 +4,6 @@ from app.routes.verifyemail import verifyemail
 from app.routes.api import api
 from os import path
 from json import dumps, loads
-from flask import Response
 
 app.register_blueprint(api)
 app.register_blueprint(verifyemail)
@@ -22,7 +21,7 @@ def index(error):
 def after_request(response, user=None):
     if response.is_json:
         if user:
-            responseJson = response.get_json()
-            responseJson['user'] = user.id
-            response.data = dumps(responseJson)
+            response_json = response.get_json()
+            response_json['user'] = user.id
+            response.data = dumps(response_json)
     return response

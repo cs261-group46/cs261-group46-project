@@ -69,15 +69,6 @@ const Meetings: FC<MeetingsProps> = () => {
     ],
   });
 
-  console.log({
-    userId,
-    mentee_id,
-    mentor_id,
-    meetings_hosted,
-    meetings_attending,
-    meetings_invited,
-  });
-
   const [theirsPosition, setTheirsPosition] = useState<
     "mentor" | "mentee" | null
   >();
@@ -182,52 +173,28 @@ const Meetings: FC<MeetingsProps> = () => {
     }
   }, [userId, validateRole]);
 
-  // const [meetings, setMeetings] = useState<MeetingType[]>([]);
-
-  // const getMeetings = useCallback(async () => {
-  //   try {
-  //     const data = await get({
-  //       resource: "mentees",
-  //       entity: Number.parseInt(menteeId as string),
-  //       args: {
-  //         fields: ["plans_of_action"],
-  //       },
-  //     });
-
-  //     setMeetings(data.mentee.plans_of_action);
-
-  //     const greatestId =
-  //       data.mentee.plans_of_action.length > 0
-  //         ? Math.max.apply(
-  //             Math,
-  //             data.mentee.plans_of_action.map(function (plan: PlanOfAction) {
-  //               return plan.id;
-  //             })
-  //           )
-  //         : 0;
-  //     setTempId(greatestId + 1);
-  //     setPlansLoaded(true);
-  //   } catch (errors) {
-  //     console.log(errors);
-  //   }
-  // }, [menteeId]);
-
-  // const declineHandler = async (meetingId: number) => {
-  //   try {
-  //     await destroy({
-  //       resource: "meeting",
-  //       entity: meetingId,
-  //     });
-  //   } catch (errors) {
-  //     console.log(errors);
-  //   }
-  // };
-
   const removeHandler = async (meetingId: number) => {
     try {
       await destroy({
         resource: "meetings",
         entity: meetingId,
+      });
+    } catch (errors) {
+      console.log(errors);
+    }
+  };
+
+  const declineHandler = async (meetingId: number) => {
+    try {
+      const body = {
+        confirmed: false,
+        user_id: userId,
+      };
+
+      await update({
+        resource: "meetings",
+        entity: meetingId,
+        body: body,
       });
     } catch (errors) {
       console.log(errors);
@@ -248,6 +215,39 @@ const Meetings: FC<MeetingsProps> = () => {
     } catch (errors) {
       console.log(errors);
     }
+  };
+
+  const hasConfirmedMessage = (meeting: MeetingType) => {
+    if (!meeting.attendees) {
+      meeting.attendees = [];
+    }
+
+    if (!meeting.invited) {
+      meeting.invited = [];
+    }
+
+    if (meeting.attendees.length === 0 && meeting.invited.length === 0) {
+      if (!meeting.host) {
+        // you are the host and the other has rejected invite
+        return `The ${theirsPosition} has declined their invite.`;
+      }
+    }
+    if (meeting.attendees.length > 0 && meeting.invited.length === 0) {
+      if (!meeting.host) {
+        // you are the host and the other has accepted invite
+        return `Yes, the ${theirsPosition} has confirmed their attendance.`;
+      } else {
+        return "Yes, you've confirmed your attendance";
+      }
+    }
+
+    if (meeting.attendees.length === 0 && meeting.invited.length > 0) {
+      if (!meeting.host) {
+        // you are the host and the other has not yet responded
+        return `No, the ${theirsPosition} has not yet confirmed their attendance.`;
+      }
+    }
+    return "";
   };
 
   return (
@@ -277,11 +277,6 @@ const Meetings: FC<MeetingsProps> = () => {
         {page === 1 &&
           confirmed_meetings.length > 0 &&
           confirmed_meetings.map((meeting, index) => {
-            console.log(meeting);
-            console.log(userId);
-
-            if (!meeting.attendees)
-              meeting.attendees = ["you" as unknown as UserType];
             return (
               <>
                 <ContentCard
@@ -307,12 +302,7 @@ const Meetings: FC<MeetingsProps> = () => {
                     },
                     {
                       title: "Confirmed?",
-                      content:
-                        meeting.attendees.length > 0
-                          ? meeting.host
-                            ? "Yes, you've confirmed your attendance"
-                            : `Yes, the ${theirsPosition} has confirmed their attendance.`
-                          : `No, the ${theirsPosition} has not yet confirmed their attendance.`,
+                      content: hasConfirmedMessage(meeting),
                     },
                     meeting.topics.length > 0 && {
                       className: styles.tags,
@@ -412,7 +402,7 @@ const Meetings: FC<MeetingsProps> = () => {
                   >
                     <Button
                       buttonStyle="primary"
-                      onClick={removeHandler.bind(null, meeting.id)}
+                      onClick={declineHandler.bind(null, meeting.id)}
                     >
                       Confirm
                     </Button>

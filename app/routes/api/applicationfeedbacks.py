@@ -1,12 +1,13 @@
-from flask import Blueprint, request, session, url_for, render_template
-from app import db, User, Department, auth_required, ApplicationFeedback
+from flask import Blueprint, request
+from app import ApplicationFeedback
+from app.middleware.auth import auth_required
 
 application_feedback = Blueprint("api_feedback_application", __name__, url_prefix="/application_feedback")
 
 
-@application_feedback.route("", methods=["PUT", "POST"])
+@application_feedback.route("/", methods=["GET"])
 @auth_required
-def index(user: User):
+def index(user=None):
     # data = parse_args_list("fields")
     data = request.get_json()
 

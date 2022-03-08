@@ -1,11 +1,13 @@
 from flask import Blueprint, request, session, url_for, render_template
-from app import db, User, Department, auth_required, MeetingFeedback
+from app import db, User, Department, MeetingFeedback
 from app.utils.request import parse_args_list
+from app.middleware.auth import auth_required
+
 
 meeting_feedback = Blueprint("api_feedback_meeting", __name__, url_prefix="/meeting_feedback")
 
 
-@meeting_feedback.route("", methods=["PUT", "POST"])
+@meeting_feedback.route("/", methods=["GET"])
 @auth_required
 def index(user: User):
     # data = parse_args_list("fields")

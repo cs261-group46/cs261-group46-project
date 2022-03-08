@@ -1,26 +1,6 @@
 from cerberus import Validator
 
-# data_dict.get("first_name"),
-# data_dict.get("last_name"),
-# data_dict.get("department"))
-
-
-#
-# class RegistrationValidator(Validator):
-#     def _validate_are_equal(self, password, field, password_repeat):
-#         """ Test password and password_repeat are the same.
-#
-#         The rule's arguments are validated against this schema:
-#         {'type': 'string'}
-#         """
-#         if password not in self.document:
-#             return False
-#
-#         if self.document[password] != password_repeat:
-#             self._error(field, "Passwords don't match")
-#
-
-validationRules = {
+loginValidationRules = {
     'email': {
         'type': 'string',
         'regex': '^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$',
@@ -30,7 +10,22 @@ validationRules = {
     },
     'password': {
         'type': 'string',
-        'regex': '(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)',    # TODO: Create regex for it (https://stackoverflow.com/questions/1559751/regex-to-make-sure-that-the-string-contains-at-least-one-lower-case-char-upper)
+        'required': True
+    },
+}
+
+registerValidationRules = {
+    'email': {
+        'type': 'string',
+        'regex': '^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$',
+        'required': True,
+        'minlength': 5,
+        'maxlength': 126
+    },
+    'password': {
+        'type': 'string',
+        # 'regex': '(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)',    # TODO: Create regex for it (https://stackoverflow.com/questions/1559751/regex-to-make-sure-that-the-string-contains-at-least-one-lower-case-char-upper)
+        # 'regex': '',    # TODO: Create regex for it (https://stackoverflow.com/questions/1559751/regex-to-make-sure-that-the-string-contains-at-least-one-lower-case-char-upper)
         'required': True,
         'minlength': 10,
         'maxlength': 126
@@ -62,4 +57,5 @@ validationRules = {
     }
 }
 
-validator = Validator(validationRules)
+loginValidator = Validator(loginValidationRules)
+registerValidator = Validator(registerValidationRules)

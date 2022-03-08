@@ -7,115 +7,140 @@ from app.middleware.auth import auth_required
 from app import Topic, Mentor, Notification, MentorTopic
 from app.models.MentorshipRequest import MentorshipRequest
 from app.models.schemas import MentorSchema
-from app.utils.mentor_reccomendations import sort_mentors
+from app.utils.cerberus_helpers import get_errors
+from app.utils.mentor_reccomendations import get_mentors
 from app.utils.request import parse_args_list
+from app.validators.MentorsValidators import storeValidator, updateValidator
 
 mentors = Blueprint("api_mentors", __name__, url_prefix="/mentors")
 
 
 @mentors.route("/", methods=["GET"])
-@auth_required()
+@auth_required
 def index(user=None):
-    print("request received")
-    fields = parse_args_list("fields")
-    filters = parse_args_list("filters")
-    # Need to introduce some filters ?
-    mentors = Mentor.query
+    try:
+        filters = parse_args_list("filters")
+        if filters is None or (len(filters) == 1 and filters[0] == ''):
+            filters = None
 
-    # if "suitable" in filters:
-    # mentors = mentors.query.
-    #     mentors = sort_mentors(mentors, user)
+        mentors = Mentor.query.all()
 
-    mentors = mentors.all()
+        if "suitable" in filters:
+            mentors = get_mentors(mentors, user)
 
-    schema = MentorSchema(only=fields, many=True)
-    result = schema.dump(mentors)
+        fields = parse_args_list("fields")
+        if fields is None or (len(fields) == 1 and fields[0] == ''):
+            fields = None
 
-    return {"success": True, "data": {"mentors": result}}, 200
+        schema = MentorSchema(only=fields, many=True)
+        result = schema.dump(mentors)
+
+        return {"success": True, "data": {"mentors": result}}, 200
+    except:
+        return {"success": False, "errors": ["An unexpected error occurred"]}, 400
 
 
-@mentors.route("/<mentorId>", methods=["GET"])
-# @auth_required()
-def get(mentorId, user=None):
-    # TODO: VALIDATE
-    fields = parse_args_list("fields")
-
-    mentor = Mentor.query.filter_by(id=mentorId).first()
-
-    if mentor is None:
-        return {"success": False, "errors": ["Mentor does not exist"]}, 400
-
-    schema = MentorSchema(only=fields)
-    result = schema.dump(mentor)
-
-    return {"success": True, "data": {"mentor": result}}, 200
+# @mentors.route("/<mentorId>", methods=["GET"])
+# @auth_required
+# def get(mentorId, user=None):
+#     # TODO: VALIDATE
+#     fields = parse_args_list("fields")
+#
+#     mentor = Mentor.query.filter_by(id=mentorId).first()
+#
+#     if mentor is None:
+#         return {"success": False, "errors": ["Mentor does not exist"]}, 400
+#
+#     schema = MentorSchema(only=fields)
+#     result = schema.dump(mentor)
+#
+#     return {"success": True, "data": {"mentor": result}}, 200
 
 
 @mentors.route("/", methods=["POST"])
-@auth_required()
+@auth_required
 def store(user=None):
-    data = dict(request.get_json())
-    # TODO: VALIDATE
-    mentor = Mentor(user_id=user.id, about=data.get("about"),
-                    capacity=data.get("capacity")).commit()
+    try:
+        data = dict(request.get_json())
+        storeValidator.validate(data)
+        if storeValidator.errors:
+            return {
+                       "success": False,
+                       "errors": get_errors(storeValidator)
+                   }, 400
 
-    selectedTopics = Topic.query.filter(Topic.id.in_([skill.get("skill") for skill in data.get("skills")])).all()
-    selectedTopicsOrdered = [next(s for s in selectedTopics if s.id == skill.get("skill")) for skill in
-                             sorted(data.get("skills"), key=(lambda i: i.get("priority")))]
+        is_duplicate = not Mentor.query.filter_by(user_id=user.id).first() is None
 
-    count = 1
-    for topic in selectedTopicsOrdered:
-        mentor_topic = MentorTopic(priority=count)
-        mentor_topic.topic = topic
-        mentor_topic.mentor = mentor
-        db.session.add(mentor_topic)
-        count += 1
-    #     db.session.add(mentor_topic)
-    #
-    db.session.commit()
+        if is_duplicate:
+            return {"success": False, "errors": ["User's mentor account already exists."]}, 400
 
-    print(mentor.topics)
+        if data.get("user_id") != user.id:
+            return {"success": False, "errors": ["You are not allowed to create mentor accounts on other's behalf."]}
 
-    return {"success": True}, 200
+        mentor = Mentor(user_id=user.id, about=data.get("about"),
+                        capacity=data.get("capacity")).commit()
+
+        selected_topics = Topic.query.filter(Topic.id.in_([skill.get("skill") for skill in data.get("skills")])).all()
+        selected_topics_ordered = [next(s for s in selected_topics if s.id == skill.get("skill")) for skill in
+                                 sorted(data.get("skills"), key=(lambda i: i.get("priority")))]
+
+        count = 1
+        for topic in selected_topics_ordered:
+            mentor_topic = MentorTopic(priority=count)
+            mentor_topic.topic = topic
+            mentor_topic.mentor = mentor
+            db.session.add(mentor_topic)
+            count += 1
+        db.session.commit()
+
+        Notification(notification_level="info", notification_type="mentoring", user_id=data.get("user_id"),
+                     description="You've become a mentor. You will be able to build a mentorship partnership with mentees, once you receive and accept a mentorship request. As a mentor for a mentee, you will be able to set and track plans of action of your mentees and set up meetings with them.").commit()
+
+        return {"success": True}, 200
+    except:
+        return {"success": False, "errors": ["An unexpected error occurred"]}, 400
 
 
 @mentors.route("/<mentorId>", methods=["PUT"])
-@auth_required()
+@auth_required
 def update(mentorId=None, user=None):
-    data = dict(request.get_json())
-    # TODO: VALIDATE
-    mentor = Mentor.query.filter_by(id=mentorId).first()
+    try:
+        data = dict(request.get_json())
+        updateValidator.validate(data)
+        if updateValidator.errors:
+            return {
+                       "success": False,
+                       "errors": get_errors(updateValidator)
+                   }, 400
+        mentor = Mentor.query.filter_by(id=mentorId).first()
 
-    if mentor is None:
-        return {"success": False, "errors": ["Requested mentor not found."]}, 400
+        if mentor is None:
+            return {"success": False, "errors": ["Requested mentor not found."]}, 400
 
-    if mentor.user_id != user.id:
-        return {"success": False, "errors": ["You don't have the permissions to update a mentor"]}, 401
-
-
-    selectedTopics = Topic.query.filter(Topic.id.in_([skill.get("skill") for skill in data.get("skills")])).all()
-    selectedTopicsOrdered = [next(s for s in selectedTopics if s.id == skill.get("skill")) for skill in
-                             sorted(data.get("skills"), key=(lambda i: i.get("priority")))]
-
-    MentorTopic.query.filter_by(mentor_id=mentorId).delete()
-    db.session.commit()
-
-    count = 1
-    for topic in selectedTopicsOrdered:
-        mentor_topic = MentorTopic(priority=count)
-        mentor_topic.topic = topic
-        mentor_topic.mentor = mentor
-        db.session.add(mentor_topic)
-        count += 1
-
-    db.session.commit()
-
-    return {"success": True}, 200
+        if mentor.user.id != user.id:
+            return {"success": False, "errors": ["You don't have the permissions to update a mentor account on other's behalf."]}, 401
 
 
-# # TODO : REMOVE THIS ROUTE
-# @mentors.route("/verify", methods=["GET"])
-# @auth_required()
-# def verify(user=None):
-#     isMentor = not Mentor.query.filter_by(user_id=user.id).first() is None
-#     return {"isMentor": isMentor}
+        selected_topics = Topic.query.filter(Topic.id.in_([skill.get("skill") for skill in data.get("skills")])).all()
+        selected_topics_ordered = [next(s for s in selected_topics if s.id == skill.get("skill")) for skill in
+                                 sorted(data.get("skills"), key=(lambda i: i.get("priority")))]
+
+        MentorTopic.query.filter_by(mentor_id=mentorId).delete()
+        db.session.commit()
+
+        count = 1
+        for topic in selected_topics_ordered:
+            mentor_topic = MentorTopic(priority=count)
+            mentor_topic.topic = topic
+            mentor_topic.mentor = mentor
+            db.session.add(mentor_topic)
+            count += 1
+
+        db.session.commit()
+
+        Notification(notification_level="info", notification_type="mentoring", user=mentor.user,
+                     description="Your mentor account details have changed.").commit()
+
+        return {"success": True}, 200
+    except:
+        return {"success": False, "errors": ["An unexpected error occurred"]}, 400

@@ -1,4 +1,3 @@
-from sqlalchemy.dialects.postgresql import UUID
 from app import db
 
 class ApplicationFeedback(db.Model):
