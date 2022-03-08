@@ -2,8 +2,8 @@ import React, { FC, useCallback, useEffect, useRef, useState } from "react";
 import styles from "./Homepage.module.scss";
 import Button from "../../components/UI/Button/Button";
 import Logo from "../../logo";
-import useLogin from "../../hooks/UseLogin/UseLogin";
 import { useNavigate } from "react-router-dom";
+import UseVerifyUser from "../../hooks/UseVerifyUser/UseVerifyUser";
 
 interface HomepageProps {}
 
@@ -22,19 +22,29 @@ const circle = (fill: string) => <circle r="50" cx="50" cy="50" fill={fill} />;
 
 const Homepage: FC<HomepageProps> = () => {
   const navigate = useNavigate();
-  const loginState = useLogin();
 
   const requestRef = useRef<number>(0);
+
+  const { userId = null } = UseVerifyUser<{
+    userId: number | null | undefined;
+  }>({
+    isProtected: false,
+    userDataPolicies: [
+      {
+        dataPoint: "user.id",
+      },
+    ],
+  });
 
   const [squares, setSquares] = useState<Shape[]>(
     Array(50).fill({ x: 0, y: 0, rotation: 0 })
   );
 
   useEffect(() => {
-    if (loginState.state === "logged_in") {
+    if (userId) {
       navigate("/dashboard");
     }
-  }, [loginState, navigate]);
+  }, [userId, navigate]);
 
   const animate = useCallback((time: number) => {
     const speed = 30000;
