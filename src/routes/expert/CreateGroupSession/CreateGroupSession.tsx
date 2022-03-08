@@ -47,7 +47,7 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
     isValueValid: titleValueValid,
     changeHandler: titleChangeHandler,
     blurHandler: titleBlurHandler,
-  } = useInput<string>("");
+  } = useInput<string>("", (t) => t.length > 0);
 
   const {
     enteredValue: room,
@@ -55,7 +55,7 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
     blurHandler: roomBlurHandler,
     isInputValid: roomInputValid,
     isValueValid: roomValueValid,
-  } = useInput<SearchSelectOptions<Room>>([], (value) => value.length > 0);
+  } = useInput<SearchSelectOptions<Room>>([], (value) => value.length === 1);
 
   const {
     enteredValue: invites,
@@ -140,7 +140,9 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
     enteredValue: description,
     changeHandler: descriptionChangeHandler,
     blurHandler: descriptionBlurHandler,
-  } = useInput<string>("");
+    isInputValid: descriptionInputValid,
+    isValueValid: descriptionValueValid,
+  } = useInput<string>("", (d) => d.length < 1000);
 
   const {
     enteredValue: capacity,
@@ -148,7 +150,12 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
     isInputValid: capacityInputValid,
     isValueValid: capacityValueValid,
     blurHandler: capacityBlurHandler,
-  } = useInput<number>(0, (value) => value > 0);
+  } = useInput<string>(
+    "",
+    (value) =>
+      (value === "" && link.length > 0) ||
+      (parseInt(value) < 1000 && parseInt(value) > 0)
+  );
 
   const {
     enteredValue: visibility,
@@ -181,10 +188,12 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
             startswith: search,
           },
         });
+
         return data.rooms.map((room: Room) => ({
           label: room.name,
           value: room,
         }));
+        // return rooms;
       } catch (errors) {
         console.log(errors);
       }
@@ -214,22 +223,22 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
   };
 
   const sendMeetingData = async () => {
-    const body = {
-      title: title,
-      host: userId,
-      room: room[0].value,
-      link: link,
-      date: date,
-      startTime: startTime,
-      endTime: endTime,
-      description: description,
-      capacity: capacity,
-      visibility: visibility.value,
-      type: type.value,
-      invites: invites.map((invite) => invite.value),
-    };
-
     try {
+      const body = {
+        title: title,
+        host: userId,
+        room: room[0].value.id,
+        link: link,
+        topics: topics.map((topic) => topic.value),
+        date: date,
+        startTime: startTime,
+        endTime: endTime,
+        description: description,
+        capacity: parseInt(capacity),
+        visibility: visibility.value,
+        type: type.value,
+        invites: invites.map((invite) => invite.value),
+      };
       await store({
         resource: "meetings",
         body: body,
@@ -254,10 +263,10 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
     capacityBlurHandler();
     endTimeBlurHandler();
     topicsBlurHandler();
+    descriptionBlurHandler();
   }
 
-  const submitHandler: FormEventHandler = (event) => {
-    event.preventDefault();
+  const submitHandler = () => {
     if (
       roomValueValid &&
       startTimeValueValid &&
@@ -269,7 +278,8 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
       (invitesValueValid || visibility.value === "public") &&
       titleValueValid &&
       endTimeValueValid &&
-      topicsValueValid
+      topicsValueValid &&
+      descriptionValueValid
     ) {
       // send off this event to the backend
       sendMeetingData();
@@ -280,151 +290,145 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
 
   return (
     <DashboardSubpageLayout title={"Create a Group Session"}>
-      <form
-        className={styles.CreateGroupSession}
-        data-testid="CreateGroupSession"
-        onSubmit={submitHandler}
-      >
-        <TextInput
-          id={"title"}
-          label={"Session Title"}
-          placeholder={"Please provide the title of your group session."}
-          value={title}
-          isValid={titleInputValid}
-          onChange={titleChangeHandler}
-          onBlur={titleBlurHandler}
-        />
-        <BigTextInput
-          id={"description"}
-          label={"Description"}
-          placeholder={"Tell attendees what the event is about"}
-          value={description}
-          isValid={true}
-          onChange={descriptionChangeHandler}
-          onBlur={descriptionBlurHandler}
-        />
+      <TextInput
+        id={"title"}
+        label={"Session Title"}
+        placeholder={"Please provide the title of your group session."}
+        value={title}
+        isValid={titleInputValid}
+        onChange={titleChangeHandler}
+        onBlur={titleBlurHandler}
+      />
+      <BigTextInput
+        id={"description"}
+        label={"Description"}
+        placeholder={"Tell attendees what the event is about"}
+        value={description}
+        isValid={descriptionInputValid}
+        onChange={descriptionChangeHandler}
+        onBlur={descriptionBlurHandler}
+      />
+      <SearchSelect
+        id={"topics"}
+        label={"Topics Covered"}
+        isValid={topicsInputValid}
+        value={topics}
+        onChange={topicsChangeHandler}
+        onBlur={topicsBlurHandler}
+        searchPromise={topicsSearchPromise}
+      />
+      <Select
+        id={"visibility"}
+        label={"Meeting Visibility"}
+        placeholder={"Public or Private?"}
+        options={[
+          { value: "public", label: "Public (anyone can join)" },
+          { value: "private", label: "Private (select who is invited)" },
+        ]}
+        value={visibility}
+        isValid={visibilityInputValid}
+        onChange={visibilityChangeHandler}
+        onBlur={visibilityBlurHandler}
+      />
+
+      {visibility.value === "private" && (
         <SearchSelect
-          id={"topics"}
-          label={"Topics Covered"}
-          isValid={topicsInputValid}
-          value={topics}
-          onChange={topicsChangeHandler}
-          onBlur={topicsBlurHandler}
-          searchPromise={topicsSearchPromise}
+          id={"invites"}
+          label={"Emails of invited"}
+          isValid={invitesInputValid}
+          value={invites}
+          onChange={invitesChangeHandler}
+          onBlur={invitesBlurHandler}
+          searchPromise={invitesSearchPromise}
         />
-        <Select
-          id={"visibility"}
-          label={"Meeting Visibility"}
-          placeholder={"Public or Private?"}
-          options={[
-            { value: "public", label: "Public (anyone can join)" },
-            { value: "private", label: "Private (select who is invited)" },
-          ]}
-          value={visibility}
-          isValid={visibilityInputValid}
-          onChange={visibilityChangeHandler}
-          onBlur={visibilityBlurHandler}
-        />
+      )}
 
-        {visibility.value === "private" && (
-          <SearchSelect
-            id={"invites"}
-            label={"Emails of invited"}
-            isValid={invitesInputValid}
-            value={invites}
-            onChange={invitesChangeHandler}
-            onBlur={invitesBlurHandler}
-            searchPromise={invitesSearchPromise}
-          />
-        )}
+      <Select
+        id={"type"}
+        label={"Meeting Type"}
+        placeholder={"Please select the session type."}
+        options={[
+          {
+            value: "workshop",
+            label: "Workshop (generally more hands-on session)",
+          },
+          {
+            value: "group session",
+            label: "Group Session (generally more theoretical)",
+          },
+        ]}
+        value={type}
+        isValid={typeInputValid}
+        onChange={typeChangeHandler}
+        onBlur={typeBlurHandler}
+      />
 
-        <Select
-          id={"type"}
-          label={"Meeting Type"}
-          placeholder={"Please select the session type."}
-          options={[
-            {
-              value: "workshop",
-              label: "Workshop (generally more hands-on session)",
-            },
-            {
-              value: "group session",
-              label: "Group Session (generally more theoretical)",
-            },
-          ]}
-          value={type}
-          isValid={typeInputValid}
-          onChange={typeChangeHandler}
-          onBlur={typeBlurHandler}
-        />
+      <DatePicker
+        id={"date"}
+        label={"Date"}
+        value={date}
+        isValid={dateInputValid}
+        onChange={dateChangeHandler}
+        onBlur={dateBlurHandler}
+      />
 
-        <DatePicker
-          id={"date"}
-          label={"Date"}
-          value={date}
-          isValid={dateInputValid}
-          onChange={dateChangeHandler}
-          onBlur={dateBlurHandler}
-        />
+      <TextInput
+        id={"time"}
+        label={"Start time"}
+        isValid={startTimeInputValid}
+        value={startTime}
+        onChange={startTimeChangeHandler}
+        onBlur={startTimeBlurHandler}
+        placeholder={"Please provide the start time of the session"}
+        type="time"
+      />
 
-        <TextInput
-          id={"time"}
-          label={"Start time"}
-          isValid={startTimeInputValid}
-          value={startTime}
-          onChange={startTimeChangeHandler}
-          onBlur={startTimeBlurHandler}
-          placeholder={"Please provide the start time of the session"}
-          type="time"
-        />
+      <TextInput
+        id={"duration"}
+        label={"End time"}
+        isValid={endTimeInputValid}
+        value={endTime}
+        onChange={endTimeChangeHandler}
+        onBlur={endTimeBlurHandler}
+        placeholder={"Please provide the start time of the session"}
+        type="time"
+      />
 
-        <TextInput
-          id={"duration"}
-          label={"End time"}
-          isValid={endTimeInputValid}
-          value={endTime}
-          onChange={endTimeChangeHandler}
-          onBlur={endTimeBlurHandler}
-          placeholder={"Please provide the start time of the session"}
-          type="time"
-        />
+      <TextInput
+        id={"capacity"}
+        label={"Capacity"}
+        placeholder={""}
+        value={capacity}
+        isValid={capacityInputValid}
+        type={"number"}
+        onChange={capacityChangeHandler}
+        onBlur={capacityBlurHandler}
+      />
 
-        <TextInput
-          id={"capacity"}
-          label={"Capacity"}
-          placeholder={""}
-          value={capacity.toString()}
-          isValid={capacityInputValid}
-          type={"number"}
-          onChange={(newValue) => capacityChangeHandler(parseInt(newValue))}
-          onBlur={capacityBlurHandler}
-        />
+      <SearchSelect
+        id={"room"}
+        label={"Room - only showing available"}
+        isValid={roomInputValid}
+        value={room}
+        onChange={roomChangeHandler}
+        onBlur={roomBlurHandler}
+        searchPromise={roomsSearchPromise}
+        limit={1}
+      />
 
-        <SearchSelect
-          id={"room"}
-          label={"Room - only showing available"}
-          isValid={roomInputValid}
-          value={room}
-          onChange={roomChangeHandler}
-          onBlur={roomBlurHandler}
-          searchPromise={roomsSearchPromise}
-          limit={1}
-        />
+      <TextInput
+        id={"link"}
+        label={"Meeting Link - for online events"}
+        placeholder={"Please provide the meeting link"}
+        value={link}
+        isValid={true}
+        onChange={linkChangeHandler}
+        onBlur={linkBlurHandler}
+      />
 
-        <TextInput
-          id={"link"}
-          label={"Meeting Link - for online events"}
-          placeholder={"Please provide the meeting link"}
-          value={link}
-          isValid={true}
-          onChange={linkChangeHandler}
-          onBlur={linkBlurHandler}
-        />
-
-        <Button icon="👑" type={"submit"} buttonStyle={"primary"}>
-          Create
-        </Button>
-      </form>
+      <Button icon="👑" onClick={submitHandler} buttonStyle={"primary"}>
+        Create
+      </Button>
     </DashboardSubpageLayout>
   );
 };

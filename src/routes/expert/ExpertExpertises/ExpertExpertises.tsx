@@ -108,8 +108,7 @@ const ExpertExpertises: FC<ExpertExpertisesProps> = () => {
     }
   };
 
-  const submitHandler: FormEventHandler = (event) => {
-    event.preventDefault();
+  const submitHandler = () => {
     if (isValueExpertisesValid) {
       updateExpertises();
     } else {
@@ -119,22 +118,20 @@ const ExpertExpertises: FC<ExpertExpertisesProps> = () => {
 
   return (
     <DashboardSubpageLayout title="Your Fields of Expertise">
-      <form onSubmit={submitHandler}>
-        <SearchSelect
-          id="expertises"
-          label="Fields of Expertise"
-          value={enteredExpertises}
-          isValid={isInputExpertisesValid}
-          onChange={expertisesChangeHandler}
-          onBlur={expertisesBlurHandler}
-          icon="💪"
-          searchPromise={searchPromise}
-        />
+      <SearchSelect
+        id="expertises"
+        label="Fields of Expertise"
+        value={enteredExpertises}
+        isValid={isInputExpertisesValid}
+        onChange={expertisesChangeHandler}
+        onBlur={expertisesBlurHandler}
+        icon="💪"
+        searchPromise={searchPromise}
+      />
 
-        <Button icon="➡️" buttonStyle="primary" type="submit">
-          Apply
-        </Button>
-      </form>
+      <Button icon="➡️" buttonStyle="primary" onClick={submitHandler}>
+        Apply
+      </Button>
       <div data-testid={"ExpertExpertises"} />
     </DashboardSubpageLayout>
     // <div className={styles.ExpertExpertises} data-testid="ExpertExpertises">

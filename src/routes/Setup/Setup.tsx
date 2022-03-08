@@ -87,8 +87,7 @@ const Setup = () => {
     }
   };
 
-  const submitHandler: FormEventHandler = (event) => {
-    event.preventDefault();
+  const submitHandler = () => {
     if (isValueExpertisesValid) {
       storeExpertises();
     } else {
@@ -115,7 +114,7 @@ const Setup = () => {
           </>
         )}
         {showExpertise === 1 && (
-          <form onSubmit={submitHandler}>
+          <>
             <SearchSelect
               id="expertise"
               label="Fields of Expertise"
@@ -130,10 +129,10 @@ const Setup = () => {
             <Link className={styles.a} to="/dashboard">
               No, I would not like to be an expert
             </Link>
-            <Button icon="➡️" buttonStyle="primary" type="submit">
+            <Button icon="➡️" buttonStyle="primary" onClick={submitHandler}>
               Continue
             </Button>
-          </form>
+          </>
         )}
         <Link className={styles.a} to="/dashboard">
           Finish setup later
