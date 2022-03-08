@@ -39,8 +39,8 @@ const YourGroupSessions: FC<YourGroupSessionsProps> = () => {
     meetings_hosted = [],
     stateChangingHandler,
   } = UseVerifyUser<{
-    expert_id: number | null | undefined;
-    meetings_hosted: MeetingType[] | null | undefined;
+    expert_id: number | null;
+    meetings_hosted: MeetingType[] | [];
   }>({
     userDataPolicies: [
       {
@@ -86,6 +86,13 @@ const YourGroupSessions: FC<YourGroupSessionsProps> = () => {
         resource: "meetings",
         entity: meetingId,
       });
+
+      stateChangingHandler((prevState) => ({
+        ...prevState,
+        meetings_hosted: prevState.meetings_hosted.filter(
+          (m) => m.id !== meetingId
+        ),
+      }));
     } catch (errors) {
       console.log(errors);
     }
@@ -156,7 +163,10 @@ const YourGroupSessions: FC<YourGroupSessionsProps> = () => {
                   >
                     <Button
                       buttonStyle="primary"
-                      onClick={removeHandler.bind(null, meeting.id)}
+                      onClick={() => {
+                        setShowWarning(false);
+                        removeHandler(meeting.id);
+                      }}
                     >
                       Confirm
                     </Button>
