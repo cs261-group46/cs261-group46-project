@@ -26,6 +26,15 @@
     width: 30px;
     height: 30px;
     position: absolute;
+    border: none;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: transparent;
+    padding: 0;
+    &:focus-visible,
+    &:hover {
+      outline: 2px solid $sq_dark_gray;
+    }
     &:first-of-type {
       left: 0;
     }

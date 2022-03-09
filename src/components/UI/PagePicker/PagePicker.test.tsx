@@ -5,7 +5,19 @@ import PagePicker from "./PagePicker";
 
 describe("<PagePicker />", () => {
   test("it should mount", () => {
-    render(<PagePicker pickers={[]} />);
+    render(
+      <PagePicker
+        pickers={[]}
+        buttons={{
+          buttonLeft: function (): void {
+            throw new Error("Function not implemented.");
+          },
+          buttonRight: function (): void {
+            throw new Error("Function not implemented.");
+          },
+        }}
+      />
+    );
 
     const pagePicker = screen.getByTestId("PagePicker");
 

@@ -16,6 +16,8 @@ updateValidationRules = {
     "mentor_id": {
         "required": True,
         "type": "integer",
+        "min": 1
+
     }
 
 }

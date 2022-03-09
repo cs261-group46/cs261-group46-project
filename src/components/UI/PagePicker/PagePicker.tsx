@@ -20,13 +20,14 @@ interface PagePickerProps {
 const PagePicker: FC<PagePickerProps> = (props) => (
   <div className={styles.PagePicker} data-testid="PagePicker">
     {props.buttons && (
-      <div className={styles.sideButton} onClick={props.buttons.buttonLeft}>
+      <button className={styles.sideButton} onClick={props.buttons.buttonLeft}>
         <Icon icon="⬅️" className={styles.Icon} />
-      </div>
+      </button>
     )}
     <div className={styles.pickers}>
-      {props.pickers.map((picker) => (
+      {props.pickers.map((picker, index) => (
         <Button
+          key={index}
           className={`${picker.className ?? ""} ${
             picker.selected ? styles.Selected : ""
           } ${styles.picker} ${picker.highlighted ? styles.Highlighted : ""}`}
@@ -37,8 +38,9 @@ const PagePicker: FC<PagePickerProps> = (props) => (
       ))}
     </div>
     <div className={styles.dots}>
-      {props.pickers.map((picker) => (
+      {props.pickers.map((picker, index) => (
         <div
+          key={index}
           className={`${styles.dot} ${
             picker.selected ? styles.SelectedDot : ""
           }`}
@@ -46,9 +48,9 @@ const PagePicker: FC<PagePickerProps> = (props) => (
       ))}
     </div>
     {props.buttons && (
-      <div className={styles.sideButton} onClick={props.buttons.buttonRight}>
+      <button className={styles.sideButton} onClick={props.buttons.buttonRight}>
         <Icon icon="➡️" className={styles.Icon} />
-      </div>
+      </button>
     )}
   </div>
 );

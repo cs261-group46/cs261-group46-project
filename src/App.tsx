@@ -34,6 +34,7 @@ import GiveFeedbackToMentor from "./routes/learn/GiveFeedbackToMentor/GiveFeedba
 import GiveFeedbackToMentee from "./routes/mentor/GiveFeedbackToMentee/GiveFeedbackToMentee.lazy";
 import MentorFeedbacks from "./routes/mentor/MentorFeedbacks/MentorFeedbacks.lazy";
 import MenteeFeedbacks from "./routes/learn/MenteeFeedbacks/MenteeFeedbacks.lazy";
+import GiveFeedbackForMeeting from "./routes/meetings/GiveFeedbackForMeeting/GiveFeedbackForMeeting.lazy";
 
 function App() {
   return (
@@ -56,6 +57,11 @@ function App() {
             path="/meetings/:menteeId/create"
             element={<CreateMeeting />}
           />
+          <Route
+            path="/meetings/give-feedback/:meetingId"
+            element={<GiveFeedbackForMeeting />}
+          />
+          {/* /meetings/give-feedback/${meeting.id} */}
           <Route path="/meetings/:menteeId" element={<Meetings />} />
           <Route path="/calendar" element={<UpcomingEvents />} />
           <Route path="/profile2" element={<Profile />} />

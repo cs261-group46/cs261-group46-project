@@ -174,7 +174,7 @@ const Dashboard: FC<DashboardProps> = () => {
         </Button> */}
 
           <Button icon={"📅"} href={"/calendar"}>
-            Upcoming Events
+            Calendar
           </Button>
 
           <Button icon={"💬"} href={"/calendar"}>

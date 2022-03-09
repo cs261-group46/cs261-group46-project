@@ -1,4 +1,4 @@
-@import '../../_variables.scss';
+@import "../../_variables.scss";
 
 .container {
   display: flex;
@@ -39,4 +39,9 @@
     border-bottom-right-radius: 10px;
     border-top-right-radius: 10px;
   }
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
 }
