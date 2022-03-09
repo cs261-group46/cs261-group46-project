@@ -6,6 +6,10 @@
 @import "../../variables";
 
 .Section {
+  button {
+    margin: 40px 0;
+    height: 40px;
+  }
   margin: 10px 0 60px 0;
   .Title {
     font-size: 15px;

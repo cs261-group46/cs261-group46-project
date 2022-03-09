@@ -114,6 +114,14 @@ const YourMentees: FC<YourMenteeProps> = () => {
             selected: filterEvents === 2,
           },
         ]}
+        buttons={{
+          buttonLeft: () => {
+            setFilterEvents((prev) => (prev > 0 ? prev - 1 : prev));
+          },
+          buttonRight: () => {
+            setFilterEvents((prev) => (prev < 2 ? prev + 1 : prev));
+          },
+        }}
       />
 
       {filterEvents === 0 && (

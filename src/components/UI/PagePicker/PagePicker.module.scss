@@ -2,7 +2,11 @@
 
 .PagePicker {
   display: flex;
-
+  align-items: center;
+  justify-content: center;
+  //   border-top: 1px solid $sq_light_gray;
+  //   border-bottom: 1px solid $sq_light_gray;
+  position: relative;
   button {
     border-radius: 0;
     z-index: 1;
@@ -18,18 +22,53 @@
       z-index: 10 !important;
     }
   }
+  .sideButton {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    &:first-of-type {
+      left: 0;
+    }
+    &:last-of-type {
+      right: 0;
+    }
+  }
+  .Icon {
+    height: 100%;
+  }
+  .dots {
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 5px;
+    display: flex;
+    gap: 10px;
+
+    .dot {
+      height: 7px;
+      border-radius: 25px;
+      width: 7px;
+      background-color: $sq_light_gray;
+      &.SelectedDot {
+        background-color: $sq_black;
+      }
+    }
+  }
 
   .picker {
+    display: none;
     height: 30px;
     border-collapse: collapse;
+
     & button {
       height: 100%;
       background-color: transparent;
       border: 1px solid $sq_black;
       color: $sq_black;
       border-collapse: collapse;
+      border-radius: 15px;
     }
     &.Selected {
+      display: block;
       & button {
         background-color: $sq_black;
         color: white;
@@ -47,13 +86,13 @@
     background-color: $sq_black;
   }
 
-  .picker:first-of-type button {
-    border-bottom-left-radius: 10px;
-    border-top-left-radius: 10px;
-  }
+  //   .picker:first-of-type button {
+  //     border-bottom-left-radius: 10px;
+  //     border-top-left-radius: 10px;
+  //   }
 
-  .picker:last-of-type button {
-    border-bottom-right-radius: 10px;
-    border-top-right-radius: 10px;
-  }
+  //   .picker:last-of-type button {
+  //     border-bottom-right-radius: 10px;
+  //     border-top-right-radius: 10px;
+  //   }
 }
