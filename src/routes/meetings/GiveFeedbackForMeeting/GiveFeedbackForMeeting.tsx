@@ -14,13 +14,21 @@ import styles from "./GiveFeedbackForMeeting.module.scss";
 interface GiveFeedbackForMeetingProps {}
 
 const GiveFeedbackForMeeting: FC<GiveFeedbackForMeetingProps> = () => {
-  const { userId = null, meetings_attending = [] } = UseVerifyUser<{
+  const {
+    userId = null,
+    meetings_attending = [],
+    meetings_hosted = [],
+  } = UseVerifyUser<{
     userId: number | null;
     meetings_attending: MeetingType[] | [];
+    meetings_hosted: MeetingType[] | [];
   }>({
     userDataPolicies: [
       {
         dataPoint: "meetings_attending",
+      },
+      {
+        dataPoint: "meetings_hosted",
       },
     ],
   });
@@ -35,27 +43,26 @@ const GiveFeedbackForMeeting: FC<GiveFeedbackForMeetingProps> = () => {
       return;
     }
 
-    const meet = meetings_attending.find((m) => {
-      console.log(m);
+    const meet = meetings_attending.find((m) => m.id === parseInt(meetingId));
+    const meet_host = meetings_hosted.find(
+      (m) =>
+        m.id === parseInt(meetingId) && m.meeting_type === "one on one meeting"
+    );
 
-      return m.id === parseInt(meetingId);
-    });
-    console.log(meet);
-
-    if (!meet) {
+    if (!meet && !meet_host) {
       navigate("/calendar");
       return;
     }
 
-    const mDate = new Date(meet.date);
+    const m = meet !== undefined ? meet : meet_host;
+
+    const mDate = new Date((m as MeetingType).date);
     const today = new Date();
 
     if (mDate.getTime() > today.getTime()) {
       navigate("/calendar");
       return;
     }
-
-    console.log("date is bad");
 
     setMeeting(meet);
   }, [meetingId, JSON.stringify(meetings_attending), navigate]);

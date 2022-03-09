@@ -98,7 +98,7 @@ function App() {
             <Route path="skills" element={<ExpertExpertises />} />
             <Route path="become-expert" element={<ExpertSignup />} />
           </Route>
-          <Route path="/feedback" element={<SiteFeedback />} />
+          <Route path="/give-feedback" element={<SiteFeedback />} />
           {/* <Route path="/workshops">
             <Route index element={<ViewWorkshops />} />
             <Route path={"create"} element={<CreateWorkshop />} />

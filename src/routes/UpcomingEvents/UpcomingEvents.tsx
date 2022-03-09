@@ -341,7 +341,8 @@ const UpcomingEvents: FC<UpcomingEventsProps> = (props) => {
               },
             ]}
             buttons={[
-              meeting.host !== undefined
+              meeting.host !== undefined ||
+              meeting.meeting_type === "one on one meeting"
                 ? {
                     children: "Give Feedback",
                     href: `/meetings/give-feedback/${meeting.id}`,

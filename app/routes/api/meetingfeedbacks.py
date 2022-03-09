@@ -1,3 +1,5 @@
+import datetime
+
 from flask import Blueprint, request, session, url_for, render_template
 from app import db, User, Department, MeetingFeedback, Meeting
 from app.utils.cerberus_helpers import get_errors
@@ -25,10 +27,19 @@ def store(user=None):
         if meeting is None:
             return {"success" : False, "errors": ["Could not find the requested meeting"]}, 400
 
-        if data.get("user_id") != user.id:
-                return {"success": False, "errors": ["You do not have the permission to submit feedback on behalf other users."]}, 404
+        if meeting.date > datetime.datetime.now():
+            return {"success" : False, "errors": ["The meeting did not take place yet."]}, 400
 
-        MeetingFeedback(meeting=meeting, user_id=data.get("user_id"), feedback=data.get("feedback")).commit()
+        u = User.query.filter_by(id=data.get("user_id")).first()
+
+        if u.id != user.id:
+                return {"success": False, "errors": ["You do not have the permission to submit feedback on behalf other users."]}, 401
+
+        if not (meeting in u.meetings_attending or (meeting in u.meetings_hosted and meeting.meeting_type == "one on one meeting")):
+            return {"success": False,
+                    "errors": ["You do not have the permission to submit feedback for a meeting in which you did not participate"]}, 401
+
+        MeetingFeedback(meeting=meeting, user_id=u.id, feedback=data.get("feedback")).commit()
 
         return {"success": True}, 200
     except:

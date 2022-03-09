@@ -164,25 +164,17 @@ const Dashboard: FC<DashboardProps> = () => {
       {pageVisiable === 1 && (
         <div className={styles.Section}>
           <Title text={"Welcome back!"} className={styles.Title} />
-
           <Button icon={"👤"} href={"/profile"}>
             Your Profile
           </Button>
-
           {/* <Button icon={"🔔"} href={"/notifications"}>
           All Notifications
         </Button> */}
-
           <Button icon={"📅"} href={"/calendar"}>
             Calendar
           </Button>
-
-          <Button icon={"💬"} href={"/calendar"}>
-            Messages
-          </Button>
-
-          <Button icon={"⚙️"} href={"/settings"}>
-            Settings
+          <Button icon={"⚙️"} href={"/give-feedback"}>
+            Give Feedback
           </Button>
 
           <Button icon={"👋"} onClick={logoutHandler}>
