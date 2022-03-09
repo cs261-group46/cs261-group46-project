@@ -32,6 +32,8 @@ import MentorFeedback from "./routes/learn/MentorFeedback/MentorFeedback.lazy";
 import PastMentors from "./routes/learn/PastMentors/PastMentors";
 import GiveFeedbackToMentor from "./routes/learn/GiveFeedbackToMentor/GiveFeedbackToMentor";
 import GiveFeedbackToMentee from "./routes/mentor/GiveFeedbackToMentee/GiveFeedbackToMentee.lazy";
+import MentorFeedbacks from "./routes/mentor/MentorFeedbacks/MentorFeedbacks.lazy";
+import MenteeFeedbacks from "./routes/learn/MenteeFeedbacks/MenteeFeedbacks.lazy";
 
 function App() {
   return (
@@ -62,6 +64,7 @@ function App() {
             element={<GiveFeedbackToMentee />}
           />
           <Route path="/mentor">
+            <Route path="feedback-received" element={<MentorFeedbacks />} />
             <Route path="become-mentor" element={<MentorSignup />} />
             <Route path="skills" element={<MentorSkills />} />
             <Route path="become-mentor" element={<MentorSignup />} />
@@ -72,6 +75,7 @@ function App() {
             element={<GiveFeedbackToMentor />}
           />
           <Route path="/learn">
+            <Route path="feedback-received" element={<MenteeFeedbacks />} />
             <Route path="past-mentors" element={<PastMentors />} />
             <Route path="become-mentee" element={<MenteeSignup />} />
             <Route path="find-mentor" element={<FindMentor />} />

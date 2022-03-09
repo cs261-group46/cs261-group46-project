@@ -37,7 +37,7 @@ const StarPicker: FC<InteractiveStarPickerProps | InlineStarPickerProps> = (
     if (hovered) {
       return index <= hovered ? "#FFBFD4" : "none";
     } else {
-      return index <= (props.value ?? 0) ? "#EA596E" : "none";
+      return index <= (props.value ?? 0) ? "#ff4e64" : "none";
     }
   }
 
@@ -84,7 +84,7 @@ const StarPicker: FC<InteractiveStarPickerProps | InlineStarPickerProps> = (
             .fill(0)
             .map((_, index) => (
               <StarSvg
-                fill={index < (props.value ?? 0) ? "#EA596E" : "none"}
+                fill={index < (props.value ?? 0) ? "#ff4e64" : "none"}
                 size={props.size}
               />
             ))}

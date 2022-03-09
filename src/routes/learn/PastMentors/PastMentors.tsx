@@ -55,7 +55,13 @@ const PastMentors: FC<PastMentorsProps> = () => {
                 },
                 feedback.score !== null && {
                   title: "Score given",
-                  content: <StarPicker type="inline" value={feedback.score} />,
+                  content: (
+                    <StarPicker
+                      type="inline"
+                      value={feedback.score}
+                      size="30px"
+                    />
+                  ),
                 },
               ]}
               buttons={[

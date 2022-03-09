@@ -1,6 +1,7 @@
 import React, { FC, useEffect, useState } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { store, update } from "../../../api/api";
+import Button from "../../../components/UI/Button/Button";
 import BigTextInput from "../../../components/UI/FormInput/BigTextInput/BigTextInput";
 import StarPicker from "../../../components/UI/FormInput/StarPicker/StarPicker";
 import TextInput from "../../../components/UI/FormInput/TextInput/TextInput";
@@ -15,32 +16,17 @@ import styles from "./GiveFeedbackToMentee.module.scss";
 interface GiveFeedbackToMenteeProps {}
 
 const GiveFeedbackToMentee: FC<GiveFeedbackToMenteeProps> = () => {
-  const {
-    userId = null,
-    mentee_id = null,
-    mentor_id = null,
-    mentor_feedback_given = [],
-    mentor = null,
-  } = UseVerifyUser<{
+  const { userId = null, mentor_feedback_given = [] } = UseVerifyUser<{
     userId: number | null | undefined;
-    mentee_id: number | null | undefined;
-    mentor_id: number | null | undefined;
     mentor_feedback_given: MenteeFeedbackType[] | [];
-    mentor: any | null | undefined;
   }>({
     userDataPolicies: [
-      {
-        dataPoint: "mentee.id",
-      },
       {
         dataPoint: "mentor.id",
         redirectOnFail: "/dashboard",
       },
       {
         dataPoint: "mentor.feedback_given",
-      },
-      {
-        dataPoint: "mentor",
       },
     ],
   });
@@ -50,26 +36,19 @@ const GiveFeedbackToMentee: FC<GiveFeedbackToMenteeProps> = () => {
 
   const navigate = useNavigate();
   useEffect(() => {
-    console.log(mentor);
+    if (!menteeId) {
+      navigate("/dashboard");
+    }
 
-    if (menteeId && userId) {
-      const id = parseInt(menteeId);
-      const found_mentee = mentor_feedback_given.find((feedback) => {
-        console.log("one of these should be found");
-        console.log(feedback.mentee.id === id);
-
-        return feedback.mentee.id === id;
-      });
-
-      console.log(found_mentee);
-      console.log(mentor_feedback_given);
-      console.log(id);
+    if (userId) {
+      const id = parseInt(menteeId as string);
+      const found_mentee = mentor_feedback_given.find(
+        (feedback) => feedback.mentee.id === id
+      );
 
       if (found_mentee) {
         setFeedback(found_mentee);
       } else {
-        console.log("navigating here");
-
         navigate("/dashboard");
       }
     }
@@ -81,7 +60,7 @@ const GiveFeedbackToMentee: FC<GiveFeedbackToMenteeProps> = () => {
     blurHandler: feedbackBlurHandler,
     isInputValid: feedbackInputValid,
     isValueValid: feedbackValueValid,
-  } = useInput<string>("", (d) => d.length < 1000);
+  } = useInput<string>("", (d) => d.length <= 1000);
 
   const {
     enteredValue: starsValue,
@@ -89,11 +68,18 @@ const GiveFeedbackToMentee: FC<GiveFeedbackToMenteeProps> = () => {
     isInputValid: starsInputValid,
     isValueValid: starsValueValid,
     blurHandler: starsBlurHandler,
-  } = useInput<number | undefined>(2, (value) => value !== undefined);
+  } = useInput<number | undefined>(
+    0,
+    (value) => value !== undefined && value > 0 && value <= 5
+  );
 
   const sendFeedbackData = async () => {
     try {
-      const body = {};
+      const body = {
+        score: starsValue,
+        feedback: enteredFeedback,
+        mentee_id: parseInt(menteeId as string),
+      };
 
       await update({
         resource: "menteefeedbacks",
@@ -145,7 +131,11 @@ const GiveFeedbackToMentee: FC<GiveFeedbackToMenteeProps> = () => {
             isValid={starsInputValid}
             onChange={starsChangeHandler}
             onBlur={starsBlurHandler}
+            size={"100%"}
           />
+          <Button onClick={submitHandler} buttonStyle={"primary"}>
+            Submit
+          </Button>
         </>
       )}
     </DashboardSubpageLayout>

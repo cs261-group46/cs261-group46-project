@@ -258,6 +258,12 @@ const Dashboard: FC<DashboardProps> = () => {
             </Button>
           )}
 
+          {mentee_id && (
+            <Button href={"/learn/feedback-received"} icon={"👨‍🏫"}>
+              Received Feedback
+            </Button>
+          )}
+
           {/* <Button href={"/learn/workshops"} icon={"✏️"}>
           Workshops
         </Button> */}
@@ -317,6 +323,12 @@ const Dashboard: FC<DashboardProps> = () => {
           {isMentor && (
             <Button href={"/mentor/skills"} icon={"💪"}>
               Your Skills
+            </Button>
+          )}
+
+          {isMentor && (
+            <Button href={"/mentor/feedback-received"} icon={"👨‍🏫"}>
+              Received Feedback
             </Button>
           )}
         </div>

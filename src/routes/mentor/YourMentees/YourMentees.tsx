@@ -55,6 +55,8 @@ const YourMentees: FC<YourMenteeProps> = () => {
     <MentorshipRequestCard key={req.mentee.id} mentorshipRequest={req} />
   ));
 
+  console.log(mentor_feedback_given);
+
   const pastMenteesList = mentor_feedback_given.map(
     (feedback: MenteeFeedbackType, index: number) => (
       <ContentCard
@@ -75,7 +77,9 @@ const YourMentees: FC<YourMenteeProps> = () => {
           },
           feedback.score !== null && {
             title: "Score given",
-            content: <StarPicker type="inline" value={feedback.score} />,
+            content: (
+              <StarPicker type="inline" value={feedback.score} size={"30px"} />
+            ),
           },
         ]}
         buttons={[
