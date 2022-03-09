@@ -1,0 +1,59 @@
+@import "../../../variables";
+
+.PagePicker {
+  display: flex;
+
+  button {
+    border-radius: 0;
+    z-index: 1;
+    position: relative;
+    // width: 100px;
+
+    div {
+      margin: 0 !important;
+    }
+
+    &:hover,
+    &:focus-visible {
+      z-index: 10 !important;
+    }
+  }
+
+  .picker {
+    height: 30px;
+    border-collapse: collapse;
+    & button {
+      height: 100%;
+      background-color: transparent;
+      border: 1px solid $sq_black;
+      color: $sq_black;
+      border-collapse: collapse;
+    }
+    &.Selected {
+      & button {
+        background-color: $sq_black;
+        color: white;
+      }
+    }
+    &.Highlighted {
+      & button {
+        background-color: $sq_red;
+        color: white;
+      }
+    }
+  }
+
+  .selected button {
+    background-color: $sq_black;
+  }
+
+  .picker:first-of-type button {
+    border-bottom-left-radius: 10px;
+    border-top-left-radius: 10px;
+  }
+
+  .picker:last-of-type button {
+    border-bottom-right-radius: 10px;
+    border-top-right-radius: 10px;
+  }
+}

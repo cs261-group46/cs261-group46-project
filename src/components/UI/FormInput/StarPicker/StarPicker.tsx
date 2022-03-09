@@ -35,10 +35,9 @@ const StarPicker: FC<InteractiveStarPickerProps | InlineStarPickerProps> = (
 
   function getFill(index: number) {
     if (hovered) {
-      // if element is hovered
       return index <= hovered ? "#FFBFD4" : "none";
     } else {
-      return index < (props.value ?? 0) ? "#EA596E" : "none";
+      return index <= (props.value ?? 0) ? "#EA596E" : "none";
     }
   }
 
@@ -54,16 +53,20 @@ const StarPicker: FC<InteractiveStarPickerProps | InlineStarPickerProps> = (
               .fill(0)
               .map((_, index) => (
                 <div
+                  key={index + 1}
                   className={styles.star}
                   onClick={() => {
                     props.onChange(index + 1);
                     props.onBlur(); // not much better place to 'blur'
                     setHovered(undefined); // turn off the hover effect to show user their choice
                   }}
-                  onMouseEnter={() => setHovered(index)}
+                  onMouseEnter={() => {
+                    console.log(index + 1);
+                    setHovered(index + 1);
+                  }}
                   onMouseLeave={() => setHovered(undefined)}
                 >
-                  <StarSvg fill={getFill(index)} size={props.size} />
+                  <StarSvg fill={getFill(index + 1)} size={props.size} />
                 </div>
               ))}
           </div>

@@ -9,6 +9,7 @@ import { MentorType } from "../../../types/Mentor";
 import Tag from "../../../components/UI/Tag/Tag";
 import ContentCard from "../../../components/UI/ContentCard/ContentCard";
 import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
+import Button from "../../../components/UI/Button/Button";
 
 interface YourMentorProps {}
 
@@ -43,10 +44,10 @@ const YourMentor: FC<YourMentorProps> = () => {
     }
   };
 
-  console.log(mentee_mentor);
   return (
     <DashboardSubpageLayout title="Your Mentor">
       <div className={styles.YourMentor} data-testid="YourMentor">
+        <Button href="/learn/past-mentors">Past Mentors</Button>
         {mentee_id && mentee_mentor ? (
           <ContentCard
             heading={`${mentee_mentor.user.first_name} ${mentee_mentor.user.last_name}`}
