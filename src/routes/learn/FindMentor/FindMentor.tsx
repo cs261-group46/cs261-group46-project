@@ -6,6 +6,7 @@ import { MentorType } from "../../../types/Mentor";
 import ContentCard from "../../../components/UI/ContentCard/ContentCard";
 import styles from "./FindMentor.module.scss";
 import Tag from "../../../components/UI/Tag/Tag";
+import LoadingSpinner from "../../../components/UI/LoadingSpinner/LoadingSpinner";
 
 interface FindMentorProps {}
 
@@ -25,7 +26,7 @@ const FindMentor: FC<FindMentorProps> = () => {
     ],
   });
 
-  const [mentors, setMentors] = useState<MentorType[]>([]);
+  const [mentors, setMentors] = useState<MentorType[]>();
 
   const indexMentors = async () => {
     try {
@@ -71,7 +72,7 @@ const FindMentor: FC<FindMentorProps> = () => {
     }
   };
 
-  const mentorCards = mentors.map((mentor) => (
+  const mentorCards = mentors?.map((mentor) => (
     // <MentorCard key={mentor.id} mentor={mentor} />
     <ContentCard
       heading={`${mentor.user.first_name} ${mentor.user.last_name}`}
@@ -111,8 +112,10 @@ const FindMentor: FC<FindMentorProps> = () => {
     <DashboardSubpageLayout title="Find a Mentor">
       <div className={styles.FindMentor} data-testid="FindMentor">
         {mentorCards}
-        {mentorCards.length === 0 &&
+        {mentorCards &&
+          mentorCards.length === 0 &&
           "Sorry, couldn't find any available mentors"}
+        {mentorCards === undefined && <LoadingSpinner />}
       </div>
     </DashboardSubpageLayout>
   );

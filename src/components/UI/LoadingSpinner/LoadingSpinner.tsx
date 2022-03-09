@@ -54,8 +54,9 @@ const LoadingSpinner: FC<LoadingSpinnerProps> = (props) => {
       data-testid="LoadingSpinner"
     >
       {dots &&
-        dots.map((dot) => (
+        dots.map((dot, index) => (
           <svg
+            key={index}
             width={size}
             height={size}
             viewBox="0 0 100 100"

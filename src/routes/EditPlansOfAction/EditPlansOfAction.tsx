@@ -15,6 +15,7 @@ import Draggable from "react-draggable";
 import UseVerifyUser from "../../hooks/UseVerifyUser/UseVerifyUser";
 import DashboardSubpageLayout from "../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
 import { get, update } from "../../api/api";
+import LoadingSpinner from "../../components/UI/LoadingSpinner/LoadingSpinner";
 
 interface EditPlansOfActionProps {}
 
@@ -365,7 +366,7 @@ const EditPlansOfAction: FC<EditPlansOfActionProps> = () => {
               </Button>
             </div>
           ) : (
-            <div className={styles.Loader}>Fetching data...</div>
+            <LoadingSpinner />
           )
         }
       </div>

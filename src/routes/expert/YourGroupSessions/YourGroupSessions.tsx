@@ -44,7 +44,7 @@ const getDateString = (date: Date, duration: number) => {
 const YourGroupSessions: FC<YourGroupSessionsProps> = () => {
   const {
     expert_id = null,
-    meetings_hosted = [],
+    meetings_hosted = undefined,
     stateChangingHandler,
   } = UseVerifyUser<{
     expert_id: number | null;
@@ -68,7 +68,7 @@ const YourGroupSessions: FC<YourGroupSessionsProps> = () => {
         ? meetings_hosted.filter(
             (meeting) => meeting.meeting_type !== "one on one meeting"
           )
-        : [],
+        : undefined,
     [JSON.stringify(meetings_hosted)]
   );
 
@@ -80,8 +80,10 @@ const YourGroupSessions: FC<YourGroupSessionsProps> = () => {
     (expert_meetings_hosted?.length ?? 0) / pageSize
   );
 
-  const groupSessionsOnPage: MeetingType[] =
-    expert_meetings_hosted?.slice(page * pageSize, (page + 1) * pageSize) ?? [];
+  const groupSessionsOnPage = expert_meetings_hosted?.slice(
+    page * pageSize,
+    (page + 1) * pageSize
+  );
 
   const [selectedGroupSessions, setSelectedGroupSessions] =
     useState<MeetingType>();
@@ -115,7 +117,7 @@ const YourGroupSessions: FC<YourGroupSessionsProps> = () => {
             {groupSessionsOnPage.map((meeting) => {
               if (!meeting.attendees) meeting.attendees = [];
               return (
-                <>
+                <div key={meeting.id}>
                   <ContentCard
                     key={meeting.id}
                     heading={meeting.title}
@@ -184,14 +186,16 @@ const YourGroupSessions: FC<YourGroupSessionsProps> = () => {
                       </Button>
                     </SystemMessage>
                   )}
-                </>
+                </div>
               );
             })}
-            {groupSessionsOnPage.length === 0 && <LoadingSpinner />}
+            {groupSessionsOnPage.length === 0 && (
+              <p>You have no group sessions</p>
+            )}
           </Fragment>
         ) : (
           // else not loaded yet
-          <p>You have no group sessions</p>
+          <LoadingSpinner />
         )}
         {hasPages && (
           <div className={styles.pagecontainer}>

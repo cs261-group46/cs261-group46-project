@@ -12,6 +12,7 @@ import PagePicker from "../../../components/UI/PagePicker/PagePicker";
 import ContentCard from "../../../components/UI/ContentCard/ContentCard";
 import { MenteeFeedbackType } from "../../../types/MenteeFeedback";
 import StarPicker from "../../../components/UI/FormInput/StarPicker/StarPicker";
+import LoadingSpinner from "../../../components/UI/LoadingSpinner/LoadingSpinner";
 
 interface YourMenteeProps {}
 
@@ -47,11 +48,11 @@ const YourMentees: FC<YourMenteeProps> = () => {
 
   const [filterEvents, setFilterEvents] = useState<number>(0);
 
-  const menteeList = mentees.map((mentee) => (
+  const menteeList = mentees?.map((mentee) => (
     <MenteeCard key={mentee.id} mentee={mentee} />
   ));
 
-  const mentorshipRequestsList = mentorshipRequests.map((req) => (
+  const mentorshipRequestsList = mentorshipRequests?.map((req) => (
     <MentorshipRequestCard key={req.mentee.id} mentorshipRequest={req} />
   ));
 
@@ -127,13 +128,17 @@ const YourMentees: FC<YourMenteeProps> = () => {
       {filterEvents === 0 && (
         <>
           <div className={styles.YourMentees}>
-            {menteeList.length === 0 ? (
-              "You currently don't have any mentees"
+            {menteeList ? (
+              menteeList.length === 0 ? (
+                "You currently don't have any mentees"
+              ) : (
+                <>
+                  <Title text={`No. of Mentees: ${menteeList.length}`} />
+                  {menteeList}
+                </>
+              )
             ) : (
-              <>
-                <Title text={`No. of Mentees: ${menteeList.length}`} />
-                {menteeList}
-              </>
+              <LoadingSpinner />
             )}
           </div>
         </>
@@ -142,15 +147,19 @@ const YourMentees: FC<YourMenteeProps> = () => {
       {filterEvents === 1 && (
         <>
           <div className={styles.YourMentees}>
-            {mentorshipRequestsList.length === 0 ? (
-              "You currently don't have any mentorship requests"
+            {mentorshipRequestsList ? (
+              mentorshipRequestsList.length === 0 ? (
+                "You currently don't have any mentorship requests"
+              ) : (
+                <>
+                  <Title
+                    text={`No. of Mentorship Requests : ${mentorshipRequestsList.length}`}
+                  />
+                  {mentorshipRequestsList}
+                </>
+              )
             ) : (
-              <>
-                <Title
-                  text={`No. of Mentorship Requests : ${mentorshipRequestsList.length}`}
-                />
-                {mentorshipRequestsList}
-              </>
+              <LoadingSpinner />
             )}
           </div>
         </>
