@@ -22,6 +22,7 @@ import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
 import { useNavigate, useParams } from "react-router-dom";
 import { get, index, store } from "../../../api/api";
 import { Room } from "../../../types/Room";
+import UseSystemMessage from "../../../hooks/UseSystemMessage/UseSystemMessage";
 
 interface CreateMeetingProps {}
 
@@ -45,6 +46,8 @@ const CreateMeeting: FC<CreateMeetingProps> = () => {
     ],
   });
 
+  const showMessage = UseSystemMessage();
+
   const [theirsPosition, setTheirsPosition] = useState<
     "mentor" | "mentee" | null
   >();
@@ -56,6 +59,7 @@ const CreateMeeting: FC<CreateMeetingProps> = () => {
 
   const validateRoleAndGetEmail = useCallback(async () => {
     if ((!mentee_id && !mentor_id) || menteeId === undefined) {
+      showMessage("error", "You do not have permission to access this page.");
       return navigate("/dashboard");
     }
     if (mentee_id !== Number.parseInt(menteeId)) {
@@ -69,6 +73,11 @@ const CreateMeeting: FC<CreateMeetingProps> = () => {
         });
 
         if (mentor_id !== data.mentee.mentor.id) {
+          showMessage(
+            "error",
+            "You do not have permission to access this page."
+          );
+
           return navigate("/dashboard");
         }
 
@@ -85,7 +94,7 @@ const CreateMeeting: FC<CreateMeetingProps> = () => {
             id: data.mentee.user.id,
           });
         } catch (errors) {
-          console.log(errors);
+          showMessage("error", errors);
         }
         setValidated(true);
         setTheirsPosition("mentee");
@@ -107,12 +116,12 @@ const CreateMeeting: FC<CreateMeetingProps> = () => {
           id: data.mentee.mentor.user.id,
         });
       } catch (errors) {
-        console.log(errors);
+        showMessage("error", errors);
       }
       setValidated(true);
       setTheirsPosition("mentor");
     }
-  }, [menteeId, mentee_id, mentor_id, navigate]);
+  }, [menteeId, mentee_id, mentor_id, navigate, showMessage]);
 
   useEffect(() => {
     if (userId) {
@@ -167,9 +176,6 @@ const CreateMeeting: FC<CreateMeetingProps> = () => {
   } = useInput<string>("", (e) => {
     const start = new Date("1970-01-01T" + startTime + "Z");
     const end = new Date("1970-01-01T" + e + "Z");
-    console.log(start);
-    console.log(end);
-
     return start < end;
   });
 
@@ -195,10 +201,10 @@ const CreateMeeting: FC<CreateMeetingProps> = () => {
           value: room,
         }));
       } catch (errors) {
-        console.log(errors);
+        showMessage("error", errors);
       }
     },
-    []
+    [showMessage]
   );
 
   const sendMeetingData = async () => {
@@ -223,9 +229,10 @@ const CreateMeeting: FC<CreateMeetingProps> = () => {
         resource: "meetings",
         body: body,
       });
+      showMessage("success", "Meeting created successfully.");
       navigate(`/meetings/${menteeId}`);
     } catch (errors) {
-      console.log(errors);
+      showMessage("error", errors);
     }
   };
 
@@ -268,7 +275,8 @@ const CreateMeeting: FC<CreateMeetingProps> = () => {
             <TextInput
               id={"title"}
               label={"Session Title"}
-              placeholder={"Please provide the title of your group session."}
+              icon="📝"
+              placeholder={"Please provide the title of your meeting."}
               value={title}
               isValid={titleInputValid}
               onChange={titleChangeHandler}
@@ -277,6 +285,7 @@ const CreateMeeting: FC<CreateMeetingProps> = () => {
             <DatePicker
               id={"date"}
               label={"Date"}
+              icon="📅"
               value={date}
               isValid={dateInputValid}
               onChange={dateChangeHandler}
@@ -286,6 +295,7 @@ const CreateMeeting: FC<CreateMeetingProps> = () => {
             <TextInput
               id={"time"}
               label={"Start time"}
+              icon="🕒"
               isValid={startTimeInputValid}
               value={startTime}
               onChange={startTimeChangeHandler}
@@ -297,6 +307,7 @@ const CreateMeeting: FC<CreateMeetingProps> = () => {
             <TextInput
               id={"duration"}
               label={"End time"}
+              icon="🕘"
               isValid={endTimeInputValid}
               value={endTime}
               onChange={endTimeChangeHandler}
@@ -308,6 +319,7 @@ const CreateMeeting: FC<CreateMeetingProps> = () => {
             <SearchSelect
               id={"room"}
               label={"Room"}
+              icon="🏠"
               isValid={roomInputValid}
               value={room}
               onChange={roomChangeHandler}
@@ -319,6 +331,7 @@ const CreateMeeting: FC<CreateMeetingProps> = () => {
             <BigTextInput
               id={"description"}
               label={`Note to ${theirsPosition}`}
+              icon="🖋️"
               placeholder={
                 "Include what you'd like to talk about in the meeting"
               }
@@ -331,6 +344,7 @@ const CreateMeeting: FC<CreateMeetingProps> = () => {
             <TextInput
               id={"link"}
               label={"Meeting Link - for online events"}
+              icon="🔗"
               placeholder={"Please provide the meeting link"}
               value={link}
               isValid={true}

@@ -94,6 +94,8 @@ def update(menteeId=None, user=None):
 
             db.session.commit()
 
+            # todo : add notification to expert
+
             Notification(notification_level="info", notification_type="learning", user_id=mentee.user.id,
                          description="Your mentee account details have changed").commit()
 

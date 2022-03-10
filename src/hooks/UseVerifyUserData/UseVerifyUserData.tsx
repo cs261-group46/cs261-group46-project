@@ -1,6 +1,7 @@
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { get } from "../../api/api";
+import UseSystemMessage from "../UseSystemMessage/UseSystemMessage";
 
 interface VerifierProps {
   dataPoint: string;
@@ -11,6 +12,8 @@ interface VerifierProps {
 
 const UseVerifyUserData = () => {
   const navigate = useNavigate();
+
+  const showMessage = UseSystemMessage();
 
   return useCallback(
     async ({
@@ -32,8 +35,6 @@ const UseVerifyUserData = () => {
           },
         });
 
-        console.log(dataPoint);
-
         let val;
         if (dataPoint === "") {
           val = data;
@@ -43,13 +44,22 @@ const UseVerifyUserData = () => {
         }
 
         if (val !== undefined) {
-          if (redirectOnSuccess) navigate(redirectOnSuccess);
+          if (redirectOnSuccess) {
+            showMessage(
+              "error",
+              "You do not have permission to view this page."
+            );
+            navigate(redirectOnSuccess);
+          }
           return val;
         } else {
           throw new Error("Verification Failed");
         }
       } catch (error) {
-        if (redirectOnFail) navigate(redirectOnFail);
+        if (redirectOnFail) {
+          showMessage("error", "You do not have permission to view this page.");
+          navigate(redirectOnFail);
+        }
         return null;
       }
     },

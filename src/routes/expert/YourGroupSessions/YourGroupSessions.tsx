@@ -10,6 +10,8 @@ import { MeetingType } from "../../../types/Meeting";
 import { destroy } from "../../../api/api";
 import SystemMessage from "../../../components/UI/SystemMessage/SystemMessage";
 import LoadingSpinner from "../../../components/UI/LoadingSpinner/LoadingSpinner";
+import PagePicker from "../../../components/UI/PagePicker/PagePicker";
+import UseSystemMessage from "../../../hooks/UseSystemMessage/UseSystemMessage";
 
 interface YourGroupSessionsProps {}
 
@@ -50,6 +52,8 @@ const YourGroupSessions: FC<YourGroupSessionsProps> = () => {
     ],
   });
 
+  const showMessage = UseSystemMessage();
+
   const [showWarning, setShowWarning] = useState(false);
   const expert_meetings_hosted = useMemo(
     () =>
@@ -65,6 +69,8 @@ const YourGroupSessions: FC<YourGroupSessionsProps> = () => {
   // const [groupSessions, setGroupSessions] = useState<YourGroupSessionType[]>();
   const pageSize = 3;
   const [page, setPage] = useState(0);
+  const [subpage, setSubpage] = useState(0);
+
   const hasPages = (expert_meetings_hosted?.length ?? 0) > 0;
   const pageAmount = Math.ceil(
     (expert_meetings_hosted?.length ?? 0) / pageSize
@@ -76,8 +82,6 @@ const YourGroupSessions: FC<YourGroupSessionsProps> = () => {
   );
 
   const [selectedGroupSessions] = useState<MeetingType>();
-
-  const editHandler = () => {};
 
   const removeHandler = async (meetingId: number) => {
     try {
@@ -92,14 +96,42 @@ const YourGroupSessions: FC<YourGroupSessionsProps> = () => {
           (m) => m.id !== meetingId
         ),
       }));
+      showMessage("success", "Group Session removed successfully.");
     } catch (errors) {
-      console.log(errors);
+      showMessage("error", errors);
     }
   };
 
   return (
     <DashboardSubpageLayout title={"Group Sessions"}>
       <Button href="/expert/group-sessions/create">Create a Session</Button>
+      <PagePicker
+        pickers={[
+          {
+            text: "Sessions",
+            onClick: () => {
+              setSubpage(0);
+            },
+            selected: subpage === 0,
+          },
+          {
+            text: "Feedback",
+            onClick: () => {
+              setSubpage(1);
+            },
+            selected: subpage === 1,
+          },
+        ]}
+        buttons={{
+          buttonLeft: () => {
+            setSubpage((prev) => (prev > 0 ? prev - 1 : prev));
+          },
+          buttonRight: () => {
+            setSubpage((prev) => (prev < 1 ? prev + 1 : prev));
+          },
+        }}
+      />
+
       <div className={styles.YourGroupSessions} data-testid="YourGroupSessions">
         {groupSessionsOnPage ? (
           <Fragment>
@@ -142,11 +174,6 @@ const YourGroupSessions: FC<YourGroupSessionsProps> = () => {
                       },
                     ]}
                     buttons={[
-                      {
-                        buttonStyle: "primary",
-                        onClick: editHandler,
-                        children: "Edit",
-                      },
                       {
                         onClick: setShowWarning.bind(null, true),
                         children: "Remove",

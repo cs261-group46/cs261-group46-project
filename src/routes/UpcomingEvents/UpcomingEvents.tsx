@@ -7,18 +7,7 @@ import PagePicker from "../../components/UI/PagePicker/PagePicker";
 import ContentCard from "../../components/UI/ContentCard/ContentCard";
 import Tag from "../../components/UI/Tag/Tag";
 
-interface UpcomingEventsProps {
-  // events: EventProps[];
-}
-
-// const DUMMY_EVENTS: EventProps[] = [
-//   {
-//     sessionType: "workshop",
-//     subject: "Crafting",
-//     mentee: "2",
-//     mentor: "5",
-//   },
-// ];
+interface UpcomingEventsProps {}
 
 const getDateString = (date: Date, duration: number) => {
   let start = date;
@@ -334,10 +323,21 @@ const UpcomingEvents: FC<UpcomingEventsProps> = () => {
                   <Tag key={topic.id}>{topic.name}</Tag>
                 )),
               },
+              meeting.feedback.find((f) => f.user && f.user.id === userId) !==
+                undefined && {
+                className: styles.tags,
+                title: "Feedback Given",
+                content: `"${
+                  meeting.feedback.find((f) => f.user && f.user.id === userId)
+                    ?.feedback
+                }"`,
+              },
             ]}
             buttons={[
-              meeting.host !== undefined ||
-              meeting.meeting_type === "one on one meeting"
+              (meeting.host !== undefined ||
+                meeting.meeting_type === "one on one meeting") &&
+              meeting.feedback.find((f) => f.user && f.user.id === userId) ===
+                undefined
                 ? {
                     children: "Give Feedback",
                     href: `/meetings/give-feedback/${meeting.id}`,

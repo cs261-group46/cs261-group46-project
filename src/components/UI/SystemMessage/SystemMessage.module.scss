@@ -45,7 +45,8 @@
 
 .warning,
 .alert,
-.information {
+.information,
+.success {
   border-radius: 15px;
 
   .h1 {
@@ -101,5 +102,18 @@
   .a:visited,
   .span {
     color: $sq_teal;
+  }
+}
+
+.success {
+  color: $sq_green;
+  background-color: #f3fff5;
+  border: 2px solid $sq_green;
+
+  .h1,
+  .a:link,
+  .a:visited,
+  .span {
+    color: $sq_green;
   }
 }

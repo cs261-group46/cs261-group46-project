@@ -32,6 +32,10 @@ def store(user=None):
 
         u = User.query.filter_by(id=data.get("user_id")).first()
 
+        if u is None:
+            return {"success": False,
+                    "errors": ["An unexpected error occurred."]}, 400
+
         if u.id != user.id:
                 return {"success": False, "errors": ["You do not have the permission to submit feedback on behalf other users."]}, 401
 

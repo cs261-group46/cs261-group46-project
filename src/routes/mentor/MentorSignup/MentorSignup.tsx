@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useCallback } from "react";
 // import styles from './MentorSignup.module.scss';
 import {
   SearchSelectOptions,
@@ -13,6 +13,7 @@ import { index, store } from "../../../api/api";
 import SearchSelect from "../../../components/UI/FormInput/SearchSelect/SearchSelect";
 import BigTextInput from "../../../components/UI/FormInput/BigTextInput/BigTextInput";
 import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
+import UseSystemMessage from "../../../hooks/UseSystemMessage/UseSystemMessage";
 
 interface MentorSignupProps {}
 
@@ -31,6 +32,7 @@ const MentorSignup: FC<MentorSignupProps> = () => {
       },
     ],
   });
+  const showMessage = UseSystemMessage();
 
   let navigate = useNavigate();
 
@@ -77,9 +79,10 @@ const MentorSignup: FC<MentorSignupProps> = () => {
         body: requestBody,
       });
 
+      showMessage("success", "Successfully signed up as mentor.");
       navigate("/dashboard"); // show message instead
     } catch (errors) {
-      console.log(errors);
+      showMessage("error", errors);
     }
   };
 
@@ -97,37 +100,44 @@ const MentorSignup: FC<MentorSignupProps> = () => {
     }
   };
 
-  const getTopics = async (startsWith: string) => {
-    try {
-      const data = await index({
-        resource: "topics",
-        args: {
-          startswith: startsWith,
-        },
-      });
-      const options: SearchSelectOptions<number> = data.topics.map(
-        ({ name, id }: { name: string; id: number }) => ({
-          label: name,
-          value: id,
-        })
-      );
+  const getTopics = useCallback(
+    async (startsWith: string) => {
+      try {
+        const data = await index({
+          resource: "topics",
+          args: {
+            startswith: startsWith,
+          },
+        });
+        const options: SearchSelectOptions<number> = data.topics.map(
+          ({ name, id }: { name: string; id: number }) => ({
+            label: name,
+            value: id,
+          })
+        );
 
-      return options;
-    } catch (errors) {
-      console.log(errors);
-      return [];
-    }
-  };
+        return options;
+      } catch (errors) {
+        showMessage("error", errors);
+        return [];
+      }
+    },
+    [showMessage]
+  );
 
-  const searchPromise: SearchPromise<number> = (_search) => {
-    return new Promise((resolve) => resolve(getTopics(_search)));
-  };
+  const searchPromise: SearchPromise<number> = useCallback(
+    (_search) => {
+      return new Promise((resolve) => resolve(getTopics(_search)));
+    },
+    [getTopics]
+  );
 
   return (
     <DashboardSubpageLayout title={"Become a Mentor"}>
       <SearchSelect
         id={"skills"}
         label={"Mentorship areas"}
+        icon="📖"
         isValid={isSkillsInputValid}
         value={enteredSkills}
         onChange={skillsChangeHandler}
@@ -139,6 +149,7 @@ const MentorSignup: FC<MentorSignupProps> = () => {
       <BigTextInput
         id={"profile"}
         label={"About me"}
+        icon="💬"
         placeholder={"I can play Electric Guitar"}
         value={enteredAbout}
         isValid={isAboutInputValid}
@@ -149,6 +160,7 @@ const MentorSignup: FC<MentorSignupProps> = () => {
       <TextInput
         id={"capacity"}
         label={"How many mentees do you want?"}
+        icon="👥"
         placeholder={"e.g. 5"}
         value={enteredCapacity}
         type={"number"}

@@ -135,7 +135,6 @@ export async function custom(requestData: {
     }
   );
   const data = await response.json();
-  console.log(response.ok);
 
   if (!response.ok) {
     throw new Error(data.errors || ["Unexpected error occurred"]);

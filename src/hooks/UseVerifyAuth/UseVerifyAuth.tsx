@@ -1,6 +1,7 @@
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { custom } from "../../api/api";
+import UseSystemMessage from "../UseSystemMessage/UseSystemMessage";
 import UseVerifyUserData from "../UseVerifyUserData/UseVerifyUserData";
 
 interface AuthVerifierProps {
@@ -12,6 +13,7 @@ const UseVerifyAuth = () => {
   const navigate = useNavigate();
 
   const userDataVerifier = UseVerifyUserData();
+  const showMessage = UseSystemMessage();
 
   const verifyAuth = useCallback(
     async ({
@@ -35,6 +37,7 @@ const UseVerifyAuth = () => {
         });
 
         if (permissions === null || permissions < minPermissionLevel) {
+          showMessage("error", "You do not have permission to view this page.");
           navigate("/dashboard");
           return null;
         }

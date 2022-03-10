@@ -10,8 +10,6 @@ class Notification(db.Model):
         "notification_type IN ('learning', 'mentoring', 'expertise')"))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     description = db.Column(db.Text, nullable=True)
-    # solution = db.Column(db.Text, nullable=True)
-    sent = db.Column(db.Boolean, default=False)
 
     user = db.relationship("User", backref="notifications", lazy=True)
 

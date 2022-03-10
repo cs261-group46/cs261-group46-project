@@ -23,18 +23,17 @@ import CreateGroupSession from "./routes/expert/CreateGroupSession/CreateGroupSe
 import YourGroupSessions from "./routes/expert/YourGroupSessions/YourGroupSessions";
 
 import YourProfile from "./routes/YourProfile/YourProfile";
-import Profile from "./routes/Profile/Profile";
 import EditPlansOfAction from "./routes/EditPlansOfAction/EditPlansOfAction";
 import SiteFeedback from "./routes/SiteFeedback/SiteFeedback.lazy";
 import Meetings from "./routes/meetings/Meetings/Meetings";
 import CreateMeeting from "./routes/meetings/CreateMeeting/CreateMeeting";
-import MentorFeedback from "./routes/learn/MentorFeedback/MentorFeedback.lazy";
 import PastMentors from "./routes/learn/PastMentors/PastMentors";
 import GiveFeedbackToMentor from "./routes/learn/GiveFeedbackToMentor/GiveFeedbackToMentor";
 import GiveFeedbackToMentee from "./routes/mentor/GiveFeedbackToMentee/GiveFeedbackToMentee.lazy";
 import MentorFeedbacks from "./routes/mentor/MentorFeedbacks/MentorFeedbacks.lazy";
 import MenteeFeedbacks from "./routes/learn/MenteeFeedbacks/MenteeFeedbacks.lazy";
 import GiveFeedbackForMeeting from "./routes/meetings/GiveFeedbackForMeeting/GiveFeedbackForMeeting.lazy";
+import UserEditDetails from "./routes/UserEditDetials/UserEditDetials";
 
 function App() {
   return (
@@ -49,6 +48,8 @@ function App() {
           <Route path="/setup" element={<Setup />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profile" element={<YourProfile />} />
+          <Route path="/edit-user-details" element={<UserEditDetails />} />
+
           <Route
             path="/plans-of-action/:menteeId"
             element={<EditPlansOfAction />}
@@ -64,7 +65,6 @@ function App() {
           {/* /meetings/give-feedback/${meeting.id} */}
           <Route path="/meetings/:menteeId" element={<Meetings />} />
           <Route path="/calendar" element={<UpcomingEvents />} />
-          <Route path="/profile2" element={<Profile />} />
           <Route
             path="/mentor/past-mentees/give-feedback/:menteeId"
             element={<GiveFeedbackToMentee />}
@@ -88,7 +88,6 @@ function App() {
             <Route path="your-mentor" element={<YourMentor />} />
             <Route path="group-sessions" element={<ViewGroupSessions />} />
             <Route path="interests" element={<YourInterests />} />
-            <Route path="give-feedback" element={<MentorFeedback />} />
           </Route>
           <Route path="/expert">
             <Route path="group-sessions">

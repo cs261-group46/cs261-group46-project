@@ -2,7 +2,6 @@ import React, {
   FC,
   FormEventHandler,
   useCallback,
-  useContext,
   useEffect,
   useState,
 } from "react";
@@ -19,7 +18,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import { custom, index } from "../../../api/api";
 import { DepartmentType } from "../../../types/Department";
-import ErrorMessagesContext from "../../../store/ErrorMessagesContext";
+import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
+import UseSystemMessage from "../../../hooks/UseSystemMessage/UseSystemMessage";
 
 function validateEmail(email: string) {
   const re =
@@ -65,29 +65,21 @@ function validateDepartment(_department: SelectOption<number>) {
   return _department.value !== -1;
 }
 
-// type Verifier = {
-//   userId: number | null | undefined;
-// };
-
 const Register: FC = () => {
-  const errorsCtx = useContext(ErrorMessagesContext);
+  UseVerifyUser({
+    isProtected: false,
+  });
+
+  const showMessage = UseSystemMessage();
 
   const [departments, setDepartments] = useState<SelectOptions<number>>([]);
   let navigate = useNavigate();
 
-  // const fetchDepartments = async () => {
-  //   const dep = await fetch("/api/departments");
-  //   const body = await dep.json();
-  //   setDepartments(body.result);
-  // };
-
-  const { setErrorsHandler } = errorsCtx;
   const getDepartments = useCallback(async () => {
     try {
       const data = await index({
         resource: "departments",
       });
-      console.log(data);
 
       setDepartments(
         data.departments.map((department: DepartmentType) => ({
@@ -96,10 +88,13 @@ const Register: FC = () => {
         }))
       );
     } catch (errors) {
-      const errs = errors as string[];
-      setErrorsHandler(errs);
+      showMessage("error", errors);
     }
-  }, [setErrorsHandler]);
+  }, [showMessage]);
+
+  useEffect(() => {
+    getDepartments();
+  }, [getDepartments]);
 
   useEffect(() => {
     getDepartments();
@@ -149,11 +144,13 @@ const Register: FC = () => {
         method: "POST",
         body: body,
       });
-
+      showMessage(
+        "success",
+        "Successfully registered. Please verify your email address."
+      );
       navigate("/register/verifyemail");
-    } catch (error) {
-      const message = errorsCtx.getErrorMessage(error);
-      errorsCtx.setErrorsHandler(message);
+    } catch (errors) {
+      showMessage("error", errors);
     }
   };
 

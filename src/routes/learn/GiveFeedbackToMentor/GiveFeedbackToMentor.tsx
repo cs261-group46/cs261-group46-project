@@ -6,6 +6,7 @@ import BigTextInput from "../../../components/UI/FormInput/BigTextInput/BigTextI
 import StarPicker from "../../../components/UI/FormInput/StarPicker/StarPicker";
 import Title from "../../../components/UI/Title/Title";
 import useInput from "../../../hooks/UseInput/UseInput";
+import UseSystemMessage from "../../../hooks/UseSystemMessage/UseSystemMessage";
 import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
 import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
 import { MentorFeedbackType } from "../../../types/MentorFeedback";
@@ -29,12 +30,15 @@ const GiveFeedbackToMentor: FC<GiveFeedbackToMentorProps> = () => {
     ],
   });
 
+  const showMessage = UseSystemMessage();
+
   let { mentorId } = useParams();
   const [feedback, setFeedback] = useState<MentorFeedbackType | null>(null);
 
   const navigate = useNavigate();
   useEffect(() => {
     if (!mentorId) {
+      showMessage("error", "Unspecified mentor id.");
       navigate("/dashboard");
     }
 
@@ -47,6 +51,7 @@ const GiveFeedbackToMentor: FC<GiveFeedbackToMentorProps> = () => {
       if (found_mentor) {
         setFeedback(found_mentor);
       } else {
+        showMessage("error", "Mentor not found.");
         navigate("/dashboard");
       }
     }
@@ -85,9 +90,10 @@ const GiveFeedbackToMentor: FC<GiveFeedbackToMentorProps> = () => {
         body: body,
         entity: (feedback as MentorFeedbackType).id,
       });
+      showMessage("success", "Feedback sent successfully.");
       navigate("/learn/past-mentors");
     } catch (errors) {
-      console.log(errors);
+      showMessage("error", errors);
     }
   };
 
@@ -116,7 +122,8 @@ const GiveFeedbackToMentor: FC<GiveFeedbackToMentorProps> = () => {
           <BigTextInput
             id={"feedback"}
             label={"Feedback"}
-            placeholder={"Please provide feedback on your past mentor"}
+            icon="💬"
+            placeholder={"Were they able to provide good support?"}
             value={enteredFeedback}
             isValid={feedbackInputValid}
             onChange={feedbackChangeHandler}
@@ -125,6 +132,7 @@ const GiveFeedbackToMentor: FC<GiveFeedbackToMentorProps> = () => {
           <StarPicker
             type={"interactive"}
             id={"stars"}
+            icon="⭐"
             label={"Mentor Rating"}
             value={starsValue}
             isValid={starsInputValid}
@@ -132,7 +140,7 @@ const GiveFeedbackToMentor: FC<GiveFeedbackToMentorProps> = () => {
             onBlur={starsBlurHandler}
             size={"100%"}
           />
-          <Button onClick={submitHandler} buttonStyle={"primary"}>
+          <Button icon="👑" onClick={submitHandler} buttonStyle={"primary"}>
             Submit
           </Button>
         </>

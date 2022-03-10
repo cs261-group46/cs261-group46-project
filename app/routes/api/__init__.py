@@ -9,7 +9,7 @@ from app.routes.api.users import users
 from app.routes.api.mentorshiprequests import mentorshiprequests
 from app.routes.api.meetings import meetings
 from app.routes.api.rooms import rooms
-from app.routes.api.applicationfeedbacks import application_feedback
+from app.routes.api.applicationfeedbacks import applicationfeedbacks
 from app.routes.api.menteefeedbacks import menteefeedbacks
 from app.routes.api.mentorfeedbacks import mentorfeedbacks
 from app.routes.api.meetingfeedbacks import meetingfeedbacks
@@ -31,7 +31,7 @@ api.register_blueprint(mentees)
 api.register_blueprint(mentorshiprequests)
 api.register_blueprint(meetings)
 api.register_blueprint(rooms)
-api.register_blueprint(application_feedback)
+api.register_blueprint(applicationfeedbacks)
 api.register_blueprint(menteefeedbacks)
 api.register_blueprint(mentorfeedbacks)
 api.register_blueprint(meetingfeedbacks)

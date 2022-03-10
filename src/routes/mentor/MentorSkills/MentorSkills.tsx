@@ -8,6 +8,7 @@ import {
   SearchPromise,
 } from "../../../components/UI/FormInput/SearchSelect/SearchSelect";
 import useInput from "../../../hooks/UseInput/UseInput";
+import UseSystemMessage from "../../../hooks/UseSystemMessage/UseSystemMessage";
 import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
 import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
 import { TopicWithPriorityType } from "../../../types/Topic";
@@ -34,34 +35,41 @@ const MentorSkills: FC<MentorSkillsProps> = () => {
       },
     ],
   });
+  const showMessage = UseSystemMessage();
 
   const navigate = useNavigate();
 
-  const getTopics = async (startsWith: string) => {
-    try {
-      const data = await index({
-        resource: "topics",
-        args: {
-          startswith: startsWith,
-        },
-      });
+  const getTopics = useCallback(
+    async (startsWith: string) => {
+      try {
+        const data = await index({
+          resource: "topics",
+          args: {
+            startswith: startsWith,
+          },
+        });
 
-      const options: SearchSelectOptions<number> = data.topics.map(
-        ({ name, id }: { name: string; id: number }) => ({
-          label: name,
-          value: id,
-        })
-      );
-      return options;
-    } catch (errors) {
-      console.log(errors);
-      return [];
-    }
-  };
+        const options: SearchSelectOptions<number> = data.topics.map(
+          ({ name, id }: { name: string; id: number }) => ({
+            label: name,
+            value: id,
+          })
+        );
+        return options;
+      } catch (errors) {
+        showMessage("error", errors);
+        return [];
+      }
+    },
+    [showMessage]
+  );
 
-  const searchPromise: SearchPromise<number> = useCallback((_search) => {
-    return new Promise((resolve) => resolve(getTopics(_search)));
-  }, []);
+  const searchPromise: SearchPromise<number> = useCallback(
+    (_search) => {
+      return new Promise((resolve) => resolve(getTopics(_search)));
+    },
+    [getTopics]
+  );
 
   const {
     enteredValue: enteredSkills,
@@ -103,9 +111,10 @@ const MentorSkills: FC<MentorSkillsProps> = () => {
         entity: mentor_id as number,
         body: requestBody,
       });
+      showMessage("success", "Details updated successfully.");
       navigate("/dashboard"); // show message instead
     } catch (errors) {
-      console.log(errors);
+      showMessage("error", errors);
     }
   };
 

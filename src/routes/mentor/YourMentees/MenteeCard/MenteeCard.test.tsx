@@ -14,6 +14,7 @@ describe("<MenteeCard />", () => {
             id: 0,
             topics: [],
             user: {
+              id: 0,
               department: {
                 id: 0,
                 name: "",
@@ -23,7 +24,9 @@ describe("<MenteeCard />", () => {
               last_name: "",
             },
             plans_of_action: [],
+            mentor: undefined,
           }}
+          stateChangingHandler={undefined}
         />
       </BrowserRouter>
     );

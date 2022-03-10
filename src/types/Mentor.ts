@@ -1,3 +1,4 @@
+import { UserType } from "./User";
 export type MentorType = {
   id: number;
   about: string;
@@ -7,10 +8,5 @@ export type MentorType = {
       name: string;
     };
   }[];
-  user: {
-    department: { id: number; name: string };
-    first_name: string;
-    last_name: string;
-    email: string;
-  };
+  user: UserType;
 };

@@ -28,6 +28,7 @@ export type FullUserType = {
 };
 
 export type UserType = {
+  id: number;
   department: DepartmentType;
   email: string;
   first_name: string;

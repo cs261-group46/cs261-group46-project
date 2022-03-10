@@ -16,6 +16,7 @@ import UseVerifyUser from "../../hooks/UseVerifyUser/UseVerifyUser";
 import DashboardSubpageLayout from "../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
 import { get, update } from "../../api/api";
 import LoadingSpinner from "../../components/UI/LoadingSpinner/LoadingSpinner";
+import UseSystemMessage from "../../hooks/UseSystemMessage/UseSystemMessage";
 
 interface EditPlansOfActionProps {}
 
@@ -38,6 +39,7 @@ const EditPlansOfAction: FC<EditPlansOfActionProps> = () => {
       },
     ],
   });
+  const showMessage = UseSystemMessage();
 
   const [validated, setValidated] = useState(false);
   const [plansLoaded, setPlansLoaded] = useState(false);
@@ -46,6 +48,7 @@ const EditPlansOfAction: FC<EditPlansOfActionProps> = () => {
 
   const validateRole = useCallback(async () => {
     if ((!mentee_id && !mentor_id) || menteeId === undefined) {
+      showMessage("error", "You do not have permission to access this page.");
       return navigate("/dashboard");
     }
     if (mentee_id !== Number.parseInt(menteeId)) {
@@ -59,16 +62,21 @@ const EditPlansOfAction: FC<EditPlansOfActionProps> = () => {
         });
 
         if (mentor_id !== data.mentee.mentor.id) {
+          showMessage(
+            "error",
+            "You do not have permission to access this page."
+          );
+
           return navigate("/dashboard");
         }
         setValidated(true);
       } catch (errors) {
-        console.log(errors);
+        showMessage("error", errors);
       }
     } else {
       setValidated(true);
     }
-  }, [menteeId, mentee_id, mentor_id, navigate]);
+  }, [menteeId, mentee_id, mentor_id, navigate, showMessage]);
 
   useEffect(() => {
     if (userId) {
@@ -112,14 +120,12 @@ const EditPlansOfAction: FC<EditPlansOfActionProps> = () => {
             )
           : 0;
 
-      console.log(greatestId);
-
       setTempId(greatestId + 1);
       setPlansLoaded(true);
     } catch (errors) {
-      console.log(errors);
+      showMessage("error", errors);
     }
-  }, [menteeId]);
+  }, [menteeId, showMessage]);
 
   useEffect(() => {
     getPlans();
@@ -172,8 +178,9 @@ const EditPlansOfAction: FC<EditPlansOfActionProps> = () => {
       });
 
       setUnsavedChanges(false);
+      showMessage("success", "Plans of Action saved successfully.");
     } catch (errors) {
-      console.log(errors);
+      showMessage("error", errors);
     }
   };
 

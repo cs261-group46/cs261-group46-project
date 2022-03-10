@@ -12,6 +12,9 @@ class ApplicationFeedback(db.Model):
     def __repr__(self):
         return f'<ApplicationFeedback \n User : {self.user} \n Rating: {self.rating} \n Feedback : {self.feedback}>'
 
-
+    def commit(self):
+        db.session.add(self)
+        db.session.commit()
+        return self
 
 

@@ -4,30 +4,59 @@ import MainLayout from "../../layouts/MainLayout/MainLayout";
 import BigTextInput from "../../components/UI/FormInput/BigTextInput/BigTextInput";
 import useInput from "../../hooks/UseInput/UseInput";
 import Button from "../../components/UI/Button/Button";
+import UseVerifyUser from "../../hooks/UseVerifyUser/UseVerifyUser";
+import { store } from "../../api/api";
+import { useNavigate } from "react-router-dom";
+import UseSystemMessage from "../../hooks/UseSystemMessage/UseSystemMessage";
 
 interface SiteFeedbackProps {}
 
 const SiteFeedback: FC<SiteFeedbackProps> = () => {
+  const { userId = null } = UseVerifyUser<{
+    userId: number | null;
+  }>({});
+
+  const showMessage = UseSystemMessage();
+
   const {
     enteredValue,
     isInputValid,
     isValueValid,
     changeHandler,
     blurHandler,
-  } = useInput("", (value) => value.length > 0);
+  } = useInput("", (value) => value.length > 0 && value.length < 1000);
 
   const showAllErrors = () => {
     blurHandler();
   };
 
+  const navigate = useNavigate();
+
+  const sendFeedbackData = async () => {
+    try {
+      const body = {
+        feedback: enteredValue,
+        user_id: userId,
+      };
+
+      await store({
+        resource: "applicationfeedbacks",
+        body: body,
+      });
+
+      showMessage("success", "Feedback submitted successfully. Thank you!");
+      navigate("/dashboard");
+    } catch (errors) {
+      showMessage("error", errors);
+    }
+  };
+
   const submitHandler: FormEventHandler = (event) => {
     event.preventDefault();
     if (isValueValid) {
-      //sendFeedback();
-      console.log("send?");
+      sendFeedbackData();
     } else {
       showAllErrors();
-      console.log("error?");
     }
   };
 
@@ -42,6 +71,7 @@ const SiteFeedback: FC<SiteFeedbackProps> = () => {
         <BigTextInput
           id={"feedback"}
           label={"General Comments"}
+          icon="💬"
           placeholder={"What did you think about using SkillShare?"}
           value={enteredValue}
           isValid={isInputValid}

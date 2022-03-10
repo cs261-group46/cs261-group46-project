@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useCallback } from "react";
 
 import {
   SearchSelectOptions,
@@ -11,6 +11,7 @@ import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpage
 import { index, store } from "../../../api/api";
 import SearchSelect from "../../../components/UI/FormInput/SearchSelect/SearchSelect";
 import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
+import UseSystemMessage from "../../../hooks/UseSystemMessage/UseSystemMessage";
 
 interface ExpertSignupProps {}
 
@@ -29,6 +30,8 @@ const ExpertSignup: FC<ExpertSignupProps> = () => {
       },
     ],
   });
+
+  const showMessage = UseSystemMessage();
 
   let navigate = useNavigate();
 
@@ -59,9 +62,10 @@ const ExpertSignup: FC<ExpertSignupProps> = () => {
         body: requestBody,
       });
 
+      showMessage("success", "Successfully signed up as an expert.");
       navigate("/dashboard"); // show message instead
     } catch (errors) {
-      console.log(errors);
+      showMessage("error", errors);
     }
   };
 
@@ -73,37 +77,44 @@ const ExpertSignup: FC<ExpertSignupProps> = () => {
     }
   };
 
-  const getTopics = async (startsWith: string) => {
-    try {
-      const data = await index({
-        resource: "topics",
-        args: {
-          startswith: startsWith,
-        },
-      });
-      const options: SearchSelectOptions<number> = data.topics.map(
-        ({ name, id }: { name: string; id: number }) => ({
-          label: name,
-          value: id,
-        })
-      );
+  const getTopics = useCallback(
+    async (startsWith: string) => {
+      try {
+        const data = await index({
+          resource: "topics",
+          args: {
+            startswith: startsWith,
+          },
+        });
+        const options: SearchSelectOptions<number> = data.topics.map(
+          ({ name, id }: { name: string; id: number }) => ({
+            label: name,
+            value: id,
+          })
+        );
 
-      return options;
-    } catch (errors) {
-      console.log(errors);
-      return [];
-    }
-  };
+        return options;
+      } catch (errors) {
+        showMessage("error", errors);
+        return [];
+      }
+    },
+    [showMessage]
+  );
 
-  const searchPromise: SearchPromise<number> = (_search) => {
-    return new Promise((resolve) => resolve(getTopics(_search)));
-  };
+  const searchPromise: SearchPromise<number> = useCallback(
+    (_search) => {
+      return new Promise((resolve) => resolve(getTopics(_search)));
+    },
+    [getTopics]
+  );
 
   return (
     <DashboardSubpageLayout title={"Become an Expert"}>
       <SearchSelect
         id={"expertises"}
         label={"Areas of Expertises"}
+        icon="💪"
         isValid={isSkillsInputValid}
         value={enteredSkills}
         onChange={skillsChangeHandler}

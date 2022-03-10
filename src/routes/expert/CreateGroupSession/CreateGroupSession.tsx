@@ -20,6 +20,7 @@ import { useNavigate } from "react-router-dom";
 import { index, store } from "../../../api/api";
 import { Room } from "../../../types/Room";
 import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
+import UseSystemMessage from "../../../hooks/UseSystemMessage/UseSystemMessage";
 
 interface CreateGroupSessionProps {}
 
@@ -35,6 +36,8 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
       },
     ],
   });
+
+  const showMessage = UseSystemMessage();
 
   const navigate = useNavigate();
 
@@ -65,7 +68,7 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
     (value) => value.length > 0
   );
 
-  const getTopics = async (startsWith: string) => {
+  const getTopics = useCallback(async (startsWith: string) => {
     try {
       const data = await index({
         resource: "topics",
@@ -85,11 +88,14 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
       console.log(errors);
       return [];
     }
-  };
+  }, []);
 
-  const topicsSearchPromise: SearchPromise<number> = (_search) => {
-    return new Promise((resolve) => resolve(getTopics(_search)));
-  };
+  const topicsSearchPromise: SearchPromise<number> = useCallback(
+    (_search) => {
+      return new Promise((resolve) => resolve(getTopics(_search)));
+    },
+    [getTopics]
+  );
 
   const {
     enteredValue: topics,
@@ -111,7 +117,7 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
     isValueValid: dateValueValid,
     changeHandler: dateChangeHandler,
     blurHandler: dateBlurHandler,
-  } = useInput<Date>(new Date(), (date) => date >= new Date());
+  } = useInput<Date>(new Date(), (d) => d >= new Date());
 
   const {
     enteredValue: startTime,
@@ -147,12 +153,7 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
     isInputValid: capacityInputValid,
     isValueValid: capacityValueValid,
     blurHandler: capacityBlurHandler,
-  } = useInput<string>(
-    "",
-    (value) =>
-      (value === "" && link.length > 0) ||
-      (parseInt(value) < 1000 && parseInt(value) > 0)
-  );
+  } = useInput<string>("");
 
   const {
     enteredValue: visibility,
@@ -192,10 +193,10 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
         }));
         // return rooms;
       } catch (errors) {
-        console.log(errors);
+        showMessage("error", errors);
       }
     },
-    []
+    [showMessage]
   );
 
   const invitesSearchPromise: SearchPromise<{
@@ -215,7 +216,7 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
         value: user,
       }));
     } catch (errors) {
-      console.log(errors);
+      showMessage("error", errors);
     }
   };
 
@@ -240,9 +241,10 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
         resource: "meetings",
         body: body,
       });
+      showMessage("success", "Group session created successfully.");
       navigate("/expert/group-sessions");
     } catch (errors) {
-      console.log(errors);
+      showMessage("error", errors);
     }
   };
 
@@ -289,6 +291,7 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
       <TextInput
         id={"title"}
         label={"Session Title"}
+        icon="📝"
         placeholder={"Please provide the title of your group session."}
         value={title}
         isValid={titleInputValid}
@@ -298,6 +301,7 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
       <BigTextInput
         id={"description"}
         label={"Description"}
+        icon="🖋️"
         placeholder={"Tell attendees what the event is about"}
         value={description}
         isValid={descriptionInputValid}
@@ -307,6 +311,7 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
       <SearchSelect
         id={"topics"}
         label={"Topics Covered"}
+        icon="📖"
         isValid={topicsInputValid}
         value={topics}
         onChange={topicsChangeHandler}
@@ -316,6 +321,7 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
       <Select
         id={"visibility"}
         label={"Meeting Visibility"}
+        icon="🗨️"
         placeholder={"Public or Private?"}
         options={[
           { value: "public", label: "Public (anyone can join)" },
@@ -331,6 +337,7 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
         <SearchSelect
           id={"invites"}
           label={"Emails of invited"}
+          icon="✉️"
           isValid={invitesInputValid}
           value={invites}
           onChange={invitesChangeHandler}
@@ -342,6 +349,7 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
       <Select
         id={"type"}
         label={"Meeting Type"}
+        icon="🔧"
         placeholder={"Please select the session type."}
         options={[
           {
@@ -362,6 +370,7 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
       <DatePicker
         id={"date"}
         label={"Date"}
+        icon="📅"
         value={date}
         isValid={dateInputValid}
         onChange={dateChangeHandler}
@@ -371,6 +380,7 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
       <TextInput
         id={"time"}
         label={"Start time"}
+        icon="🕒"
         isValid={startTimeInputValid}
         value={startTime}
         onChange={startTimeChangeHandler}
@@ -382,6 +392,7 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
       <TextInput
         id={"duration"}
         label={"End time"}
+        icon="🕘"
         isValid={endTimeInputValid}
         value={endTime}
         onChange={endTimeChangeHandler}
@@ -393,9 +404,10 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
       <TextInput
         id={"capacity"}
         label={"Capacity"}
+        icon="👥"
         placeholder={""}
         value={capacity}
-        isValid={capacityInputValid}
+        isValid={true}
         type={"number"}
         onChange={capacityChangeHandler}
         onBlur={capacityBlurHandler}
@@ -403,7 +415,8 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
 
       <SearchSelect
         id={"room"}
-        label={"Room - only showing available"}
+        label={"Room"}
+        icon="🏠"
         isValid={roomInputValid}
         value={room}
         onChange={roomChangeHandler}
@@ -415,6 +428,7 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
       <TextInput
         id={"link"}
         label={"Meeting Link - for online events"}
+        icon="🔗"
         placeholder={"Please provide the meeting link"}
         value={link}
         isValid={true}

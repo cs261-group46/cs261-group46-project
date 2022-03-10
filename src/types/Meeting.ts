@@ -1,3 +1,4 @@
+import { MeetingFeedbackType } from "./MeetingFeedback";
 import { TopicType } from "./Topic";
 import { Room } from "./Room";
 import { UserType } from "./User";
@@ -12,9 +13,7 @@ export type MeetingType = {
   capacity: number;
   date: string;
   duration: number;
-  feedback: {
-    feedback: string;
-  };
+  feedback: MeetingFeedbackType[];
   id: number;
   invited?: UserType[];
   link: string;

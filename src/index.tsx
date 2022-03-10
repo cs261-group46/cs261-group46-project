@@ -3,13 +3,13 @@ import ReactDOM from "react-dom";
 import "./index.scss";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { ErrorMessagesContextProvider } from "./store/ErrorMessagesContext";
+import { SystemMessagesContextProvider } from "./store/SystemMessagesContext";
 
 ReactDOM.render(
   <React.StrictMode>
-    <ErrorMessagesContextProvider>
+    <SystemMessagesContextProvider>
       <App />
-    </ErrorMessagesContextProvider>
+    </SystemMessagesContextProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

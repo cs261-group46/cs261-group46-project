@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useCallback, useEffect, useState } from "react";
 import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
 import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
 import { index, store } from "../../../api/api";
@@ -7,6 +7,7 @@ import ContentCard from "../../../components/UI/ContentCard/ContentCard";
 import styles from "./FindMentor.module.scss";
 import Tag from "../../../components/UI/Tag/Tag";
 import LoadingSpinner from "../../../components/UI/LoadingSpinner/LoadingSpinner";
+import UseSystemMessage from "../../../hooks/UseSystemMessage/UseSystemMessage";
 
 interface FindMentorProps {}
 
@@ -26,9 +27,11 @@ const FindMentor: FC<FindMentorProps> = () => {
     ],
   });
 
+  const showMessage = UseSystemMessage();
+
   const [mentors, setMentors] = useState<MentorType[]>();
 
-  const indexMentors = async () => {
+  const indexMentors = useCallback(async () => {
     try {
       const data = await index({
         resource: "mentors",
@@ -48,13 +51,13 @@ const FindMentor: FC<FindMentorProps> = () => {
 
       setMentors(data.mentors);
     } catch (errors) {
-      console.log(errors);
+      showMessage("error", errors);
     }
-  };
+  }, [showMessage]);
 
   useEffect(() => {
     indexMentors();
-  }, []);
+  }, [indexMentors]);
 
   const requestMentorHandler = async (mentorId: number) => {
     try {
@@ -67,8 +70,9 @@ const FindMentor: FC<FindMentorProps> = () => {
         resource: "mentorshiprequests",
         body: body,
       });
+      showMessage("error", "Mentorship request sent successfully.");
     } catch (errors) {
-      console.log(errors);
+      showMessage("error", errors);
     }
   };
 

@@ -1,12 +1,12 @@
-import React, { FC, FormEventHandler, useContext } from "react";
+import React, { FC, FormEventHandler } from "react";
 import MainLayout from "../../../layouts/MainLayout/MainLayout";
 import useInput from "../../../hooks/UseInput/UseInput";
 import { useNavigate } from "react-router-dom";
 import Button from "../../../components/UI/Button/Button";
 import TextInput from "../../../components/UI/FormInput/TextInput/TextInput";
-import UserDataContext from "../../../store/UserDataContext";
 import { custom } from "../../../api/api";
-import ErrorMessagesContext from "../../../store/ErrorMessagesContext";
+import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
+import UseSystemMessage from "../../../hooks/UseSystemMessage/UseSystemMessage";
 
 interface LoginProps {}
 
@@ -20,13 +20,12 @@ function validatePassword(password: string) {
   return password.length > 0;
 }
 
-// type Verifier = {
-//   userId: number | null | undefined;
-// };
-
 const Login: FC<LoginProps> = () => {
-  const userDataCtx = useContext(UserDataContext);
-  const errorsCtx = useContext(ErrorMessagesContext);
+  UseVerifyUser({
+    isProtected: false,
+  });
+
+  const showMessage = UseSystemMessage();
 
   const navigate = useNavigate();
 
@@ -56,27 +55,10 @@ const Login: FC<LoginProps> = () => {
         method: "POST",
         body: body,
       });
-      userDataCtx.updateUserId();
       navigate("/dashboard");
-    } catch (error) {
-      const message = errorsCtx.getErrorMessage(error);
-      errorsCtx.setErrorsHandler(message);
+    } catch (errors) {
+      showMessage("error", errors);
     }
-
-    // const response = await fetch("/api/auth/login", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     "Access-Control-Allow-Origin": "*",
-    //   },
-    //   body: JSON.stringify(body), // body data type must match "Content-Type" header
-    // });
-
-    // const returnedData = await response.json();
-
-    // if (returnedData.user) userDataCtx.setUserIdHandler(returnedData.user);
-
-    // if (returnedData.successful) navigate("/dashboard");
   };
 
   const {
