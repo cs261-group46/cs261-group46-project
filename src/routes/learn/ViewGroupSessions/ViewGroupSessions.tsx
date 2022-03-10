@@ -112,10 +112,7 @@ const ViewGroupSessions: FC<ViewGroupSessionsProps> = () => {
   }, [JSON.stringify(meetings_invited)]);
 
   return (
-    <DashboardSubpageLayout
-      title={"Group Sessions"}
-      dashboardSection={"#learning"}
-    >
+    <DashboardSubpageLayout title={"Group Sessions"}>
       <div className={styles.ViewGroupSessions} data-testid="ViewGroupSessions">
         {groupSessions && groupSessionsOnPage ? (
           <Fragment>

@@ -171,10 +171,7 @@ const UserEditDetails: FC<UserEditDetailsProps> = () => {
   };
 
   return (
-    <DashboardSubpageLayout
-      title="Update User Details"
-      dashboardSection={"#home"}
-    >
+    <DashboardSubpageLayout title="Update User Details">
       <TextInput
         icon="1️⃣"
         value={enteredFirstName}

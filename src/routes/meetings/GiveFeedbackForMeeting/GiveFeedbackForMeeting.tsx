@@ -134,10 +134,7 @@ const GiveFeedbackForMeeting: FC<GiveFeedbackForMeetingProps> = () => {
   };
 
   return (
-    <DashboardSubpageLayout
-      title="Give Feedback on the Meeting"
-      dashboardSection={"#home"}
-    >
+    <DashboardSubpageLayout title="Give Feedback on the Meeting">
       {meeting && (
         <>
           <Title

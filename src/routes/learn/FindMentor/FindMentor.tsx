@@ -113,10 +113,7 @@ const FindMentor: FC<FindMentorProps> = () => {
   ));
 
   return (
-    <DashboardSubpageLayout
-      title="Find a Mentor"
-      dashboardSection={"#learning"}
-    >
+    <DashboardSubpageLayout title="Find a Mentor">
       <div className={styles.FindMentor} data-testid="FindMentor">
         {mentorCards}
         {mentorCards &&

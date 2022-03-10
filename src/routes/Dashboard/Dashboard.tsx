@@ -1,4 +1,11 @@
-import React, { FC, useCallback, useContext, useEffect, useState } from "react";
+import React, {
+  FC,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import styles from "./Dashboard.module.scss";
 import MainLayout from "../../layouts/MainLayout/MainLayout";
 import Button from "../../components/UI/Button/Button";
@@ -12,6 +19,7 @@ import Icon from "../../components/UI/Icon/Icon";
 import { useLocation, useNavigate } from "react-router-dom";
 import UseVerifyUser from "../../hooks/UseVerifyUser/UseVerifyUser";
 import { MentorType } from "../../types/Mentor";
+import DashboardNavbar, { hashToSlot } from "./DashboardNavbar";
 
 interface DashboardProps {}
 
@@ -45,21 +53,10 @@ const Dashboard: FC<DashboardProps> = () => {
     ],
   });
 
-  const pageHashes = ["#home", "#learning", "#mentoring", "#expertise"];
   const { hash } = useLocation();
-  const initialPage = pageHashes.includes(hash)
-    ? pageHashes.indexOf(hash) + 1
-    : 1;
 
-  const launchbarClickHandler = (slot: number) => {
-    navigate(`/dashboard${pageHashes[slot - 1]}`);
-    setPageVisible(slot);
-  };
-
-  const [pageVisible, setPageVisible] = useState(initialPage);
+  const pageVisible = hashToSlot(hash);
   const navigate = useNavigate();
-
-  console.log(hash);
 
   const [notificationsLearn, setNotificationsLearn] = useState<
     NotificationType<"learning">[]
@@ -391,36 +388,9 @@ const Dashboard: FC<DashboardProps> = () => {
           )}
         </div>
       )}
-      <div className={styles.Switch}>
-        <Button
-          onClick={launchbarClickHandler.bind(null, 1)}
-          className={`${styles.Button} ${pageVisible === 1 && styles.selected}`}
-          icon="🏠"
-        >
-          Home
-        </Button>
-        <Button
-          onClick={launchbarClickHandler.bind(null, 2)}
-          className={`${styles.Button} ${pageVisible === 2 && styles.selected}`}
-          icon="🧑‍🎓"
-        >
-          Your Learning
-        </Button>
-        <Button
-          onClick={launchbarClickHandler.bind(null, 3)}
-          className={`${styles.Button} ${pageVisible === 3 && styles.selected}`}
-          icon="🧑"
-        >
-          Your Mentoring
-        </Button>
-        <Button
-          onClick={launchbarClickHandler.bind(null, 4)}
-          className={`${styles.Button} ${pageVisible === 4 && styles.selected}`}
-          icon="💪"
-        >
-          Your Expertise
-        </Button>
-      </div>
+
+      <DashboardNavbar hash={hash} />
+
       <div data-testid="Dashboard" />
     </MainLayout>
   );

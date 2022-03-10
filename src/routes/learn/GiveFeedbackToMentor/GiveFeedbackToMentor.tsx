@@ -115,10 +115,7 @@ const GiveFeedbackToMentor: FC<GiveFeedbackToMentorProps> = () => {
   };
 
   return (
-    <DashboardSubpageLayout
-      title="Give Feedback to Past Mentee"
-      dashboardSection={"#learning"}
-    >
+    <DashboardSubpageLayout title="Give Feedback to Past Mentee">
       {feedback && (
         <>
           <Title

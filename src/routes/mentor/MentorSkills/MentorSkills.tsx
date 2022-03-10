@@ -127,10 +127,7 @@ const MentorSkills: FC<MentorSkillsProps> = () => {
   };
 
   return (
-    <DashboardSubpageLayout
-      title="Your Mentorship Areas"
-      dashboardSection={"#mentoring"}
-    >
+    <DashboardSubpageLayout title="Your Mentorship Areas">
       <SearchSelect
         id="skills"
         label="Areas of Mentorship"

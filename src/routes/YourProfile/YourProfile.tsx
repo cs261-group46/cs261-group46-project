@@ -23,7 +23,7 @@ const YourProfile: FC<YourProfileProps> = () => {
   });
 
   return (
-    <DashboardSubpageLayout title="Your Profile" dashboardSection={"#home"}>
+    <DashboardSubpageLayout title="Your Profile">
       <div className={styles.YourProfile} data-testid="YourProfile">
         {user ? (
           <>

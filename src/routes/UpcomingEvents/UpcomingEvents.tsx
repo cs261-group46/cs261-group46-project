@@ -100,7 +100,7 @@ const UpcomingEvents: FC<UpcomingEventsProps> = (props) => {
   }, [JSON.stringify(meetings_attending), JSON.stringify(meetings_hosted)]);
 
   return (
-    <DashboardSubpageLayout title={"Calendar"} dashboardSection={"#home"}>
+    <DashboardSubpageLayout title={"Calendar"}>
       {userId && (
         <PagePicker
           pickers={[
