@@ -425,6 +425,8 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
       <Button icon="👑" onClick={submitHandler} buttonStyle={"primary"}>
         Create
       </Button>
+
+      <div data-testid="CreateGroupSession" />
     </DashboardSubpageLayout>
   );
 };

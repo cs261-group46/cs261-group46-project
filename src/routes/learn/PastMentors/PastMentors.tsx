@@ -5,6 +5,7 @@ import ContentCard from "../../../components/UI/ContentCard/ContentCard";
 import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
 import { MentorFeedbackType } from "../../../types/MentorFeedback";
 import StarPicker from "../../../components/UI/FormInput/StarPicker/StarPicker";
+import LoadingSpinner from "../../../components/UI/LoadingSpinner/LoadingSpinner";
 
 interface PastMentorsProps {}
 
@@ -29,7 +30,7 @@ const PastMentors: FC<PastMentorsProps> = () => {
   return (
     <DashboardSubpageLayout title="Past Mentors">
       <div className={styles.PastMentors} data-testid="PastMentors">
-        {mentee_id &&
+        {mentee_id ? (
           mentee_feedback_given.map((feedback: MentorFeedbackType) => (
             <ContentCard
               heading={`${feedback.mentor.user.first_name} ${feedback.mentor.user.last_name}`}
@@ -65,7 +66,10 @@ const PastMentors: FC<PastMentorsProps> = () => {
                 },
               ]}
             />
-          ))}
+          ))
+        ) : (
+          <LoadingSpinner />
+        )}
       </div>
     </DashboardSubpageLayout>
   );

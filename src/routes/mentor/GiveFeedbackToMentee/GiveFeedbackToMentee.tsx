@@ -9,6 +9,7 @@ import useInput from "../../../hooks/UseInput/UseInput";
 import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
 import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
 import { MenteeFeedbackType } from "../../../types/MenteeFeedback";
+import LoadingSpinner from "../../../components/UI/LoadingSpinner/LoadingSpinner";
 
 interface GiveFeedbackToMenteeProps {}
 
@@ -107,7 +108,7 @@ const GiveFeedbackToMentee: FC<GiveFeedbackToMenteeProps> = () => {
 
   return (
     <DashboardSubpageLayout title="Give Feedback to Past Mentee">
-      {feedback && (
+      {feedback ? (
         <>
           <Title
             text={`${feedback.mentee.user.first_name} ${feedback.mentee.user.last_name}`}
@@ -135,7 +136,10 @@ const GiveFeedbackToMentee: FC<GiveFeedbackToMenteeProps> = () => {
             Submit
           </Button>
         </>
+      ) : (
+        <LoadingSpinner />
       )}
+      <div data-testid="GiveFeedbackToMentee" />
     </DashboardSubpageLayout>
   );
 };

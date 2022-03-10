@@ -9,6 +9,7 @@ import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
 import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
 import { MeetingType } from "../../../types/Meeting";
 import { UserType } from "../../../types/User";
+import LoadingSpinner from "../../../components/UI/LoadingSpinner/LoadingSpinner";
 
 interface GiveFeedbackForMeetingProps {}
 
@@ -115,7 +116,7 @@ const GiveFeedbackForMeeting: FC<GiveFeedbackForMeetingProps> = () => {
 
   return (
     <DashboardSubpageLayout title="Give Feedback on the Meeting">
-      {meeting && (
+      {meeting ? (
         <>
           <Title
             text={`${meeting.title} - ${(meeting.host as UserType).email}`}
@@ -134,7 +135,10 @@ const GiveFeedbackForMeeting: FC<GiveFeedbackForMeetingProps> = () => {
             Submit
           </Button>
         </>
+      ) : (
+        <LoadingSpinner />
       )}
+      <div data-testid="GiveFeedbackForMeeting" />
     </DashboardSubpageLayout>
   );
 };

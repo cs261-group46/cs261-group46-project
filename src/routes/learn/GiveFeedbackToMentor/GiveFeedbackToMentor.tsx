@@ -9,6 +9,7 @@ import useInput from "../../../hooks/UseInput/UseInput";
 import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
 import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
 import { MentorFeedbackType } from "../../../types/MentorFeedback";
+import LoadingSpinner from "../../../components/UI/LoadingSpinner/LoadingSpinner";
 
 interface GiveFeedbackToMentorProps {}
 
@@ -107,7 +108,7 @@ const GiveFeedbackToMentor: FC<GiveFeedbackToMentorProps> = () => {
 
   return (
     <DashboardSubpageLayout title="Give Feedback to Past Mentee">
-      {feedback && (
+      {feedback ? (
         <>
           <Title
             text={`${feedback.mentor.user.first_name} ${feedback.mentor.user.last_name}`}
@@ -135,7 +136,10 @@ const GiveFeedbackToMentor: FC<GiveFeedbackToMentorProps> = () => {
             Submit
           </Button>
         </>
+      ) : (
+        <LoadingSpinner />
       )}
+      <div data-testid="GiveFeedbackToMentor" />
     </DashboardSubpageLayout>
   );
 };
