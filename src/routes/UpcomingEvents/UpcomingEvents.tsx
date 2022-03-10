@@ -1,15 +1,11 @@
 import React, { FC, useEffect, useState } from "react";
 import styles from "./UpcomingEvents.module.scss";
-import Event from "../../components/UpcommingEvents/Event/Event";
-import Button from "../../components/UI/Button/Button";
-import { EventProps } from "../../components/UpcommingEvents/Event/Event.d";
 import DashboardSubpageLayout from "../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
 import UseVerifyUser from "../../hooks/UseVerifyUser/UseVerifyUser";
 import { MeetingType } from "../../types/Meeting";
 import PagePicker from "../../components/UI/PagePicker/PagePicker";
 import ContentCard from "../../components/UI/ContentCard/ContentCard";
 import Tag from "../../components/UI/Tag/Tag";
-import { UserType } from "../../types/User";
 
 interface UpcomingEventsProps {
   // events: EventProps[];
@@ -45,13 +41,11 @@ const getDateString = (date: Date, duration: number) => {
   );
 };
 
-const UpcomingEvents: FC<UpcomingEventsProps> = (props) => {
+const UpcomingEvents: FC<UpcomingEventsProps> = () => {
   const {
     userId = null,
-    expert_id = null,
     meetings_hosted = [],
     meetings_attending = [],
-    stateChangingHandler,
   } = UseVerifyUser<{
     userId: number | null;
     expert_id: number | null;
@@ -108,6 +102,7 @@ const UpcomingEvents: FC<UpcomingEventsProps> = (props) => {
     setPastMeetings(
       meetingsSorted.filter((meeting) => new Date(meeting.date) < new Date())
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(meetings_attending), JSON.stringify(meetings_hosted)]);
 
   return (

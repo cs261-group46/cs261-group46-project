@@ -1,11 +1,4 @@
-import React, {
-  FC,
-  Fragment,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import React, { FC, Fragment, useMemo, useState } from "react";
 import styles from "./YourGroupSessions.module.scss";
 import Button from "../../../components/UI/Button/Button";
 import PageStepper from "../../../components/UI/PageStepper/PageStepper";
@@ -42,11 +35,7 @@ const getDateString = (date: Date, duration: number) => {
 };
 
 const YourGroupSessions: FC<YourGroupSessionsProps> = () => {
-  const {
-    expert_id = null,
-    meetings_hosted = undefined,
-    stateChangingHandler,
-  } = UseVerifyUser<{
+  const { meetings_hosted = undefined, stateChangingHandler } = UseVerifyUser<{
     expert_id: number | null | undefined;
     meetings_hosted: MeetingType[] | null | undefined;
   }>({

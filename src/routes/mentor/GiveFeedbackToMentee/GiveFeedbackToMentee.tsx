@@ -1,17 +1,14 @@
 import React, { FC, useEffect, useState } from "react";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
-import { store, update } from "../../../api/api";
+import { useNavigate, useParams } from "react-router-dom";
+import { update } from "../../../api/api";
 import Button from "../../../components/UI/Button/Button";
 import BigTextInput from "../../../components/UI/FormInput/BigTextInput/BigTextInput";
 import StarPicker from "../../../components/UI/FormInput/StarPicker/StarPicker";
-import TextInput from "../../../components/UI/FormInput/TextInput/TextInput";
 import Title from "../../../components/UI/Title/Title";
 import useInput from "../../../hooks/UseInput/UseInput";
 import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
 import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
-import { MenteeType } from "../../../types/Mentee";
 import { MenteeFeedbackType } from "../../../types/MenteeFeedback";
-import styles from "./GiveFeedbackToMentee.module.scss";
 
 interface GiveFeedbackToMenteeProps {}
 
@@ -52,6 +49,7 @@ const GiveFeedbackToMentee: FC<GiveFeedbackToMenteeProps> = () => {
         navigate("/dashboard");
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId, menteeId, JSON.stringify(mentor_feedback_given), navigate]);
 
   const {

@@ -9,7 +9,6 @@ import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
 import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
 import { MeetingType } from "../../../types/Meeting";
 import { UserType } from "../../../types/User";
-import styles from "./GiveFeedbackForMeeting.module.scss";
 
 interface GiveFeedbackForMeetingProps {}
 
@@ -65,13 +64,14 @@ const GiveFeedbackForMeeting: FC<GiveFeedbackForMeetingProps> = () => {
     }
 
     setMeeting(meet);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [meetingId, JSON.stringify(meetings_attending), navigate]);
 
   useEffect(() => {
     if (userId) {
       verifyAttendance();
     }
-  }, [verifyAttendance]);
+  }, [userId, verifyAttendance]);
 
   const {
     enteredValue: enteredFeedback,

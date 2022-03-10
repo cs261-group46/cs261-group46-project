@@ -2,14 +2,13 @@ import React, { FC, useEffect, useState } from "react";
 import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
 import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
 import ContentCard from "../../../components/UI/ContentCard/ContentCard";
-import { MenteeFeedbackType } from "../../../types/MenteeFeedback";
 import StarPicker from "../../../components/UI/FormInput/StarPicker/StarPicker";
 import { MentorFeedbackType } from "../../../types/MentorFeedback";
 
 interface MenteeFeedbacksProps {}
 
 const MenteeFeedbacks: FC<MenteeFeedbacksProps> = () => {
-  const { userId = null, mentee_received_feedback = [] } = UseVerifyUser<{
+  const { mentee_received_feedback = [] } = UseVerifyUser<{
     userId: number | null;
     mentee_received_feedback: MentorFeedbackType[] | [];
   }>({
@@ -33,6 +32,7 @@ const MenteeFeedbacks: FC<MenteeFeedbacksProps> = () => {
       (feedback) => feedback.feedback != null
     );
     setFeedbackReceived(filtered_feedbacks);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(mentee_received_feedback)]);
 
   const feedbackReceivedList = feedbackReceived.map(

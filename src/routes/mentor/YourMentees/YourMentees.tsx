@@ -3,7 +3,6 @@ import styles from "./YourMentees.module.scss";
 import Title from "../../../components/UI/Title/Title";
 import MenteeCard from "./MenteeCard/MenteeCard";
 import { MentorshipRequestType } from "../../../types/MentorshipRequest";
-import Button from "../../../components/UI/Button/Button";
 import MentorshipRequestCard from "./MentorshipRequestCard/MentorshipRequestCard";
 import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
 import { MenteeType } from "../../../types/Mentee";
