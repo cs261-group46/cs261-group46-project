@@ -2,6 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
 import MentorshipRequestCard from "./MentorshipRequestCard";
+import { MentorshipRequestType } from "../../../../types/MentorshipRequest";
 
 describe("<MentorshipRequestCard />", () => {
   test("it should mount", () => {
@@ -14,6 +15,7 @@ describe("<MentorshipRequestCard />", () => {
             id: 0,
             topics: [],
             user: {
+              id: 0,
               department: {
                 id: 0,
                 name: "",
@@ -22,7 +24,14 @@ describe("<MentorshipRequestCard />", () => {
               first_name: "",
               last_name: "",
             },
+            plans_of_action: [],
           },
+        }}
+        onProcessRequest={function (
+          mentorshipRequest: MentorshipRequestType,
+          accepted: boolean
+        ): void {
+          throw new Error("Function not implemented.");
         }}
       />
     );

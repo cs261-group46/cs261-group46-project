@@ -78,17 +78,18 @@ def update(userId, user=None):
             for mentee in return_user.mentor.mentees:
                 if mentee.user.department.id == department.id:
                     Notification(description="Your mentor changed departments. Now you are in the same department, and so you mentoship partnerhip might not be as effective. Consider changing mentors.", notification_level='warning', notification_type='learning', user_id=mentee.user.id).commit()
-                    mentees_in_department.append(mentee)
-
-        for mentee in mentees_in_department:
-            Notification(
-                description=f"Your changed your department. Now you are in the same department, as you mentee {mentee.user.first_name} {mentee.user.last_name} and so you mentoship partnerhip might not be as effective. Consider terminating partnership.",
-                notification_level='warning', notification_type='mentoring', user_id=mentee.user.id).commit()
+                    Notification(
+                        description=f"You changed your department. Now you are in the same department as you mentee {mentee.user.first_name} {mentee.user.last_name} and so you mentorship partnership might not be as effective. Consider terminating partnership.",
+                        notification_level='warning', notification_type='mentoring', user_id=return_user.user.id).commit()
 
         if return_user.mentee and return_user.mentee.mentor and return_user.mentee.mentor.user.department.id == department.id:
             Notification(
                 description=f"Your mentee {return_user.first_name} {return_user.last_name} changed departments. Now you are in the same department, and so you mentoship partnerhip might not be as effective. Consider terminating partnership.",
                 notification_level='warning', notification_type='mentoring', user_id=return_user.mentee.mentor.user.id).commit()
+            Notification(
+                description=f"You changed your department. Now you are in the same department as you mentor, and so you mentorship partnership might not be as effective. Consider terminating partnership.",
+                notification_level='warning', notification_type='learning',
+                user_id=return_user.id).commit()
 
         return {"success": True}, 200
     except:

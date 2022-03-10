@@ -11,64 +11,15 @@ import { MenteeFeedbackType } from "../../../../types/MenteeFeedback";
 //Probably need to pass mentor id along
 interface MentorshipRequestProp {
   mentorshipRequest: MentorshipRequestType;
-  stateChangingHandler: React.Dispatch<
-    React.SetStateAction<{
-      userId: number | null | undefined;
-      mentor_id: number | null | undefined;
-      mentor_mentees: MenteeType[] | [];
-      mentor_mentorship_requests_received: MentorshipRequestType[] | [];
-      mentor_feedback_given: MenteeFeedbackType[] | [];
-    }>
-  >;
+  onProcessRequest: (
+    mentorshipRequest: MentorshipRequestType,
+    accepted: boolean
+  ) => void;
 }
 
 const MentorshipRequestCard: FC<MentorshipRequestProp> = (props) => {
   //TODO: Given an id, lead to the correct plan of action.
   //TODO: have button send to meeting link instead of dashboard
-  const showMessage = UseSystemMessage();
-
-  const proccessRequestHandler = async (accept: boolean) => {
-    const body = {
-      accepted: accept,
-    };
-    try {
-      await update({
-        resource: "mentorshiprequests",
-        entity: props.mentorshipRequest.id,
-        body: body,
-      });
-
-      props.stateChangingHandler((prevState) => ({
-        ...prevState,
-        mentor_mentorship_requests_received:
-          prevState.mentor_mentorship_requests_received.filter(
-            (m) => m.id !== props.mentorshipRequest.id
-          ),
-      }));
-
-      if (accept) {
-        showMessage("success", "Request accepted successfully");
-
-        props.stateChangingHandler((prevState) => {
-          const mentor_mentees = [
-            ...prevState.mentor_mentees,
-            props.mentorshipRequest.mentee,
-          ];
-
-          // mentor_mentees.push(
-          //   props.mentorshipRequest.mentee as MenteeType
-          // ),
-
-          return {
-            ...prevState,
-            mentor_mentees: mentor_mentees,
-          };
-        });
-      } else showMessage("success", "Request rejected successfully");
-    } catch (errors) {
-      showMessage("error", errors);
-    }
-  };
 
   return (
     <ContentCard
@@ -98,12 +49,20 @@ const MentorshipRequestCard: FC<MentorshipRequestProp> = (props) => {
         {
           buttonStyle: "primary",
           children: "Accept",
-          onClick: proccessRequestHandler.bind(null, true),
+          onClick: props.onProcessRequest.bind(
+            null,
+            props.mentorshipRequest,
+            true
+          ),
         },
         {
           buttonStyle: "default",
           children: "Decline",
-          onClick: proccessRequestHandler.bind(null, false),
+          onClick: props.onProcessRequest.bind(
+            null,
+            props.mentorshipRequest,
+            false
+          ),
         },
       ]}
     />

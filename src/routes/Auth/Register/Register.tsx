@@ -19,7 +19,6 @@ import {
 import { useNavigate } from "react-router-dom";
 import { custom, index } from "../../../api/api";
 import { DepartmentType } from "../../../types/Department";
-import ErrorMessagesContext from "../../../store/SystemMessagesContext";
 import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
 import UseSystemMessage from "../../../hooks/UseSystemMessage/UseSystemMessage";
 
@@ -115,7 +114,7 @@ const Register: FC = () => {
       isValueEmailValid &&
       isValuePasswordValid &&
       isValueRepeatedPasswordValid &&
-      isValueDeprtmentPasswordValid
+      isValueDepartmentValid
     ) {
       sendRegistrationData();
     } else {
@@ -198,7 +197,7 @@ const Register: FC = () => {
   const {
     enteredValue: enteredDepartment,
     isInputValid: isInputDepartmentValid,
-    isValueValid: isValueDeprtmentPasswordValid,
+    isValueValid: isValueDepartmentValid,
     changeHandler: departmentChangeHandler,
     blurHandler: departmentBlurHandler,
   } = useInput<SelectOption<number>>({ value: -1 }, validateDepartment);

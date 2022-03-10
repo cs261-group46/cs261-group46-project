@@ -14,6 +14,7 @@ import { MenteeFeedbackType } from "../../../types/MenteeFeedback";
 import StarPicker from "../../../components/UI/FormInput/StarPicker/StarPicker";
 import LoadingSpinner from "../../../components/UI/LoadingSpinner/LoadingSpinner";
 import UseSystemMessage from "../../../hooks/UseSystemMessage/UseSystemMessage";
+import { update } from "../../../api/api";
 
 interface YourMenteeProps {}
 
@@ -49,12 +50,77 @@ const YourMentees: FC<YourMenteeProps> = () => {
   });
 
   const [filterEvents, setFilterEvents] = useState<number>(0);
+  const showMessage = UseSystemMessage();
+
+  const processRequestHandler = async (
+    mentorshipRequest: MentorshipRequestType,
+    accept: boolean
+  ) => {
+    const body = {
+      accepted: accept,
+    };
+    try {
+      await update({
+        resource: "mentorshiprequests",
+        entity: mentorshipRequest.id,
+        body: body,
+      });
+
+      stateChangingHandler((prevState) => ({
+        ...prevState,
+        mentor_mentorship_requests_received:
+          prevState.mentor_mentorship_requests_received.filter(
+            (m) => m.id !== mentorshipRequest.id
+          ),
+      }));
+
+      if (accept) {
+        showMessage("success", "Request accepted successfully");
+
+        stateChangingHandler((prevState) => {
+          const mentor_mentees = [
+            ...prevState.mentor_mentees,
+            mentorshipRequest.mentee,
+          ];
+
+          return {
+            ...prevState,
+            mentor_mentees: mentor_mentees,
+          };
+        });
+      } else showMessage("success", "Request rejected successfully");
+    } catch (errors) {
+      showMessage("error", errors);
+    }
+  };
+
+  const terminateMentorshipHandler = async (mentee: MenteeType) => {
+    try {
+      const body = {
+        mentor: -1,
+      };
+      await update({
+        entity: mentee.id,
+        resource: "mentees",
+        body: body,
+      });
+      stateChangingHandler((prevState) => ({
+        ...prevState,
+        mentor_mentees: prevState.mentor_mentees.filter(
+          (m) => m.id !== mentee.id
+        ),
+      }));
+      showMessage("success", "Mentorship terminated successfully");
+    } catch (errors) {
+      showMessage("error", errors);
+    }
+  };
 
   const menteeList = mentees?.map((mentee) => (
     <MenteeCard
       key={mentee.id}
       mentee={mentee}
-      stateChangingHandler={stateChangingHandler}
+      onTerminateMentorship={terminateMentorshipHandler}
     />
   ));
 
@@ -62,7 +128,7 @@ const YourMentees: FC<YourMenteeProps> = () => {
     <MentorshipRequestCard
       key={req.mentee.id}
       mentorshipRequest={req}
-      stateChangingHandler={stateChangingHandler}
+      onProcessRequest={processRequestHandler}
     />
   ));
 
