@@ -10,19 +10,9 @@ import PagePicker from "../../components/UI/PagePicker/PagePicker";
 import ContentCard from "../../components/UI/ContentCard/ContentCard";
 import Tag from "../../components/UI/Tag/Tag";
 import { UserType } from "../../types/User";
+import UseSystemMessage from "../../hooks/UseSystemMessage/UseSystemMessage";
 
-interface UpcomingEventsProps {
-  // events: EventProps[];
-}
-
-// const DUMMY_EVENTS: EventProps[] = [
-//   {
-//     sessionType: "workshop",
-//     subject: "Crafting",
-//     mentee: "2",
-//     mentor: "5",
-//   },
-// ];
+interface UpcomingEventsProps {}
 
 const getDateString = (date: Date, duration: number) => {
   let start = date;
@@ -48,10 +38,8 @@ const getDateString = (date: Date, duration: number) => {
 const UpcomingEvents: FC<UpcomingEventsProps> = (props) => {
   const {
     userId = null,
-    expert_id = null,
     meetings_hosted = [],
     meetings_attending = [],
-    stateChangingHandler,
   } = UseVerifyUser<{
     userId: number | null;
     expert_id: number | null;
@@ -108,6 +96,7 @@ const UpcomingEvents: FC<UpcomingEventsProps> = (props) => {
     setPastMeetings(
       meetingsSorted.filter((meeting) => new Date(meeting.date) < new Date())
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(meetings_attending), JSON.stringify(meetings_hosted)]);
 
   return (
@@ -339,10 +328,21 @@ const UpcomingEvents: FC<UpcomingEventsProps> = (props) => {
                   <Tag key={topic.id}>{topic.name}</Tag>
                 )),
               },
+              meeting.feedback.find((f) => f.user && f.user.id === userId) !==
+                undefined && {
+                className: styles.tags,
+                title: "Feedback Given",
+                content: `"${
+                  meeting.feedback.find((f) => f.user && f.user.id === userId)
+                    ?.feedback
+                }"`,
+              },
             ]}
             buttons={[
-              meeting.host !== undefined ||
-              meeting.meeting_type === "one on one meeting"
+              (meeting.host !== undefined ||
+                meeting.meeting_type === "one on one meeting") &&
+              meeting.feedback.find((f) => f.user && f.user.id === userId) ===
+                undefined
                 ? {
                     children: "Give Feedback",
                     href: `/meetings/give-feedback/${meeting.id}`,

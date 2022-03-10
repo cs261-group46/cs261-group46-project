@@ -1,21 +1,37 @@
-from flask import Blueprint, request
-from app import ApplicationFeedback
+import datetime
+
+from flask import Blueprint, request, session, url_for, render_template
+from app import User, ApplicationFeedback
+from app.utils.cerberus_helpers import get_errors
 from app.middleware.auth import auth_required
+from app.validators.ApplicationFeedbacksValidators import storeValidator
 
-application_feedback = Blueprint("api_feedback_application", __name__, url_prefix="/application_feedback")
+applicationfeedbacks = Blueprint("api_applicationfeedbacks", __name__, url_prefix="/applicationfeedbacks")
 
 
-@application_feedback.route("/", methods=["GET"])
+@applicationfeedbacks.route("/", methods=["POST"])
 @auth_required
-def index(user=None):
-    # data = parse_args_list("fields")
-    data = request.get_json()
+def store(user=None):
+    try:
+        data = dict(request.get_json())
+        storeValidator.validate(data)
+        if storeValidator.errors:
+            return {
+                       "success": False,
+                       "errors": get_errors(storeValidator)
+                   }, 400
 
-    if (feedback_feedback := data.get("feedback")) is not None:
-        ApplicationFeedback(
-            user_id=user.id,
-            feedback=feedback_feedback
-        ).commit()
-        return {"successful": True}, 200
-    else:
-        return {"successful": False, "errors": "Missing feedback"}, 400
+
+        u = User.query.filter_by(id=data.get("user_id")).first()
+
+        # if u is None:
+        #     return {"success": False,
+        #             "errors": ["An unexpected error occurred."]}, 400
+
+        if u.id != user.id:
+            return {"success": False, "errors": ["You do not have the permission to submit feedback on behalf other users."]}, 401
+
+        ApplicationFeedback(user_id=u.id, feedback=data.get("feedback")).commit()
+        return {"success": True}, 200
+    except:
+        return {"success": False, "errors": ["An unexpected error occurred."]}, 400

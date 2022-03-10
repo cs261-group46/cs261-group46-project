@@ -138,7 +138,7 @@ class MeetingSchema(ma.SQLAlchemySchema):
     invited = ma.Nested(UserSchema(exclude=["meetings_invited", "mentor", "mentee", "expert", "permissions", "notifications", "meetings_hosted", "meetings_attending", "meeting_feedback"]), many=True)
     topics = ma.Nested(TopicSchema(exclude=["meetings", "experts", "mentors", "mentees"]), many=True)
     room = ma.Nested(RoomSchema(exclude=["meetings"]))
-    feedback = ma.Nested(lambda: MeetingFeedbackSchema(exclude=["meeting"]))
+    feedback = ma.Nested(lambda: MeetingFeedbackSchema(exclude=["meeting"]), many=True)
 
 
 class NotificationSchema(ma.SQLAlchemySchema):
@@ -196,6 +196,22 @@ class MeetingFeedbackSchema(ma.SQLAlchemySchema):
     class Meta:
         model = MeetingFeedback
 
+    id = ma.auto_field()
     feedback = ma.auto_field()
-    user = ma.Nested(UserSchema(exclude=["meeting_feedback"]))
+    user = ma.Nested(UserSchema(exclude=["meeting_feedback", "meetings_hosted", "meetings_attending", "meetings_invited", "permissions", "department", "mentor", "mentee", "expert", "notifications"]))
     meeting = ma.Nested(MeetingSchema(exclude=["feedback"]))
+#
+# id = ma.auto_field()
+#     email = ma.auto_field()
+#     first_name = ma.auto_field()
+#     last_name = ma.auto_field()
+#     permissions = ma.auto_field()
+#     department = ma.Nested(lambda: DepartmentSchema(exclude=["users"]))
+#     mentor = ma.Nested(lambda: MentorSchema(exclude=["user"]))
+#     mentee = ma.Nested(lambda: MenteeSchema(exclude=["user"]))
+#     expert = ma.Nested(lambda: ExpertSchema(exclude=["user", "topics.experts", "topics.mentors", "topics.mentees"]))
+#     notifications = ma.Nested(lambda: NotificationSchema(exclude=["user"]), many=True)
+#     meetings_hosted = ma.Nested(lambda: MeetingSchema(exclude=["host"]), many=True)
+#     meetings_attending = ma.Nested(lambda: MeetingSchema(exclude=["attendees"]), many=True)
+#     meeting_feedback = ma.Nested(lambda: MeetingFeedbackSchema(exclude=["user"]), many=True)
+#     meetings_invited = ma.Nested(lambda: MeetingSchema(exclude=["invited"]), many=True)

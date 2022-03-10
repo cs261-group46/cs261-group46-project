@@ -4,7 +4,7 @@ import styles from "./SystemMessage.module.scss";
 
 interface SystemMessageProps {
   sort: "popup" | "inline";
-  type: "warning" | "alert" | "info";
+  type: "warning" | "alert" | "info" | "success";
   description: string;
   visible: boolean;
   onClose?: () => void;
@@ -26,7 +26,9 @@ const SystemMessage: FC<SystemMessageProps> = (props) => {
           " " +
           (props.type === "alert" ? styles.alert : "") +
           " " +
-          (props.type === "info" ? styles.information : "")
+          (props.type === "info" ? styles.information : "") +
+          " " +
+          (props.type === "success" ? styles.success : "")
         }
         data-testid="SystemMessage"
       >

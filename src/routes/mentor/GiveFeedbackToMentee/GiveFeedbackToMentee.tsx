@@ -7,6 +7,7 @@ import StarPicker from "../../../components/UI/FormInput/StarPicker/StarPicker";
 import TextInput from "../../../components/UI/FormInput/TextInput/TextInput";
 import Title from "../../../components/UI/Title/Title";
 import useInput from "../../../hooks/UseInput/UseInput";
+import UseSystemMessage from "../../../hooks/UseSystemMessage/UseSystemMessage";
 import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
 import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
 import { MenteeType } from "../../../types/Mentee";
@@ -31,12 +32,14 @@ const GiveFeedbackToMentee: FC<GiveFeedbackToMenteeProps> = () => {
     ],
   });
 
+  const showMessage = UseSystemMessage();
   let { menteeId } = useParams();
   const [feedback, setFeedback] = useState<MenteeFeedbackType | null>(null);
 
   const navigate = useNavigate();
   useEffect(() => {
     if (!menteeId) {
+      showMessage("error", "Unspecified mentee id.");
       navigate("/dashboard");
     }
 
@@ -49,10 +52,18 @@ const GiveFeedbackToMentee: FC<GiveFeedbackToMenteeProps> = () => {
       if (found_mentee) {
         setFeedback(found_mentee);
       } else {
+        showMessage("error", "Mentee not found.");
         navigate("/dashboard");
       }
     }
-  }, [userId, menteeId, JSON.stringify(mentor_feedback_given), navigate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    userId,
+    menteeId,
+    JSON.stringify(mentor_feedback_given),
+    showMessage,
+    navigate,
+  ]);
 
   const {
     enteredValue: enteredFeedback,
@@ -86,9 +97,10 @@ const GiveFeedbackToMentee: FC<GiveFeedbackToMenteeProps> = () => {
         body: body,
         entity: (feedback as MenteeFeedbackType).id,
       });
+      showMessage("success", "Feedback submitted successfully.");
       navigate("/mentor/your-mentees");
     } catch (errors) {
-      console.log(errors);
+      showMessage("error", errors);
     }
   };
 
@@ -117,7 +129,7 @@ const GiveFeedbackToMentee: FC<GiveFeedbackToMenteeProps> = () => {
           <BigTextInput
             id={"feedback"}
             label={"Feedback"}
-            placeholder={"Please provide feedback on your past mentee"}
+            placeholder={"PDid this mentee make good progress?"}
             value={enteredFeedback}
             isValid={feedbackInputValid}
             onChange={feedbackChangeHandler}

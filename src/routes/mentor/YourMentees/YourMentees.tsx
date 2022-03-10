@@ -13,6 +13,7 @@ import ContentCard from "../../../components/UI/ContentCard/ContentCard";
 import { MenteeFeedbackType } from "../../../types/MenteeFeedback";
 import StarPicker from "../../../components/UI/FormInput/StarPicker/StarPicker";
 import LoadingSpinner from "../../../components/UI/LoadingSpinner/LoadingSpinner";
+import UseSystemMessage from "../../../hooks/UseSystemMessage/UseSystemMessage";
 
 interface YourMenteeProps {}
 
@@ -22,6 +23,7 @@ const YourMentees: FC<YourMenteeProps> = () => {
     mentor_mentees: mentees = [],
     mentor_mentorship_requests_received: mentorshipRequests = [],
     mentor_feedback_given = [],
+    stateChangingHandler,
   } = UseVerifyUser<{
     userId: number | null | undefined;
     mentor_id: number | null | undefined;
@@ -49,14 +51,20 @@ const YourMentees: FC<YourMenteeProps> = () => {
   const [filterEvents, setFilterEvents] = useState<number>(0);
 
   const menteeList = mentees?.map((mentee) => (
-    <MenteeCard key={mentee.id} mentee={mentee} />
+    <MenteeCard
+      key={mentee.id}
+      mentee={mentee}
+      stateChangingHandler={stateChangingHandler}
+    />
   ));
 
   const mentorshipRequestsList = mentorshipRequests?.map((req) => (
-    <MentorshipRequestCard key={req.mentee.id} mentorshipRequest={req} />
+    <MentorshipRequestCard
+      key={req.mentee.id}
+      mentorshipRequest={req}
+      stateChangingHandler={stateChangingHandler}
+    />
   ));
-
-  console.log(mentor_feedback_given);
 
   const pastMenteesList = mentor_feedback_given.map(
     (feedback: MenteeFeedbackType, index: number) => (

@@ -20,6 +20,7 @@ import { useNavigate } from "react-router-dom";
 import { index, store } from "../../../api/api";
 import { Room } from "../../../types/Room";
 import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
+import UseSystemMessage from "../../../hooks/UseSystemMessage/UseSystemMessage";
 
 interface CreateGroupSessionProps {}
 
@@ -35,6 +36,8 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
       },
     ],
   });
+
+  const showMessage = UseSystemMessage();
 
   const navigate = useNavigate();
 
@@ -65,7 +68,7 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
     (value) => value.length > 0
   );
 
-  const getTopics = async (startsWith: string) => {
+  const getTopics = useCallback(async (startsWith: string) => {
     try {
       const data = await index({
         resource: "topics",
@@ -85,11 +88,14 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
       console.log(errors);
       return [];
     }
-  };
+  }, []);
 
-  const topicsSearchPromise: SearchPromise<number> = (_search) => {
-    return new Promise((resolve) => resolve(getTopics(_search)));
-  };
+  const topicsSearchPromise: SearchPromise<number> = useCallback(
+    (_search) => {
+      return new Promise((resolve) => resolve(getTopics(_search)));
+    },
+    [getTopics]
+  );
 
   const {
     enteredValue: topics,
@@ -111,7 +117,7 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
     isValueValid: dateValueValid,
     changeHandler: dateChangeHandler,
     blurHandler: dateBlurHandler,
-  } = useInput<Date>(new Date(), (date) => date >= new Date());
+  } = useInput<Date>(new Date(), (d) => d >= new Date());
 
   const {
     enteredValue: startTime,
@@ -147,12 +153,7 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
     isInputValid: capacityInputValid,
     isValueValid: capacityValueValid,
     blurHandler: capacityBlurHandler,
-  } = useInput<string>(
-    "",
-    (value) =>
-      (value === "" && link.length > 0) ||
-      (parseInt(value) < 1000 && parseInt(value) > 0)
-  );
+  } = useInput<string>("");
 
   const {
     enteredValue: visibility,
@@ -192,10 +193,10 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
         }));
         // return rooms;
       } catch (errors) {
-        console.log(errors);
+        showMessage("error", errors);
       }
     },
-    []
+    [showMessage]
   );
 
   const invitesSearchPromise: SearchPromise<{
@@ -215,7 +216,7 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
         value: user,
       }));
     } catch (errors) {
-      console.log(errors);
+      showMessage("error", errors);
     }
   };
 
@@ -240,9 +241,10 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
         resource: "meetings",
         body: body,
       });
+      showMessage("success", "Group session created successfully.");
       navigate("/expert/group-sessions");
     } catch (errors) {
-      console.log(errors);
+      showMessage("error", errors);
     }
   };
 
@@ -395,7 +397,7 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
         label={"Capacity"}
         placeholder={""}
         value={capacity}
-        isValid={capacityInputValid}
+        isValid={true}
         type={"number"}
         onChange={capacityChangeHandler}
         onBlur={capacityBlurHandler}
@@ -403,7 +405,7 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
 
       <SearchSelect
         id={"room"}
-        label={"Room - only showing available"}
+        label={"Room"}
         isValid={roomInputValid}
         value={room}
         onChange={roomChangeHandler}

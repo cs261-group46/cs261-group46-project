@@ -2,7 +2,7 @@ import React, { FC, Fragment, useContext } from "react";
 import Header from "../../components/UI/Header/Header";
 import Footer from "../../components/UI/Footer/Footer";
 import styles from "./MainLayout.module.scss";
-import ErrorMessagesContext from "../../store/ErrorMessagesContext";
+import SystemMessagesContext from "../../store/SystemMessagesContext";
 import SystemMessage from "../../components/UI/SystemMessage/SystemMessage";
 
 interface MainTemplateProps {
@@ -11,17 +11,17 @@ interface MainTemplateProps {
 }
 
 const MainLayout: FC<MainTemplateProps> = (props) => {
-  const errorsCtx = useContext(ErrorMessagesContext);
+  const systemMessageCtx = useContext(SystemMessagesContext);
 
-  const errors = errorsCtx.errors.map((error, i) => {
+  const messages = systemMessageCtx.messages.map(({ id, message, type }, i) => {
     return (
       <SystemMessage
         key={i}
         sort={"inline"}
-        type={"warning"}
-        description={error.message}
+        type={type === "error" ? "warning" : "success"}
+        description={message}
         visible={true}
-        onClose={errorsCtx.removeErrorHandler.bind(null, error.id)}
+        onClose={systemMessageCtx.removeMessageHandler.bind(null, id)}
       />
     );
   });
@@ -29,7 +29,7 @@ const MainLayout: FC<MainTemplateProps> = (props) => {
   return (
     <Fragment>
       <Header title={props.title} />
-      <div className={styles.Errors}>{errors}</div>
+      <div className={styles.Errors}>{messages}</div>
       <div className={styles.ContentLayout}>{props.children}</div>
       <Footer />
       <div data-testid="MainLayout" />

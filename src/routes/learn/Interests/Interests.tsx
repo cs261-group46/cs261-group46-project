@@ -8,6 +8,7 @@ import {
   SearchPromise,
 } from "../../../components/UI/FormInput/SearchSelect/SearchSelect";
 import useInput from "../../../hooks/UseInput/UseInput";
+import UseSystemMessage from "../../../hooks/UseSystemMessage/UseSystemMessage";
 import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
 import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
 import { TopicWithPriorityType } from "../../../types/Topic";
@@ -35,6 +36,8 @@ const Interests: FC<InterestsProps> = () => {
     ],
   });
 
+  const showMessage = UseSystemMessage();
+
   const navigate = useNavigate();
 
   const getTopics = async (startsWith: string) => {
@@ -53,7 +56,7 @@ const Interests: FC<InterestsProps> = () => {
       );
       return options;
     } catch (errors) {
-      console.log(errors);
+      showMessage("error", errors);
       return [];
     }
   };
@@ -84,6 +87,7 @@ const Interests: FC<InterestsProps> = () => {
       })
     );
     interestsChangeHandler(topicsOptions);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(mentee_topics), interestsChangeHandler]);
 
   const updateInterests = async () => {
@@ -100,9 +104,10 @@ const Interests: FC<InterestsProps> = () => {
         entity: mentee_id as number,
         body: requestBody,
       });
+      showMessage("success", "Details updated successfully.");
       navigate("/dashboard"); // show message instead
     } catch (errors) {
-      console.log(errors);
+      showMessage("error", errors);
     }
   };
 

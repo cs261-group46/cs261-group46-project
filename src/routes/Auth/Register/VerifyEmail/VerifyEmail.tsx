@@ -1,5 +1,6 @@
 import React from "react";
 import HelperLink from "../../../../components/UI/HelperLink/HelperLink";
+import UseVerifyUser from "../../../../hooks/UseVerifyUser/UseVerifyUser";
 import MainLayout from "../../../../layouts/MainLayout/MainLayout";
 import styles from "./VerifyEmail.module.scss";
 
@@ -8,6 +9,9 @@ type Verifier = {
 };
 
 function VerifyEmail() {
+  UseVerifyUser({
+    isProtected: false,
+  });
   const resendHandler = () => {
     // TODO : Send a request to re-verify
   };

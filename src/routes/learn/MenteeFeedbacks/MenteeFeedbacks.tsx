@@ -5,6 +5,7 @@ import ContentCard from "../../../components/UI/ContentCard/ContentCard";
 import { MenteeFeedbackType } from "../../../types/MenteeFeedback";
 import StarPicker from "../../../components/UI/FormInput/StarPicker/StarPicker";
 import { MentorFeedbackType } from "../../../types/MentorFeedback";
+import UseSystemMessage from "../../../hooks/UseSystemMessage/UseSystemMessage";
 
 interface MenteeFeedbacksProps {}
 
@@ -33,6 +34,7 @@ const MenteeFeedbacks: FC<MenteeFeedbacksProps> = () => {
       (feedback) => feedback.feedback != null
     );
     setFeedbackReceived(filtered_feedbacks);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(mentee_received_feedback)]);
 
   const feedbackReceivedList = feedbackReceived.map(

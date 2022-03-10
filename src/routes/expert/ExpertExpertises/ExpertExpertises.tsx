@@ -16,6 +16,7 @@ import {
   SearchPromise,
 } from "../../../components/UI/FormInput/SearchSelect/SearchSelect";
 import useInput from "../../../hooks/UseInput/UseInput";
+import UseSystemMessage from "../../../hooks/UseSystemMessage/UseSystemMessage";
 import UseVerifyAuth from "../../../hooks/UseVerifyAuth/UseVerifyAuth";
 import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
 import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
@@ -44,6 +45,8 @@ const ExpertExpertises: FC<ExpertExpertisesProps> = () => {
     ],
   });
 
+  const showMessage = UseSystemMessage();
+
   const navigate = useNavigate();
 
   const getTopics = async (startsWith: string) => {
@@ -62,7 +65,7 @@ const ExpertExpertises: FC<ExpertExpertisesProps> = () => {
       );
       return options;
     } catch (errors) {
-      console.log(errors);
+      showMessage("error", errors);
       return [];
     }
   };
@@ -88,6 +91,7 @@ const ExpertExpertises: FC<ExpertExpertisesProps> = () => {
         }))
       : [];
     expertisesChangeHandler(topicsOptions);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(expert_topics), expertisesChangeHandler]);
 
   const updateExpertises = async () => {
@@ -102,9 +106,10 @@ const ExpertExpertises: FC<ExpertExpertisesProps> = () => {
         entity: expert_id as number,
         body: requestBody,
       });
+      showMessage("success", "Details updated successfully.");
       navigate("/dashboard"); // show message instead
     } catch (errors) {
-      console.log(errors);
+      showMessage("error", errors);
     }
   };
 

@@ -4,11 +4,12 @@ import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
 import ContentCard from "../../../components/UI/ContentCard/ContentCard";
 import { MenteeFeedbackType } from "../../../types/MenteeFeedback";
 import StarPicker from "../../../components/UI/FormInput/StarPicker/StarPicker";
+import UseSystemMessage from "../../../hooks/UseSystemMessage/UseSystemMessage";
 
 interface MentorFeedbacksProps {}
 
 const MentorFeedbacks: FC<MentorFeedbacksProps> = () => {
-  const { userId = null, mentor_received_feedback = [] } = UseVerifyUser<{
+  const { mentor_received_feedback = [] } = UseVerifyUser<{
     userId: number | null;
     mentor_received_feedback: MenteeFeedbackType[] | [];
   }>({
@@ -32,6 +33,7 @@ const MentorFeedbacks: FC<MentorFeedbacksProps> = () => {
       (feedback) => feedback.feedback != null
     );
     setFeedbackReceived(filtered_feedbacks);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(mentor_received_feedback)]);
 
   const feedbackReceivedList = feedbackReceived.map(

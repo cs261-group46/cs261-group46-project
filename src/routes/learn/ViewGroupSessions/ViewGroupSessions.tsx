@@ -11,6 +11,7 @@ import { MeetingType } from "../../../types/Meeting";
 import { UserType } from "../../../types/User";
 import { update } from "../../../api/api";
 import LoadingSpinner from "../../../components/UI/LoadingSpinner/LoadingSpinner";
+import UseSystemMessage from "../../../hooks/UseSystemMessage/UseSystemMessage";
 
 interface ViewGroupSessionsProps {}
 
@@ -72,6 +73,8 @@ const ViewGroupSessions: FC<ViewGroupSessionsProps> = () => {
     ],
   });
 
+  const showMessage = UseSystemMessage();
+
   const joinHandler = async (groupSessionId: number) => {
     try {
       const body = {
@@ -84,7 +87,7 @@ const ViewGroupSessions: FC<ViewGroupSessionsProps> = () => {
         body: body,
       });
     } catch (errors) {
-      console.log(errors);
+      showMessage("error", errors);
     }
   };
 
@@ -105,9 +108,8 @@ const ViewGroupSessions: FC<ViewGroupSessionsProps> = () => {
             return b_date.getTime() - a_date.getTime();
           })
       );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(meetings_invited)]);
-
-  console.log(groupSessions);
 
   return (
     <DashboardSubpageLayout title={"Group Sessions"}>
@@ -116,8 +118,6 @@ const ViewGroupSessions: FC<ViewGroupSessionsProps> = () => {
           <Fragment>
             {groupSessions.length > 0 ? (
               groupSessionsOnPage.map((groupSession) => {
-                console.log(groupSession);
-
                 const host = (
                   <div>
                     {groupSession.host?.first_name}{" "}

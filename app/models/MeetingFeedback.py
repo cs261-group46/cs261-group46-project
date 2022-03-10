@@ -1,3 +1,5 @@
+from sqlalchemy.orm import backref
+
 from app import db
 
 
@@ -12,7 +14,7 @@ class MeetingFeedback(db.Model):
     feedback = db.Column(db.Text, nullable=False)
 
     user = db.relationship('User', backref="meeting_feedback", lazy=True)
-    meeting = db.relationship('Meeting', backref="feedback", lazy=True)
+    meeting = db.relationship('Meeting', backref=backref("feedback", cascade="all, delete-orphan"), lazy=True)
 
     def __repr__(self):
         return f'<MeetingFeedback \n User: {self.user} \n Meeting: {self.meeting} \n Feedback: {self.feedback}>'

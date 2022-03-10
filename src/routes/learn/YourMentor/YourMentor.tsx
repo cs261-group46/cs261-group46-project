@@ -18,6 +18,8 @@ import ContentCard from "../../../components/UI/ContentCard/ContentCard";
 import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
 import Button from "../../../components/UI/Button/Button";
 import LoadingSpinner from "../../../components/UI/LoadingSpinner/LoadingSpinner";
+import UseSystemMessage from "../../../hooks/UseSystemMessage/UseSystemMessage";
+import SystemMessage from "../../../components/UI/SystemMessage/SystemMessage";
 
 interface YourMentorProps {}
 
@@ -36,6 +38,9 @@ const YourMentor: FC<YourMentorProps> = () => {
       },
     ],
   });
+  const showMessage = UseSystemMessage();
+
+  const [showWarning, setShowWarning] = useState(false);
 
   const terminateMentorshipHandler = async (menteeId: number) => {
     try {
@@ -47,8 +52,9 @@ const YourMentor: FC<YourMentorProps> = () => {
         resource: "mentees",
         body: body,
       });
+      showMessage("success", "Mentorship terminated successfully.");
     } catch (errors) {
-      console.log(errors);
+      showMessage("error", errors);
     }
   };
 
@@ -57,45 +63,62 @@ const YourMentor: FC<YourMentorProps> = () => {
       <div className={styles.YourMentor} data-testid="YourMentor">
         <Button href="/learn/past-mentors">Past Mentors</Button>
         {mentee_id && mentee_mentor ? (
-          <ContentCard
-            heading={`${mentee_mentor.user.first_name} ${mentee_mentor.user.last_name}`}
-            sections={[
-              {
-                title: "About",
-                content: mentee_mentor.about,
-              },
-              {
-                title: "Email",
-                icon: "✉️",
-                content: mentee_mentor.user.email,
-              },
-              {
-                title: "Department",
-                content: mentee_mentor.user.department.name,
-              },
-              {
-                title: "Mentorship Areas",
-                className: styles.Skills,
-                content: mentee_mentor.topics.map((topic) => (
-                  <Tag key={topic.topic.id}>{topic.topic.name}</Tag>
-                )),
-              },
-            ]}
-            buttons={[
-              {
-                buttonStyle: "primary",
-                children: "Meetings",
-                icon: "👥",
-                href: `/meetings/${mentee_id}`,
-              },
-              {
-                buttonStyle: "default",
-                children: "Terminate Partnership",
-                icon: "📈",
-                onClick: terminateMentorshipHandler.bind(null, mentee_id),
-              },
-            ]}
-          />
+          <>
+            <ContentCard
+              heading={`${mentee_mentor.user.first_name} ${mentee_mentor.user.last_name}`}
+              sections={[
+                {
+                  title: "About",
+                  content: mentee_mentor.about,
+                },
+                {
+                  title: "Email",
+                  icon: "✉️",
+                  content: mentee_mentor.user.email,
+                },
+                {
+                  title: "Department",
+                  content: mentee_mentor.user.department.name,
+                },
+                {
+                  title: "Mentorship Areas",
+                  className: styles.Skills,
+                  content: mentee_mentor.topics.map((topic) => (
+                    <Tag key={topic.topic.id}>{topic.topic.name}</Tag>
+                  )),
+                },
+              ]}
+              buttons={[
+                {
+                  buttonStyle: "primary",
+                  children: "Meetings",
+                  icon: "👥",
+                  href: `/meetings/${mentee_id}`,
+                },
+                {
+                  buttonStyle: "default",
+                  children: "Terminate Partnership",
+                  icon: "📈",
+                  onClick: setShowWarning.bind(null, true),
+                },
+              ]}
+            />
+            <SystemMessage
+              sort={"popup"}
+              type={"alert"}
+              description={`Are you sure you want to terminate the partnership?`}
+              visible={showWarning}
+              onClose={setShowWarning.bind(null, false)}
+            >
+              <Button
+                buttonStyle="primary"
+                onClick={terminateMentorshipHandler.bind(null, mentee_id)}
+              >
+                Confirm
+              </Button>
+              <Button onClick={setShowWarning.bind(null, false)}>Cancel</Button>
+            </SystemMessage>
+          </>
         ) : (
           <Fragment>
             {mentee_id === undefined && <LoadingSpinner />}

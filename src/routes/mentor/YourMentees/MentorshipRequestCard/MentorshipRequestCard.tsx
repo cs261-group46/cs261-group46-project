@@ -4,15 +4,28 @@ import { MentorshipRequestType } from "../../../../types/MentorshipRequest";
 import Tag from "../../../../components/UI/Tag/Tag";
 import { update } from "../../../../api/api";
 import ContentCard from "../../../../components/UI/ContentCard/ContentCard";
+import UseSystemMessage from "../../../../hooks/UseSystemMessage/UseSystemMessage";
+import { MenteeType } from "../../../../types/Mentee";
+import { MenteeFeedbackType } from "../../../../types/MenteeFeedback";
 
 //Probably need to pass mentor id along
 interface MentorshipRequestProp {
   mentorshipRequest: MentorshipRequestType;
+  stateChangingHandler: React.Dispatch<
+    React.SetStateAction<{
+      userId: number | null | undefined;
+      mentor_id: number | null | undefined;
+      mentor_mentees: MenteeType[] | [];
+      mentor_mentorship_requests_received: MentorshipRequestType[] | [];
+      mentor_feedback_given: MenteeFeedbackType[] | [];
+    }>
+  >;
 }
 
 const MentorshipRequestCard: FC<MentorshipRequestProp> = (props) => {
   //TODO: Given an id, lead to the correct plan of action.
   //TODO: have button send to meeting link instead of dashboard
+  const showMessage = UseSystemMessage();
 
   const proccessRequestHandler = async (accept: boolean) => {
     const body = {
@@ -24,12 +37,38 @@ const MentorshipRequestCard: FC<MentorshipRequestProp> = (props) => {
         entity: props.mentorshipRequest.id,
         body: body,
       });
-    } catch (error) {
-      console.log(error);
+
+      props.stateChangingHandler((prevState) => ({
+        ...prevState,
+        mentor_mentorship_requests_received:
+          prevState.mentor_mentorship_requests_received.filter(
+            (m) => m.id !== props.mentorshipRequest.id
+          ),
+      }));
+
+      if (accept) {
+        showMessage("success", "Request accepted successfully");
+
+        props.stateChangingHandler((prevState) => {
+          const mentor_mentees = [
+            ...prevState.mentor_mentees,
+            props.mentorshipRequest.mentee,
+          ];
+
+          // mentor_mentees.push(
+          //   props.mentorshipRequest.mentee as MenteeType
+          // ),
+
+          return {
+            ...prevState,
+            mentor_mentees: mentor_mentees,
+          };
+        });
+      } else showMessage("success", "Request rejected successfully");
+    } catch (errors) {
+      showMessage("error", errors);
     }
   };
-
-  // const declineRequestHandler = () => {};
 
   return (
     <ContentCard

@@ -11,6 +11,11 @@ import Tag from "../../../components/UI/Tag/Tag";
 import SystemMessage from "../../../components/UI/SystemMessage/SystemMessage";
 import { UserType } from "../../../types/User";
 import PagePicker from "../../../components/UI/PagePicker/PagePicker";
+import { MeetingFeedbackType } from "../../../types/MeetingFeedback";
+import { MenteeType } from "../../../types/Mentee";
+import { MentorType } from "../../../types/Mentor";
+import { MentorFeedbackType } from "../../../types/MentorFeedback";
+import UseSystemMessage from "../../../hooks/UseSystemMessage/UseSystemMessage";
 
 interface MeetingsProps {}
 
@@ -35,25 +40,64 @@ const getDateString = (date: Date, duration: number) => {
   );
 };
 
+const hasConfirmedMessage = (
+  meeting: MeetingType,
+  theirsPosition: string | null
+) => {
+  if (!theirsPosition) {
+    theirsPosition = "";
+  }
+  if (!meeting.attendees) {
+    meeting.attendees = [{} as UserType];
+  }
+
+  if (!meeting.invited) {
+    meeting.invited = [];
+  }
+
+  if (meeting.attendees.length === 0 && meeting.invited.length === 0) {
+    if (!meeting.host) {
+      // you are the host and the other has rejected invite
+      return `The ${theirsPosition} has declined their invite.`;
+    }
+  }
+  if (meeting.attendees.length > 0 && meeting.invited.length === 0) {
+    if (!meeting.host) {
+      // you are the host and the other has accepted invite
+      return `Yes, the ${theirsPosition} has confirmed their attendance.`;
+    } else {
+      return "Yes, you've confirmed your attendance";
+    }
+  }
+
+  if (meeting.attendees.length === 0 && meeting.invited.length > 0) {
+    if (!meeting.host) {
+      // you are the host and the other has not yet responded
+      return `No, the ${theirsPosition} has not yet confirmed their attendance.`;
+    }
+  }
+  return "";
+};
+
 const Meetings: FC<MeetingsProps> = () => {
   const {
     userId = null,
-    mentee_id = null,
+    mentee = null,
     mentor_id = null,
     meetings_hosted = [],
     meetings_attending = [],
     meetings_invited = [],
   } = UseVerifyUser<{
-    userId: number | null | undefined;
-    mentee_id: number | null | undefined;
-    mentor_id: number | null | undefined;
-    meetings_hosted: MeetingType[] | null | undefined;
-    meetings_attending: MeetingType[] | null | undefined;
-    meetings_invited: MeetingType[] | null | undefined;
+    userId: number | null;
+    mentee: MenteeType | null;
+    mentor_id: number | null;
+    meetings_hosted: MeetingType[];
+    meetings_attending: MeetingType[];
+    meetings_invited: MeetingType[];
   }>({
     userDataPolicies: [
       {
-        dataPoint: "mentee.id",
+        dataPoint: "mentee",
       },
       {
         dataPoint: "mentor.id",
@@ -70,34 +114,147 @@ const Meetings: FC<MeetingsProps> = () => {
     ],
   });
 
+  const showMessage = UseSystemMessage();
+
+  let { menteeId } = useParams();
+  const navigate = useNavigate();
+
+  const [validated, setValidated] = useState(false);
+  const [pageMentee, setPageMentee] = useState<MenteeType>();
+
+  const validateRole = useCallback(async () => {
+    if (
+      (!mentee && !mentor_id) ||
+      menteeId === undefined ||
+      (mentee && mentee.id !== Number.parseInt(menteeId) && !mentor_id)
+    ) {
+      showMessage("error", "You don't have permission to access this page.");
+      return navigate("/dashboard");
+    }
+
+    if (!mentee || mentee.id !== Number.parseInt(menteeId)) {
+      // they are not the mentee, they are a mentor, are they the mentor for the mentee?
+      try {
+        const data = await get({
+          resource: "mentees",
+          entity: Number.parseInt(menteeId),
+          args: {
+            fields: [""],
+          },
+        });
+
+        if (mentor_id !== data.mentee.mentor.id) {
+          // they are not the mentor
+          showMessage(
+            "error",
+            "You don't have permission to access this page."
+          );
+          return navigate("/dashboard");
+        }
+        setTheirsPosition("mentee");
+        setPageMentee(data.mentee);
+        setValidated(true);
+      } catch (errors) {
+        showMessage("error", errors);
+      }
+    } else {
+      setPageMentee(mentee);
+      setValidated(true);
+      setTheirsPosition("mentor");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [menteeId, showMessage, JSON.stringify(mentee), mentor_id, navigate]);
+
+  useEffect(() => {
+    if (userId) {
+      validateRole();
+    }
+  }, [userId, validateRole]);
+
   const [theirsPosition, setTheirsPosition] = useState<
     "mentor" | "mentee" | null
-  >();
+  >(null);
+
   const [page, setPage] = useState(1);
   const [showWarning, setShowWarning] = useState(false);
   const [showWarning2, setShowWarning2] = useState(false);
 
-  const mentormentee_meetings_hosted = meetings_hosted
-    ? meetings_hosted.filter(
-        (meeting) => meeting.meeting_type === "one on one meeting"
-      )
-    : [];
+  const [mentormentee_meetings_hosted, set_mentormentee_meetings_hosted] =
+    useState<MeetingType[]>([]);
 
-  const mentormentee_meetings_invited = meetings_invited
-    ? meetings_invited.filter(
-        (meeting) => meeting.meeting_type === "one on one meeting"
-      )
-    : [];
+  const [mentormentee_meetings_invited, set_mentormentee_meetings_invited] =
+    useState<MeetingType[]>([]);
 
-  const mentormentee_meetings_attending = meetings_attending
-    ? meetings_attending.filter(
-        (meeting) => meeting.meeting_type === "one on one meeting"
-      )
-    : [];
+  const [mentormentee_meetings_attending, set_mentormentee_meetings_attending] =
+    useState<MeetingType[]>([]);
 
   const [confirmed_meetings, setConfirmedMeetings] = useState<MeetingType[]>(
     []
   );
+  const [mentormentee_meetings_feedback, set_mentormentee_meetings_feedback] =
+    useState<MeetingFeedbackType[]>([]);
+
+  useEffect(() => {
+    set_mentormentee_meetings_hosted(
+      meetings_hosted.filter(
+        (meeting) => meeting.meeting_type === "one on one meeting"
+      )
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(meetings_hosted)]);
+
+  useEffect(() => {
+    set_mentormentee_meetings_invited(
+      meetings_invited.filter(
+        (meeting) => meeting.meeting_type === "one on one meeting"
+      )
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(meetings_invited)]);
+
+  useEffect(() => {
+    set_mentormentee_meetings_attending(
+      meetings_attending.filter(
+        (meeting) => meeting.meeting_type === "one on one meeting"
+      )
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(meetings_attending)]);
+
+  useEffect(() => {
+    if (pageMentee && pageMentee.mentor) {
+      set_mentormentee_meetings_feedback(() => {
+        let feedbacks: MeetingFeedbackType[] = [];
+
+        for (const m of mentormentee_meetings_hosted) {
+          feedbacks = feedbacks.concat(
+            m.feedback.map((feedback) => ({ ...feedback, meeting: m }))
+          );
+        }
+
+        for (const m of mentormentee_meetings_attending) {
+          feedbacks = feedbacks.concat(
+            m.feedback.map((feedback) => ({ ...feedback, meeting: m }))
+          );
+        }
+
+        return feedbacks.sort((f1, f2) => {
+          console.log(f1);
+
+          const f1Date = new Date(f1.meeting.date);
+          const f2Date = new Date(f2.meeting.date);
+          return f2Date.getTime() - f1Date.getTime();
+        });
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    JSON.stringify(mentormentee_meetings_hosted),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    JSON.stringify(pageMentee),
+    userId,
+  ]);
 
   useEffect(() => {
     setConfirmedMeetings((prevMeetings: MeetingType[]) => {
@@ -115,6 +272,7 @@ const Meetings: FC<MeetingsProps> = () => {
       });
       return prevMeetings;
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(mentormentee_meetings_attending)]);
 
   useEffect(() => {
@@ -133,46 +291,8 @@ const Meetings: FC<MeetingsProps> = () => {
       });
       return prevMeetings;
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(mentormentee_meetings_hosted)]);
-
-  const [validated, setValidated] = useState(false);
-
-  let { menteeId } = useParams();
-  const navigate = useNavigate();
-
-  const validateRole = useCallback(async () => {
-    if ((!mentee_id && !mentor_id) || menteeId === undefined) {
-      return navigate("/dashboard");
-    }
-    if (mentee_id !== Number.parseInt(menteeId)) {
-      try {
-        const data = await get({
-          resource: "mentees",
-          entity: Number.parseInt(menteeId),
-          args: {
-            fields: ["mentor.id"],
-          },
-        });
-
-        if (mentor_id !== data.mentee.mentor.id) {
-          return navigate("/dashboard");
-        }
-        setTheirsPosition("mentee");
-        setValidated(true);
-      } catch (errors) {
-        console.log(errors);
-      }
-    } else {
-      setValidated(true);
-      setTheirsPosition("mentor");
-    }
-  }, [menteeId, mentee_id, mentor_id, navigate]);
-
-  useEffect(() => {
-    if (userId) {
-      validateRole();
-    }
-  }, [userId, validateRole]);
 
   const removeHandler = async (meetingId: number) => {
     try {
@@ -180,8 +300,9 @@ const Meetings: FC<MeetingsProps> = () => {
         resource: "meetings",
         entity: meetingId,
       });
+      showMessage("success", "Meeting removed successfully.");
     } catch (errors) {
-      console.log(errors);
+      showMessage("error", errors);
     }
   };
 
@@ -197,10 +318,12 @@ const Meetings: FC<MeetingsProps> = () => {
         entity: meetingId,
         body: body,
       });
+      showMessage("success", "Meeting invite declined successfully.");
     } catch (errors) {
-      console.log(errors);
+      showMessage("error", errors);
     }
   };
+  // showMessage("success", "Feedback submitted successfully.");
 
   const confirmHandler = async (meetingId: number) => {
     try {
@@ -213,79 +336,34 @@ const Meetings: FC<MeetingsProps> = () => {
         entity: meetingId,
         body: body,
       });
+      showMessage("success", "Meeting invite confirmed successfully.");
     } catch (errors) {
-      console.log(errors);
+      showMessage("error", errors);
     }
-  };
-
-  const hasConfirmedMessage = (meeting: MeetingType) => {
-    if (!meeting.attendees) {
-      meeting.attendees = [{} as UserType];
-    }
-
-    if (!meeting.invited) {
-      meeting.invited = [];
-    }
-
-    if (meeting.attendees.length === 0 && meeting.invited.length === 0) {
-      if (!meeting.host) {
-        // you are the host and the other has rejected invite
-        return `The ${theirsPosition} has declined their invite.`;
-      }
-    }
-    if (meeting.attendees.length > 0 && meeting.invited.length === 0) {
-      if (!meeting.host) {
-        // you are the host and the other has accepted invite
-        return `Yes, the ${theirsPosition} has confirmed their attendance.`;
-      } else {
-        return "Yes, you've confirmed your attendance";
-      }
-    }
-
-    if (meeting.attendees.length === 0 && meeting.invited.length > 0) {
-      if (!meeting.host) {
-        // you are the host and the other has not yet responded
-        return `No, the ${theirsPosition} has not yet confirmed their attendance.`;
-      }
-    }
-    return "";
   };
 
   return (
     <DashboardSubpageLayout title={"Group Sessions"}>
       <Button href={`/meetings/${menteeId}/create`}>Create a Meeting</Button>
-      {/* <div className={styles.buttonDiv}>
-        <Button
-          className={styles.firstButton}
-          onClick={() => {
-            setPage(1);
-          }}
-          buttonStyle={(page === 1 && "primary") || "default"}
-        >
-          Meetings
-        </Button>
-        <Button
-          className={styles.lastButton}
-          onClick={() => {
-            setPage(2);
-          }}
-          buttonStyle={(page === 2 && "primary") || "default"}
-        >
-          Invites
-        </Button>
-      </div> */}
 
       <PagePicker
         pickers={[
           {
             text: "Meetings",
             onClick: () => {
+              setPage(0);
+            },
+            selected: page === 0,
+          },
+          {
+            text: "Invites",
+            onClick: () => {
               setPage(1);
             },
             selected: page === 1,
           },
           {
-            text: "Invites",
+            text: "Feedback",
             onClick: () => {
               setPage(2);
             },
@@ -294,15 +372,16 @@ const Meetings: FC<MeetingsProps> = () => {
         ]}
         buttons={{
           buttonLeft: () => {
-            setPage((prev) => (prev > 1 ? prev - 1 : prev));
+            setPage((prev) => (prev > 0 ? prev - 1 : prev));
           },
           buttonRight: () => {
             setPage((prev) => (prev < 2 ? prev + 1 : prev));
           },
         }}
       />
+
       <div className={styles.YourGroupSessions} data-testid="Meetings">
-        {page === 1 &&
+        {page === 0 &&
           confirmed_meetings.length > 0 &&
           confirmed_meetings.map((meeting, index) => {
             return (
@@ -330,7 +409,7 @@ const Meetings: FC<MeetingsProps> = () => {
                     },
                     {
                       title: "Confirmed?",
-                      content: hasConfirmedMessage(meeting),
+                      content: hasConfirmedMessage(meeting, theirsPosition),
                     },
                     meeting.topics.length > 0 && {
                       className: styles.tags,
@@ -341,11 +420,6 @@ const Meetings: FC<MeetingsProps> = () => {
                     },
                   ]}
                   buttons={[
-                    // {
-                    //   buttonStyle: "primary",
-                    //   onClick: editHandler,
-                    //   children: "Edit",
-                    // },
                     {
                       onClick: setShowWarning.bind(null, true),
                       children: "Remove",
@@ -375,11 +449,11 @@ const Meetings: FC<MeetingsProps> = () => {
               </>
             );
           })}
-        {validated && page === 1 && confirmed_meetings.length === 0 && (
+        {validated && page === 0 && confirmed_meetings.length === 0 && (
           <p>You have no meetings with your {theirsPosition}</p>
         )}
         {validated &&
-          page === 2 &&
+          page === 1 &&
           mentormentee_meetings_invited.length > 0 &&
           mentormentee_meetings_invited.map((meeting, index) => {
             return (
@@ -442,10 +516,44 @@ const Meetings: FC<MeetingsProps> = () => {
               </>
             );
           })}
-        {validated && page === 2 && mentormentee_meetings_invited.length === 0 && (
-          // else not loaded yet
-          <p>You have no meetings invites by your {theirsPosition}</p>
-        )}
+        {validated &&
+          page === 1 &&
+          mentormentee_meetings_invited.length === 0 && (
+            <p>You have no meetings invites by your {theirsPosition}</p>
+          )}
+
+        {validated &&
+          page === 2 &&
+          mentormentee_meetings_feedback.length > 0 &&
+          mentormentee_meetings_feedback.map((feedback, index) => {
+            return (
+              <>
+                <ContentCard
+                  key={index}
+                  heading={feedback.meeting.title}
+                  sections={[
+                    {
+                      title: "When",
+                      content: getDateString(
+                        new Date(feedback.meeting.date),
+                        feedback.meeting.duration
+                      ),
+                    },
+                    {
+                      title: "Feedback",
+                      content: `"${feedback.feedback}" - ${
+                        feedback.user
+                          ? feedback.user.first_name +
+                            " " +
+                            feedback.user.last_name
+                          : "You"
+                      }`,
+                    },
+                  ]}
+                />
+              </>
+            );
+          })}
       </div>
     </DashboardSubpageLayout>
   );

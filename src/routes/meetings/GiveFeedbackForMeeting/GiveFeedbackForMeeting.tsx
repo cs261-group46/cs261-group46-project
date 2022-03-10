@@ -5,6 +5,7 @@ import Button from "../../../components/UI/Button/Button";
 import BigTextInput from "../../../components/UI/FormInput/BigTextInput/BigTextInput";
 import Title from "../../../components/UI/Title/Title";
 import useInput from "../../../hooks/UseInput/UseInput";
+import UseSystemMessage from "../../../hooks/UseSystemMessage/UseSystemMessage";
 import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
 import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
 import { MeetingType } from "../../../types/Meeting";
@@ -32,6 +33,7 @@ const GiveFeedbackForMeeting: FC<GiveFeedbackForMeetingProps> = () => {
       },
     ],
   });
+  const showMessage = UseSystemMessage();
 
   const { meetingId } = useParams();
   const navigate = useNavigate();
@@ -39,6 +41,7 @@ const GiveFeedbackForMeeting: FC<GiveFeedbackForMeetingProps> = () => {
 
   const verifyAttendance = useCallback(() => {
     if (!meetingId) {
+      showMessage("error", "Unspecified meeting id.");
       navigate("/calendar");
       return;
     }
@@ -50,6 +53,10 @@ const GiveFeedbackForMeeting: FC<GiveFeedbackForMeetingProps> = () => {
     );
 
     if (!meet && !meet_host) {
+      showMessage(
+        "error",
+        "You cannot give feedback on meetings you did not attend."
+      );
       navigate("/calendar");
       return;
     }
@@ -60,18 +67,30 @@ const GiveFeedbackForMeeting: FC<GiveFeedbackForMeetingProps> = () => {
     const today = new Date();
 
     if (mDate.getTime() > today.getTime()) {
+      showMessage(
+        "error",
+        "You cannot give feedback on meetings which did not yet happen."
+      );
+
       navigate("/calendar");
       return;
     }
 
-    setMeeting(meet);
-  }, [meetingId, JSON.stringify(meetings_attending), navigate]);
+    setMeeting(m as MeetingType);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    meetingId,
+    JSON.stringify(meetings_attending),
+    JSON.stringify(meetings_hosted),
+    navigate,
+    showMessage,
+  ]);
 
   useEffect(() => {
     if (userId) {
       verifyAttendance();
     }
-  }, [verifyAttendance]);
+  }, [userId, verifyAttendance]);
 
   const {
     enteredValue: enteredFeedback,
@@ -93,9 +112,10 @@ const GiveFeedbackForMeeting: FC<GiveFeedbackForMeetingProps> = () => {
         resource: "meetingfeedbacks",
         body: body,
       });
+      showMessage("success", "Feedback submitted successfully.");
       navigate("/calendar");
     } catch (errors) {
-      console.log(errors);
+      showMessage("error", errors);
     }
   };
 
@@ -118,7 +138,9 @@ const GiveFeedbackForMeeting: FC<GiveFeedbackForMeetingProps> = () => {
       {meeting && (
         <>
           <Title
-            text={`${meeting.title} - ${(meeting.host as UserType).email}`}
+            text={`${meeting.title} - ${
+              meeting.host ? (meeting.host as UserType).first_name : "You"
+            } ${meeting.host ? (meeting.host as UserType).last_name : ""}`}
           />
 
           <BigTextInput

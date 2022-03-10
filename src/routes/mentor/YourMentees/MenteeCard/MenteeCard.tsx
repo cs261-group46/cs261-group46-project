@@ -1,10 +1,15 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import styles from "./MenteeCard.module.scss";
 import BarChart from "../../../../components/UI/BarChart/BarChart";
 import { MenteeType } from "../../../../types/Mentee";
 import Tag from "../../../../components/UI/Tag/Tag";
 import ContentCard from "../../../../components/UI/ContentCard/ContentCard";
 import { destroy, update } from "../../../../api/api";
+import UseSystemMessage from "../../../../hooks/UseSystemMessage/UseSystemMessage";
+import SystemMessage from "../../../../components/UI/SystemMessage/SystemMessage";
+import Button from "../../../../components/UI/Button/Button";
+import { MentorshipRequestType } from "../../../../types/MentorshipRequest";
+import { MenteeFeedbackType } from "../../../../types/MenteeFeedback";
 
 //Probably need to pass mentor id along
 interface MenteeProp {
@@ -14,6 +19,15 @@ interface MenteeProp {
   //   completedGoal: number;
   //   totalGoal: number;
   mentee: MenteeType;
+  stateChangingHandler: React.Dispatch<
+    React.SetStateAction<{
+      userId: number | null | undefined;
+      mentor_id: number | null | undefined;
+      mentor_mentees: MenteeType[] | [];
+      mentor_mentorship_requests_received: MentorshipRequestType[] | [];
+      mentor_feedback_given: MenteeFeedbackType[] | [];
+    }>
+  >;
 }
 
 const MenteeCard: FC<MenteeProp> = (props) => {
@@ -22,6 +36,9 @@ const MenteeCard: FC<MenteeProp> = (props) => {
   const completedPlans = props.mentee.plans_of_action.filter(
     (plan) => plan.status === "completed"
   );
+
+  const showMessage = UseSystemMessage();
+  const [showWarning, setShowWarning] = useState(false);
 
   const terminateMentorshipHandler = async (menteeId: number) => {
     try {
@@ -33,70 +50,96 @@ const MenteeCard: FC<MenteeProp> = (props) => {
         resource: "mentees",
         body: body,
       });
+      props.stateChangingHandler((prevState) => ({
+        ...prevState,
+        mentor_mentees: prevState.mentor_mentees.filter(
+          (m) => m.id !== menteeId
+        ),
+      }));
+      showMessage("success", "Mentorship terminated successfully");
     } catch (errors) {
-      console.log(errors);
+      showMessage("error", errors);
     }
   };
 
   return (
-    <ContentCard
-      heading={`${props.mentee.user.first_name} ${props.mentee.user.last_name}`}
-      sections={[
-        {
-          title: "About",
-          content: props.mentee.about,
-        },
-        {
-          title: "Email",
-          icon: "✉️",
-          content: props.mentee.user.email,
-        },
-        {
-          title: "Department",
-          content: props.mentee.user.department.name,
-        },
-        {
-          title: "Interests",
-          className: styles.Interests,
-          content: props.mentee.topics.map((topic) => (
-            <Tag key={topic.topic.id}>{topic.topic.name}</Tag>
-          )),
-        },
-        {
-          title: "Plan of Action progress",
-          content:
-            props.mentee.plans_of_action.length > 0 ? (
-              <BarChart
-                className={styles.BarChart}
-                completedGoals={completedPlans.length}
-                totalGoals={props.mentee.plans_of_action.length}
-              />
-            ) : (
-              "No plans of action set"
-            ),
-        },
-      ]}
-      buttons={[
-        {
-          buttonStyle: "primary",
-          children: "Meetings",
-          icon: "👥",
-          href: `/meetings/${props.mentee.id}`,
-        },
-        {
-          buttonStyle: "default",
-          children: "View Plan",
-          icon: "📈",
-          href: `/plans-of-action/${props.mentee.id}`,
-        },
-        {
-          buttonStyle: "default",
-          children: "Terminate Partnership",
-          icon: "📈",
-          onClick: terminateMentorshipHandler.bind(null, props.mentee.id),
-        },
-      ]}
-    />
+    <>
+      <ContentCard
+        heading={`${props.mentee.user.first_name} ${props.mentee.user.last_name}`}
+        sections={[
+          {
+            title: "About",
+            content: props.mentee.about,
+          },
+          {
+            title: "Email",
+            icon: "✉️",
+            content: props.mentee.user.email,
+          },
+          {
+            title: "Department",
+            content: props.mentee.user.department.name,
+          },
+          {
+            title: "Interests",
+            className: styles.Interests,
+            content: props.mentee.topics.map((topic) => (
+              <Tag key={topic.topic.id}>{topic.topic.name}</Tag>
+            )),
+          },
+          {
+            title: "Plan of Action progress",
+            content:
+              props.mentee.plans_of_action.length > 0 ? (
+                <BarChart
+                  className={styles.BarChart}
+                  completedGoals={completedPlans.length}
+                  totalGoals={props.mentee.plans_of_action.length}
+                />
+              ) : (
+                "No plans of action set"
+              ),
+          },
+        ]}
+        buttons={[
+          {
+            buttonStyle: "primary",
+            children: "Meetings",
+            icon: "👥",
+            href: `/meetings/${props.mentee.id}`,
+          },
+          {
+            buttonStyle: "default",
+            children: "View Plan",
+            icon: "📈",
+            href: `/plans-of-action/${props.mentee.id}`,
+          },
+          {
+            buttonStyle: "default",
+            children: "Terminate Partnership",
+            icon: "📈",
+            onClick: setShowWarning.bind(null, true),
+          },
+        ]}
+      />
+      {showWarning && (
+        <SystemMessage
+          sort={"popup"}
+          type={"alert"}
+          description={`Are you sure you want to terminate the partnership?`}
+          visible={showWarning}
+          onClose={setShowWarning.bind(null, false)}
+        >
+          <Button
+            buttonStyle="primary"
+            onClick={terminateMentorshipHandler.bind(null, props.mentee.id)}
+          >
+            Confirm
+          </Button>
+          <Button onClick={setShowWarning.bind(null, false)}>Cancel</Button>
+        </SystemMessage>
+      )}
+    </>
 
     // <Card className={styles.MenteeCard}>
     //   <div className={styles.Name}>

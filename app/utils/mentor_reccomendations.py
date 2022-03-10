@@ -5,9 +5,8 @@ import math
 def get_mentors(mentors, user):
     suitable_mentors = []
 
-    # todo: consider capacity
     for mentor in mentors:
-        if mentor.user.department.id != user.department.id and mentor.user.id != user.id:
+        if mentor.user.department.id != user.department.id and mentor.user.id != user.id and len(mentor.mentees) < mentor.capacity:
             suitable_mentors.append(mentor)
 
     user_topics = [topic.topic for topic in sorted(user.mentee.topics, key=lambda topic: topic.priority)]

@@ -2,6 +2,7 @@ import { useEffect, useCallback, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { custom, get } from "../../api/api";
 import UserDataContext from "../../store/UserDataContext";
+import UseSystemMessage from "../UseSystemMessage/UseSystemMessage";
 import UseVerifyUserData from "../UseVerifyUserData/UseVerifyUserData";
 
 interface AuthVerifierProps {
@@ -13,6 +14,7 @@ const UseVerifyAuth = () => {
   const navigate = useNavigate();
 
   const userDataVerifier = UseVerifyUserData();
+  const showMessage = UseSystemMessage();
 
   const verifyAuth = useCallback(
     async ({
@@ -36,6 +38,7 @@ const UseVerifyAuth = () => {
         });
 
         if (permissions === null || permissions < minPermissionLevel) {
+          showMessage("error", "You do not have permission to view this page.");
           navigate("/dashboard");
           return null;
         }

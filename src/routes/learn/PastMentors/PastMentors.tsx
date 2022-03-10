@@ -12,6 +12,7 @@ import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
 import Button from "../../../components/UI/Button/Button";
 import { MentorFeedbackType } from "../../../types/MentorFeedback";
 import StarPicker from "../../../components/UI/FormInput/StarPicker/StarPicker";
+import UseSystemMessage from "../../../hooks/UseSystemMessage/UseSystemMessage";
 
 interface PastMentorsProps {}
 
@@ -30,8 +31,6 @@ const PastMentors: FC<PastMentorsProps> = () => {
       },
     ],
   });
-
-  console.log(mentee_feedback_given);
 
   return (
     <DashboardSubpageLayout title="Past Mentors">

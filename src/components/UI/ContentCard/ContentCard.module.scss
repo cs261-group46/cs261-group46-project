@@ -1,6 +1,7 @@
 @import "../../../variables";
 
 .ContentCard {
+  margin-bottom: 30px;
   &:hover,
   &:focus-visible {
     outline: 3px solid $sq_dark_gray;

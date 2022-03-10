@@ -1,15 +1,13 @@
 import { DepartmentType } from "./Department";
+import { MentorType } from "./Mentor";
 import { TopicWithPriorityType } from "./Topic";
+import { UserType } from "./User";
 
 export type MenteeType = {
   about: string;
   id: number;
   topics: TopicWithPriorityType[];
-  user: {
-    department: DepartmentType;
-    email: string;
-    first_name: string;
-    last_name: string;
-  };
+  user: UserType;
   plans_of_action: PlanOfAction[];
+  mentor?: MentorType;
 };

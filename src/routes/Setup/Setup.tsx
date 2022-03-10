@@ -12,9 +12,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { index, store } from "../../api/api";
 import SearchSelect from "../../components/UI/FormInput/SearchSelect/SearchSelect";
 import UseVerifyUser from "../../hooks/UseVerifyUser/UseVerifyUser";
+import UseSystemMessage from "../../hooks/UseSystemMessage/UseSystemMessage";
 
 const Setup = () => {
-  const { userId = null, expert_id = null } = UseVerifyUser<{
+  const { userId = null } = UseVerifyUser<{
     userId: number | null | undefined;
     expert_id: number | null | undefined;
   }>({
@@ -25,6 +26,8 @@ const Setup = () => {
       },
     ],
   });
+
+  const showMessage = UseSystemMessage();
 
   const navigate = useNavigate();
   const [showExpertise, setShowExpertise] = useState(0);
@@ -49,7 +52,7 @@ const Setup = () => {
       );
       return options;
     } catch (errors) {
-      console.log(errors);
+      showMessage("error", errors);
       return [];
     }
   };
@@ -81,9 +84,10 @@ const Setup = () => {
         resource: "experts",
         body: requestBody,
       });
+      showMessage("success", "Successfully signed up as an expert!");
       navigate("/dashboard"); // show message instead
     } catch (errors) {
-      console.log(errors);
+      showMessage("error", errors);
     }
   };
 
