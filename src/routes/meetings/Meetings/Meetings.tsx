@@ -379,11 +379,7 @@ const Meetings: FC<MeetingsProps> = () => {
   };
 
   return (
-<<<<<<< HEAD
-    <DashboardSubpageLayout title={"Group Sessions"} dashboardSection={"#home"}>
-=======
     <DashboardSubpageLayout title={"Meetings"}>
->>>>>>> 1ba6b568832c0a0c4d9f06ffbbfee1f8c1a97fdb
       <Button href={`/meetings/${menteeId}/create`}>Create a Meeting</Button>
 
       <PagePicker
