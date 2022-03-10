@@ -12,7 +12,6 @@ import Icon from "../../components/UI/Icon/Icon";
 import { useNavigate } from "react-router-dom";
 import UseVerifyUser from "../../hooks/UseVerifyUser/UseVerifyUser";
 import { MentorType } from "../../types/Mentor";
-import UseSystemMessage from "../../hooks/UseSystemMessage/UseSystemMessage";
 
 interface DashboardProps {}
 
@@ -45,8 +44,6 @@ const Dashboard: FC<DashboardProps> = () => {
       },
     ],
   });
-
-  const showMessage = UseSystemMessage();
 
   const [pageVisible, setPageVisible] = useState(1);
   const navigate = useNavigate();
@@ -108,9 +105,9 @@ const Dashboard: FC<DashboardProps> = () => {
       setNotificationsMentor(mentorNotifications);
       setNotificationsExpert(expertNotifcations);
     } catch (errors) {
-      showMessage("error", errors);
+      console.log(errors);
     }
-  }, [showMessage, userId]);
+  }, [userId]);
 
   useEffect(() => {
     getUserData();
@@ -123,9 +120,7 @@ const Dashboard: FC<DashboardProps> = () => {
         method: "GET",
       });
       navigate("/login");
-    } catch (errors) {
-      showMessage("error", errors);
-    }
+    } catch (errors) {}
   };
 
   const toggleLearnNotificationHandler = () => {
@@ -169,223 +164,218 @@ const Dashboard: FC<DashboardProps> = () => {
       {pageVisible === 1 && (
         <div className={styles.Section}>
           <Title text={"Welcome back!"} className={styles.Title} />
-          <div className={styles.Buttons}>
-            <Button icon={"👤"} href={"/profile"}>
-              Your Profile
-            </Button>
-            {/* <Button icon={"🔔"} href={"/notifications"}>
+          <Button icon={"👤"} href={"/profile"}>
+            Your Profile
+          </Button>
+          {/* <Button icon={"🔔"} href={"/notifications"}>
           All Notifications
         </Button> */}
-            <Button icon={"📅"} href={"/calendar"}>
-              Calendar
-            </Button>
-            <Button icon={"⚙️"} href={"/give-feedback"}>
-              Give Feedback
-            </Button>
+          <Button icon={"📅"} href={"/calendar"}>
+            Calendar
+          </Button>
+          <Button icon={"⚙️"} href={"/give-feedback"}>
+            Give Feedback
+          </Button>
 
-            <Button icon={"👋"} onClick={logoutHandler}>
-              Logout
-            </Button>
-          </div>
+          <Button icon={"👋"} onClick={logoutHandler}>
+            Logout
+          </Button>
         </div>
       )}
 
       {pageVisible === 2 && (
         <div className={styles.Section}>
           <Title text={"Your Learning"} className={styles.Title} />
-          <div className={styles.Buttons}>
-            {!mentee_id && (
+
+          {!mentee_id && (
+            <Button
+              href={"/learn/become-mentee"}
+              buttonStyle="primary"
+              icon={"👨‍🏫"}
+            >
+              Become a Mentee
+            </Button>
+          )}
+
+          {!hasMentor && mentee_id && (
+            <Button
+              href={"/learn/find-mentor"}
+              buttonStyle="primary"
+              icon={"👨‍🏫"}
+            >
+              Find a mentor
+            </Button>
+          )}
+
+          {notificationsLearn.length > 0 && (
+            <>
               <Button
-                href={"/learn/become-mentee"}
+                className={styles.NotificationButton}
                 buttonStyle="primary"
-                icon={"👨‍🏫"}
+                icon={"🔔"}
+                onClick={toggleLearnNotificationHandler}
               >
-                Become a Mentee
+                Recent Notifications
+                <div className={styles.NotificationCounter}>
+                  {notificationsLearn.length}
+                </div>
+                <Icon
+                  className={styles.NotificationButtonToggleIcon}
+                  icon={notificationsLearnVisible ? "🔼" : "🔽"}
+                />
               </Button>
-            )}
+              {notificationsLearnVisible && (
+                <Notifications
+                  onRemove={removeLearnNotificationHandler}
+                  notifications={notificationsLearn}
+                />
+              )}
+            </>
+          )}
 
-            {!hasMentor && mentee_id && (
-              <Button
-                href={"/learn/find-mentor"}
-                buttonStyle="primary"
-                icon={"👨‍🏫"}
-              >
-                Find a mentor
-              </Button>
-            )}
+          {mentee_id && (
+            <Button href={"/learn/your-mentor"} icon={"👨‍🏫"}>
+              Your Mentor
+            </Button>
+          )}
+          {mentee_id && (
+            <Button href={"/learn/interests"} icon={"💡"}>
+              Your Interests
+            </Button>
+          )}
 
-            {notificationsLearn.length > 0 && (
-              <div>
-                <Button
-                  className={styles.NotificationButton}
-                  buttonStyle="primary"
-                  icon={"🔔"}
-                  onClick={toggleLearnNotificationHandler}
-                >
-                  Recent Notifications
-                  <div className={styles.NotificationCounter}>
-                    {notificationsLearn.length}
-                  </div>
-                  <Icon
-                    className={styles.NotificationButtonToggleIcon}
-                    icon={notificationsLearnVisible ? "🔼" : "🔽"}
-                  />
-                </Button>
-                {notificationsLearnVisible && (
-                  <Notifications
-                    onRemove={removeLearnNotificationHandler}
-                    notifications={notificationsLearn}
-                  />
-                )}
-              </div>
-            )}
+          {mentee_id && hasMentor && (
+            <Button href={`/plans-of-action/${mentee_id}`} icon={"📈"}>
+              Plans of Action
+            </Button>
+          )}
 
-            {mentee_id && (
-              <Button href={"/learn/your-mentor"} icon={"👨‍🏫"}>
-                Your Mentor
-              </Button>
-            )}
-            {mentee_id && (
-              <Button href={"/learn/interests"} icon={"💡"}>
-                Your Interests
-              </Button>
-            )}
+          {mentee_id && (
+            <Button href={"/learn/feedback-received"} icon={"👨‍🏫"}>
+              Received Feedback
+            </Button>
+          )}
 
-            {mentee_id && hasMentor && (
-              <Button href={`/plans-of-action/${mentee_id}`} icon={"📈"}>
-                Plans of Action
-              </Button>
-            )}
-
-            {mentee_id && (
-              <Button href={"/learn/feedback-received"} icon={"👨‍🏫"}>
-                Received Feedback
-              </Button>
-            )}
-
-            {/* <Button href={"/learn/workshops"} icon={"✏️"}>
+          {/* <Button href={"/learn/workshops"} icon={"✏️"}>
           Workshops
         </Button> */}
 
-            <Button href={"/learn/group-sessions"} icon={"👥"}>
-              Explore Group Sessions
-            </Button>
-          </div>
+          <Button href={"/learn/group-sessions"} icon={"👥"}>
+            Explore Group Sessions
+          </Button>
         </div>
       )}
 
       {pageVisible === 3 && (
         <div className={styles.Section}>
           <Title text={"Your Mentoring"} className={styles.Title} />
-          <div className={styles.Buttons}>
-            {!isMentor && (
+
+          {!isMentor && (
+            <Button
+              href={"/mentor/become-mentor"}
+              buttonStyle="primary"
+              icon={"👨‍🏫"}
+            >
+              Become a Mentor
+            </Button>
+          )}
+
+          {isMentor && notificationsMentor.length > 0 && (
+            <>
               <Button
-                href={"/mentor/become-mentor"}
+                className={styles.NotificationButton}
                 buttonStyle="primary"
-                icon={"👨‍🏫"}
+                icon={"🔔"}
+                onClick={toggleMentorNotificationHandler}
               >
-                Become a Mentor
+                Recent Notifications
+                <div className={styles.NotificationCounter}>
+                  {notificationsMentor.length}
+                </div>
+                <Icon
+                  className={styles.NotificationButtonToggleIcon}
+                  icon={notificationsMentorVisible ? "🔼" : "🔽"}
+                />
               </Button>
-            )}
+              {notificationsMentorVisible && (
+                <Notifications
+                  onRemove={removeMentorNotificationHandler}
+                  notifications={notificationsMentor}
+                />
+              )}
+            </>
+          )}
 
-            {isMentor && notificationsMentor.length > 0 && (
-              <div>
-                <Button
-                  className={styles.NotificationButton}
-                  buttonStyle="primary"
-                  icon={"🔔"}
-                  onClick={toggleMentorNotificationHandler}
-                >
-                  Recent Notifications
-                  <div className={styles.NotificationCounter}>
-                    {notificationsMentor.length}
-                  </div>
-                  <Icon
-                    className={styles.NotificationButtonToggleIcon}
-                    icon={notificationsMentorVisible ? "🔼" : "🔽"}
-                  />
-                </Button>
-                {notificationsMentorVisible && (
-                  <Notifications
-                    onRemove={removeMentorNotificationHandler}
-                    notifications={notificationsMentor}
-                  />
-                )}
-              </div>
-            )}
+          {isMentor && (
+            <Button href={"/mentor/your-mentees"} icon={"🧑‍🎓"}>
+              Your Mentees
+            </Button>
+          )}
 
-            {isMentor && (
-              <Button href={"/mentor/your-mentees"} icon={"🧑‍🎓"}>
-                Your Mentees
-              </Button>
-            )}
+          {isMentor && (
+            <Button href={"/mentor/skills"} icon={"💪"}>
+              Your Skills
+            </Button>
+          )}
 
-            {isMentor && (
-              <Button href={"/mentor/skills"} icon={"💪"}>
-                Your Skills
-              </Button>
-            )}
-
-            {isMentor && (
-              <Button href={"/mentor/feedback-received"} icon={"👨‍🏫"}>
-                Received Feedback
-              </Button>
-            )}
-          </div>
+          {isMentor && (
+            <Button href={"/mentor/feedback-received"} icon={"👨‍🏫"}>
+              Received Feedback
+            </Button>
+          )}
         </div>
       )}
 
       {pageVisible === 4 && (
         <div className={styles.Section}>
           <Title text={"Your Expertise"} className={styles.Title} />
-          <div className={styles.Buttons}>
-            {!isExpert && (
+
+          {!isExpert && (
+            <Button
+              href={"/expert/become-expert"}
+              buttonStyle="primary"
+              icon={"👨‍🏫"}
+            >
+              Become an Expert
+            </Button>
+          )}
+
+          {isExpert && notificationsExpert.length > 0 && (
+            <>
               <Button
-                href={"/expert/become-expert"}
+                className={styles.NotificationButton}
                 buttonStyle="primary"
-                icon={"👨‍🏫"}
+                icon={"🔔"}
+                onClick={toggleExpertNotificationHandler}
               >
-                Become an Expert
+                Recent Notifications
+                <div className={styles.NotificationCounter}>
+                  {notificationsExpert.length}
+                </div>
+                <Icon
+                  className={styles.NotificationButtonToggleIcon}
+                  icon={notificationsExpertVisible ? "🔼" : "🔽"}
+                />
               </Button>
-            )}
+              {notificationsExpertVisible && (
+                <Notifications
+                  onRemove={removeExpertNotificationHandler}
+                  notifications={notificationsExpert}
+                />
+              )}
+            </>
+          )}
 
-            {isExpert && notificationsExpert.length > 0 && (
-              <div>
-                <Button
-                  className={styles.NotificationButton}
-                  buttonStyle="primary"
-                  icon={"🔔"}
-                  onClick={toggleExpertNotificationHandler}
-                >
-                  Recent Notifications
-                  <div className={styles.NotificationCounter}>
-                    {notificationsExpert.length}
-                  </div>
-                  <Icon
-                    className={styles.NotificationButtonToggleIcon}
-                    icon={notificationsExpertVisible ? "🔼" : "🔽"}
-                  />
-                </Button>
-                {notificationsExpertVisible && (
-                  <Notifications
-                    onRemove={removeExpertNotificationHandler}
-                    notifications={notificationsExpert}
-                  />
-                )}
-              </div>
-            )}
-
-            {isExpert && (
-              <Button href={"/expert/group-sessions"} icon={"👥"}>
-                Your Group Sessions
-              </Button>
-            )}
-            {isExpert && (
-              <Button href={"/expert/skills"} icon={"💪"}>
-                Your Fields of Expertise
-              </Button>
-            )}
-          </div>
+          {isExpert && (
+            <Button href={"/expert/group-sessions"} icon={"👥"}>
+              Your Group Sessions
+            </Button>
+          )}
+          {isExpert && (
+            <Button href={"/expert/skills"} icon={"💪"}>
+              Your Fields of Expertise
+            </Button>
+          )}
         </div>
       )}
       <div className={styles.Switch}>
