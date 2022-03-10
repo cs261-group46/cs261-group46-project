@@ -116,10 +116,11 @@ def store(user=None):
             meeting = Meeting(host_id=data.get("host"), title=data.get("title"), date=start_date_time, room_id=room_id,
                     link=data.get("link"), meeting_type=meeting_type, duration=duration, capacity=data.get("capacity"), invited=users).commit()
 
-            for t in data.get("topics"):
-                topic = Topic.query.filter_by(id=t).first()
-                if topic:
-                    meeting.topics.append(topic)
+            if data.get("topics"):
+                for t in data.get("topics"):
+                    topic = Topic.query.filter_by(id=t).first()
+                    if topic:
+                        meeting.topics.append(topic)
 
             meeting.commit()
 
@@ -134,10 +135,11 @@ def store(user=None):
                     link=data.get("link"), meeting_type=meeting_type, duration=duration, capacity=data.get("capacity"),
                     invited=users).commit()
 
-            for t in data.get("topics"):
-                topic = Topic.query.filter_by(id=t).first()
-                if topic:
-                    meeting.topics.append(topic)
+            if data.get("topics"):
+                for t in data.get("topics"):
+                    topic = Topic.query.filter_by(id=t).first()
+                    if topic:
+                        meeting.topics.append(topic)
 
             meeting.commit()
 

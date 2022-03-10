@@ -220,7 +220,7 @@ const Meetings: FC<MeetingsProps> = () => {
 
   const hasConfirmedMessage = (meeting: MeetingType) => {
     if (!meeting.attendees) {
-      meeting.attendees = [];
+      meeting.attendees = [{} as UserType];
     }
 
     if (!meeting.invited) {
@@ -254,7 +254,7 @@ const Meetings: FC<MeetingsProps> = () => {
   return (
     <DashboardSubpageLayout title={"Group Sessions"}>
       <Button href={`/meetings/${menteeId}/create`}>Create a Meeting</Button>
-      <div className={styles.buttonDiv}>
+      {/* <div className={styles.buttonDiv}>
         <Button
           className={styles.firstButton}
           onClick={() => {
@@ -273,7 +273,34 @@ const Meetings: FC<MeetingsProps> = () => {
         >
           Invites
         </Button>
-      </div>
+      </div> */}
+
+      <PagePicker
+        pickers={[
+          {
+            text: "Meetings",
+            onClick: () => {
+              setPage(1);
+            },
+            selected: page === 1,
+          },
+          {
+            text: "Invites",
+            onClick: () => {
+              setPage(2);
+            },
+            selected: page === 2,
+          },
+        ]}
+        buttons={{
+          buttonLeft: () => {
+            setPage((prev) => (prev > 1 ? prev - 1 : prev));
+          },
+          buttonRight: () => {
+            setPage((prev) => (prev < 2 ? prev + 1 : prev));
+          },
+        }}
+      />
       <div className={styles.YourGroupSessions} data-testid="Meetings">
         {page === 1 &&
           confirmed_meetings.length > 0 &&

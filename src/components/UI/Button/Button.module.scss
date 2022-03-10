@@ -19,6 +19,7 @@
     padding: 10px 20px;
     border: none;
     white-space: nowrap;
+    gap: 20px;
 
     &:hover,
     &:focus-visible {
@@ -31,11 +32,11 @@
   }
 
   button.primary {
-    background-color: #ea596e;
+    background-color: $sq_red;
   }
 
   button.default {
-    background-color: #393838;
+    background-color: $sq_black;
   }
 
   .Icon {
@@ -43,7 +44,6 @@
     height: 100%;
   }
   .Description {
-    margin-left: 20px;
     display: flex;
   }
 }

@@ -174,6 +174,7 @@ class MentorFeedbackSchema(ma.SQLAlchemySchema):
     class Meta:
         model = MentorFeedback
 
+    id = ma.auto_field()
     score = ma.auto_field()
     feedback = ma.auto_field()
     mentee = ma.Nested(MenteeSchema(exclude=["received_feedback", "feedback_given", "mentor", "topics", "mentorship_requests_sent", "plans_of_action"]))
@@ -184,6 +185,7 @@ class MenteeFeedbackSchema(ma.SQLAlchemySchema):
     class Meta:
         model = MenteeFeedback
 
+    id = ma.auto_field()
     score = ma.auto_field()
     feedback = ma.auto_field()
     mentee = ma.Nested(MenteeSchema(exclude=["received_feedback", "feedback_given", "mentor", "topics", "mentorship_requests_sent", "plans_of_action"]))

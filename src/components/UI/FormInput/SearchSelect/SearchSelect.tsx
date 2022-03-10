@@ -76,12 +76,14 @@ function SearchSelect<T>(props: PropsWithChildren<SearchSelectProps<T>>) {
     });
   }, [searchPromise, searchSubject]);
 
-  const possibleResults = searchResults.filter(
-    (searchResult) =>
-      !props.value
-        .map((labelled) => labelled.value)
-        .includes(searchResult.value)
-  );
+  const possibleResults = searchResults
+    ? searchResults.filter(
+        (searchResult) =>
+          !props.value
+            .map((labelled) => labelled.value)
+            .includes(searchResult.value)
+      )
+    : [];
 
   const inputHandler = () => {
     const inputEl: HTMLSpanElement | null = inputElement.current;

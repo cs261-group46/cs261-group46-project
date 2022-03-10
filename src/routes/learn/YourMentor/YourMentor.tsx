@@ -1,4 +1,7 @@
-import React, { FC } from "react";
+import React, {
+  FC,
+  Fragment,
+} from "react";
 import { update } from "../../../api/api";
 import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
 import styles from "./YourMentor.module.scss";
@@ -6,11 +9,13 @@ import { MentorType } from "../../../types/Mentor";
 import Tag from "../../../components/UI/Tag/Tag";
 import ContentCard from "../../../components/UI/ContentCard/ContentCard";
 import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
+import Button from "../../../components/UI/Button/Button";
+import LoadingSpinner from "../../../components/UI/LoadingSpinner/LoadingSpinner";
 
 interface YourMentorProps {}
 
 const YourMentor: FC<YourMentorProps> = () => {
-  const { mentee_mentor = null, mentee_id = null } = UseVerifyUser<{
+  const { mentee_mentor = undefined, mentee_id = undefined } = UseVerifyUser<{
     mentee_mentor: MentorType | null | undefined;
     mentee_id: number | null | undefined;
   }>({
@@ -40,10 +45,10 @@ const YourMentor: FC<YourMentorProps> = () => {
     }
   };
 
-  console.log(mentee_mentor);
   return (
     <DashboardSubpageLayout title="Your Mentor">
       <div className={styles.YourMentor} data-testid="YourMentor">
+        <Button href="/learn/past-mentors">Past Mentors</Button>
         {mentee_id && mentee_mentor ? (
           <ContentCard
             heading={`${mentee_mentor.user.first_name} ${mentee_mentor.user.last_name}`}
@@ -85,7 +90,12 @@ const YourMentor: FC<YourMentorProps> = () => {
             ]}
           />
         ) : (
-          <p>You don't have a mentor at the moment. </p>
+          <Fragment>
+            {mentee_id === undefined && <LoadingSpinner />}
+            {mentee_id === null && (
+              <p>You don't have a mentor at the moment. </p>
+            )}
+          </Fragment>
         )}
       </div>
     </DashboardSubpageLayout>

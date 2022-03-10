@@ -5,6 +5,7 @@ import Tag from "../../components/UI/Tag/Tag";
 import ContentCard from "../../components/UI/ContentCard/ContentCard";
 import { FullUserType } from "../../types/User";
 import UseVerifyUser from "../../hooks/UseVerifyUser/UseVerifyUser";
+import LoadingSpinner from "../../components/UI/LoadingSpinner/LoadingSpinner";
 
 interface YourProfileProps {}
 
@@ -23,12 +24,10 @@ const YourProfile: FC<YourProfileProps> = () => {
     ],
   });
 
-  console.log(user);
-
   return (
     <DashboardSubpageLayout title="Your Profile">
       <div className={styles.YourProfile} data-testid="YourProfile">
-        {user && (
+        {user ? (
           <ContentCard
             heading={`${user.user.first_name} ${user.user.last_name}`}
             sections={[
@@ -81,6 +80,8 @@ const YourProfile: FC<YourProfileProps> = () => {
                 },
             ]}
           />
+        ) : (
+          <LoadingSpinner />
         )}
       </div>
     </DashboardSubpageLayout>

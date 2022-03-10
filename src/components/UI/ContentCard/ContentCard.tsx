@@ -20,7 +20,7 @@ interface ContentCardProps {
     | false
   )[];
 
-  buttons?: ButtonProps[];
+  buttons?: (ButtonProps | false)[];
 }
 
 const ContentCard: FC<ContentCardProps> = (props) => (
@@ -49,9 +49,10 @@ const ContentCard: FC<ContentCardProps> = (props) => (
 
     <div className={styles.Buttons}>
       {props.buttons &&
-        props.buttons.map((button, i) => (
-          <Button key={i} className={styles.Button} {...button} />
-        ))}
+        props.buttons.map(
+          (button, i) =>
+            button && <Button key={i} className={styles.Button} {...button} />
+        )}
     </div>
   </Card>
 );

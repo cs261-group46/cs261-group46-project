@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, Fragment, useEffect, useState } from "react";
 import styles from "./ViewGroupSessions.module.scss";
 import Title from "../../../components/UI/Title/Title";
 import Button from "../../../components/UI/Button/Button";
@@ -10,6 +10,7 @@ import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
 import { MeetingType } from "../../../types/Meeting";
 import { UserType } from "../../../types/User";
 import { update } from "../../../api/api";
+import LoadingSpinner from "../../../components/UI/LoadingSpinner/LoadingSpinner";
 
 interface ViewGroupSessionsProps {}
 
@@ -54,14 +55,13 @@ const ViewGroupSessions: FC<ViewGroupSessionsProps> = () => {
   const [page, setPage] = useState(0);
   const hasPages = (groupSessions?.length ?? 0) > 0;
   const pageAmount = Math.ceil((groupSessions?.length ?? 0) / pageSize);
-  const groupSessionsOnPage: MeetingType[] =
-    groupSessions?.slice(page * pageSize, (page + 1) * pageSize) ?? [];
+  const groupSessionsOnPage = groupSessions?.slice(
+    page * pageSize,
+    (page + 1) * pageSize
+  );
   const [selectedWorkshop, setSelectedWorkshop] = useState<GroupSessionType>();
 
-  const {
-    // userId,
-    meetings_invited = [],
-  } = UseVerifyUser<{
+  const { userId = null, meetings_invited = undefined } = UseVerifyUser<{
     userId: number | null | undefined;
     meetings_invited: MeetingType[] | null | undefined;
   }>({
@@ -108,73 +108,82 @@ const ViewGroupSessions: FC<ViewGroupSessionsProps> = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(meetings_invited)]);
 
+  console.log(groupSessions);
+
   return (
     <DashboardSubpageLayout title={"Group Sessions"}>
       <div className={styles.ViewGroupSessions} data-testid="ViewGroupSessions">
-        {groupSessions && groupSessions.length > 0 ? (
-          groupSessionsOnPage.map((groupSession) => {
-            console.log(groupSession);
+        {groupSessions && groupSessionsOnPage ? (
+          <Fragment>
+            {groupSessions.length > 0 ? (
+              groupSessionsOnPage.map((groupSession) => {
+                console.log(groupSession);
 
-            const host = (
-              <div>
-                {groupSession.host?.first_name} {groupSession.host?.last_name}
-                <br />
-                {groupSession.host?.email}
-              </div>
-            );
-            return (
-              <ContentCard
-                key={groupSession.id}
-                heading={groupSession.title}
-                sections={[
-                  {
-                    title: "Host",
-                    content: host,
-                  },
-                  {
-                    title: "When",
-                    content: getDateString(
-                      new Date(groupSession.date),
-                      groupSession.duration
-                    ),
-                  },
-                  {
-                    title: "Where",
-                    content: groupSession.room.name,
-                  },
-                  {
-                    className: styles.tags,
-                    title: "Topics Covered",
-                    content: groupSession.topics.map((topic) => (
-                      <Tag key={topic.id}>{topic.name}</Tag>
-                    )),
-                  },
-                  {
-                    title: "Capacity",
-                    content: `${
-                      groupSession.capacity -
-                      (groupSession.attendees as UserType[]).length
-                    } / ${groupSession.capacity} slots left`,
-                  },
-                  {
-                    className: styles.type,
-                    title: "Type",
-                    content: <Tag>{groupSession.meeting_type}</Tag>,
-                  },
-                ]}
-                buttons={[
-                  {
-                    buttonStyle: "primary",
-                    onClick: joinHandler.bind(null, groupSession.id),
-                    children: "Join",
-                  },
-                ]}
-              />
-            );
-          })
+                const host = (
+                  <div>
+                    {groupSession.host?.first_name}{" "}
+                    {groupSession.host?.last_name}
+                    <br />
+                    {groupSession.host?.email}
+                  </div>
+                );
+                return (
+                  <ContentCard
+                    key={groupSession.id}
+                    heading={groupSession.title}
+                    sections={[
+                      {
+                        title: "Host",
+                        content: host,
+                      },
+                      {
+                        title: "When",
+                        content: getDateString(
+                          new Date(groupSession.date),
+                          groupSession.duration
+                        ),
+                      },
+                      {
+                        title: "Where",
+                        content: groupSession.room.name,
+                      },
+                      {
+                        className: styles.tags,
+                        title: "Topics Covered",
+                        content: groupSession.topics.map((topic) => (
+                          <Tag key={topic.id}>{topic.name}</Tag>
+                        )),
+                      },
+                      {
+                        title: "Capacity",
+                        content: `${
+                          groupSession.capacity -
+                          (groupSession.attendees as UserType[]).length
+                        } / ${groupSession.capacity} slots left`,
+                      },
+                      {
+                        className: styles.type,
+                        title: "Type",
+                        content: <Tag>{groupSession.meeting_type}</Tag>,
+                      },
+                    ]}
+                    buttons={[
+                      {
+                        buttonStyle: "primary",
+                        onClick: joinHandler.bind(null, groupSession.id),
+                        children: "Join",
+                      },
+                    ]}
+                  />
+                );
+              })
+            ) : (
+              // else not loaded yet
+              <p>Sorry, no workshops available</p>
+            )}
+          </Fragment>
         ) : (
-          // else not loaded yet
-          <p>Sorry, no workshops available</p>
+          <LoadingSpinner />
         )}
         {hasPages && (
           <div className={styles.pagecontainer}>
