@@ -71,6 +71,7 @@ const SiteFeedback: FC<SiteFeedbackProps> = () => {
         <BigTextInput
           id={"feedback"}
           label={"General Comments"}
+          icon="💬"
           placeholder={"What did you think about using SkillShare?"}
           value={enteredValue}
           isValid={isInputValid}

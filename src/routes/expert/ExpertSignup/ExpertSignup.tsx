@@ -113,6 +113,7 @@ const ExpertSignup: FC<ExpertSignupProps> = () => {
       <SearchSelect
         id={"expertises"}
         label={"Areas of Expertises"}
+        icon="💪"
         isValid={isSkillsInputValid}
         value={enteredSkills}
         onChange={skillsChangeHandler}

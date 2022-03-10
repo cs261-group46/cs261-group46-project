@@ -288,6 +288,7 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
       <TextInput
         id={"title"}
         label={"Session Title"}
+        icon="📝"
         placeholder={"Please provide the title of your group session."}
         value={title}
         isValid={titleInputValid}
@@ -297,6 +298,7 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
       <BigTextInput
         id={"description"}
         label={"Description"}
+        icon="🖋️"
         placeholder={"Tell attendees what the event is about"}
         value={description}
         isValid={descriptionInputValid}
@@ -306,6 +308,7 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
       <SearchSelect
         id={"topics"}
         label={"Topics Covered"}
+        icon="📖"
         isValid={topicsInputValid}
         value={topics}
         onChange={topicsChangeHandler}
@@ -315,6 +318,7 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
       <Select
         id={"visibility"}
         label={"Meeting Visibility"}
+        icon="🗨️"
         placeholder={"Public or Private?"}
         options={[
           { value: "public", label: "Public (anyone can join)" },
@@ -330,6 +334,7 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
         <SearchSelect
           id={"invites"}
           label={"Emails of invited"}
+          icon="✉️"
           isValid={invitesInputValid}
           value={invites}
           onChange={invitesChangeHandler}
@@ -341,6 +346,7 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
       <Select
         id={"type"}
         label={"Meeting Type"}
+        icon="🔧"
         placeholder={"Please select the session type."}
         options={[
           {
@@ -361,6 +367,7 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
       <DatePicker
         id={"date"}
         label={"Date"}
+        icon="📅"
         value={date}
         isValid={dateInputValid}
         onChange={dateChangeHandler}
@@ -370,6 +377,7 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
       <TextInput
         id={"time"}
         label={"Start time"}
+        icon="🕒"
         isValid={startTimeInputValid}
         value={startTime}
         onChange={startTimeChangeHandler}
@@ -381,6 +389,7 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
       <TextInput
         id={"duration"}
         label={"End time"}
+        icon="🕘"
         isValid={endTimeInputValid}
         value={endTime}
         onChange={endTimeChangeHandler}
@@ -392,6 +401,7 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
       <TextInput
         id={"capacity"}
         label={"Capacity"}
+        icon="👥"
         placeholder={""}
         value={capacity}
         isValid={true}
@@ -403,6 +413,7 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
       <SearchSelect
         id={"room"}
         label={"Room"}
+        icon="🏠"
         isValid={roomInputValid}
         value={room}
         onChange={roomChangeHandler}
@@ -414,6 +425,7 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
       <TextInput
         id={"link"}
         label={"Meeting Link - for online events"}
+        icon="🔗"
         placeholder={"Please provide the meeting link"}
         value={link}
         isValid={true}

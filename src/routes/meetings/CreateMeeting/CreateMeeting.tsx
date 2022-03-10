@@ -275,7 +275,8 @@ const CreateMeeting: FC<CreateMeetingProps> = () => {
             <TextInput
               id={"title"}
               label={"Session Title"}
-              placeholder={"Please provide the title of your group session."}
+              icon="📝"
+              placeholder={"Please provide the title of your meeting."}
               value={title}
               isValid={titleInputValid}
               onChange={titleChangeHandler}
@@ -284,6 +285,7 @@ const CreateMeeting: FC<CreateMeetingProps> = () => {
             <DatePicker
               id={"date"}
               label={"Date"}
+              icon="📅"
               value={date}
               isValid={dateInputValid}
               onChange={dateChangeHandler}
@@ -293,6 +295,7 @@ const CreateMeeting: FC<CreateMeetingProps> = () => {
             <TextInput
               id={"time"}
               label={"Start time"}
+              icon="🕒"
               isValid={startTimeInputValid}
               value={startTime}
               onChange={startTimeChangeHandler}
@@ -304,6 +307,7 @@ const CreateMeeting: FC<CreateMeetingProps> = () => {
             <TextInput
               id={"duration"}
               label={"End time"}
+              icon="🕘"
               isValid={endTimeInputValid}
               value={endTime}
               onChange={endTimeChangeHandler}
@@ -315,6 +319,7 @@ const CreateMeeting: FC<CreateMeetingProps> = () => {
             <SearchSelect
               id={"room"}
               label={"Room"}
+              icon="🏠"
               isValid={roomInputValid}
               value={room}
               onChange={roomChangeHandler}
@@ -326,6 +331,7 @@ const CreateMeeting: FC<CreateMeetingProps> = () => {
             <BigTextInput
               id={"description"}
               label={`Note to ${theirsPosition}`}
+              icon="🖋️"
               placeholder={
                 "Include what you'd like to talk about in the meeting"
               }
@@ -338,6 +344,7 @@ const CreateMeeting: FC<CreateMeetingProps> = () => {
             <TextInput
               id={"link"}
               label={"Meeting Link - for online events"}
+              icon="🔗"
               placeholder={"Please provide the meeting link"}
               value={link}
               isValid={true}
