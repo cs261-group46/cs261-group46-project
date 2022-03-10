@@ -48,7 +48,7 @@ const Dashboard: FC<DashboardProps> = () => {
 
   const showMessage = UseSystemMessage();
 
-  const [pageVisiable, setPageVisible] = useState(1);
+  const [pageVisible, setPageVisible] = useState(1);
   const navigate = useNavigate();
 
   const [notificationsLearn, setNotificationsLearn] = useState<
@@ -166,7 +166,7 @@ const Dashboard: FC<DashboardProps> = () => {
 
   return (
     <MainLayout title={"Dashboard"}>
-      {pageVisiable === 1 && (
+      {pageVisible === 1 && (
         <div className={styles.Section}>
           <Title text={"Welcome back!"} className={styles.Title} />
           <div className={styles.Buttons}>
@@ -190,7 +190,7 @@ const Dashboard: FC<DashboardProps> = () => {
         </div>
       )}
 
-      {pageVisiable === 2 && (
+      {pageVisible === 2 && (
         <div className={styles.Section}>
           <Title text={"Your Learning"} className={styles.Title} />
           <div className={styles.Buttons}>
@@ -274,7 +274,7 @@ const Dashboard: FC<DashboardProps> = () => {
         </div>
       )}
 
-      {pageVisiable === 3 && (
+      {pageVisible === 3 && (
         <div className={styles.Section}>
           <Title text={"Your Mentoring"} className={styles.Title} />
           <div className={styles.Buttons}>
@@ -335,7 +335,7 @@ const Dashboard: FC<DashboardProps> = () => {
         </div>
       )}
 
-      {pageVisiable === 4 && (
+      {pageVisible === 4 && (
         <div className={styles.Section}>
           <Title text={"Your Expertise"} className={styles.Title} />
           <div className={styles.Buttons}>
@@ -391,36 +391,28 @@ const Dashboard: FC<DashboardProps> = () => {
       <div className={styles.Switch}>
         <Button
           onClick={setPageVisible.bind(null, 1)}
-          className={`${styles.Button} ${
-            pageVisiable === 1 && styles.selected
-          }`}
+          className={`${styles.Button} ${pageVisible === 1 && styles.selected}`}
           icon="🏠"
         >
           Home
         </Button>
         <Button
           onClick={setPageVisible.bind(null, 2)}
-          className={`${styles.Button} ${
-            pageVisiable === 2 && styles.selected
-          }`}
+          className={`${styles.Button} ${pageVisible === 2 && styles.selected}`}
           icon="🧑‍🎓"
         >
           Your Learning
         </Button>
         <Button
           onClick={setPageVisible.bind(null, 3)}
-          className={`${styles.Button} ${
-            pageVisiable === 3 && styles.selected
-          }`}
+          className={`${styles.Button} ${pageVisible === 3 && styles.selected}`}
           icon="🧑"
         >
           Your Mentoring
         </Button>
         <Button
           onClick={setPageVisible.bind(null, 4)}
-          className={`${styles.Button} ${
-            pageVisiable === 4 && styles.selected
-          }`}
+          className={`${styles.Button} ${pageVisible === 4 && styles.selected}`}
           icon="💪"
         >
           Your Expertise
