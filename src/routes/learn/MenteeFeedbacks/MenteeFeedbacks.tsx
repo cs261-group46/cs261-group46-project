@@ -64,7 +64,7 @@ const MenteeFeedbacks: FC<MenteeFeedbacksProps> = () => {
   );
 
   return (
-    <DashboardSubpageLayout title="Your Mentees">
+    <DashboardSubpageLayout title="Your Mentees" dashboardSection={"#learning"}>
       {feedbackReceivedList.length === 0 && (
         <p>You haven't received any feedback from your mentors yet.</p>
       )}

@@ -59,7 +59,7 @@ const YourMentor: FC<YourMentorProps> = () => {
   };
 
   return (
-    <DashboardSubpageLayout title="Your Mentor">
+    <DashboardSubpageLayout title="Your Mentor" dashboardSection={"#learning"}>
       <div className={styles.YourMentor} data-testid="YourMentor">
         <Button href="/learn/past-mentors">Past Mentors</Button>
         {mentee_id && mentee_mentor ? (

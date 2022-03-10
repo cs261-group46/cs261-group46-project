@@ -9,7 +9,7 @@ import { custom, get } from "../../api/api";
 import { NotificationType } from "../../types/Notification";
 import Notifications from "../../components/Notifications/Notifications";
 import Icon from "../../components/UI/Icon/Icon";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import UseVerifyUser from "../../hooks/UseVerifyUser/UseVerifyUser";
 import { MentorType } from "../../types/Mentor";
 
@@ -45,8 +45,21 @@ const Dashboard: FC<DashboardProps> = () => {
     ],
   });
 
-  const [pageVisible, setPageVisible] = useState(1);
+  const pageHashes = ["#home", "#learning", "#mentoring", "#expertise"];
+  const { hash } = useLocation();
+  const initialPage = pageHashes.includes(hash)
+    ? pageHashes.indexOf(hash) + 1
+    : 1;
+
+  const launchbarClickHandler = (slot: number) => {
+    navigate(`/dashboard${pageHashes[slot - 1]}`);
+    setPageVisible(slot);
+  };
+
+  const [pageVisible, setPageVisible] = useState(initialPage);
   const navigate = useNavigate();
+
+  console.log(hash);
 
   const [notificationsLearn, setNotificationsLearn] = useState<
     NotificationType<"learning">[]
@@ -380,28 +393,28 @@ const Dashboard: FC<DashboardProps> = () => {
       )}
       <div className={styles.Switch}>
         <Button
-          onClick={setPageVisible.bind(null, 1)}
+          onClick={launchbarClickHandler.bind(null, 1)}
           className={`${styles.Button} ${pageVisible === 1 && styles.selected}`}
           icon="🏠"
         >
           Home
         </Button>
         <Button
-          onClick={setPageVisible.bind(null, 2)}
+          onClick={launchbarClickHandler.bind(null, 2)}
           className={`${styles.Button} ${pageVisible === 2 && styles.selected}`}
           icon="🧑‍🎓"
         >
           Your Learning
         </Button>
         <Button
-          onClick={setPageVisible.bind(null, 3)}
+          onClick={launchbarClickHandler.bind(null, 3)}
           className={`${styles.Button} ${pageVisible === 3 && styles.selected}`}
           icon="🧑"
         >
           Your Mentoring
         </Button>
         <Button
-          onClick={setPageVisible.bind(null, 4)}
+          onClick={launchbarClickHandler.bind(null, 4)}
           className={`${styles.Button} ${pageVisible === 4 && styles.selected}`}
           icon="💪"
         >

@@ -2,7 +2,7 @@ import React, { FC, useCallback, useEffect, useRef, useState } from "react";
 import styles from "./Homepage.module.scss";
 import Button from "../../components/UI/Button/Button";
 import Logo from "../../logo";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import UseVerifyUser from "../../hooks/UseVerifyUser/UseVerifyUser";
 
 interface HomepageProps {}

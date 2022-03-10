@@ -284,7 +284,10 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
   };
 
   return (
-    <DashboardSubpageLayout title={"Create a Group Session"}>
+    <DashboardSubpageLayout
+      title={"Create a Group Session"}
+      dashboardSection={"#expertise"}
+    >
       <TextInput
         id={"title"}
         label={"Session Title"}

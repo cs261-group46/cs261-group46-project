@@ -33,7 +33,7 @@ const PastMentors: FC<PastMentorsProps> = () => {
   });
 
   return (
-    <DashboardSubpageLayout title="Past Mentors">
+    <DashboardSubpageLayout title="Past Mentors" dashboardSection={"#learning"}>
       <div className={styles.PastMentors} data-testid="PastMentors">
         {mentee_id &&
           mentee_feedback_given.map((feedback: MentorFeedbackType) => (

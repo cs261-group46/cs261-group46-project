@@ -130,7 +130,10 @@ const MentorSignup: FC<MentorSignupProps> = () => {
   );
 
   return (
-    <DashboardSubpageLayout title={"Become a Mentor"}>
+    <DashboardSubpageLayout
+      title={"Become a Mentor"}
+      dashboardSection={"#mentoring"}
+    >
       <SearchSelect
         id={"skills"}
         label={"Mentorship areas"}
