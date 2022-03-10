@@ -134,6 +134,7 @@ const MenteeSignup: FC<MenteeSignupProps> = () => {
       <BigTextInput
         id={"profile"}
         label={"About me"}
+        icon="💬"
         placeholder={"I can play Electric Guitar"}
         value={enteredAbout}
         isValid={isAboutInputValid}

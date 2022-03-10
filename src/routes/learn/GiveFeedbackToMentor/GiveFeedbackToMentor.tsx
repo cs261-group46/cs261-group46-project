@@ -124,6 +124,7 @@ const GiveFeedbackToMentor: FC<GiveFeedbackToMentorProps> = () => {
           <BigTextInput
             id={"feedback"}
             label={"Feedback"}
+            icon="💬"
             placeholder={"Were they able to provide good support?"}
             value={enteredFeedback}
             isValid={feedbackInputValid}
@@ -133,6 +134,7 @@ const GiveFeedbackToMentor: FC<GiveFeedbackToMentorProps> = () => {
           <StarPicker
             type={"interactive"}
             id={"stars"}
+            icon="⭐"
             label={"Mentor Rating"}
             value={starsValue}
             isValid={starsInputValid}
@@ -140,7 +142,7 @@ const GiveFeedbackToMentor: FC<GiveFeedbackToMentorProps> = () => {
             onBlur={starsBlurHandler}
             size={"100%"}
           />
-          <Button onClick={submitHandler} buttonStyle={"primary"}>
+          <Button icon="👑" onClick={submitHandler} buttonStyle={"primary"}>
             Submit
           </Button>
         </>

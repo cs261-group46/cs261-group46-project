@@ -129,7 +129,8 @@ const GiveFeedbackToMentee: FC<GiveFeedbackToMenteeProps> = () => {
           <BigTextInput
             id={"feedback"}
             label={"Feedback"}
-            placeholder={"PDid this mentee make good progress?"}
+            icon="💬"
+            placeholder={"Did this mentee make good progress?"}
             value={enteredFeedback}
             isValid={feedbackInputValid}
             onChange={feedbackChangeHandler}
@@ -138,6 +139,7 @@ const GiveFeedbackToMentee: FC<GiveFeedbackToMenteeProps> = () => {
           <StarPicker
             type={"interactive"}
             id={"stars"}
+            icon="⭐"
             label={"Mentee Rating"}
             value={starsValue}
             isValid={starsInputValid}

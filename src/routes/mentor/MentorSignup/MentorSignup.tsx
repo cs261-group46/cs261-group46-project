@@ -134,6 +134,7 @@ const MentorSignup: FC<MentorSignupProps> = () => {
       <SearchSelect
         id={"skills"}
         label={"Mentorship areas"}
+        icon="📖"
         isValid={isSkillsInputValid}
         value={enteredSkills}
         onChange={skillsChangeHandler}
@@ -145,6 +146,7 @@ const MentorSignup: FC<MentorSignupProps> = () => {
       <BigTextInput
         id={"profile"}
         label={"About me"}
+        icon="💬"
         placeholder={"I can play Electric Guitar"}
         value={enteredAbout}
         isValid={isAboutInputValid}
@@ -155,6 +157,7 @@ const MentorSignup: FC<MentorSignupProps> = () => {
       <TextInput
         id={"capacity"}
         label={"How many mentees do you want?"}
+        icon="👥"
         placeholder={"e.g. 5"}
         value={enteredCapacity}
         type={"number"}

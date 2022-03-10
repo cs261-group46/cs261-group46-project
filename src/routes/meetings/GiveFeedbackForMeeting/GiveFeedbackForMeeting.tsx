@@ -146,13 +146,14 @@ const GiveFeedbackForMeeting: FC<GiveFeedbackForMeetingProps> = () => {
           <BigTextInput
             id={"feedback"}
             label={"Feedback"}
+            icon="💬"
             placeholder={"Please provide feedback on the meeting"}
             value={enteredFeedback}
             isValid={feedbackInputValid}
             onChange={feedbackChangeHandler}
             onBlur={feedbackBlurHandler}
           />
-          <Button onClick={submitHandler} buttonStyle={"primary"}>
+          <Button icon="👑" onClick={submitHandler} buttonStyle={"primary"}>
             Submit
           </Button>
         </>
