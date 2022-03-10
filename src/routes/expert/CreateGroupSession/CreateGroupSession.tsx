@@ -407,7 +407,7 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
         icon="👥"
         placeholder={""}
         value={capacity}
-        isValid={true}
+        isValid={capacityInputValid}
         type={"number"}
         onChange={capacityChangeHandler}
         onBlur={capacityBlurHandler}

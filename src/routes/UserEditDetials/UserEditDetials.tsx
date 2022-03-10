@@ -1,10 +1,4 @@
-import React, {
-  FC,
-  FormEventHandler,
-  useCallback,
-  useEffect,
-  useState,
-} from "react";
+import React, { FC, useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { index, update } from "../../api/api";
 import Button from "../../components/UI/Button/Button";
@@ -207,7 +201,7 @@ const UserEditDetails: FC<UserEditDetailsProps> = () => {
       <Button icon="➡️" buttonStyle="primary" onClick={submitHandler}>
         Apply
       </Button>
-      <div data-testid={"Interests"} />
+      <div data-testid={"UserEditDetials"} />
     </DashboardSubpageLayout>
     // <div className={styles.Interests} data-testid="Interests">
     //   Interests Component

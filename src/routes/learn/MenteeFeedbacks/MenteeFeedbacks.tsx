@@ -4,7 +4,6 @@ import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
 import ContentCard from "../../../components/UI/ContentCard/ContentCard";
 import StarPicker from "../../../components/UI/FormInput/StarPicker/StarPicker";
 import { MentorFeedbackType } from "../../../types/MentorFeedback";
-import UseSystemMessage from "../../../hooks/UseSystemMessage/UseSystemMessage";
 
 interface MenteeFeedbacksProps {}
 

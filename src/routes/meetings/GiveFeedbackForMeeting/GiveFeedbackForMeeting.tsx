@@ -80,7 +80,9 @@ const GiveFeedbackForMeeting: FC<GiveFeedbackForMeetingProps> = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     meetingId,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     JSON.stringify(meetings_attending),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     JSON.stringify(meetings_hosted),
     navigate,
     showMessage,

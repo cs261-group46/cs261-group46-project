@@ -58,6 +58,7 @@ const UseVerifyAuth = () => {
         return null;
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [navigate, userDataVerifier]
   );
 

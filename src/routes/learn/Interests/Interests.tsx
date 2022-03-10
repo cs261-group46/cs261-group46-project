@@ -62,6 +62,7 @@ const Interests: FC<InterestsProps> = () => {
   };
   const searchPromise: SearchPromise<number> = useCallback((_search) => {
     return new Promise((resolve) => resolve(getTopics(_search)));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const {

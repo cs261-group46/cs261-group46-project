@@ -58,6 +58,7 @@ const GiveFeedbackToMentee: FC<GiveFeedbackToMenteeProps> = () => {
   }, [
     userId,
     menteeId,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     JSON.stringify(mentor_feedback_given),
     showMessage,
     navigate,

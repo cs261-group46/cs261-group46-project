@@ -1,4 +1,3 @@
-import { DepartmentType } from "./Department";
 import { MentorType } from "./Mentor";
 import { TopicWithPriorityType } from "./Topic";
 import { UserType } from "./User";

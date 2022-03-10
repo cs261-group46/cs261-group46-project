@@ -12,7 +12,6 @@ import ContentCard from "../../../components/UI/ContentCard/ContentCard";
 import { MenteeFeedbackType } from "../../../types/MenteeFeedback";
 import StarPicker from "../../../components/UI/FormInput/StarPicker/StarPicker";
 import LoadingSpinner from "../../../components/UI/LoadingSpinner/LoadingSpinner";
-import UseSystemMessage from "../../../hooks/UseSystemMessage/UseSystemMessage";
 
 interface YourMenteeProps {}
 

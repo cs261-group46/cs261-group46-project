@@ -13,8 +13,6 @@ import { UserType } from "../../../types/User";
 import PagePicker from "../../../components/UI/PagePicker/PagePicker";
 import { MeetingFeedbackType } from "../../../types/MeetingFeedback";
 import { MenteeType } from "../../../types/Mentee";
-import { MentorType } from "../../../types/Mentor";
-import { MentorFeedbackType } from "../../../types/MentorFeedback";
 import UseSystemMessage from "../../../hooks/UseSystemMessage/UseSystemMessage";
 
 interface MeetingsProps {}

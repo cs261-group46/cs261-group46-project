@@ -1,5 +1,4 @@
 import { UserType } from "./User";
-import { DepartmentType } from "./Department";
 import { TopicWithPriorityType } from "./Topic";
 
 export type MentorshipRequestType = {
