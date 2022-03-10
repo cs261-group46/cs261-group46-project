@@ -54,6 +54,7 @@ def register():
         token = generate_confirmation_token(new_user.email)
 
         verify_url = url_for('verifyemail.verify_email', token=token, _external=True)
+        # noinspection PyUnresolvedReferences
         html = render_template(
             'emails/verify_email.html',
             user={

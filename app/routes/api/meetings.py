@@ -130,6 +130,7 @@ def store(user=None):
                              description="An expert scheduled a meeting that might interest you!").commit()
 
         elif data.get("visibility") == "private" and len(data.get("invites")) > 0:
+            # noinspection PyUnresolvedReferences
             users = User.query.filter(User.id.in_([invite.get("id") for invite in data.get("invites")])).filter(User.email.in_([invite.get("email") for invite in data.get("invites")])).all()
             meeting = Meeting(host_id=data.get("host"), title=data.get("title"), date=start_date_time, room_id=room_id,
                     link=data.get("link"), meeting_type=meeting_type, duration=duration, capacity=data.get("capacity"),

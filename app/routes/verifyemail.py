@@ -1,10 +1,8 @@
-from flask import Blueprint, request, session, current_app, redirect, flash
-from app.middleware.auth import auth_required
+from flask import Blueprint, redirect
+
+from app import User
 from app.utils.auth import set_login_token
 from app.utils.email_confirm_token import confirm_token
-from datetime import datetime
-from app import db, User
-
 
 verifyemail = Blueprint("verifyemail", __name__, url_prefix="/verifyemail")
 

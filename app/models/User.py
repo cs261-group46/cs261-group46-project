@@ -1,7 +1,10 @@
-from uuid import uuid4
-from sqlalchemy.dialects.postgresql import UUID
-from app import db, ma
 from datetime import datetime
+from uuid import uuid4
+
+from sqlalchemy.dialects.postgresql import UUID
+
+from app import db
+
 
 class User(db.Model):
     __tablename__ = 'users'

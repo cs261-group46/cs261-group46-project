@@ -1,4 +1,5 @@
-from app import db, ma
+from app import db
+
 
 # mentors_topics = db.Table('mentors_topics',
 #                           db.Column('mentor_id', db.Integer, db.ForeignKey(

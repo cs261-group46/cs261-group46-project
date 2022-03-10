@@ -1,10 +1,7 @@
-import datetime
-
 from flask import Blueprint, request
-from app import db, Meeting, User, Notification, Topic, MenteeFeedback, Mentee
-from app.middleware.auth import auth_required
-from datetime import datetime
 
+from app import MenteeFeedback
+from app.middleware.auth import auth_required
 from app.utils.cerberus_helpers import get_errors
 from app.validators.MenteeFeedbacksValidators import updateValidator
 

@@ -1,4 +1,4 @@
-from app import db, Topic
+from app import Topic
 
 
 def topics_factory():

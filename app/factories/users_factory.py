@@ -1,7 +1,9 @@
 import random
-from app import db, User, Department
-from app.utils.strings import generate_random_string
+
 from werkzeug.security import generate_password_hash
+
+from app import User
+from app.utils.strings import generate_random_string
 
 
 def users_factory(departments):

@@ -1,4 +1,4 @@
-from app import db, Department
+from app import Department
 
 
 def department_factory():

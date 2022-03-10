@@ -1,11 +1,8 @@
 from flask import Blueprint, request
-from sqlalchemy import func, any_
-from app import db
 
-
-from app.middleware.auth import auth_required
 from app import Topic, Mentor, Notification, MentorTopic
-from app.models.MentorshipRequest import MentorshipRequest
+from app import db
+from app.middleware.auth import auth_required
 from app.models.schemas import MentorSchema
 from app.utils.cerberus_helpers import get_errors
 from app.utils.mentor_reccomendations import get_mentors
@@ -77,6 +74,7 @@ def store(user=None):
         mentor = Mentor(user_id=user.id, about=data.get("about"),
                         capacity=data.get("capacity")).commit()
 
+        # noinspection PyUnresolvedReferences
         selected_topics = Topic.query.filter(Topic.id.in_([skill.get("skill") for skill in data.get("skills")])).all()
         selected_topics_ordered = [next(s for s in selected_topics if s.id == skill.get("skill")) for skill in
                                  sorted(data.get("skills"), key=(lambda i: i.get("priority")))]
@@ -118,6 +116,7 @@ def update(mentorId=None, user=None):
             return {"success": False, "errors": ["You don't have the permissions to update a mentor account on other's behalf."]}, 401
 
 
+        # noinspection PyUnresolvedReferences
         selected_topics = Topic.query.filter(Topic.id.in_([skill.get("skill") for skill in data.get("skills")])).all()
         selected_topics_ordered = [next(s for s in selected_topics if s.id == skill.get("skill")) for skill in
                                  sorted(data.get("skills"), key=(lambda i: i.get("priority")))]

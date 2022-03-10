@@ -1,10 +1,10 @@
 from functools import wraps
 
-from flask import request, jsonify, session, current_app
+from flask import session, current_app
 from app import User
 import jwt
 from datetime import datetime
-from app.utils.auth import get_login_token_timeout, set_login_token
+from app.utils.auth import set_login_token
 
 
 # # TODO : REFACOTOR THIS SO THE DECORATOR USES IT (DONE)

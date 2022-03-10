@@ -1,7 +1,3 @@
-from app import Mentor, Topic
-import math
-
-
 def get_mentors(mentors, user):
     suitable_mentors = []
 

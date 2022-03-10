@@ -1,11 +1,10 @@
 from flask import Blueprint, request
+
 from app import Mentee, Topic, MenteeTopic, db, PlanOfAction, Notification, MentorFeedback, MenteeFeedback
 from app.middleware.auth import auth_required
 from app.models.schemas import MenteeSchema
 from app.utils.cerberus_helpers import get_errors
-from app.utils.dict import respect_more_delimiters
 from app.utils.marshmallow_helpers import get_results
-from app.utils.request import parse_args_list
 from app.validators.MenteesValidators import storeValidator, updateValidator
 
 mentees = Blueprint("api_mentees", __name__, url_prefix="/mentees")
@@ -33,6 +32,7 @@ def store(user=None):
 
         mentee = Mentee(user_id=user.id, about=data.get("about")).commit()
 
+        # noinspection PyUnresolvedReferences
         selected_topics = Topic.query.filter(Topic.id.in_([interest.get("interest") for interest in data.get("interests")])).all()
         selected_topics_ordered = [next(s for s in selected_topics if s.id == interest.get("interest")) for interest in
                                  sorted(data.get("interests"), key=(lambda i: i.get("priority")))]
@@ -77,6 +77,7 @@ def update(menteeId=None, user=None):
             if mentee.user.id != user.id:
                 return {"success": False, "errors": ["You don't have the permissions to update a mentee account on other's behalf."]}, 401
 
+            # noinspection PyUnresolvedReferences
             selected_topics = Topic.query.filter(Topic.id.in_([interest.get("interest") for interest in data.get("interests")])).all()
             selected_topics_ordered = [next(s for s in selected_topics if s.id == interest.get("interest")) for interest in sorted(data.get("interests"), key=(lambda i: i.get("priority")))]
 

@@ -1,9 +1,8 @@
 from flask import Blueprint, request
+
 from app import Expert, Topic, Notification
 from app.middleware.auth import auth_required
-from app.models.schemas import ExpertSchema
 from app.utils.cerberus_helpers import get_errors
-from app.utils.request import parse_args_list
 from app.validators.ExpertsValidators import storeValidator, updateValidator
 
 experts = Blueprint("api_experts", __name__, url_prefix="/experts")
