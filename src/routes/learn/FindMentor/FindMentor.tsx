@@ -8,28 +8,48 @@ import styles from "./FindMentor.module.scss";
 import Tag from "../../../components/UI/Tag/Tag";
 import LoadingSpinner from "../../../components/UI/LoadingSpinner/LoadingSpinner";
 import UseSystemMessage from "../../../hooks/UseSystemMessage/UseSystemMessage";
+import StarPicker from "../../../components/UI/FormInput/StarPicker/StarPicker";
 
 interface FindMentorProps {}
 
 const FindMentor: FC<FindMentorProps> = () => {
-  const { mentee_id = null } = UseVerifyUser<{
-    mentee_id: number | null;
-  }>({
-    userDataPolicies: [
-      {
-        dataPoint: "mentee.id",
-        redirectOnFail: "/dashboard",
-      },
-      {
-        dataPoint: "mentee.mentor.id",
-        redirectOnSuccess: "/dashboard",
-      },
-    ],
-  });
+  const { mentee_id = null, mentee_mentorship_requests_sent = [] } =
+    UseVerifyUser<{
+      mentee_id: number | null;
+      mentee_mentorship_requests_sent: { mentor: MentorType }[];
+    }>({
+      userDataPolicies: [
+        {
+          dataPoint: "mentee.id",
+          redirectOnFail: "/dashboard",
+        },
+        {
+          dataPoint: "mentee.mentor.id",
+          redirectOnSuccess: "/dashboard",
+        },
+        {
+          dataPoint: "mentee.mentorship_requests_sent",
+        },
+      ],
+    });
 
   const showMessage = UseSystemMessage();
 
-  const [mentors, setMentors] = useState<MentorType[]>();
+  const [mentors, setMentors] = useState<MentorType[]>([]);
+
+  useEffect(() => {
+    if (mentors.length > 0) {
+      setMentors((prevMentors) =>
+        prevMentors.filter(
+          (mentor) =>
+            !mentee_mentorship_requests_sent.find(
+              (req) => req.mentor.id === mentor.id
+            )
+        )
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(mentee_mentorship_requests_sent), mentors.length]);
 
   const indexMentors = useCallback(async () => {
     try {
@@ -39,6 +59,7 @@ const FindMentor: FC<FindMentorProps> = () => {
           fields: [
             "id",
             "about",
+            "score",
             "topics.topic",
             "user.first_name",
             "user.last_name",
@@ -70,6 +91,10 @@ const FindMentor: FC<FindMentorProps> = () => {
         resource: "mentorshiprequests",
         body: body,
       });
+
+      setMentors((prevMentors) =>
+        prevMentors.filter((mentor) => mentor.id !== mentorId)
+      );
       showMessage("success", "Mentorship request sent successfully.");
     } catch (errors) {
       showMessage("error", errors);
@@ -95,6 +120,16 @@ const FindMentor: FC<FindMentorProps> = () => {
           content: mentor.topics.map((topic) => (
             <Tag key={topic.topic.id}>{topic.topic.name}</Tag>
           )),
+        },
+        {
+          title: "Rating",
+          content: (
+            <StarPicker
+              type="inline"
+              value={Math.round(mentor.score)}
+              size={"30px"}
+            />
+          ),
         },
         {
           className: styles.tags,

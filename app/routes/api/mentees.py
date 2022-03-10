@@ -130,7 +130,7 @@ def update(menteeId=None, user=None):
                              description=message).commit()
             else:
                 message = f'Your mentee {mentee.user.first_name} {mentee.user.last_name} has terminated your partnership. Please make sure to provide them with feedback by going to the "Your Mentees" page, and then to the "Past mentees" page.'
-                Notification(notification_level="alert", notification_type="mentoring", user_id=user.id,
+                Notification(notification_level="alert", notification_type="mentoring", user_id=mentee.mentor.user.id,
                              description=message).commit()
 
                 message = f'You have terminated your partnership with your mentor. Please make sure to provide them with feedback by going to the "Your Mentor" page, and then to the "Past mentors" page.'

@@ -13,29 +13,32 @@ import Button from "../../../components/UI/Button/Button";
 import { MentorFeedbackType } from "../../../types/MentorFeedback";
 import StarPicker from "../../../components/UI/FormInput/StarPicker/StarPicker";
 import UseSystemMessage from "../../../hooks/UseSystemMessage/UseSystemMessage";
+import LoadingSpinner from "../../../components/UI/LoadingSpinner/LoadingSpinner";
 
 interface PastMentorsProps {}
 
 const PastMentors: FC<PastMentorsProps> = () => {
-  const { mentee_feedback_given = [], mentee_id = null } = UseVerifyUser<{
-    mentee_feedback_given: any | [];
-    mentee_id: number | null;
-  }>({
-    userDataPolicies: [
-      {
-        dataPoint: "mentee.feedback_given",
-      },
-      {
-        dataPoint: "mentee.id",
-        redirectOnFail: "/dashboard",
-      },
-    ],
-  });
+  const { mentee_feedback_given = undefined, mentee_id = null } =
+    UseVerifyUser<{
+      mentee_feedback_given: any | [];
+      mentee_id: number | null;
+    }>({
+      userDataPolicies: [
+        {
+          dataPoint: "mentee.feedback_given",
+        },
+        {
+          dataPoint: "mentee.id",
+          redirectOnFail: "/dashboard",
+        },
+      ],
+    });
 
   return (
     <DashboardSubpageLayout title="Past Mentors" dashboardSection={"#learning"}>
       <div className={styles.PastMentors} data-testid="PastMentors">
         {mentee_id &&
+          mentee_feedback_given &&
           mentee_feedback_given.map((feedback: MentorFeedbackType) => (
             <ContentCard
               heading={`${feedback.mentor.user.first_name} ${feedback.mentor.user.last_name}`}
@@ -72,6 +75,10 @@ const PastMentors: FC<PastMentorsProps> = () => {
               ]}
             />
           ))}
+        {mentee_feedback_given && mentee_feedback_given.length === 0 && (
+          <p>You don't have any past mentors</p>
+        )}
+        {mentee_feedback_given === undefined && <LoadingSpinner />}
       </div>
     </DashboardSubpageLayout>
   );

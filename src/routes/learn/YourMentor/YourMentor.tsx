@@ -24,7 +24,11 @@ import SystemMessage from "../../../components/UI/SystemMessage/SystemMessage";
 interface YourMentorProps {}
 
 const YourMentor: FC<YourMentorProps> = () => {
-  const { mentee_mentor = undefined, mentee_id = undefined } = UseVerifyUser<{
+  const {
+    mentee_mentor = undefined,
+    mentee_id = undefined,
+    stateChangingHandler,
+  } = UseVerifyUser<{
     mentee_mentor: MentorType | null | undefined;
     mentee_id: number | null | undefined;
   }>({
@@ -52,6 +56,12 @@ const YourMentor: FC<YourMentorProps> = () => {
         resource: "mentees",
         body: body,
       });
+
+      stateChangingHandler((prevState) => ({
+        ...prevState,
+        mentee_mentor: null,
+      }));
+
       showMessage("success", "Mentorship terminated successfully.");
     } catch (errors) {
       showMessage("error", errors);
@@ -112,7 +122,10 @@ const YourMentor: FC<YourMentorProps> = () => {
             >
               <Button
                 buttonStyle="primary"
-                onClick={terminateMentorshipHandler.bind(null, mentee_id)}
+                onClick={() => {
+                  terminateMentorshipHandler(mentee_id);
+                  setShowWarning(false);
+                }}
               >
                 Confirm
               </Button>
@@ -122,7 +135,7 @@ const YourMentor: FC<YourMentorProps> = () => {
         ) : (
           <Fragment>
             {mentee_id === undefined && <LoadingSpinner />}
-            {mentee_id === null && (
+            {mentee_mentor === null && (
               <p>You don't have a mentor at the moment. </p>
             )}
           </Fragment>

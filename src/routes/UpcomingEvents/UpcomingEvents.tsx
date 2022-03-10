@@ -74,12 +74,15 @@ const UpcomingEvents: FC<UpcomingEventsProps> = (props) => {
     const meetingsSorted = meetingsUnion.sort((a, b) => {
       const aDate = new Date(a.date);
       const bDate = new Date(b.date);
-      return bDate.getTime() - aDate.getTime();
+      return aDate.getTime() - bDate.getTime();
     });
 
-    const futureMeetings = meetingsSorted.filter(
-      (meeting) => new Date(meeting.date) >= new Date()
-    );
+    const futureMeetings = meetingsSorted.filter((meeting) => {
+      const date = new Date(meeting.date);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      return date.getTime() >= today.getTime();
+    });
 
     setAllMeetings(futureMeetings);
 
@@ -94,7 +97,14 @@ const UpcomingEvents: FC<UpcomingEventsProps> = (props) => {
       )
     );
     setPastMeetings(
-      meetingsSorted.filter((meeting) => new Date(meeting.date) < new Date())
+      meetingsSorted
+        .filter((meeting) => {
+          const date = new Date(meeting.date);
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+          return date < today;
+        })
+        .reverse()
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(meetings_attending), JSON.stringify(meetings_hosted)]);

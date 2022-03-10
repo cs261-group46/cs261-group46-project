@@ -259,10 +259,16 @@ const Meetings: FC<MeetingsProps> = () => {
 
   useEffect(() => {
     setConfirmedMeetings((prevMeetings: MeetingType[]) => {
-      const filtered = mentormentee_meetings_attending.filter(
-        (meeting) =>
-          !prevMeetings.find((prevMeeting) => prevMeeting.id === meeting.id)
-      );
+      const filtered = mentormentee_meetings_attending.filter((meeting) => {
+        const date = new Date(meeting.date);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        return (
+          !prevMeetings.find((prevMeeting) => prevMeeting.id === meeting.id) &&
+          date.getTime() >= today.getTime()
+        );
+      });
       prevMeetings.push(...filtered);
       prevMeetings.sort(function (a, b) {
         // Turn your strings into dates, and then subtract them
@@ -278,10 +284,15 @@ const Meetings: FC<MeetingsProps> = () => {
 
   useEffect(() => {
     setConfirmedMeetings((prevMeetings: MeetingType[]) => {
-      const filtered = mentormentee_meetings_hosted.filter(
-        (meeting) =>
-          !prevMeetings.find((prevMeeting) => prevMeeting.id === meeting.id)
-      );
+      const filtered = mentormentee_meetings_hosted.filter((meeting) => {
+        const date = new Date(meeting.date);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        return (
+          !prevMeetings.find((prevMeeting) => prevMeeting.id === meeting.id) &&
+          date.getTime() >= today.getTime()
+        );
+      });
       prevMeetings.push(...filtered);
       prevMeetings.sort(function (a, b) {
         // Turn your strings into dates, and then subtract them
@@ -350,10 +361,6 @@ const Meetings: FC<MeetingsProps> = () => {
 
       stateChangingHandler((prevState) => {
         const filtered = prevState.meetings_invited.filter((m) => {
-          console.log(m.id);
-          console.log(meeting.id);
-          console.log(m.id !== meeting.id);
-
           return m.id !== meeting.id;
         });
         return { ...prevState, meetings_invited: filtered };
@@ -372,7 +379,7 @@ const Meetings: FC<MeetingsProps> = () => {
   };
 
   return (
-    <DashboardSubpageLayout title={"Meetings"} dashboardSection={"#home"}>
+    <DashboardSubpageLayout title={"Group Sessions"} dashboardSection={"#home"}>
       <Button href={`/meetings/${menteeId}/create`}>Create a Meeting</Button>
 
       <PagePicker
