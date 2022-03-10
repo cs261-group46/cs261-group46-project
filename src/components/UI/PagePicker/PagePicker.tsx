@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import Button from "../Button/Button";
-import Icon from "../Icon/Icon";
 import styles from "./PagePicker.module.scss";
+import arrow from "./arrow.svg";
 
 interface PagePickerProps {
   pickers: {
@@ -21,7 +21,7 @@ const PagePicker: FC<PagePickerProps> = (props) => (
   <div className={styles.PagePicker} data-testid="PagePicker">
     {props.buttons && (
       <button className={styles.sideButton} onClick={props.buttons.buttonLeft}>
-        <Icon icon="⬅️" className={styles.Icon} />
+        <img src={arrow} alt="left arrow" />
       </button>
     )}
     <div className={styles.pickers}>
@@ -44,12 +44,12 @@ const PagePicker: FC<PagePickerProps> = (props) => (
           className={`${styles.dot} ${
             picker.selected ? styles.SelectedDot : ""
           }`}
-        ></div>
+        />
       ))}
     </div>
     {props.buttons && (
       <button className={styles.sideButton} onClick={props.buttons.buttonRight}>
-        <Icon icon="➡️" className={styles.Icon} />
+        <img src={arrow} alt="right arrow" className={styles.flip} />
       </button>
     )}
   </div>
