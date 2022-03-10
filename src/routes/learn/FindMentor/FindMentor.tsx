@@ -70,7 +70,7 @@ const FindMentor: FC<FindMentorProps> = () => {
         resource: "mentorshiprequests",
         body: body,
       });
-      showMessage("error", "Mentorship request sent successfully.");
+      showMessage("success", "Mentorship request sent successfully.");
     } catch (errors) {
       showMessage("error", errors);
     }

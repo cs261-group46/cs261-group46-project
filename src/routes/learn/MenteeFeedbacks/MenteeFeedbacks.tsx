@@ -9,6 +9,8 @@ import UseSystemMessage from "../../../hooks/UseSystemMessage/UseSystemMessage";
 
 interface MenteeFeedbacksProps {}
 
+// TODO : FINISH THIS
+
 const MenteeFeedbacks: FC<MenteeFeedbacksProps> = () => {
   const { userId = null, mentee_received_feedback = [] } = UseVerifyUser<{
     userId: number | null;
@@ -17,10 +19,9 @@ const MenteeFeedbacks: FC<MenteeFeedbacksProps> = () => {
     userDataPolicies: [
       {
         dataPoint: "mentor.id",
-        redirectOnFail: "/dashboard",
       },
       {
-        dataPoint: "mentor.received_feedback",
+        dataPoint: "mentee.received_feedback",
       },
     ],
   });

@@ -175,7 +175,7 @@ const Meetings: FC<MeetingsProps> = () => {
     "mentor" | "mentee" | null
   >(null);
 
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const [showWarning, setShowWarning] = useState(false);
   const [showWarning2, setShowWarning2] = useState(false);
 

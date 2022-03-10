@@ -169,7 +169,10 @@ const EditPlansOfAction: FC<EditPlansOfActionProps> = () => {
   const savePlans = async () => {
     try {
       const requestBody = {
-        plansofaction: plansOfAction,
+        plansofaction: plansOfAction.map((plan) => ({
+          status: plan.status,
+          title: plan.title,
+        })),
       };
       await update({
         resource: "mentees",

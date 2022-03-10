@@ -85,7 +85,6 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
 
       return options;
     } catch (errors) {
-      console.log(errors);
       return [];
     }
   }, []);
@@ -192,9 +191,7 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
           value: room,
         }));
         // return rooms;
-      } catch (errors) {
-        showMessage("error", errors);
-      }
+      } catch (errors) {}
     },
     [showMessage]
   );

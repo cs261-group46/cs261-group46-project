@@ -65,7 +65,7 @@ const YourGroupSessions: FC<YourGroupSessionsProps> = () => {
 
   const showMessage = UseSystemMessage();
 
-  const [showWarning, setShowWarning] = useState(false);
+  const [showWarning, setShowWarning] = useState(-1);
   const expert_meetings_hosted = useMemo(
     () =>
       meetings_hosted
@@ -187,29 +187,29 @@ const YourGroupSessions: FC<YourGroupSessionsProps> = () => {
                     ]}
                     buttons={[
                       {
-                        onClick: setShowWarning.bind(null, true),
+                        onClick: setShowWarning.bind(null, meeting.id),
                         children: "Remove",
                       },
                     ]}
                   />
-                  {showWarning && (
+                  {showWarning === meeting.id && (
                     <SystemMessage
                       sort={"popup"}
                       type={"alert"}
                       description={`Are you sure you want to delete the ${meeting.title} session?`}
-                      visible={showWarning}
-                      onClose={setShowWarning.bind(null, false)}
+                      visible={true}
+                      onClose={setShowWarning.bind(null, -1)}
                     >
                       <Button
                         buttonStyle="primary"
                         onClick={() => {
-                          setShowWarning(false);
+                          setShowWarning(-1);
                           removeHandler(meeting.id);
                         }}
                       >
                         Confirm
                       </Button>
-                      <Button onClick={setShowWarning.bind(null, false)}>
+                      <Button onClick={setShowWarning.bind(null, -1)}>
                         Cancel
                       </Button>
                     </SystemMessage>
