@@ -239,8 +239,6 @@ const Meetings: FC<MeetingsProps> = () => {
         }
 
         return feedbacks.sort((f1, f2) => {
-          console.log(f1);
-
           const f1Date = new Date(f1.meeting.date);
           const f2Date = new Date(f2.meeting.date);
           return f2Date.getTime() - f1Date.getTime();
@@ -527,31 +525,29 @@ const Meetings: FC<MeetingsProps> = () => {
           mentormentee_meetings_feedback.length > 0 &&
           mentormentee_meetings_feedback.map((feedback, index) => {
             return (
-              <>
-                <ContentCard
-                  key={index}
-                  heading={feedback.meeting.title}
-                  sections={[
-                    {
-                      title: "When",
-                      content: getDateString(
-                        new Date(feedback.meeting.date),
-                        feedback.meeting.duration
-                      ),
-                    },
-                    {
-                      title: "Feedback",
-                      content: `"${feedback.feedback}" - ${
-                        feedback.user
-                          ? feedback.user.first_name +
-                            " " +
-                            feedback.user.last_name
-                          : "You"
-                      }`,
-                    },
-                  ]}
-                />
-              </>
+              <ContentCard
+                key={index}
+                heading={feedback.meeting.title}
+                sections={[
+                  {
+                    title: "When",
+                    content: getDateString(
+                      new Date(feedback.meeting.date),
+                      feedback.meeting.duration
+                    ),
+                  },
+                  {
+                    title: "Feedback",
+                    content: `"${feedback.feedback}" - ${
+                      feedback.user
+                        ? feedback.user.first_name +
+                          " " +
+                          feedback.user.last_name
+                        : "You"
+                    }`,
+                  },
+                ]}
+              />
             );
           })}
       </div>
