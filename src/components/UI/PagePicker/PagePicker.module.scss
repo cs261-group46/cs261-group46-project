@@ -26,7 +26,7 @@
     }
     .sideButton {
       width: 30px;
-      height: 30px;
+      height: 20px;
       position: absolute;
       border: none;
       border-radius: 12px;
@@ -80,7 +80,7 @@
 
     .picker {
       display: none;
-      height: 30px;
+      height: 20px;
       border-collapse: collapse;
 
       & button {
@@ -125,21 +125,33 @@
 
         button {
           border-radius: 0;
+          background-color: transparent;
+          border: $sq_black 2px solid;
+          border-left: none;
+          color: $sq_black;
+          height: 30px;
         }
       }
 
        .picker:first-of-type button {
-         border-bottom-left-radius: 10px;
-         border-top-left-radius: 10px;
+         border-bottom-left-radius: 15px;
+         border-top-left-radius: 15px;
+         border-left: $sq_black 2px solid;
        }
 
        .picker:last-of-type button {
-         border-bottom-right-radius: 10px;
-         border-top-right-radius: 10px;
+         border-bottom-right-radius: 15px;
+         border-top-right-radius: 15px;
        }
 
       .Selected button {
+        background-color: $sq_black;
+        color: white;
+      }
+
+      &.Highlighted button {
         background-color: $sq_red;
+        color: white;
       }
     }
   }
