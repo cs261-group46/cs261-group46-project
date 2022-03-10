@@ -120,7 +120,10 @@ const Interests: FC<InterestsProps> = () => {
   };
 
   return (
-    <DashboardSubpageLayout title="Your Interests">
+    <DashboardSubpageLayout
+      title="Your Interests"
+      dashboardSection={"#learning"}
+    >
       <SearchSelect
         id="interests"
         label="Fields of Interests"

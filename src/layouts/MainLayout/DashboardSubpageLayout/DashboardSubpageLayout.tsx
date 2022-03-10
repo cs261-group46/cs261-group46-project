@@ -5,6 +5,7 @@ import styles from "./DashboardSubpageLayout.module.scss";
 interface DashboardSubpageLayoutTemplateProps {
   children: React.ReactNode;
   title: string;
+  dashboardSection: "#home" | "#learning" | "#mentoring" | "#expertise";
 }
 
 const DashboardSubpageLayout: FC<DashboardSubpageLayoutTemplateProps> = (
@@ -14,7 +15,11 @@ const DashboardSubpageLayout: FC<DashboardSubpageLayoutTemplateProps> = (
   //   MainTemplate Component
   // </div>
   <MainLayout title={props.title}>
-    <Button className={styles.HomeButton} href="/Dashboard" icon="🏠">
+    <Button
+      className={styles.HomeButton}
+      href={`/dashboard${props.dashboardSection}`}
+      icon="🏠"
+    >
       Dashboard
     </Button>
     {props.children}

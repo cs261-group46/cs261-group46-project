@@ -62,7 +62,10 @@ const MentorFeedbacks: FC<MentorFeedbacksProps> = () => {
   );
 
   return (
-    <DashboardSubpageLayout title="Your Mentees">
+    <DashboardSubpageLayout
+      title="Your Mentees"
+      dashboardSection={"#mentoring"}
+    >
       {feedbackReceivedList.length === 0 && (
         <p>You haven't received any feedback from your mentees yet.</p>
       )}

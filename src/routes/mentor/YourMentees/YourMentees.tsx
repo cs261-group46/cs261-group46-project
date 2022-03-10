@@ -103,7 +103,10 @@ const YourMentees: FC<YourMenteeProps> = () => {
   );
 
   return (
-    <DashboardSubpageLayout title="Your Mentees">
+    <DashboardSubpageLayout
+      title="Your Mentees"
+      dashboardSection={"#mentoring"}
+    >
       <PagePicker
         pickers={[
           {

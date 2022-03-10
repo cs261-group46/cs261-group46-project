@@ -122,7 +122,10 @@ const ExpertExpertises: FC<ExpertExpertisesProps> = () => {
   };
 
   return (
-    <DashboardSubpageLayout title="Your Fields of Expertise">
+    <DashboardSubpageLayout
+      title="Your Fields of Expertise"
+      dashboardSection={"#expertise"}
+    >
       <SearchSelect
         id="expertises"
         label="Fields of Expertise"

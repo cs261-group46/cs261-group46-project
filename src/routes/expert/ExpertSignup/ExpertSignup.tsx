@@ -109,7 +109,10 @@ const ExpertSignup: FC<ExpertSignupProps> = () => {
   );
 
   return (
-    <DashboardSubpageLayout title={"Become an Expert"}>
+    <DashboardSubpageLayout
+      title={"Become an Expert"}
+      dashboardSection={"#expertise"}
+    >
       <SearchSelect
         id={"expertises"}
         label={"Areas of Expertises"}

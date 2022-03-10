@@ -118,7 +118,10 @@ const MenteeSignup: FC<MenteeSignupProps> = () => {
   };
 
   return (
-    <DashboardSubpageLayout title="Your Interests">
+    <DashboardSubpageLayout
+      title="Your Interests"
+      dashboardSection={"#learning"}
+    >
       <SearchSelect
         id="interests"
         label="Fields of Interests"
