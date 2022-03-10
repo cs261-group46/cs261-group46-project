@@ -36,8 +36,8 @@ const getDateString = (date: Date, duration: number) => {
 
 const YourGroupSessions: FC<YourGroupSessionsProps> = () => {
   const { meetings_hosted = undefined, stateChangingHandler } = UseVerifyUser<{
-    expert_id: number | null | undefined;
-    meetings_hosted: MeetingType[] | null | undefined;
+    expert_id: number | null;
+    meetings_hosted: MeetingType[] | [];
   }>({
     userDataPolicies: [
       {
