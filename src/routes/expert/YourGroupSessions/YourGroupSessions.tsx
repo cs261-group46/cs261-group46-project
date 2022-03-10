@@ -136,10 +136,7 @@ const YourGroupSessions: FC<YourGroupSessionsProps> = () => {
   const feedback = [];
 
   return (
-    <DashboardSubpageLayout
-      title={"Group Sessions"}
-      dashboardSection={"#expertise"}
-    >
+    <DashboardSubpageLayout title={"Group Sessions"}>
       <Button href="/expert/group-sessions/create">Create a Session</Button>
       <PagePicker
         pickers={[

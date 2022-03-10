@@ -246,10 +246,7 @@ const EditPlansOfAction: FC<EditPlansOfActionProps> = () => {
   };
 
   return (
-    <DashboardSubpageLayout
-      title={"Set Plans of Action"}
-      dashboardSection={"#mentoring"}
-    >
+    <DashboardSubpageLayout title={"Set Plans of Action"}>
       <div className={styles.EditPlansOfAction} data-testid="EditPlansOfAction">
         {
           // if plans have loaded
