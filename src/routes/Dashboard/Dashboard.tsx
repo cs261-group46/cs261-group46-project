@@ -191,8 +191,8 @@ const Dashboard: FC<DashboardProps> = () => {
           <Button icon={"📅"} href={"/calendar"}>
             Calendar
           </Button>
-          <Button icon={"⚙️"} href={"/give-feedback"}>
-            Give Feedback
+          <Button icon={"👍"} href={"/give-feedback"}>
+            Give Us Feedback
           </Button>
 
           <Button icon={"👋"} onClick={logoutHandler}>

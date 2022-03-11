@@ -41,7 +41,7 @@ const DashboardNavbar = (props: DashboardNavbarProps) => {
       <Button
         onClick={launchbarClickHandler.bind(null, 3)}
         className={`${styles.Button} ${pageVisible === 3 && styles.selected}`}
-        icon="🧑"
+        icon="👨‍🏫"
       >
         Your Mentoring
       </Button>
