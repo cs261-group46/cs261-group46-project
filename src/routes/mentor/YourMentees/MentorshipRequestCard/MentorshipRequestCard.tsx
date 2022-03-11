@@ -7,6 +7,7 @@ import ContentCard from "../../../../components/UI/ContentCard/ContentCard";
 import UseSystemMessage from "../../../../hooks/UseSystemMessage/UseSystemMessage";
 import { MenteeType } from "../../../../types/Mentee";
 import { MenteeFeedbackType } from "../../../../types/MenteeFeedback";
+import StarPicker from "../../../../components/UI/FormInput/StarPicker/StarPicker";
 
 //Probably need to pass mentor id along
 interface MentorshipRequestProp {
@@ -43,6 +44,16 @@ const MentorshipRequestCard: FC<MentorshipRequestProp> = (props) => {
           content: props.mentorshipRequest.mentee.topics.map((topic) => (
             <Tag key={topic.topic.id}>{topic.topic.name}</Tag>
           )),
+        },
+        {
+          title: "Rating",
+          content: (
+            <StarPicker
+              type="inline"
+              value={Math.round(props.mentorshipRequest.mentee.score)}
+              size={"30px"}
+            />
+          ),
         },
       ]}
       buttons={[

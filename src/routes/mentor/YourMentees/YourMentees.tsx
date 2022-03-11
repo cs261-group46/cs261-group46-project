@@ -110,7 +110,7 @@ const YourMentees: FC<YourMenteeProps> = () => {
           (m) => m.id !== mentee.id
         ),
       }));
-      showMessage("success", "Mentorship terminated successfully");
+      showMessage("success", "Mentorship terminated successfully.");
     } catch (errors) {
       showMessage("error", errors);
     }

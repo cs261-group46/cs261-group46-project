@@ -46,8 +46,18 @@ def store(user=None):
 
         db.session.commit()
 
-        Notification(notification_level="info", notification_type="learning", user=mentee.user,
+        Notification(notification_level="alert", notification_type="learning", user=mentee.user,
                      description='You have now become a mentee. When you wish to find a mentor, head over to the find "Find a mentor" page, where you can request mentorships from mentors. Once a mentor accepts your request, you will be able to set up your plans of action, track them, set up meetings with your mentor. Meanwhile, headover to the "Explore group sessions" page, where you can explore public group sessions and workshops hosted by experts, or private ones if you have received an invite by an expert.').commit()
+
+        for topic in selected_topics_ordered:
+            no_of_mentees_doing_topic = len(topic.mentees)
+            if no_of_mentees_doing_topic > 20 and no_of_mentees_doing_topic % 10 == 0:
+                for expert in topic.experts:
+                    n = Notification(notification_level="info", notification_type="expertise", user=expert.user, description=f"{topic.name} is a popular interest. Consider running a group session on it.")
+                    db.session.add(n)
+
+        db.session.commit()
+
 
         return {"success": True}, 200
     except:
@@ -93,10 +103,18 @@ def update(menteeId=None, user=None):
 
             db.session.commit()
 
-            # todo : add notification to expert
-
             Notification(notification_level="info", notification_type="learning", user_id=mentee.user.id,
                          description="Your mentee account details have changed").commit()
+
+            for topic in selected_topics_ordered:
+                no_of_mentees_doing_topic = len(topic.mentees)
+                if no_of_mentees_doing_topic > 20 and no_of_mentees_doing_topic % 10 == 0:
+                    for expert in topic.experts:
+                        n = Notification(notification_level="alert", notification_type="expertise", user=expert.user,
+                                     description=f"{topic.name} is a popular interest. Consider running a group session on it.")
+                        db.session.add(n)
+
+            db.session.commit()
 
         if data.get("plansofaction"):
             if (mentee.user.id != user.id) and (mentee.mentor.user.id != user.id):

@@ -1,5 +1,5 @@
 from flask import Blueprint, request
-from app import MentorFeedback
+from app import MentorFeedback, db
 from app.middleware.auth import auth_required
 from app.utils.cerberus_helpers import get_errors
 from app.validators.MentorFeedbacksValidators import updateValidator
@@ -29,6 +29,13 @@ def update(mentorfeedbackId=None, user=None):
         mentor_feedback.feedback = data.get("feedback")
         mentor_feedback.score = data.get("score")
         mentor_feedback.commit()
+
+        mentor = mentor_feedback.mentor
+        no_of_feedbacks = len(mentor.received_feedback)
+        s = mentor.score
+        mentor.score = ((s * no_of_feedbacks) + mentor_feedback.score) / (no_of_feedbacks + 1)
+        db.session.add(mentor)
+        db.session.commit()
 
         return {"success": True}, 200
 

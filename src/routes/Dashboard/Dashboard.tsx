@@ -19,7 +19,7 @@ import Icon from "../../components/UI/Icon/Icon";
 import { useLocation, useNavigate } from "react-router-dom";
 import UseVerifyUser from "../../hooks/UseVerifyUser/UseVerifyUser";
 import { MentorType } from "../../types/Mentor";
-import DashboardNavbar, { hashToSlot } from "./DashboardNavbar";
+import DashboardNavbar, { hashToSlot, pageHashes } from "./DashboardNavbar";
 
 interface DashboardProps {}
 
@@ -54,9 +54,15 @@ const Dashboard: FC<DashboardProps> = () => {
   });
 
   const { hash } = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!pageHashes.includes(hash)) {
+      navigate("/dashboard#home");
+    }
+  }, [hash, navigate]);
 
   const pageVisible = hashToSlot(hash);
-  const navigate = useNavigate();
 
   const [notificationsLearn, setNotificationsLearn] = useState<
     NotificationType<"learning">[]

@@ -10,4 +10,5 @@ export type MenteeType = {
   user: UserType;
   plans_of_action: PlanOfAction[];
   mentor?: MentorType;
+  score: number;
 };

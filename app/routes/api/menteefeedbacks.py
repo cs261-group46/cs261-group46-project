@@ -35,6 +35,13 @@ def update(menteefeedbackId=None, user=None):
         mentee_feedback.score = data.get("score")
         mentee_feedback.commit()
 
+        mentee = mentee_feedback.mentee
+        no_of_feedbacks = len(mentee.received_feedback)
+        s = mentee.score
+        mentee.score = ((s * no_of_feedbacks) + mentee_feedback.score) / (no_of_feedbacks + 1)
+        db.session.add(mentee)
+        db.session.commit()
+
         return {"success": True}, 200
 
     except:

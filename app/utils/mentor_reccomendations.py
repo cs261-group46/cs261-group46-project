@@ -12,14 +12,12 @@ def get_mentors(mentors, user):
     user_topics = [topic.topic for topic in sorted(user.mentee.topics, key=lambda topic: topic.priority)]
 
 
-    # print(user.mentee.topics.sort(key=lambda topic: topic.priority))
-    # for
     unordered_mentors = []
 
     for mentor in suitable_mentors:
         mentor_topics = [topic.topic for topic in sorted(mentor.topics, key=lambda topic: topic.priority)]
         value = RBO(mentor_topics, user_topics)
-        unordered_mentors.append((mentor, value))
+        unordered_mentors.append((mentor, value + ((mentor.score - 2.5)/10)))
 
     sorted_mentors = [mentorTuple[0] for mentorTuple in sorted(unordered_mentors, key=lambda tuple: tuple[1], reverse=True)]
 
@@ -27,7 +25,7 @@ def get_mentors(mentors, user):
     return sorted_mentors
 
 
-def RBO(list1, list2, p=0.9):
+def RBO(list1, list2, p=0.7):
     value = 0
 
     for d in range(1, min(len(list1), len(list2))+1):
