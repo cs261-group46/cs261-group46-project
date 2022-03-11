@@ -227,18 +227,19 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
       const body = {
         title: title,
         host: userId,
-        room: room[0].value.id,
+        room: room.length === 1 ? room[0].value.id : undefined,
         link: link,
         topics: topics.map((topic) => topic.value),
         date: date,
         startTime: startTime,
         endTime: endTime,
         description: description,
-        capacity: parseInt(capacity),
+        capacity: capacity ? parseInt(capacity) : undefined,
         visibility: visibility.value,
         type: type.value,
         invites: invites.map((invite) => invite.value),
       };
+
       await store({
         resource: "meetings",
         body: body,
@@ -281,7 +282,7 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
       endTimeValueValid &&
       topicsValueValid &&
       descriptionValueValid &&
-      ((parseInt(capacity) > 0 && room.length === 1) || link.length > 0)
+      (link.length > 0 || (parseInt(capacity) > 0 && room.length === 1))
     ) {
       // send off this event to the backend
       sendMeetingData();

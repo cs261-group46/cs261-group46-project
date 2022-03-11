@@ -27,7 +27,8 @@ class Meeting(db.Model):
     meeting_type = db.Column(db.String(18), db.CheckConstraint(
         "meeting_type IN ('workshop', 'group session', 'one on one meeting')"))
     duration = db.Column(db.Integer, nullable=False)
-    capacity = db.Column(db.Integer, nullable=False)
+    capacity = db.Column(db.Integer, nullable=True)
+    description = db.Column(db.Text, nullable=True, default="")
     # status = db.Column(db.Text, nullable=False)
 
     room = db.relationship("Room", backref="meetings", lazy=True)

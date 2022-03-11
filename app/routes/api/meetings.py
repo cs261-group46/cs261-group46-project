@@ -72,7 +72,7 @@ def delete(meetingID=None, user=None):
 @meetings.route("/", methods=["POST"])
 @auth_required
 def store(user=None):
-    try:
+    # try:
         data = dict(request.get_json())
         storeValidator.validate(data)
         if storeValidator.errors:
@@ -108,9 +108,9 @@ def store(user=None):
             return {"success": False, "errors": ["Start date and time needs to be in the future"]}, 400
 
 
-        room_id = data.get("room")
-        capacity = data.get("capacity")
-        link = data.get("link")
+        room_id = None if not data.get("room") else data.get("room")
+        capacity = None if not data.get("capacity") else data.get("capacity")
+        link = None if not data.get("link") else data.get("link")
 
         if (not ((capacity and room_id) or link)):
             return {"success": False, "errors": ["For in person events - please specify the room and capacity. For online events - please specify the link."]}, 400
@@ -121,7 +121,7 @@ def store(user=None):
         if data.get("visibility") == "public":
             users = User.query.filter(User.id != user.id).all()
             meeting = Meeting(host_id=data.get("host"), title=data.get("title"), date=start_date_time, room_id=room_id,
-                    link=data.get("link"), meeting_type=meeting_type, duration=duration, capacity=data.get("capacity"), invited=users).commit()
+                    link=data.get("link"), meeting_type=meeting_type, duration=duration, capacity=data.get("capacity"), invited=users, description=data.get("description")).commit()
 
             if data.get("topics"):
                 for t in data.get("topics"):
@@ -140,7 +140,7 @@ def store(user=None):
             users = User.query.filter(User.id.in_([invite.get("id") for invite in data.get("invites")])).filter(User.email.in_([invite.get("email") for invite in data.get("invites")])).all()
             meeting = Meeting(host_id=data.get("host"), title=data.get("title"), date=start_date_time, room_id=room_id,
                     link=data.get("link"), meeting_type=meeting_type, duration=duration, capacity=data.get("capacity"),
-                    invited=users).commit()
+                    invited=users, description=data.get("description")).commit()
 
             if data.get("topics"):
                 for t in data.get("topics"):
@@ -169,6 +169,6 @@ def store(user=None):
 
         return {"success": True}, 200
 
-    except:
-        return {"success": False, "errors": ["An unexpected error occurred"]}, 400
+    # except:
+    #     return {"success": False, "errors": ["An unexpected error occurred"]}, 400
 

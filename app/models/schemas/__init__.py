@@ -134,6 +134,7 @@ class MeetingSchema(ma.SQLAlchemySchema):
     meeting_type = ma.auto_field()
     duration = ma.auto_field()
     capacity = ma.auto_field()
+    description = ma.auto_field()
     host = ma.Nested(UserSchema(exclude=["notifications", "mentee", "mentor", "expert", "meetings_hosted", "meetings_attending", "meeting_feedback", "meetings_invited", "permissions"]))
     attendees = ma.Nested(UserSchema(exclude=["meetings_invited", "mentor", "mentee", "expert", "permissions", "notifications", "meetings_hosted", "meetings_attending", "meeting_feedback"]), many=True)
     invited = ma.Nested(UserSchema(exclude=["meetings_invited", "mentor", "mentee", "expert", "permissions", "notifications", "meetings_hosted", "meetings_attending", "meeting_feedback"]), many=True)

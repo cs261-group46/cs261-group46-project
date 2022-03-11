@@ -183,6 +183,24 @@ const UpcomingEvents: FC<UpcomingEventsProps> = (props) => {
                 title: "Type",
                 content: <Tag>{meeting.meeting_type}</Tag>,
               },
+              !!meeting.room && {
+                title: "Where",
+                content: meeting.room.name,
+              },
+              !!meeting.link && {
+                title: "Link",
+                content: meeting.link,
+              },
+              {
+                className: styles.tags,
+                title: "Online/In-person",
+                content: (
+                  <>
+                    {meeting.room && <Tag>In-person</Tag>}
+                    {meeting.link && <Tag>Online</Tag>}
+                  </>
+                ),
+              },
               meeting.topics.length > 0 && {
                 className: styles.tags,
                 title: "Topics Covered",
@@ -228,6 +246,24 @@ const UpcomingEvents: FC<UpcomingEventsProps> = (props) => {
                 title: "Type",
                 content: <Tag>{meeting.meeting_type}</Tag>,
               },
+              !!meeting.room && {
+                title: "Where",
+                content: meeting.room.name,
+              },
+              !!meeting.link && {
+                title: "Link",
+                content: meeting.link,
+              },
+              {
+                className: styles.tags,
+                title: "Online/In-person",
+                content: (
+                  <>
+                    {meeting.room && <Tag>In-person</Tag>}
+                    {meeting.link && <Tag>Online</Tag>}
+                  </>
+                ),
+              },
               meeting.topics.length > 0 && {
                 className: styles.tags,
                 title: "Topics Covered",
@@ -251,6 +287,10 @@ const UpcomingEvents: FC<UpcomingEventsProps> = (props) => {
             heading={meeting.title}
             sections={[
               {
+                title: "Description",
+                content: meeting.description,
+              },
+              {
                 title: "Host",
                 content: meeting.host
                   ? `${meeting.host.first_name} ${meeting.host.last_name}`
@@ -271,6 +311,24 @@ const UpcomingEvents: FC<UpcomingEventsProps> = (props) => {
                 className: styles.tags,
                 title: "Type",
                 content: <Tag>{meeting.meeting_type}</Tag>,
+              },
+              !!meeting.room && {
+                title: "Where",
+                content: meeting.room.name,
+              },
+              !!meeting.link && {
+                title: "Link",
+                content: meeting.link,
+              },
+              {
+                className: styles.tags,
+                title: "Online/In-person",
+                content: (
+                  <>
+                    {meeting.room && <Tag>In-person</Tag>}
+                    {meeting.link && <Tag>Online</Tag>}
+                  </>
+                ),
               },
               meeting.topics.length > 0 && {
                 className: styles.tags,

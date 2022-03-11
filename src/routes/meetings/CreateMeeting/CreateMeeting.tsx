@@ -143,13 +143,15 @@ const CreateMeeting: FC<CreateMeetingProps> = () => {
     blurHandler: roomBlurHandler,
     isInputValid: roomInputValid,
     isValueValid: roomValueValid,
-  } = useInput<SearchSelectOptions<Room>>([], (value) => value.length === 1);
+  } = useInput<SearchSelectOptions<Room>>([], (value) => value.length <= 1);
 
   const {
     enteredValue: link,
+    isInputValid: linkInputValid,
+    isValueValid: linkValueValid,
     changeHandler: linkChangeHandler,
     blurHandler: linkBlurHandler,
-  } = useInput<string>("");
+  } = useInput<string>("", (value) => value.length < 200);
 
   const {
     enteredValue: date,
@@ -211,7 +213,7 @@ const CreateMeeting: FC<CreateMeetingProps> = () => {
     const body = {
       title: title,
       host: userId,
-      room: room[0].value.id,
+      room: room.length === 1 ? room[0].value.id : undefined,
       link: link,
       date: date,
       startTime: startTime,
@@ -244,6 +246,7 @@ const CreateMeeting: FC<CreateMeetingProps> = () => {
     dateBlurHandler();
     descriptionBlurHandler();
     titleBlurHandler();
+    linkBlurHandler();
   }
 
   const submitHandler: FormEventHandler = (event) => {
@@ -254,12 +257,20 @@ const CreateMeeting: FC<CreateMeetingProps> = () => {
       startTimeValueValid &&
       endTimeValueValid &&
       descriptionValueValid &&
-      titleValueValid
+      titleValueValid &&
+      linkValueValid &&
+      (link.length > 0 || room.length === 1)
     ) {
       sendMeetingData();
       // send off this event to the backend
     } else {
       showErrors();
+      if (!(room.length === 1 || link.length > 0)) {
+        showMessage(
+          "error",
+          "For in person events - please specify the room. For online events - please specify the link."
+        );
+      }
     }
   };
 
@@ -272,6 +283,11 @@ const CreateMeeting: FC<CreateMeetingProps> = () => {
       >
         {validated && (
           <Fragment>
+            <p>
+              For online events, capacity and room is not required. For
+              in-person events, link is not required. An event can be both
+              online and in person.
+            </p>
             <TextInput
               id={"title"}
               label={"Session Title"}
@@ -347,7 +363,7 @@ const CreateMeeting: FC<CreateMeetingProps> = () => {
               icon="🔗"
               placeholder={"Please provide the meeting link"}
               value={link}
-              isValid={true}
+              isValid={linkInputValid}
               onChange={linkChangeHandler}
               onBlur={linkBlurHandler}
             />

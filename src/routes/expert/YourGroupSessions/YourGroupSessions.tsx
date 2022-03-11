@@ -68,12 +68,22 @@ const YourGroupSessions: FC<YourGroupSessionsProps> = () => {
 
   const [expert_meetings_hosted, set_expert_meetings_hosted] =
     useState<MeetingType[]>();
+  const [expert_meetings_hosted_all, set_expert_meetings_hosted_all] =
+    useState<MeetingType[]>();
 
   const [expert_meetings_feedback, set_expert_meetings_feedback] =
     useState<MeetingFeedbackType[]>();
 
   const [showWarning, setShowWarning] = useState(-1);
   useEffect(() => {
+    set_expert_meetings_hosted_all(
+      meetings_hosted
+        ? meetings_hosted.filter((meeting) => {
+            return meeting.meeting_type !== "one on one meeting";
+          })
+        : undefined
+    );
+
     set_expert_meetings_hosted(
       meetings_hosted
         ? meetings_hosted.filter((meeting) => {
@@ -91,11 +101,11 @@ const YourGroupSessions: FC<YourGroupSessionsProps> = () => {
   }, [JSON.stringify(meetings_hosted)]);
 
   useEffect(() => {
-    if (expert_meetings_hosted) {
+    if (expert_meetings_hosted_all) {
       set_expert_meetings_feedback(() => {
         let feedbacks: MeetingFeedbackType[] = [];
 
-        for (const m of expert_meetings_hosted) {
+        for (const m of expert_meetings_hosted_all) {
           feedbacks = feedbacks.concat(
             m.feedback.map((feedback) => ({ ...feedback, meeting: m }))
           );
@@ -109,7 +119,7 @@ const YourGroupSessions: FC<YourGroupSessionsProps> = () => {
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [JSON.stringify(expert_meetings_hosted)]);
+  }, [JSON.stringify(expert_meetings_hosted_all)]);
 
   // const [groupSessions, setGroupSessions] = useState<YourGroupSessionType[]>();
   const [subpage, setSubpage] = useState(0);
@@ -176,21 +186,39 @@ const YourGroupSessions: FC<YourGroupSessionsProps> = () => {
                       heading={meeting.title}
                       sections={[
                         {
+                          title: "Description",
+                          content: meeting.description,
+                        },
+                        {
                           title: "When",
                           content: getDateString(
                             new Date(meeting.date),
                             meeting.duration
                           ),
                         },
-                        {
+                        !!meeting.room && {
                           title: "Where",
                           content: meeting.room.name,
                         },
-                        {
+                        !!meeting.capacity && {
                           title: "Capacity",
                           content: `${
                             meeting.capacity - meeting.attendees.length
                           } / ${meeting.capacity} slots left`,
+                        },
+                        !!meeting.link && {
+                          title: "Link",
+                          content: meeting.link,
+                        },
+                        {
+                          className: styles.tags,
+                          title: "Online/In-person",
+                          content: (
+                            <>
+                              {meeting.room && <Tag>In-person</Tag>}
+                              {meeting.link && <Tag>Online</Tag>}
+                            </>
+                          ),
                         },
                         {
                           className: styles.tags,
