@@ -8,6 +8,8 @@ class Mentee(db.Model):
     mentor_id = db.Column(db.Integer, db.ForeignKey(
         'mentors.id'), nullable=True)
     about = db.Column(db.Text, nullable=True)
+    score = db.Column(db.Float, nullable=False, default=2.5)
+
     weight = db.Column(db.Float, nullable=False, default=0.5)
 
     user = db.relationship("User", backref=db.backref("mentee", uselist=False))

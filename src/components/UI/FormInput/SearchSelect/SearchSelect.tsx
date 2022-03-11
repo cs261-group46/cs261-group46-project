@@ -37,6 +37,7 @@ interface SearchSelectProps<T> {
   onChange: (input: SearchSelectOptions<T>) => void;
   onBlur: () => void;
   type?: OptionsType;
+  className?: string;
 }
 
 function SearchSelect<T>(props: PropsWithChildren<SearchSelectProps<T>>) {
@@ -122,7 +123,7 @@ function SearchSelect<T>(props: PropsWithChildren<SearchSelectProps<T>>) {
 
   return (
     <div
-      className={styles.MultiSelect}
+      className={`${styles.MultiSelect} ${props.className ?? ""}`}
       tabIndex={0}
       onFocus={focusHandler}
       onBlur={blurHandler}
