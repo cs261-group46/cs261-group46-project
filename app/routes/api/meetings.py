@@ -109,6 +109,13 @@ def store(user=None):
 
 
         room_id = data.get("room")
+        capacity = data.get("capacity")
+        link = data.get("link")
+
+        if (not ((capacity and room_id) or link)):
+            return {"success": False, "errors": ["For in person events - please specify the room and capacity. For online events - please specify the link."]}, 400
+
+
         meeting_type = data.get("type")
 
         if data.get("visibility") == "public":

@@ -10,6 +10,9 @@ describe("<MenteeCard />", () => {
     render(
       <BrowserRouter>
         <MenteeCard
+          onTerminateMentorship={function (mentee: MenteeType): void {
+            throw new Error("Function not implemented.");
+          }}
           mentee={{
             about: "",
             id: 0,
@@ -26,9 +29,7 @@ describe("<MenteeCard />", () => {
             },
             plans_of_action: [],
             mentor: undefined,
-          }}
-          onTerminateMentorship={function (mentee: MenteeType): void {
-            throw new Error("Function not implemented.");
+            score: 0,
           }}
         />
       </BrowserRouter>

@@ -22,7 +22,7 @@ class Meeting(db.Model):
     host_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     title = db.Column(db.String(128), nullable=False)
     date = db.Column(db.DateTime, nullable=False)
-    room_id = db.Column(db.Integer, db.ForeignKey("rooms.id"), nullable=False)
+    room_id = db.Column(db.Integer, db.ForeignKey("rooms.id"), nullable=True)
     link = db.Column(db.Text, nullable=True)
     meeting_type = db.Column(db.String(18), db.CheckConstraint(
         "meeting_type IN ('workshop', 'group session', 'one on one meeting')"))

@@ -73,7 +73,7 @@ storeValidationRules = {
         'maxlength': 100
     },
     'room': {
-        'required': True,
+        'required': False,
         'type': 'integer',
         'min': 1,
     },

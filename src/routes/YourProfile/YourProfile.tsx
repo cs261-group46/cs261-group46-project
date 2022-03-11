@@ -7,6 +7,7 @@ import { FullUserType } from "../../types/User";
 import UseVerifyUser from "../../hooks/UseVerifyUser/UseVerifyUser";
 import LoadingSpinner from "../../components/UI/LoadingSpinner/LoadingSpinner";
 import Button from "../../components/UI/Button/Button";
+import StarPicker from "../../components/UI/FormInput/StarPicker/StarPicker";
 
 interface YourProfileProps {}
 
@@ -55,6 +56,16 @@ const YourProfile: FC<YourProfileProps> = () => {
                   title: "Capacity",
                   content: user.user.mentor.capacity,
                 },
+                user.user.mentor && {
+                  title: "Rating on your Mentorship",
+                  content: (
+                    <StarPicker
+                      type="inline"
+                      value={Math.round(user.user.mentor.score)}
+                      size={"30px"}
+                    />
+                  ),
+                },
                 user.user.expert && {
                   title: "Areas of Expertise",
                   className: styles.Tags,
@@ -78,6 +89,16 @@ const YourProfile: FC<YourProfileProps> = () => {
                     title: "Your Mentor",
                     content: `${user.user.mentee.mentor.user.first_name} ${user.user.mentee.mentor.user.last_name}`,
                   },
+                user.user.mentee && {
+                  title: "Rating on you as a mentee",
+                  content: (
+                    <StarPicker
+                      type="inline"
+                      value={Math.round(user.user.mentee.score)}
+                      size={"30px"}
+                    />
+                  ),
+                },
               ]}
             />
           </>

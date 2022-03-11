@@ -1,9 +1,12 @@
-import React, { lazy, Suspense } from 'react';
+import React, { lazy, Suspense } from "react";
+import LoadingSpinner from "../../../components/UI/LoadingSpinner/LoadingSpinner";
 
-const LazyYourMentor = lazy(() => import('./YourMentor'));
+const LazyYourMentor = lazy(() => import("./YourMentor"));
 
-const YourMentor = (props: JSX.IntrinsicAttributes & { children?: React.ReactNode; }) => (
-  <Suspense fallback={null}>
+const YourMentor = (
+  props: JSX.IntrinsicAttributes & { children?: React.ReactNode }
+) => (
+  <Suspense fallback={<LoadingSpinner />}>
     <LazyYourMentor {...props} />
   </Suspense>
 );

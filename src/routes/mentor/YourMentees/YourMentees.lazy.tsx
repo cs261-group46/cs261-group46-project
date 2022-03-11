@@ -1,14 +1,14 @@
 import React, { lazy, Suspense } from "react";
 import LoadingSpinner from "../../../components/UI/LoadingSpinner/LoadingSpinner";
 
-const LazyPastMentors = lazy(() => import("./PastMentors"));
+const LazyYourMentees = lazy(() => import("./YourMentees"));
 
-const PastMentors = (
+const YourMentees = (
   props: JSX.IntrinsicAttributes & { children?: React.ReactNode }
 ) => (
   <Suspense fallback={<LoadingSpinner />}>
-    <LazyPastMentors {...props} />
+    <LazyYourMentees {...props} />
   </Suspense>
 );
 
-export default PastMentors;
+export default YourMentees;

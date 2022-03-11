@@ -55,7 +55,7 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
     blurHandler: roomBlurHandler,
     isInputValid: roomInputValid,
     isValueValid: roomValueValid,
-  } = useInput<SearchSelectOptions<Room>>([], (value) => value.length === 1);
+  } = useInput<SearchSelectOptions<Room>>([], (value) => value.length <= 1);
 
   const {
     enteredValue: invites,
@@ -106,9 +106,11 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
 
   const {
     enteredValue: link,
+    isInputValid: linkInputValid,
+    isValueValid: linkValueValid,
     changeHandler: linkChangeHandler,
     blurHandler: linkBlurHandler,
-  } = useInput<string>("");
+  } = useInput<string>("", (value) => value.length < 200);
 
   const {
     enteredValue: date,
@@ -152,7 +154,10 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
     isInputValid: capacityInputValid,
     isValueValid: capacityValueValid,
     blurHandler: capacityBlurHandler,
-  } = useInput<string>("");
+  } = useInput<string>(
+    "",
+    (capacity) => parseInt(capacity === "" ? "0" : capacity) < 1000
+  );
 
   const {
     enteredValue: visibility,
@@ -193,7 +198,7 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
         // return rooms;
       } catch (errors) {}
     },
-    [showMessage]
+    []
   );
 
   const invitesSearchPromise: SearchPromise<{
@@ -267,6 +272,7 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
       roomValueValid &&
       startTimeValueValid &&
       capacityValueValid &&
+      linkValueValid &&
       visibilityValueValid &&
       dateValueValid &&
       typeValueValid &&
@@ -274,17 +280,29 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
       titleValueValid &&
       endTimeValueValid &&
       topicsValueValid &&
-      descriptionValueValid
+      descriptionValueValid &&
+      ((parseInt(capacity) > 0 && room.length === 1) || link.length > 0)
     ) {
       // send off this event to the backend
       sendMeetingData();
     } else {
       showErrors();
+
+      if (!((parseInt(capacity) > 0 && room.length === 1) || link.length > 0)) {
+        showMessage(
+          "error",
+          "For in person events - please specify the room and capacity. For online events - please specify the link."
+        );
+      }
     }
   };
 
   return (
     <DashboardSubpageLayout title={"Create a Group Session"}>
+      <p>
+        For online events, capacity and room is not required. For in-person
+        events, link is not required. An event can be both online and in person.
+      </p>
       <TextInput
         id={"title"}
         label={"Session Title"}
@@ -404,7 +422,7 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
         icon="👥"
         placeholder={""}
         value={capacity}
-        isValid={true}
+        isValid={capacityInputValid}
         type={"number"}
         onChange={capacityChangeHandler}
         onBlur={capacityBlurHandler}
@@ -428,7 +446,7 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
         icon="🔗"
         placeholder={"Please provide the meeting link"}
         value={link}
-        isValid={true}
+        isValid={linkInputValid}
         onChange={linkChangeHandler}
         onBlur={linkBlurHandler}
       />

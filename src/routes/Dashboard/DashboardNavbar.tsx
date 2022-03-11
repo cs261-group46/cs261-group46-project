@@ -6,7 +6,7 @@ interface DashboardNavbarProps {
   hash?: string;
 }
 
-const pageHashes = ["#home", "#learning", "#mentoring", "#expertise"];
+export const pageHashes = ["#home", "#learning", "#mentoring", "#expertise"];
 
 export function hashToSlot(hash: string) {
   return pageHashes.indexOf(hash) + 1;

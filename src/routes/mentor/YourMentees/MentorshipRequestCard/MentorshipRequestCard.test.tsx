@@ -8,6 +8,12 @@ describe("<MentorshipRequestCard />", () => {
   test("it should mount", () => {
     render(
       <MentorshipRequestCard
+        onProcessRequest={function (
+          mentorshipRequest: MentorshipRequestType,
+          accepted: boolean
+        ): void {
+          throw new Error("Function not implemented.");
+        }}
         mentorshipRequest={{
           id: 0,
           mentee: {
@@ -25,13 +31,8 @@ describe("<MentorshipRequestCard />", () => {
               last_name: "",
             },
             plans_of_action: [],
+            score: 0,
           },
-        }}
-        onProcessRequest={function (
-          mentorshipRequest: MentorshipRequestType,
-          accepted: boolean
-        ): void {
-          throw new Error("Function not implemented.");
         }}
       />
     );

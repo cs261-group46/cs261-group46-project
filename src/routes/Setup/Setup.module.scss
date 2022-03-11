@@ -28,11 +28,16 @@
   .a {
     color: $sq_dark_gray;
     font-weight: bold;
-    font-size: 17px;
+    font-size: 15px;
+    margin-bottom: 60px;
   }
 
   .together {
     display: flex;
     gap: 20px;
+  }
+
+  .expertises {
+    margin: 60px 0 10px 0;
   }
 }
