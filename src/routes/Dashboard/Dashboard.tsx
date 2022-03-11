@@ -53,16 +53,18 @@ const Dashboard: FC<DashboardProps> = () => {
     ],
   });
 
-  const { hash } = useLocation();
   const navigate = useNavigate();
+  const { hash } = useLocation();
+  // remove invalid hashes
+  if (hash !== "" && hashToSlot(hash) === 0) navigate("/dashboard");
+
+  const pageVisible = hash !== "" ? hashToSlot(hash) : 1;
 
   useEffect(() => {
     if (!pageHashes.includes(hash)) {
       navigate("/dashboard#home");
     }
   }, [hash, navigate]);
-
-  const pageVisible = hashToSlot(hash);
 
   const [notificationsLearn, setNotificationsLearn] = useState<
     NotificationType<"learning">[]
