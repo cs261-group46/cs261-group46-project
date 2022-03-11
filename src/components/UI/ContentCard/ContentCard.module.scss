@@ -2,6 +2,16 @@
 
 .ContentCard {
   margin-bottom: 30px;
+  .sections {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+    & > div {
+      width: 50%;
+    }
+  }
   &:hover,
   &:focus-visible {
     outline: 3px solid $sq_dark_gray;
@@ -22,7 +32,7 @@
   }
 
   .Section {
-    margin: 40px 0;
+    margin: 10px 0;
   }
   .subtitle {
     margin: 0px;
@@ -42,6 +52,20 @@
     gap: 15px;
     .Icon {
       height: 20px;
+    }
+  }
+}
+@media only screen and (min-width: 1500px) {
+  .ContentCard {
+    .sections {
+      display: flex;
+      flex-direction: row;
+      gap: 0;
+      flex-wrap: wrap;
+      margin-bottom: 30px;
+      & > div {
+        width: 50%;
+      }
     }
   }
 }

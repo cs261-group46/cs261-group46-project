@@ -28,24 +28,25 @@ const ContentCard: FC<ContentCardProps> = (props) => (
     <div className={styles.Heading} data-testid={"ContentCard"}>
       {props.heading}
     </div>
-
-    {props.sections.map((section, i) => {
-      return (
-        section && (
-          <div key={i} className={styles.Section}>
-            <div className={styles.title}>
-              {section.icon && (
-                <Icon icon={section.icon} className={styles.Icon} />
-              )}
-              <Title className={styles.subtitle} text={`${section.title}:`} />
+    <div className={styles.sections}>
+      {props.sections.map((section, i) => {
+        return (
+          section && (
+            <div key={i} className={styles.Section}>
+              <div className={styles.title}>
+                {section.icon && (
+                  <Icon icon={section.icon} className={styles.Icon} />
+                )}
+                <Title className={styles.subtitle} text={`${section.title}:`} />
+              </div>
+              <div className={`${styles.subtext} ${section.className ?? ""}`}>
+                {section.content}
+              </div>
             </div>
-            <div className={`${styles.subtext} ${section.className ?? ""}`}>
-              {section.content}
-            </div>
-          </div>
-        )
-      );
-    })}
+          )
+        );
+      })}
+    </div>
 
     <div className={styles.Buttons}>
       {props.buttons &&
