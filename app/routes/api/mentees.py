@@ -46,7 +46,7 @@ def store(user=None):
 
         db.session.commit()
 
-        Notification(notification_level="alert", notification_type="learning", user=mentee.user,
+        Notification(notification_level="info", notification_type="learning", user=mentee.user,
                      description='You have now become a mentee. When you wish to find a mentor, head over to the find "Find a mentor" page, where you can request mentorships from mentors. Once a mentor accepts your request, you will be able to set up your plans of action, track them, set up meetings with your mentor. Meanwhile, headover to the "Explore group sessions" page, where you can explore public group sessions and workshops hosted by experts, or private ones if you have received an invite by an expert.').commit()
 
         for topic in selected_topics_ordered:
