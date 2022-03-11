@@ -1,6 +1,6 @@
 from flask import Blueprint, request
 
-from app import MenteeFeedback
+from app import MenteeFeedback, db
 from app.middleware.auth import auth_required
 from app.utils.cerberus_helpers import get_errors
 from app.validators.MenteeFeedbacksValidators import updateValidator
@@ -31,6 +31,13 @@ def update(menteefeedbackId=None, user=None):
         mentee_feedback.feedback = data.get("feedback")
         mentee_feedback.score = data.get("score")
         mentee_feedback.commit()
+
+        mentee = mentee_feedback.mentee
+        no_of_feedbacks = len(mentee.received_feedback)
+        s = mentee.score
+        mentee.score = ((s * no_of_feedbacks) + mentee_feedback.score) / (no_of_feedbacks + 1)
+        db.session.add(mentee)
+        db.session.commit()
 
         return {"success": True}, 200
 

@@ -128,11 +128,13 @@ const Setup = () => {
               onBlur={expertisesBlurHandler}
               icon="💪"
               searchPromise={searchPromise}
+              className={styles.expertises}
             />
-
-            <Link className={styles.a} to="/dashboard">
-              No, I would not like to be an expert
-            </Link>
+            <div className={styles.a}>
+              <Link className={styles.a} to="/dashboard">
+                No, I would not like to be an expert
+              </Link>
+            </div>
             <Button icon="➡️" buttonStyle="primary" onClick={submitHandler}>
               Continue
             </Button>

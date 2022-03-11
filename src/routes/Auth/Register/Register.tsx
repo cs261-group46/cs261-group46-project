@@ -117,7 +117,7 @@ const Register: FC = () => {
       isValueEmailValid &&
       isValuePasswordValid &&
       isValueRepeatedPasswordValid &&
-      isValueDeprtmentPasswordValid
+      isValueDepartmentValid
     ) {
       sendRegistrationData();
     } else {
@@ -200,7 +200,7 @@ const Register: FC = () => {
   const {
     enteredValue: enteredDepartment,
     isInputValid: isInputDepartmentValid,
-    isValueValid: isValueDeprtmentPasswordValid,
+    isValueValid: isValueDepartmentValid,
     changeHandler: departmentChangeHandler,
     blurHandler: departmentBlurHandler,
   } = useInput<SelectOption<number>>({ value: -1 }, validateDepartment);

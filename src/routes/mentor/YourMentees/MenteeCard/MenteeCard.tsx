@@ -4,30 +4,13 @@ import BarChart from "../../../../components/UI/BarChart/BarChart";
 import { MenteeType } from "../../../../types/Mentee";
 import Tag from "../../../../components/UI/Tag/Tag";
 import ContentCard from "../../../../components/UI/ContentCard/ContentCard";
-import { update } from "../../../../api/api";
-import UseSystemMessage from "../../../../hooks/UseSystemMessage/UseSystemMessage";
 import SystemMessage from "../../../../components/UI/SystemMessage/SystemMessage";
 import Button from "../../../../components/UI/Button/Button";
-import { MentorshipRequestType } from "../../../../types/MentorshipRequest";
-import { MenteeFeedbackType } from "../../../../types/MenteeFeedback";
 
 //Probably need to pass mentor id along
 interface MenteeProp {
-  //   id: number;
-  //   firstname: string;
-  //   lastname: string;
-  //   completedGoal: number;
-  //   totalGoal: number;
   mentee: MenteeType;
-  stateChangingHandler: React.Dispatch<
-    React.SetStateAction<{
-      userId: number | null | undefined;
-      mentor_id: number | null | undefined;
-      mentor_mentees: MenteeType[] | [];
-      mentor_mentorship_requests_received: MentorshipRequestType[] | [];
-      mentor_feedback_given: MenteeFeedbackType[] | [];
-    }>
-  >;
+  onTerminateMentorship: (mentee: MenteeType) => void;
 }
 
 const MenteeCard: FC<MenteeProp> = (props) => {
@@ -37,30 +20,7 @@ const MenteeCard: FC<MenteeProp> = (props) => {
     (plan) => plan.status === "completed"
   );
 
-  const showMessage = UseSystemMessage();
   const [showWarning, setShowWarning] = useState(false);
-
-  const terminateMentorshipHandler = async (menteeId: number) => {
-    try {
-      const body = {
-        mentor: -1,
-      };
-      await update({
-        entity: menteeId,
-        resource: "mentees",
-        body: body,
-      });
-      props.stateChangingHandler((prevState) => ({
-        ...prevState,
-        mentor_mentees: prevState.mentor_mentees.filter(
-          (m) => m.id !== menteeId
-        ),
-      }));
-      showMessage("success", "Mentorship terminated successfully");
-    } catch (errors) {
-      showMessage("error", errors);
-    }
-  };
 
   return (
     <>
@@ -132,7 +92,7 @@ const MenteeCard: FC<MenteeProp> = (props) => {
         >
           <Button
             buttonStyle="primary"
-            onClick={terminateMentorshipHandler.bind(null, props.mentee.id)}
+            onClick={props.onTerminateMentorship.bind(null, props.mentee)}
           >
             Confirm
           </Button>
@@ -140,65 +100,6 @@ const MenteeCard: FC<MenteeProp> = (props) => {
         </SystemMessage>
       )}
     </>
-
-    // <Card className={styles.MenteeCard}>
-    //   <div className={styles.Name}>
-    //     {`${props.mentee.user.first_name} ${props.mentee.user.last_name}`}
-    //   </div>
-
-    //   <div className={styles.Section}>
-    //     <Title text="About:" className={styles.subtitle} />
-    //     <div className={styles.subtext}>{props.mentee.about}</div>
-    //   </div>
-
-    //   <div className={styles.Section}>
-    //     <Title text="Email:" className={styles.subtitle} />
-    //     <div className={styles.subtext}>{props.mentee.user.email}</div>
-    //   </div>
-
-    //   <div className={styles.Section}>
-    //     <Title text="Department:" className={styles.subtitle} />
-    //     <div className={styles.subtext}>
-    //       {props.mentee.user.department.name}
-    //     </div>
-    //   </div>
-
-    //   <div className={styles.Section}>
-    //     <Title text="Interests:" className={styles.subtitle} />
-    //     <div className={`${styles.subtext} ${styles.Interests}`}>
-    //       {props.mentee.topics.map((topic) => (
-    //         <Tag key={topic.topic.id}>{topic.topic.name}</Tag>
-    //       ))}
-    //     </div>
-    //   </div>
-
-    //   <div className={styles.Section}>
-    //     <Title text="Plan of Action progress:" className={styles.subtitle} />
-    //     <BarChart
-    //       className={styles.BarChart}
-    //       completedGoals={20}
-    //       totalGoals={100}
-    //     />
-    //   </div>
-
-    //   <div className={styles.Buttons}>
-    //     <Button
-    //       className={styles.Button}
-    //       href={"/dashboard"}
-    //       buttonStyle="primary"
-    //       icon={"👥"}
-    //     >
-    //       Meetings
-    //     </Button>
-    //     <Button
-    //       className={styles.Button}
-    //       href={"/learn/plans-of-action"}
-    //       icon={"📈"}
-    //     >
-    //       View Plan
-    //     </Button>
-    //   </div>
-    // </Card>
   );
 };
 

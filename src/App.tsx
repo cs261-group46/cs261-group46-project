@@ -1,39 +1,38 @@
 import React from "react";
-import { Routes, BrowserRouter, Route } from "react-router-dom";
+import { Routes, BrowserRouter, Route, Navigate } from "react-router-dom";
 import "./App.scss";
 import Register from "./routes/Auth/Register/Register.lazy";
 import Dashboard from "./routes/Dashboard/Dashboard.lazy";
 import VerifyEmail from "./routes/Auth/Register/VerifyEmail/VerifyEmail.lazy";
-import Setup from "./routes/Setup/Setup";
+import Setup from "./routes/Setup/Setup.lazy";
 import MentorSignup from "./routes/mentor/MentorSignup/MentorSignup.lazy";
-import MenteeSignup from "./routes/learn/MenteeSignup/MenteeSignup";
-import Login from "./routes/Auth/Login/Login";
-import YourInterests from "./routes/learn/Interests/Interests";
-import MentorSkills from "./routes/mentor/MentorSkills/MentorSkills";
+import MenteeSignup from "./routes/learn/MenteeSignup/MenteeSignup.lazy";
+import Login from "./routes/Auth/Login/Login.lazy";
+import YourInterests from "./routes/learn/Interests/Interests.lazy";
+import MentorSkills from "./routes/mentor/MentorSkills/MentorSkills.lazy";
 import ExpertExpertises from "./routes/expert/ExpertExpertises/ExpertExpertises.lazy";
 import Homepage from "./routes/Homepage/Homepage.lazy";
 import ViewGroupSessions from "./routes/learn/ViewGroupSessions/ViewGroupSessions.lazy";
 import ComponentPlaygound from "./routes/ComponentPlaygound/ComponentPlaygound.lazy";
 import UpcomingEvents from "./routes/UpcomingEvents/UpcomingEvents.lazy";
-import YourMentor from "./routes/learn/YourMentor/YourMentor";
-import ExpertSignup from "./routes/expert/ExpertSignup/ExpertSignup";
-import YourMentees from "./routes/mentor/YourMentees/YourMentees";
-import FindMentor from "./routes/learn/FindMentor/FindMentor";
+import YourMentor from "./routes/learn/YourMentor/YourMentor.lazy";
+import ExpertSignup from "./routes/expert/ExpertSignup/ExpertSignup.lazy";
+import YourMentees from "./routes/mentor/YourMentees/YourMentees.lazy";
+import FindMentor from "./routes/learn/FindMentor/FindMentor.lazy";
 import CreateGroupSession from "./routes/expert/CreateGroupSession/CreateGroupSession.lazy";
-import YourGroupSessions from "./routes/expert/YourGroupSessions/YourGroupSessions";
-
-import YourProfile from "./routes/YourProfile/YourProfile";
-import EditPlansOfAction from "./routes/EditPlansOfAction/EditPlansOfAction";
+import YourGroupSessions from "./routes/expert/YourGroupSessions/YourGroupSessions.lazy";
+import YourProfile from "./routes/YourProfile/YourProfile.lazy";
+import EditPlansOfAction from "./routes/EditPlansOfAction/EditPlansOfAction.lazy";
 import SiteFeedback from "./routes/SiteFeedback/SiteFeedback.lazy";
-import Meetings from "./routes/meetings/Meetings/Meetings";
-import CreateMeeting from "./routes/meetings/CreateMeeting/CreateMeeting";
-import PastMentors from "./routes/learn/PastMentors/PastMentors";
-import GiveFeedbackToMentor from "./routes/learn/GiveFeedbackToMentor/GiveFeedbackToMentor";
+import Meetings from "./routes/meetings/Meetings/Meetings.lazy";
+import CreateMeeting from "./routes/meetings/CreateMeeting/CreateMeeting.lazy";
+import PastMentors from "./routes/learn/PastMentors/PastMentors.lazy";
+import GiveFeedbackToMentor from "./routes/learn/GiveFeedbackToMentor/GiveFeedbackToMentor.lazy";
 import GiveFeedbackToMentee from "./routes/mentor/GiveFeedbackToMentee/GiveFeedbackToMentee.lazy";
 import MentorFeedbacks from "./routes/mentor/MentorFeedbacks/MentorFeedbacks.lazy";
 import MenteeFeedbacks from "./routes/learn/MenteeFeedbacks/MenteeFeedbacks.lazy";
 import GiveFeedbackForMeeting from "./routes/meetings/GiveFeedbackForMeeting/GiveFeedbackForMeeting.lazy";
-import UserEditDetails from "./routes/UserEditDetials/UserEditDetials";
+import UserEditDetails from "./routes/UserEditDetials/UserEditDetials.lazy";
 
 function App() {
   return (
@@ -98,12 +97,9 @@ function App() {
             <Route path="become-expert" element={<ExpertSignup />} />
           </Route>
           <Route path="/give-feedback" element={<SiteFeedback />} />
-          {/* <Route path="/workshops">
-            <Route index element={<ViewWorkshops />} />
-            <Route path={"create"} element={<CreateWorkshop />} />
-          </Route> */}
           <Route path="/test" element={<ComponentPlaygound />} />
           <Route index element={<Homepage />} />
+          <Route path="/*" element={<Navigate to="/dashboard" />} />
         </Routes>
       </div>
     </BrowserRouter>

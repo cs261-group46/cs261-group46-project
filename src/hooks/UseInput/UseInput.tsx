@@ -16,7 +16,7 @@ function useInput<T>(
   const [enteredValue, updateEnteredValue] = useState<T>(initialValue);
   const [isTouched, updateIsTouched] = useState(false);
 
-  const isValueValid = enteredValue && validationFunction(enteredValue);
+  const isValueValid = validationFunction(enteredValue);
   const isInputValid = isValueValid || !isTouched;
 
   const changeHandler: (newValue: T) => void = useCallback((newValue: T) => {

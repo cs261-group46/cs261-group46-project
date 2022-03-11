@@ -85,6 +85,7 @@ const Meetings: FC<MeetingsProps> = () => {
     meetings_hosted = [],
     meetings_attending = [],
     meetings_invited = [],
+    stateChangingHandler,
   } = UseVerifyUser<{
     userId: number | null;
     mentee: MenteeType | null;
@@ -173,9 +174,9 @@ const Meetings: FC<MeetingsProps> = () => {
     "mentor" | "mentee" | null
   >(null);
 
-  const [page, setPage] = useState(1);
-  const [showWarning, setShowWarning] = useState(false);
-  const [showWarning2, setShowWarning2] = useState(false);
+  const [page, setPage] = useState(0);
+  const [showWarning, setShowWarning] = useState(-1);
+  const [showWarning2, setShowWarning2] = useState(-1);
 
   const [mentormentee_meetings_hosted, set_mentormentee_meetings_hosted] =
     useState<MeetingType[]>([]);
@@ -202,6 +203,8 @@ const Meetings: FC<MeetingsProps> = () => {
   }, [JSON.stringify(meetings_hosted)]);
 
   useEffect(() => {
+    console.log("this effect reruns for whatever reason");
+
     set_mentormentee_meetings_invited(
       meetings_invited.filter(
         (meeting) => meeting.meeting_type === "one on one meeting"
@@ -237,8 +240,6 @@ const Meetings: FC<MeetingsProps> = () => {
         }
 
         return feedbacks.sort((f1, f2) => {
-          console.log(f1);
-
           const f1Date = new Date(f1.meeting.date);
           const f2Date = new Date(f2.meeting.date);
           return f2Date.getTime() - f1Date.getTime();
@@ -256,17 +257,23 @@ const Meetings: FC<MeetingsProps> = () => {
 
   useEffect(() => {
     setConfirmedMeetings((prevMeetings: MeetingType[]) => {
-      const filtered = mentormentee_meetings_attending.filter(
-        (meeting) =>
-          !prevMeetings.find((prevMeeting) => prevMeeting.id === meeting.id)
-      );
+      const filtered = mentormentee_meetings_attending.filter((meeting) => {
+        const date = new Date(meeting.date);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        return (
+          !prevMeetings.find((prevMeeting) => prevMeeting.id === meeting.id) &&
+          date.getTime() >= today.getTime()
+        );
+      });
       prevMeetings.push(...filtered);
       prevMeetings.sort(function (a, b) {
         // Turn your strings into dates, and then subtract them
         // to get a value that is either negative, positive, or zero.
         const a_date = new Date(a.date);
         const b_date = new Date(b.date);
-        return b_date.getTime() - a_date.getTime();
+        return a_date.getTime() - b_date.getTime();
       });
       return prevMeetings;
     });
@@ -275,17 +282,22 @@ const Meetings: FC<MeetingsProps> = () => {
 
   useEffect(() => {
     setConfirmedMeetings((prevMeetings: MeetingType[]) => {
-      const filtered = mentormentee_meetings_hosted.filter(
-        (meeting) =>
-          !prevMeetings.find((prevMeeting) => prevMeeting.id === meeting.id)
-      );
+      const filtered = mentormentee_meetings_hosted.filter((meeting) => {
+        const date = new Date(meeting.date);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        return (
+          !prevMeetings.find((prevMeeting) => prevMeeting.id === meeting.id) &&
+          date.getTime() >= today.getTime()
+        );
+      });
       prevMeetings.push(...filtered);
       prevMeetings.sort(function (a, b) {
         // Turn your strings into dates, and then subtract them
         // to get a value that is either negative, positive, or zero.
         const a_date = new Date(a.date);
         const b_date = new Date(b.date);
-        return b_date.getTime() - a_date.getTime();
+        return a_date.getTime() - b_date.getTime();
       });
       return prevMeetings;
     });
@@ -298,6 +310,11 @@ const Meetings: FC<MeetingsProps> = () => {
         resource: "meetings",
         entity: meetingId,
       });
+
+      setConfirmedMeetings((prevMeetings) => {
+        return prevMeetings.filter((m) => m.id !== meetingId);
+      });
+
       showMessage("success", "Meeting removed successfully.");
     } catch (errors) {
       showMessage("error", errors);
@@ -316,14 +333,18 @@ const Meetings: FC<MeetingsProps> = () => {
         entity: meetingId,
         body: body,
       });
+
+      set_mentormentee_meetings_invited((prevMeetings) => {
+        return prevMeetings.filter((m) => m.id !== meetingId);
+      });
+
       showMessage("success", "Meeting invite declined successfully.");
     } catch (errors) {
       showMessage("error", errors);
     }
   };
-  // showMessage("success", "Feedback submitted successfully.");
 
-  const confirmHandler = async (meetingId: number) => {
+  const confirmHandler = async (meeting: MeetingType) => {
     try {
       const body = {
         confirmed: true,
@@ -331,9 +352,24 @@ const Meetings: FC<MeetingsProps> = () => {
       };
       await update({
         resource: "meetings",
-        entity: meetingId,
+        entity: meeting.id,
         body: body,
       });
+      meeting.attendees.push({} as UserType);
+
+      stateChangingHandler((prevState) => {
+        const filtered = prevState.meetings_invited.filter((m) => {
+          return m.id !== meeting.id;
+        });
+        return { ...prevState, meetings_invited: filtered };
+      });
+
+      setConfirmedMeetings((prevMeetings) => {
+        const meets = [...prevMeetings];
+        meets.push(meeting);
+        return meets;
+      });
+
       showMessage("success", "Meeting invite confirmed successfully.");
     } catch (errors) {
       showMessage("error", errors);
@@ -341,7 +377,7 @@ const Meetings: FC<MeetingsProps> = () => {
   };
 
   return (
-    <DashboardSubpageLayout title={"Group Sessions"}>
+    <DashboardSubpageLayout title={"Meetings"}>
       <Button href={`/meetings/${menteeId}/create`}>Create a Meeting</Button>
 
       <PagePicker
@@ -383,9 +419,8 @@ const Meetings: FC<MeetingsProps> = () => {
           confirmed_meetings.length > 0 &&
           confirmed_meetings.map((meeting, index) => {
             return (
-              <>
+              <div key={index}>
                 <ContentCard
-                  key={index}
                   heading={meeting.title}
                   sections={[
                     {
@@ -418,33 +453,35 @@ const Meetings: FC<MeetingsProps> = () => {
                     },
                   ]}
                   buttons={[
-                    {
-                      onClick: setShowWarning.bind(null, true),
+                    !meeting.host && {
+                      onClick: setShowWarning.bind(null, meeting.id),
                       children: "Remove",
                     },
                   ]}
                 />
-                {showWarning && (
+                {showWarning === meeting.id && (
                   <SystemMessage
-                    key={index}
                     sort={"popup"}
                     type={"alert"}
                     description={`Are you sure you want to delete the ${meeting.title} meeting?`}
-                    visible={showWarning}
-                    onClose={setShowWarning.bind(null, false)}
+                    visible={true}
+                    onClose={setShowWarning.bind(null, -1)}
                   >
                     <Button
                       buttonStyle="primary"
-                      onClick={removeHandler.bind(null, meeting.id)}
+                      onClick={() => {
+                        removeHandler(meeting.id);
+                        setShowWarning(-1);
+                      }}
                     >
                       Confirm
                     </Button>
-                    <Button onClick={setShowWarning.bind(null, false)}>
+                    <Button onClick={setShowWarning.bind(null, -1)}>
                       Cancel
                     </Button>
                   </SystemMessage>
                 )}
-              </>
+              </div>
             );
           })}
         {validated && page === 0 && confirmed_meetings.length === 0 && (
@@ -455,9 +492,8 @@ const Meetings: FC<MeetingsProps> = () => {
           mentormentee_meetings_invited.length > 0 &&
           mentormentee_meetings_invited.map((meeting, index) => {
             return (
-              <>
+              <div key={index}>
                 <ContentCard
-                  key={index}
                   heading={meeting.title}
                   sections={[
                     {
@@ -482,36 +518,38 @@ const Meetings: FC<MeetingsProps> = () => {
                   buttons={[
                     {
                       buttonStyle: "primary",
-                      onClick: confirmHandler.bind(null, meeting.id),
+                      onClick: confirmHandler.bind(null, meeting),
                       children: "Confirm",
                     },
                     {
-                      onClick: setShowWarning2.bind(null, true),
+                      onClick: setShowWarning2.bind(null, meeting.id),
                       children: "Decline",
                     },
                   ]}
                 />
-                {showWarning2 && (
+                {showWarning2 === meeting.id && (
                   <SystemMessage
-                    key={index}
                     sort={"popup"}
                     type={"alert"}
                     description={`Are you sure you want to decline the ${meeting.title} meeting request?`}
-                    visible={showWarning2}
-                    onClose={setShowWarning2.bind(null, false)}
+                    visible={true}
+                    onClose={setShowWarning2.bind(null, -1)}
                   >
                     <Button
                       buttonStyle="primary"
-                      onClick={declineHandler.bind(null, meeting.id)}
+                      onClick={() => {
+                        declineHandler(meeting.id);
+                        setShowWarning2(-1);
+                      }}
                     >
                       Confirm
                     </Button>
-                    <Button onClick={setShowWarning2.bind(null, false)}>
+                    <Button onClick={setShowWarning2.bind(null, -1)}>
                       Cancel
                     </Button>
                   </SystemMessage>
                 )}
-              </>
+              </div>
             );
           })}
         {validated &&
@@ -525,33 +563,36 @@ const Meetings: FC<MeetingsProps> = () => {
           mentormentee_meetings_feedback.length > 0 &&
           mentormentee_meetings_feedback.map((feedback, index) => {
             return (
-              <>
-                <ContentCard
-                  key={index}
-                  heading={feedback.meeting.title}
-                  sections={[
-                    {
-                      title: "When",
-                      content: getDateString(
-                        new Date(feedback.meeting.date),
-                        feedback.meeting.duration
-                      ),
-                    },
-                    {
-                      title: "Feedback",
-                      content: `"${feedback.feedback}" - ${
-                        feedback.user
-                          ? feedback.user.first_name +
-                            " " +
-                            feedback.user.last_name
-                          : "You"
-                      }`,
-                    },
-                  ]}
-                />
-              </>
+              <ContentCard
+                key={index + "c"}
+                heading={feedback.meeting.title}
+                sections={[
+                  {
+                    title: "When",
+                    content: getDateString(
+                      new Date(feedback.meeting.date),
+                      feedback.meeting.duration
+                    ),
+                  },
+                  {
+                    title: "Feedback",
+                    content: `"${feedback.feedback}" - ${
+                      feedback.user
+                        ? feedback.user.first_name +
+                          " " +
+                          feedback.user.last_name
+                        : "You"
+                    }`,
+                  },
+                ]}
+              />
             );
           })}
+        {validated &&
+          page === 2 &&
+          mentormentee_meetings_feedback.length === 0 && (
+            <p>You have no meeting feedback</p>
+          )}
       </div>
     </DashboardSubpageLayout>
   );

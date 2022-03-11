@@ -7,6 +7,8 @@ import { MentorFeedbackType } from "../../../types/MentorFeedback";
 
 interface MenteeFeedbacksProps {}
 
+// TODO : FINISH THIS
+
 const MenteeFeedbacks: FC<MenteeFeedbacksProps> = () => {
   const { mentee_received_feedback = [] } = UseVerifyUser<{
     userId: number | null;
@@ -15,10 +17,9 @@ const MenteeFeedbacks: FC<MenteeFeedbacksProps> = () => {
     userDataPolicies: [
       {
         dataPoint: "mentor.id",
-        redirectOnFail: "/dashboard",
       },
       {
-        dataPoint: "mentor.received_feedback",
+        dataPoint: "mentee.received_feedback",
       },
     ],
   });

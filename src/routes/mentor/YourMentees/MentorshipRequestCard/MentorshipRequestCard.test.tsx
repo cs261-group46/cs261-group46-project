@@ -7,6 +7,9 @@ describe("<MentorshipRequestCard />", () => {
   test("it should mount", () => {
     render(
       <MentorshipRequestCard
+        onProcessRequest={function (): void {
+          throw new Error("Function not implemented.");
+        }}
         mentorshipRequest={{
           id: 0,
           mentee: {
@@ -14,6 +17,7 @@ describe("<MentorshipRequestCard />", () => {
             id: 0,
             topics: [],
             user: {
+              id: 0,
               department: {
                 id: 0,
                 name: "",
@@ -22,6 +26,8 @@ describe("<MentorshipRequestCard />", () => {
               first_name: "",
               last_name: "",
             },
+            plans_of_action: [],
+            score: 0,
           },
         }}
       />

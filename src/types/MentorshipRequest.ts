@@ -9,14 +9,6 @@ export type MentorshipRequestType = {
     topics: TopicWithPriorityType[];
     user: UserType;
     plans_of_action: [];
+    score: number;
   };
 };
-
-// MenteeType = {
-//   about: string;
-//   id: number;
-//   topics: TopicWithPriorityType[];
-//   user: UserType;
-//   plans_of_action: PlanOfAction[];
-//   mentor?: MentorType;
-// };

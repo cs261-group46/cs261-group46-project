@@ -46,6 +46,7 @@ class MenteeSchema(ma.SQLAlchemySchema):
 
     id = ma.auto_field()
     about = ma.auto_field()
+    score = ma.auto_field()
     user = ma.Nested(UserSchema(exclude=["mentee", "mentor", "expert", "notifications", "permissions", "meeting_feedback", "meetings_attending", "meetings_hosted", "meetings_invited"]))
     mentor = ma.Nested(MentorSchema(exclude=["mentees", "mentorship_requests_received", "feedback_given", "received_feedback"]))
     topics = ma.Nested(lambda: MenteeTopicSchema(exclude=["mentee", "topic.experts", "topic.mentees", "topic.mentors"]), many=True)

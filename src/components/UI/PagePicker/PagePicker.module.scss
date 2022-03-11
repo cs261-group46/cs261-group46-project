@@ -1,108 +1,158 @@
 @import "../../../variables";
 
 .PagePicker {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 50px;
-  //   border-top: 1px solid $sq_light_gray;
-  //   border-bottom: 1px solid $sq_light_gray;
-  position: relative;
-  button {
-    border-radius: 0;
-    z-index: 1;
-    position: relative;
-    // width: 100px;
-
-    div {
-      margin: 0 !important;
-    }
-
-    &:hover,
-    &:focus-visible {
-      z-index: 10 !important;
-    }
-  }
-  .sideButton {
-    width: 30px;
-    height: 30px;
-    position: absolute;
-    border: none;
-    border-radius: 12px;
-    overflow: hidden;
-    background-color: transparent;
-    padding: 0;
-    &:focus-visible,
-    &:hover {
-      outline: 2px solid $sq_dark_gray;
-    }
-    &:first-of-type {
-      left: 0;
-    }
-    &:last-of-type {
-      right: 0;
-    }
-  }
-  .Icon {
-    height: 100%;
-  }
-  .dots {
-    position: absolute;
-    bottom: 0;
-    margin-bottom: 5px;
+  @media screen and (max-width: 799px) {
     display: flex;
-    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 50px;
+    //   border-top: 1px solid $sq_light_gray;
+    //   border-bottom: 1px solid $sq_light_gray;
+    position: relative;
+    button {
+      border-radius: 0;
+      z-index: 1;
+      position: relative;
+      // width: 100px;
 
-    .dot {
-      height: 7px;
-      border-radius: 25px;
-      width: 7px;
-      background-color: $sq_light_gray;
-      &.SelectedDot {
-        background-color: $sq_black;
+      div {
+        margin: 0 !important;
+      }
+
+      &:hover,
+      &:focus-visible {
+        z-index: 10 !important;
+      }
+    }
+    .sideButton {
+      width: 30px;
+      height: 20px;
+      position: absolute;
+      border: none;
+      border-radius: 12px;
+      overflow: hidden;
+      background-color: $sq_red;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      &:focus-visible,
+      &:hover {
+        outline: 2px solid $sq_dark_gray;
+      }
+      &:first-of-type {
+        left: 0;
+      }
+      &:last-of-type {
+        right: 0;
+      }
+
+      img {
+        width: 20px;
+        height: 20px;
+      }
+
+      .flip {
+        rotate: 180deg;
+      }
+    }
+    .Icon {
+      height: 100%;
+    }
+    .dots {
+      position: absolute;
+      bottom: 0;
+      margin-bottom: 5px;
+      display: flex;
+      gap: 10px;
+
+      .dot {
+        height: 7px;
+        border-radius: 25px;
+        width: 7px;
+        background-color: $sq_light_gray;
+        &.SelectedDot {
+          background-color: $sq_black;
+        }
+      }
+    }
+
+    .picker {
+      display: none;
+      height: 20px;
+      border-collapse: collapse;
+
+      & button {
+        height: 100%;
+        background-color: transparent;
+        border: 1px solid $sq_black;
+        color: $sq_black;
+        border-collapse: collapse;
+        border-radius: 15px;
+      }
+      &.Selected {
+        display: block;
+        & button {
+          background-color: $sq_black;
+          color: white;
+        }
+      }
+      &.Highlighted {
+        & button {
+          background-color: $sq_red;
+          color: white;
+        }
       }
     }
   }
 
-  .picker {
-    display: none;
-    height: 30px;
-    border-collapse: collapse;
-
-    & button {
-      height: 100%;
-      background-color: transparent;
-      border: 1px solid $sq_black;
-      color: $sq_black;
-      border-collapse: collapse;
-      border-radius: 15px;
+  @media screen and (min-width: 800px) {
+    .sideButton {
+      display: none;
     }
-    &.Selected {
-      display: block;
-      & button {
+
+    .pickers {
+      display: flex;
+      justify-content: center;
+
+      .picker {
+        // makes the button pop out when hovered
+        // makes outline look better
+        &:hover {
+          z-index: 1;
+        }
+
+        button {
+          border-radius: 0;
+          background-color: transparent;
+          border: $sq_black 2px solid;
+          border-left: none;
+          color: $sq_black;
+          height: 30px;
+        }
+      }
+
+       .picker:first-of-type button {
+         border-bottom-left-radius: 15px;
+         border-top-left-radius: 15px;
+         border-left: $sq_black 2px solid;
+       }
+
+       .picker:last-of-type button {
+         border-bottom-right-radius: 15px;
+         border-top-right-radius: 15px;
+       }
+
+      .Selected button {
         background-color: $sq_black;
         color: white;
       }
-    }
-    &.Highlighted {
-      & button {
+
+      &.Highlighted button {
         background-color: $sq_red;
         color: white;
       }
     }
   }
-
-  .selected button {
-    background-color: $sq_black;
-  }
-
-  //   .picker:first-of-type button {
-  //     border-bottom-left-radius: 10px;
-  //     border-top-left-radius: 10px;
-  //   }
-
-  //   .picker:last-of-type button {
-  //     border-bottom-right-radius: 10px;
-  //     border-top-right-radius: 10px;
-  //   }
 }

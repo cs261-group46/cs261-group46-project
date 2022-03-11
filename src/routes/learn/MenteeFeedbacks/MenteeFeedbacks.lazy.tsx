@@ -1,9 +1,12 @@
-import React, { lazy, Suspense } from 'react';
+import React, { lazy, Suspense } from "react";
+import LoadingSpinner from "../../../components/UI/LoadingSpinner/LoadingSpinner";
 
-const LazyMenteeFeedbacks = lazy(() => import('./MenteeFeedbacks'));
+const LazyMenteeFeedbacks = lazy(() => import("./MenteeFeedbacks"));
 
-const MenteeFeedbacks = (props: JSX.IntrinsicAttributes & { children?: React.ReactNode; }) => (
-  <Suspense fallback={null}>
+const MenteeFeedbacks = (
+  props: JSX.IntrinsicAttributes & { children?: React.ReactNode }
+) => (
+  <Suspense fallback={<LoadingSpinner />}>
     <LazyMenteeFeedbacks {...props} />
   </Suspense>
 );

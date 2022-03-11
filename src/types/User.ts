@@ -1,3 +1,4 @@
+import { MentorType } from "./Mentor";
 import { TopicType, TopicWithPriorityType } from "./Topic";
 import { DepartmentType } from "./Department";
 
@@ -8,13 +9,9 @@ export type FullUserType = {
     expert: { id: string; topics: TopicType[] } | null;
     first_name: string;
     last_name: string;
-    mentor: {
-      capacity: number;
-      score: number;
-      topics: TopicWithPriorityType[];
-      about: string;
-    } | null;
+    mentor: MentorType | null;
     mentee: {
+      score: number;
       topics: TopicWithPriorityType[];
       about: string;
       mentor: {

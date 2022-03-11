@@ -9,6 +9,9 @@ describe("<MenteeCard />", () => {
     render(
       <BrowserRouter>
         <MenteeCard
+          onTerminateMentorship={function (): void {
+            throw new Error("Function not implemented.");
+          }}
           mentee={{
             about: "",
             id: 0,
@@ -25,8 +28,8 @@ describe("<MenteeCard />", () => {
             },
             plans_of_action: [],
             mentor: undefined,
+            score: 0,
           }}
-          stateChangingHandler={undefined}
         />
       </BrowserRouter>
     );

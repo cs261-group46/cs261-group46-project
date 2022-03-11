@@ -7,8 +7,9 @@ import { custom, get } from "../../api/api";
 import { NotificationType } from "../../types/Notification";
 import Notifications from "../../components/Notifications/Notifications";
 import Icon from "../../components/UI/Icon/Icon";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import UseVerifyUser from "../../hooks/UseVerifyUser/UseVerifyUser";
+import DashboardNavbar, { hashToSlot, pageHashes } from "./DashboardNavbar";
 
 interface DashboardProps {}
 
@@ -42,8 +43,18 @@ const Dashboard: FC<DashboardProps> = () => {
     ],
   });
 
-  const [pageVisible, setPageVisible] = useState(1);
   const navigate = useNavigate();
+  const { hash } = useLocation();
+  // remove invalid hashes
+  if (hash !== "" && hashToSlot(hash) === 0) navigate("/dashboard");
+
+  const pageVisible = hash !== "" ? hashToSlot(hash) : 1;
+
+  useEffect(() => {
+    if (!pageHashes.includes(hash)) {
+      navigate("/dashboard#home");
+    }
+  }, [hash, navigate]);
 
   const [notificationsLearn, setNotificationsLearn] = useState<
     NotificationType<"learning">[]
@@ -375,36 +386,9 @@ const Dashboard: FC<DashboardProps> = () => {
           )}
         </div>
       )}
-      <div className={styles.Switch}>
-        <Button
-          onClick={setPageVisible.bind(null, 1)}
-          className={`${styles.Button} ${pageVisible === 1 && styles.selected}`}
-          icon="🏠"
-        >
-          Home
-        </Button>
-        <Button
-          onClick={setPageVisible.bind(null, 2)}
-          className={`${styles.Button} ${pageVisible === 2 && styles.selected}`}
-          icon="🧑‍🎓"
-        >
-          Your Learning
-        </Button>
-        <Button
-          onClick={setPageVisible.bind(null, 3)}
-          className={`${styles.Button} ${pageVisible === 3 && styles.selected}`}
-          icon="🧑"
-        >
-          Your Mentoring
-        </Button>
-        <Button
-          onClick={setPageVisible.bind(null, 4)}
-          className={`${styles.Button} ${pageVisible === 4 && styles.selected}`}
-          icon="💪"
-        >
-          Your Expertise
-        </Button>
-      </div>
+
+      <DashboardNavbar hash={hash} />
+
       <div data-testid="Dashboard" />
     </MainLayout>
   );
