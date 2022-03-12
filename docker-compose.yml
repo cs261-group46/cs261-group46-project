@@ -1,0 +1,36 @@
+version: "3.8"
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    image: cs261_api
+    depends_on:
+      - database
+  client:
+    build:
+      context: .
+      dockerfile: Dockerfile.client
+    image: cs261_client
+    ports:
+      - "3000:80"
+    depends_on:
+      - api
+
+  database:
+    image: postgres:13
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: cs261
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    ports:
+      - "5400:5432"
+
+  # build:
+  #   context: .
+  #   dockerfile: Dockerfile.client
+  # image: cs261_client
+  # ports:
+  #   - "3000:80"
