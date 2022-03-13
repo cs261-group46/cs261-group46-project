@@ -46,7 +46,6 @@ export async function update(requestData: {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
       },
       body: JSON.stringify(requestData.body), // body data type must match "Content-Type" header
     }
@@ -103,7 +102,6 @@ export async function destroy(requestData: {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
       },
     }
   );
@@ -129,7 +127,6 @@ export async function custom(requestData: {
       method: requestData.method,
       headers: {
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
       },
       body: JSON.stringify(requestData.body), // body data type must match "Content-Type" header
     }

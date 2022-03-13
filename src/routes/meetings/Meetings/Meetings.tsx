@@ -424,6 +424,12 @@ const Meetings: FC<MeetingsProps> = () => {
                   heading={meeting.title}
                   sections={[
                     {
+                      title: !meeting.host
+                        ? `Note to ${theirsPosition}`
+                        : "Note to You",
+                      content: meeting.description,
+                    },
+                    {
                       title: "Host",
                       content: meeting.host
                         ? `${meeting.host.first_name} ${meeting.host.last_name}`
@@ -436,9 +442,23 @@ const Meetings: FC<MeetingsProps> = () => {
                         meeting.duration
                       ),
                     },
-                    {
+                    !!meeting.room && {
                       title: "Where",
                       content: meeting.room.name,
+                    },
+                    !!meeting.link && {
+                      title: "Link",
+                      content: meeting.link,
+                    },
+                    {
+                      className: styles.tags,
+                      title: "Online/In-person",
+                      content: (
+                        <>
+                          {meeting.room && <Tag>In-person</Tag>}
+                          {meeting.link && <Tag>Online</Tag>}
+                        </>
+                      ),
                     },
                     {
                       title: "Confirmed?",
@@ -497,15 +517,31 @@ const Meetings: FC<MeetingsProps> = () => {
                   heading={meeting.title}
                   sections={[
                     {
+                      title: !meeting.host
+                        ? `Note to ${theirsPosition}`
+                        : "Note to You",
+                      content: meeting.description,
+                    },
+                    {
                       title: "When",
                       content: getDateString(
                         new Date(meeting.date),
                         meeting.duration
                       ),
                     },
-                    {
+                    !!meeting.room && {
                       title: "Where",
                       content: meeting.room.name,
+                    },
+                    {
+                      className: styles.tags,
+                      title: "Online/In-person",
+                      content: (
+                        <>
+                          {meeting.room && <Tag>In-person</Tag>}
+                          {meeting.link && <Tag>Online</Tag>}
+                        </>
+                      ),
                     },
                     meeting.topics.length > 0 && {
                       className: styles.tags,

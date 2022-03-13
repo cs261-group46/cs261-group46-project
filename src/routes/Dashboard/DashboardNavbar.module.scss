@@ -10,13 +10,14 @@
   color: black;
   display: flex;
   justify-content: space-between;
+  overflow-x: hidden;
 
   @media screen and (min-width: 800px) {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     padding: 10px 20px;
     gap: 25px;
-    overflow: scroll;
+    overflow: hidden;
     .Button {
       width: fit-content;
       margin: 0;
@@ -36,29 +37,33 @@
     gap: 1rem;
     padding-left: 0.5rem;
     padding-right: 0.5rem;
-
+    overflow: hidden;
     .Button {
       width: 100%;
-      height: initial;
+      margin: 10px 0;
+
+      // height: 20px;
       background-color: transparent;
 
       &.selected > button {
-        outline: 4px solid $sq_red;
+        border-bottom: 4px solid $sq_red;
       }
 
       & > button {
+        border-radius: 0;
         flex-direction: column;
         height: initial;
         gap: 5px;
         padding: 5px;
-        font-size: 14px;
+        font-size: 10px;
         width: 100%;
         white-space: normal;
+        margin: 0;
 
         // since the icon is always first, use this to target twemoji
         :first-child {
-          width: 30px;
-          height: 30px;
+          width: 20px;
+          height: 20px;
         }
       }
     }

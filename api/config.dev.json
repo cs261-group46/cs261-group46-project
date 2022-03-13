@@ -1,0 +1,17 @@
+{
+  "FLASK_APP": "run",
+  "FLASK_ENV": "development",
+  "FLASK_RUN_PORT": 6000,
+  "SECRET_KEY": "va_tLgio5_XvHQ1MTXqn_geISuIBxkctGw3Fmz7cwutYAxq0Xl7twJQAXl£XShE3T8JjWPQCXbSgTXdoV39VMmiSt9ybQ",
+  "SQLALCHEMY_DATABASE_URI": "postgresql://postgres:wcfqcNNgp4vk@localhost:5432/cs261",
+  "SQLALCHEMY_TRACK_MODIFICATIONS": false,
+  "PEPER": "B1a5KEbbMThr2Klsat2XUyZWXegayfq9",
+  "MAIL_DEFAULT_SENDER": "noreply@skillquest.com",
+  "MAIL_SERVER": "smtp.mailtrap.io",
+  "MAIL_PORT": 2525,
+  "MAIL_USERNAME": "9df87ed9dbd792",
+  "MAIL_PASSWORD": "a1da64e3af15fc",
+  "MAIL_USE_TLS": true,
+  "MAIL_USE_SSL": false,
+  "SERVER": "http://localhost:3000"
+}

@@ -9,6 +9,7 @@ export type MeetingType = {
     last_name: string;
     email: string;
   };
+  description: string;
   attendees: UserType[];
   capacity: number;
   date: string;

@@ -23,6 +23,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { get, index, store } from "../../../api/api";
 import { Room } from "../../../types/Room";
 import UseSystemMessage from "../../../hooks/UseSystemMessage/UseSystemMessage";
+import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
 
 interface CreateMeetingProps {}
 
@@ -143,13 +144,15 @@ const CreateMeeting: FC<CreateMeetingProps> = () => {
     blurHandler: roomBlurHandler,
     isInputValid: roomInputValid,
     isValueValid: roomValueValid,
-  } = useInput<SearchSelectOptions<Room>>([], (value) => value.length === 1);
+  } = useInput<SearchSelectOptions<Room>>([], (value) => value.length <= 1);
 
   const {
     enteredValue: link,
+    isInputValid: linkInputValid,
+    isValueValid: linkValueValid,
     changeHandler: linkChangeHandler,
     blurHandler: linkBlurHandler,
-  } = useInput<string>("");
+  } = useInput<string>("", (value) => value.length < 200);
 
   const {
     enteredValue: date,
@@ -157,7 +160,11 @@ const CreateMeeting: FC<CreateMeetingProps> = () => {
     isValueValid: dateValueValid,
     changeHandler: dateChangeHandler,
     blurHandler: dateBlurHandler,
-  } = useInput<Date>(new Date(), (date) => date >= new Date());
+  } = useInput<Date>(new Date(), (d) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return d.getTime() >= today.getTime();
+  });
 
   const {
     enteredValue: startTime,
@@ -165,7 +172,14 @@ const CreateMeeting: FC<CreateMeetingProps> = () => {
     blurHandler: startTimeBlurHandler,
     isInputValid: startTimeInputValid,
     isValueValid: startTimeValueValid,
-  } = useInput<string>("");
+  } = useInput<string>("", (startTime) => {
+    if (startTime) {
+      date.setHours(Number.parseInt(startTime.substring(0, 2)));
+      date.setMinutes(Number.parseInt(startTime.substring(3)));
+    }
+    const now = new Date();
+    return date.getTime() >= now.getTime();
+  });
 
   const {
     enteredValue: endTime,
@@ -211,7 +225,7 @@ const CreateMeeting: FC<CreateMeetingProps> = () => {
     const body = {
       title: title,
       host: userId,
-      room: room[0].value.id,
+      room: room.length === 1 ? room[0].value.id : undefined,
       link: link,
       date: date,
       startTime: startTime,
@@ -244,6 +258,7 @@ const CreateMeeting: FC<CreateMeetingProps> = () => {
     dateBlurHandler();
     descriptionBlurHandler();
     titleBlurHandler();
+    linkBlurHandler();
   }
 
   const submitHandler: FormEventHandler = (event) => {
@@ -254,17 +269,25 @@ const CreateMeeting: FC<CreateMeetingProps> = () => {
       startTimeValueValid &&
       endTimeValueValid &&
       descriptionValueValid &&
-      titleValueValid
+      titleValueValid &&
+      linkValueValid &&
+      (link.length > 0 || room.length === 1)
     ) {
       sendMeetingData();
       // send off this event to the backend
     } else {
       showErrors();
+      if (!(room.length === 1 || link.length > 0)) {
+        showMessage(
+          "error",
+          "For in person events - please specify the room. For online events - please specify the link."
+        );
+      }
     }
   };
 
   return (
-    <MainLayout title={"Create a Meeting"}>
+    <DashboardSubpageLayout title={"Create a Meeting"}>
       <form
         className={styles.CreateMeeting}
         data-testid="CreateMeeting"
@@ -272,6 +295,11 @@ const CreateMeeting: FC<CreateMeetingProps> = () => {
       >
         {validated && (
           <Fragment>
+            <p>
+              For online events, capacity and room is not required. For
+              in-person events, link is not required. An event can be both
+              online and in person.
+            </p>
             <TextInput
               id={"title"}
               label={"Session Title"}
@@ -347,7 +375,7 @@ const CreateMeeting: FC<CreateMeetingProps> = () => {
               icon="🔗"
               placeholder={"Please provide the meeting link"}
               value={link}
-              isValid={true}
+              isValid={linkInputValid}
               onChange={linkChangeHandler}
               onBlur={linkBlurHandler}
             />
@@ -358,7 +386,7 @@ const CreateMeeting: FC<CreateMeetingProps> = () => {
           </Fragment>
         )}
       </form>
-    </MainLayout>
+    </DashboardSubpageLayout>
   );
 };
 

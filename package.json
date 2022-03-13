@@ -27,12 +27,9 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "start-api": "python run.py",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "test-api": "cd api && ../venv/bin/flask test",
-    "eject": "react-scripts eject",
-    "setup": "mkdir app/config"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [

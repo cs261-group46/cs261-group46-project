@@ -26,7 +26,7 @@
     }
     .sideButton {
       width: 30px;
-      height: 20px;
+      height: 25px;
       position: absolute;
       border: none;
       border-radius: 12px;
@@ -49,12 +49,12 @@
       }
 
       img {
-        width: 20px;
+        width: 14px;
         height: 20px;
       }
 
       .flip {
-        rotate: 180deg;
+        transform: rotate(180deg);
       }
     }
     .Icon {
@@ -133,16 +133,16 @@
         }
       }
 
-       .picker:first-of-type button {
-         border-bottom-left-radius: 15px;
-         border-top-left-radius: 15px;
-         border-left: $sq_black 2px solid;
-       }
+      .picker:first-of-type button {
+        border-bottom-left-radius: 15px;
+        border-top-left-radius: 15px;
+        border-left: $sq_black 2px solid;
+      }
 
-       .picker:last-of-type button {
-         border-bottom-right-radius: 15px;
-         border-top-right-radius: 15px;
-       }
+      .picker:last-of-type button {
+        border-bottom-right-radius: 15px;
+        border-top-right-radius: 15px;
+      }
 
       .Selected button {
         background-color: $sq_black;

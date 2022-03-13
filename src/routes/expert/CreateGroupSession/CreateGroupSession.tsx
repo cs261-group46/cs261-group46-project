@@ -118,7 +118,11 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
     isValueValid: dateValueValid,
     changeHandler: dateChangeHandler,
     blurHandler: dateBlurHandler,
-  } = useInput<Date>(new Date(), (d) => d >= new Date());
+  } = useInput<Date>(new Date(), (d) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return d.getTime() >= today.getTime();
+  });
 
   const {
     enteredValue: startTime,
@@ -126,7 +130,16 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
     blurHandler: startTimeBlurHandler,
     isInputValid: startTimeInputValid,
     isValueValid: startTimeValueValid,
-  } = useInput<string>("");
+  } = useInput<string>("", (startTime) => {
+    if (startTime) {
+      date.setHours(Number.parseInt(startTime.substring(0, 2)));
+      date.setMinutes(Number.parseInt(startTime.substring(3)));
+    }
+
+    const now = new Date();
+
+    return date.getTime() >= now.getTime();
+  });
 
   const {
     enteredValue: endTime,
@@ -227,18 +240,19 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
       const body = {
         title: title,
         host: userId,
-        room: room[0].value.id,
+        room: room.length === 1 ? room[0].value.id : undefined,
         link: link,
         topics: topics.map((topic) => topic.value),
         date: date,
         startTime: startTime,
         endTime: endTime,
         description: description,
-        capacity: parseInt(capacity),
+        capacity: capacity ? parseInt(capacity) : undefined,
         visibility: visibility.value,
         type: type.value,
         invites: invites.map((invite) => invite.value),
       };
+
       await store({
         resource: "meetings",
         body: body,
@@ -281,7 +295,7 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
       endTimeValueValid &&
       topicsValueValid &&
       descriptionValueValid &&
-      ((parseInt(capacity) > 0 && room.length === 1) || link.length > 0)
+      (link.length > 0 || (parseInt(capacity) > 0 && room.length === 1))
     ) {
       // send off this event to the backend
       sendMeetingData();
