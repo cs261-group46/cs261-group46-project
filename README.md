@@ -17,6 +17,12 @@ Run the following command in the root directory of the project.
 <h3>Step 4: Enjoy using SkillQuest!</h3>
 Go to <a href="localhost:3000">localhost:3000</a> and start using skillQuest!
 
+<h3>Bonus: Build and run containers</h3>
+Instead of running the command in step 3, run the following command to deploy multiple instances of the backend container, taking advantage of load balancing. Feel free to increase the number of containers running by increasing the value provided to the api parameter.
+```
+   docker-compose up --build --scale api=3
+```
+
 <hr>
 
 <h3>Email Verification</h3>
@@ -37,14 +43,11 @@ Password: gJESf(2xh*ph{Q9h
 1) It has been noted, that installing Flask in the <strong>api</strong> container via pip occasionally 
 results in a timeout. In such circumstances, please re-run the provided command.
 
-2) It has been noted, that running the containers for the 
-first time, despite the introduced retry logic and 
-correctly set dependencies in the docker-compose.yml file, 
-might still result in no connection being made to the database (although rarely), 
-in such cases, re-run the provided command.
+2. It has been noted, that running the containers for the
+   first time, despite the introduced retry logic and
+   correctly set dependencies in the docker-compose.yml file,
+   might still result in no connection being made to the database (although rarely),
+   in such cases, re-run the provided command.
 
 Please do not be deterred by long container building times, there are a number of dependencies that
 yarn has to install, which can take up to two, three minutes.
-
-
-
