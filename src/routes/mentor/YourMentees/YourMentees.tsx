@@ -132,8 +132,9 @@ const YourMentees: FC<YourMenteeProps> = () => {
     />
   ));
 
-  const pastMenteesList = mentor_feedback_given.map(
-    (feedback: MenteeFeedbackType, index: number) => (
+  const pastMenteesList = mentor_feedback_given
+    .sort((feed1, feed2) => feed2.id - feed1.id)
+    .map((feedback: MenteeFeedbackType, index: number) => (
       <ContentCard
         key={index}
         heading={`${feedback.mentee.user.first_name} ${feedback.mentee.user.last_name}`}
@@ -165,8 +166,7 @@ const YourMentees: FC<YourMenteeProps> = () => {
           },
         ]}
       />
-    )
-  );
+    ));
 
   return (
     <DashboardSubpageLayout title="Your Mentees">

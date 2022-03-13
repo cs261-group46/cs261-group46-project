@@ -86,15 +86,21 @@ const YourGroupSessions: FC<YourGroupSessionsProps> = () => {
 
     set_expert_meetings_hosted(
       meetings_hosted
-        ? meetings_hosted.filter((meeting) => {
-            const date = new Date(meeting.date);
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            return (
-              meeting.meeting_type !== "one on one meeting" &&
-              date.getTime() >= today.getTime()
-            );
-          })
+        ? meetings_hosted
+            .filter((meeting) => {
+              const date = new Date(meeting.date);
+              const today = new Date();
+              today.setHours(0, 0, 0, 0);
+              return (
+                meeting.meeting_type !== "one on one meeting" &&
+                date.getTime() >= today.getTime()
+              );
+            })
+            .sort((f1, f2) => {
+              const f1Date = new Date(f1.date);
+              const f2Date = new Date(f2.date);
+              return f1Date.getTime() - f2Date.getTime();
+            })
         : undefined
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
