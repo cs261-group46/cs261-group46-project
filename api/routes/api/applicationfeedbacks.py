@@ -34,3 +34,12 @@ def store(user=None):
         return {"success": True}, 200
     except:
         return {"success": False, "errors": ["An unexpected error occurred."]}, 400
+
+
+@applicationfeedbacks.route("/", methods=["GET"])
+@auth_required(required_permission_level=1)
+def get(user=None):
+    feedback_arr = ApplicationFeedback.query.all()
+    schema = ApplicationFeedback(exclude=["id"], many=True)
+    result = schema.dump(feedback_arr)
+    return {"success": True, "data": result}, 200
