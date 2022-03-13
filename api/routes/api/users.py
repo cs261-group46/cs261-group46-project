@@ -71,16 +71,13 @@ def update(userId, user=None):
         db.session.add(return_user)
         db.session.commit()
 
-
-        mentees_in_department = []
-
         if return_user.mentor:
             for mentee in return_user.mentor.mentees:
                 if mentee.user.department.id == department.id:
-                    Notification(description="Your mentor changed departments. Now you are in the same department, and so you mentoship partnerhip might not be as effective. Consider changing mentors.", notification_level='warning', notification_type='learning', user_id=mentee.user.id).commit()
+                    Notification(description="Your mentor changed departments. Now you are in the same department, and so you mentoship partnerhip might not be as effective. Consider terminating partnership.", notification_level='warning', notification_type='learning', user_id=mentee.user.id).commit()
                     Notification(
                         description=f"You changed your department. Now you are in the same department as you mentee {mentee.user.first_name} {mentee.user.last_name} and so you mentorship partnership might not be as effective. Consider terminating partnership.",
-                        notification_level='warning', notification_type='mentoring', user_id=return_user.user.id).commit()
+                        notification_level='warning', notification_type='mentoring', user_id=return_user.id).commit()
 
         if return_user.mentee and return_user.mentee.mentor and return_user.mentee.mentor.user.department.id == department.id:
             Notification(
@@ -94,17 +91,6 @@ def update(userId, user=None):
         return {"success": True}, 200
     except:
         return {"success": False, "errors": ["An unexpected error occurred"]}, 400
-
-
-# id = db.Column(db.Integer, primary_key=True)
-#     notification_level = db.Column(db.String(10), db.CheckConstraint(
-#         "notification_level IN ('warning', 'alert', 'info')"))
-#     notification_type = db.Column(db.String(10), db.CheckConstraint(
-#         "notification_type IN ('learning', 'mentoring', 'expertise')"))
-#     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-#     description = db.Column(db.Text, nullable=True)
-#
-#     user = db.relationship("User", backref="notifications", lazy=True)
 
 
 @users.route("/<userId>", methods=["GET"])

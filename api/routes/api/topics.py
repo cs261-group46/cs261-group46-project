@@ -32,17 +32,4 @@ def index(user=None):
         return {"success": True, "data": {"topics": result}}, 200
     except:
         return {"success": False, "errors": ["An unexpected error occurred"]}, 400
-#
-# @auth_required
-# @topics.route("", methods=["POST"])
-# def store(user):
-#     data = dict(request.get_json())
-#     print(user)
-#     # TODO : VALIDATOR
-#
-#
-#     departments_arr = Department.query.all()
-#     return {"result": [{"id": department.id, "label": department.name} for department in departments_arr]}
 
-# @topics.route("", methods=["POST"])
-# def store():

@@ -1,13 +1,12 @@
 import datetime
 
-from flask import Blueprint, request, session, url_for, render_template
+from flask import Blueprint, request
 from api.models import User, ApplicationFeedback
 from api.utils.cerberus_helpers import get_errors
 from api.middleware.auth import auth_required
 from api.validators.ApplicationFeedbacksValidators import storeValidator
 
 applicationfeedbacks = Blueprint("api_applicationfeedbacks", __name__, url_prefix="/applicationfeedbacks")
-
 
 @applicationfeedbacks.route("/", methods=["POST"])
 @auth_required

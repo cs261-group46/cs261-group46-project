@@ -1,7 +1,6 @@
 from api.app import db
 from api.models import Mentor, MentorTopic
 import random
-from api.utils.strings import generate_random_string
 
 
 def mentors_factory(users, topics):
@@ -20,14 +19,15 @@ def mentors_factory(users, topics):
     mentors = []
     users = users.copy()
 
-    for i in range(0, 10):
+    for i in range(0, 100):
         user = random.choice(users)
         users.remove(user)
 
         mentor = Mentor(
             user_id=user.id,
-            about=abouts[i],
+            about=abouts[i % 10],
             capacity=random.randint(1, 10),
+            score=(random.random() * 5)
         )
 
         mentor_topics = random.sample(topics, random.randint(1, 5))

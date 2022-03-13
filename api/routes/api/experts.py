@@ -7,22 +7,6 @@ from api.validators.ExpertsValidators import storeValidator, updateValidator
 experts = Blueprint("api_experts", __name__, url_prefix="/experts")
 
 
-# @experts.route("/<expertId>", methods=["GET"])
-# @auth_required
-# def get(expertId=None, user=None):
-#     fields = parse_args_list("fields")
-#     # TODO: VALIDATE
-#     expert = Expert.query.filter_by(id=expertId).first()
-#
-#     if expert is None:
-#         return {"success": False, "errors": ["The expert with the given id doesn't exist"]}, 400
-#
-#     schema = ExpertSchema(only=fields)
-#     result = schema.dump(expert)
-#
-#     return {"success": True, "data": {"expert": result}}, 200
-
-
 @experts.route("/", methods=["POST"])
 @auth_required
 def store(user=None):
