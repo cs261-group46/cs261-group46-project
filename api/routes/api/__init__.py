@@ -33,10 +33,3 @@ api.register_blueprint(applicationfeedbacks)
 api.register_blueprint(menteefeedbacks)
 api.register_blueprint(mentorfeedbacks)
 api.register_blueprint(meetingfeedbacks)
-
-from api.app import db
-
-@api.route("/help", methods=["GET"])
-def test():
-    print("help")
-    return {"help": "help"}, 200

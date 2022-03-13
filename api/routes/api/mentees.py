@@ -9,7 +9,6 @@ from api.validators.MenteesValidators import storeValidator, updateValidator
 
 mentees = Blueprint("api_mentees", __name__, url_prefix="/mentees")
 
-
 @mentees.route("/", methods=["POST"])
 @auth_required
 def store(user=None):
@@ -115,7 +114,6 @@ def update(menteeId=None, user=None):
 
             db.session.commit()
 
-        print(data.get("plansofaction"))
         if "plansofaction" in data:
             if (mentee.user.id != user.id) and (mentee.mentor.user.id != user.id):
                 return {"success": False, "errors": ["You don't have the permissions to update a mentee account on other's behalf."]}, 401

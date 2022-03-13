@@ -29,7 +29,6 @@ class Meeting(db.Model):
     duration = db.Column(db.Integer, nullable=False)
     capacity = db.Column(db.Integer, nullable=True)
     description = db.Column(db.Text, nullable=True, default="")
-    # status = db.Column(db.Text, nullable=False)
 
     room = db.relationship("Room", backref="meetings", lazy=True)
     host = db.relationship("User", backref="meetings_hosted", lazy=True)

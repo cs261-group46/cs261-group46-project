@@ -73,7 +73,7 @@ def delete(meetingID=None, user=None):
 @meetings.route("/", methods=["POST"])
 @auth_required
 def store(user=None):
-    # try:
+    try:
         data = dict(request.get_json())
         storeValidator.validate(data)
         if storeValidator.errors:
@@ -170,6 +170,6 @@ def store(user=None):
 
         return {"success": True}, 200
 
-    # except:
-    #     return {"success": False, "errors": ["An unexpected error occurred"]}, 400
+    except:
+        return {"success": False, "errors": ["An unexpected error occurred"]}, 400
 

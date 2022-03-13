@@ -32,23 +32,6 @@ def index(user=None):
     return {"success": True, "data": {"mentors": result}}, 200
 
 
-# @mentors.route("/<mentorId>", methods=["GET"])
-# @auth_required
-# def get(mentorId, user=None):
-#     # TODO: VALIDATE
-#     fields = parse_args_list("fields")
-#
-#     mentor = Mentor.query.filter_by(id=mentorId).first()
-#
-#     if mentor is None:
-#         return {"success": False, "errors": ["Mentor does not exist"]}, 400
-#
-#     schema = MentorSchema(only=fields)
-#     result = schema.dump(mentor)
-#
-#     return {"success": True, "data": {"mentor": result}}, 200
-
-
 @mentors.route("/", methods=["POST"])
 @auth_required
 def store(user=None):

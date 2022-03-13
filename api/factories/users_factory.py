@@ -9,13 +9,13 @@ def users_factory(departments):
     names = ["Bessie Allan", "Hiba Beck", "Logan Long", "Elowen Page", "Penelope Sims", "Asa Mckenna" "Elaina Buchanan", "Keiren Sawyer", "Rudi Perez", "Yvie Currie", "Collette Ellwood", "Adyan Howell", "Layton Salt", "Ilayda Avalos", "Henley Blair", "Acacia Moyer", "Cally Ford", "Athena Woodward", "Carrie Watkins", "Lily-Mai Carty"]
     users = []
 
-    for i in range(0, 18):
+    for i in range(0, 100):
         name = random.choice(names)
-        names.remove(name)
+        # names.remove(name)
 
         first_name = name.split(" ", 1)[0]
         last_name = name.split(" ", 1)[1]
-        email = first_name.lower() + last_name.lower() + "@gmail.com"
+        email = first_name.lower() + last_name.lower() + str(i) + "@gmail.com"
 
         user = User(
             email=email,

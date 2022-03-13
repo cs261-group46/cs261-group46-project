@@ -15,6 +15,3 @@ from api.models.MentorshipRequest import MentorshipRequest
 from api.models.MentorTopic import MentorTopic
 from api.models.MenteeTopic import MenteeTopic
 from api.models.PlanOfAction import PlanOfAction
-
-
-# from app.models.schemas import *
