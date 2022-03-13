@@ -5,6 +5,8 @@ services:
       context: .
       dockerfile: Dockerfile.api
     image: cs261_api
+    ports:
+      - "5000"
     depends_on:
       - database
   client:
