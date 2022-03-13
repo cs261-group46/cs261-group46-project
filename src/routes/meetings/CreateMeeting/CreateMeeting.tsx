@@ -160,7 +160,11 @@ const CreateMeeting: FC<CreateMeetingProps> = () => {
     isValueValid: dateValueValid,
     changeHandler: dateChangeHandler,
     blurHandler: dateBlurHandler,
-  } = useInput<Date>(new Date(), (date) => date >= new Date());
+  } = useInput<Date>(new Date(), (d) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return d.getTime() >= today.getTime();
+  });
 
   const {
     enteredValue: startTime,
@@ -168,7 +172,14 @@ const CreateMeeting: FC<CreateMeetingProps> = () => {
     blurHandler: startTimeBlurHandler,
     isInputValid: startTimeInputValid,
     isValueValid: startTimeValueValid,
-  } = useInput<string>("");
+  } = useInput<string>("", (startTime) => {
+    if (startTime) {
+      date.setHours(Number.parseInt(startTime.substring(0, 2)));
+      date.setMinutes(Number.parseInt(startTime.substring(3)));
+    }
+    const now = new Date();
+    return date.getTime() >= now.getTime();
+  });
 
   const {
     enteredValue: endTime,
