@@ -251,8 +251,8 @@ const UpcomingEvents: FC<UpcomingEventsProps> = (props) => {
                 title: "Online/In-person",
                 content: (
                   <>
-                    {meeting.room && <Tag>In-person</Tag>}
-                    {meeting.link && <Tag>Online</Tag>}
+                    {!!meeting.room && <Tag>In-person</Tag>}
+                    {!!meeting.link && <Tag>Online</Tag>}
                   </>
                 ),
               },
@@ -313,8 +313,8 @@ const UpcomingEvents: FC<UpcomingEventsProps> = (props) => {
                 title: "Online/In-person",
                 content: (
                   <>
-                    {meeting.room && <Tag>In-person</Tag>}
-                    {meeting.link && <Tag>Online</Tag>}
+                    {!!meeting.room && <Tag>In-person</Tag>}
+                    {!!meeting.link && <Tag>Online</Tag>}
                   </>
                 ),
               },
@@ -352,7 +352,7 @@ const UpcomingEvents: FC<UpcomingEventsProps> = (props) => {
                   meeting.duration
                 ),
               },
-              {
+              !!meeting.room && {
                 title: "Where",
                 content: meeting.room.name,
               },
@@ -360,6 +360,16 @@ const UpcomingEvents: FC<UpcomingEventsProps> = (props) => {
                 className: styles.tags,
                 title: "Type",
                 content: <Tag>{meeting.meeting_type}</Tag>,
+              },
+              {
+                className: styles.tags,
+                title: "Online/In-person",
+                content: (
+                  <>
+                    {!!meeting.room && <Tag>In-person</Tag>}
+                    {!!meeting.link && <Tag>Online</Tag>}
+                  </>
+                ),
               },
               meeting.topics.length > 0 && {
                 className: styles.tags,

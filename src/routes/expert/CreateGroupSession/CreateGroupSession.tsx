@@ -135,9 +135,7 @@ const CreateGroupSession: FC<CreateGroupSessionProps> = () => {
       date.setHours(Number.parseInt(startTime.substring(0, 2)));
       date.setMinutes(Number.parseInt(startTime.substring(3)));
     }
-
     const now = new Date();
-
     return date.getTime() >= now.getTime();
   });
 

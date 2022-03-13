@@ -147,9 +147,23 @@ const ViewGroupSessions: FC<ViewGroupSessionsProps> = () => {
                         groupSession.duration
                       ),
                     },
-                    {
+                    !!groupSession.room && {
                       title: "Where",
                       content: groupSession.room.name,
+                    },
+                    !!groupSession.link && {
+                      title: "Link",
+                      content: groupSession.link,
+                    },
+                    {
+                      className: styles.tags,
+                      title: "Online/In-person",
+                      content: (
+                        <>
+                          {!!groupSession.room && <Tag>In-person</Tag>}
+                          {!!groupSession.link && <Tag>Online</Tag>}
+                        </>
+                      ),
                     },
                     {
                       className: styles.tags,
