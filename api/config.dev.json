@@ -9,8 +9,8 @@
   "MAIL_DEFAULT_SENDER": "noreply@skillquest.com",
   "MAIL_SERVER": "smtp.mailtrap.io",
   "MAIL_PORT": 2525,
-  "MAIL_USERNAME": "9df87ed9dbd792",
-  "MAIL_PASSWORD": "a1da64e3af15fc",
+  "MAIL_USERNAME": "8d47684a59104c",
+  "MAIL_PASSWORD": "297d0c8fb722cf",
   "MAIL_USE_TLS": true,
   "MAIL_USE_SSL": false,
   "SERVER": "http://localhost:3000"
