@@ -377,7 +377,6 @@ const Meetings: FC<MeetingsProps> = () => {
       showMessage("error", errors);
     }
   };
-  console.log(confirmed_meetings);
 
   return (
     <DashboardSubpageLayout title={"Meetings"}>

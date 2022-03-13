@@ -115,7 +115,8 @@ def update(menteeId=None, user=None):
 
             db.session.commit()
 
-        if data.get("plansofaction"):
+        print(data.get("plansofaction"))
+        if "plansofaction" in data:
             if (mentee.user.id != user.id) and (mentee.mentor.user.id != user.id):
                 return {"success": False, "errors": ["You don't have the permissions to update a mentee account on other's behalf."]}, 401
 

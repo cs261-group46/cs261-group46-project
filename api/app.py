@@ -30,16 +30,17 @@ from flask_marshmallow import Marshmallow
 #############
 
 app = Flask(__name__)
-app.config.from_file("config.json", load=json.load)
+config = "config.dev.json" if app.config['ENV'] == "development" else "config.prod.json"
+app.config.from_file(config, load=json.load)
 
 db = SQLAlchemy(app)
 mail = Mail(app)
 ma = Marshmallow(app)
 
-retries = 5
+# retry logic
+retries = 20
 while retries > 0:
     try:
-        # to check database we will execute raw query
         db.session.query("1").from_statement("SELECT 1").all()
         break
     except:
@@ -50,19 +51,5 @@ if not inspect(db.get_engine()).get_table_names():
     from api.factories.reset import reset
     reset()
 
-#     try:
-#         from api.factories.reset import reset
-#         table_names = inspect(db.get_engine()).get_table_names()
-#         if not table_names:
-#             reset()
-#         break
-#     except:
-#         retries = retries - 1
-#         time.sleep(2)
-
-# from api.factories.reset import reset
-# table_names = inspect(db.get_engine()).get_table_names()
-# if not table_names:
-#     reset()
 
 import api.routes

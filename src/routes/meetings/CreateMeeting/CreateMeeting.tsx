@@ -23,6 +23,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { get, index, store } from "../../../api/api";
 import { Room } from "../../../types/Room";
 import UseSystemMessage from "../../../hooks/UseSystemMessage/UseSystemMessage";
+import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
 
 interface CreateMeetingProps {}
 
@@ -275,7 +276,7 @@ const CreateMeeting: FC<CreateMeetingProps> = () => {
   };
 
   return (
-    <MainLayout title={"Create a Meeting"}>
+    <DashboardSubpageLayout title={"Create a Meeting"}>
       <form
         className={styles.CreateMeeting}
         data-testid="CreateMeeting"
@@ -374,7 +375,7 @@ const CreateMeeting: FC<CreateMeetingProps> = () => {
           </Fragment>
         )}
       </form>
-    </MainLayout>
+    </DashboardSubpageLayout>
   );
 };
 

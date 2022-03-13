@@ -14,5 +14,5 @@ Run the following command in the root directory of the project.
    docker-compose up --build
 ```
 
-<h3>Step 4: Enjoy using skillQuest!</h3>
+<h3>Step 4: Enjoy using SkillQuest!</h3>
 Go to <a href="localhost:3000">localhost:3000</a> and start using skillQuest!

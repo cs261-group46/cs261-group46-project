@@ -6,6 +6,7 @@ from api.factories.topics_factory import topics_factory
 from api.factories.users_factory import users_factory
 from api.factories.rooms_factory import rooms_factory
 
+
 def reset():
     db.drop_all()
     db.create_all()
@@ -22,11 +23,11 @@ def reset():
     db.session.add_all(users)
     db.session.commit()
 
-    mentors = mentors_factory(users)
+    mentors = mentors_factory(users, topics)
     db.session.add_all(mentors)
     db.session.commit()
 
-    mentees = mentees_factory(users, mentors)
+    mentees = mentees_factory(users, mentors, topics)
     db.session.add_all(mentees)
     db.session.commit()
 

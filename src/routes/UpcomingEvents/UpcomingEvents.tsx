@@ -175,10 +175,6 @@ const UpcomingEvents: FC<UpcomingEventsProps> = (props) => {
                 ),
               },
               {
-                title: "Where",
-                content: meeting.room.name,
-              },
-              {
                 className: styles.tags,
                 title: "Type",
                 content: <Tag>{meeting.meeting_type}</Tag>,
@@ -236,10 +232,6 @@ const UpcomingEvents: FC<UpcomingEventsProps> = (props) => {
                   new Date(meeting.date),
                   meeting.duration
                 ),
-              },
-              {
-                title: "Where",
-                content: meeting.room.name,
               },
               {
                 className: styles.tags,
@@ -302,10 +294,6 @@ const UpcomingEvents: FC<UpcomingEventsProps> = (props) => {
                   new Date(meeting.date),
                   meeting.duration
                 ),
-              },
-              {
-                title: "Where",
-                content: meeting.room.name,
               },
               {
                 className: styles.tags,

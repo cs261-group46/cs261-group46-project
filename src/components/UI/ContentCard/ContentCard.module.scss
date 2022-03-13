@@ -55,7 +55,7 @@
     }
   }
 }
-@media only screen and (min-width: 1500px) {
+@media only screen and (min-width: 1300px) {
   .ContentCard {
     .sections {
       display: flex;
@@ -63,8 +63,11 @@
       gap: 0;
       flex-wrap: wrap;
       margin-bottom: 30px;
-      & > div {
-        width: 50%;
+      box-sizing: border-box;
+      justify-content: space-between;
+
+      .Section {
+        width: 45%;
       }
     }
   }
