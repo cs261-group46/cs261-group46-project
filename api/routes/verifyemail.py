@@ -6,6 +6,7 @@ from flask import current_app
 
 verifyemail = Blueprint("verifyemail", __name__, url_prefix="/verifyemail")
 
+
 @verifyemail.route('/<token>')
 def verify_email(token):
     try:
