@@ -51,7 +51,7 @@ def store(user=None):
             no_of_mentees_doing_topic = len(topic.mentees)
             if no_of_mentees_doing_topic > 20 and no_of_mentees_doing_topic % 10 == 0:
                 for expert in topic.experts:
-                    n = Notification(notification_level="info", notification_type="expertise", user=expert.user, description=f"{topic.name} is a popular interest. Consider running a group session on it.")
+                    n = Notification(notification_level="alert", notification_type="expertise", user=expert.user, description=f"{topic.name} is a popular interest. Consider running a group session on it.")
                     db.session.add(n)
 
         db.session.commit()
