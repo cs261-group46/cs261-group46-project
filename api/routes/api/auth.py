@@ -75,7 +75,7 @@ def register():
 
 @auth.route("/login/", methods=["POST"])
 def login():
-    # try:
+    try:
         data = dict(request.get_json())
         loginValidator.validate(data)
         if loginValidator.errors:
@@ -102,8 +102,8 @@ def login():
         set_login_token(user)
 
         return {"success": True}, 200
-    # except:
-    #     return {"success": False, "errors": ["An unexpected error occurred"]}, 400
+    except:
+        return {"success": False, "errors": ["An unexpected error occurred"]}, 400
 
 
 @auth.route("/logout/", methods=["GET"])
