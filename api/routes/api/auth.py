@@ -89,7 +89,7 @@ def login():
         if email_doesnt_exists:
             return {
                 "success": False,
-                "errors": ["An account with the given email doesn't exist exists"]
+                "errors": ["An account with the given email doesn't exist"]
             }, 400
 
         user = User.query.filter_by(email=data.get("email")).first()
