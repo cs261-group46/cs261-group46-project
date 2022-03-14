@@ -38,8 +38,6 @@ def store(user=None):
 
 @applicationfeedbacks.route("/", methods=["GET"])
 @auth_required(required_permission_level=1)
-def get(user=None):
+def index(user=None):
     feedback_arr = ApplicationFeedback.query.all()
-    schema = ApplicationFeedback(exclude=["id"], many=True)
-    result = schema.dump(feedback_arr)
-    return {"success": True, "data": result}, 200
+    return {"success": True, "data": [{"feedback" : feedback.feedback} for feedback in feedback_arr]}, 200
