@@ -1,4 +1,4 @@
-import React, { FC, FormEventHandler, useCallback, useContext } from "react";
+import React, { FC, useCallback } from "react";
 // import styles from './MentorSignup.module.scss';
 import {
   SearchSelectOptions,
@@ -18,7 +18,10 @@ import UseSystemMessage from "../../../hooks/UseSystemMessage/UseSystemMessage";
 interface MentorSignupProps {}
 
 const MentorSignup: FC<MentorSignupProps> = () => {
-  const { userId = null, mentor_id = null } = UseVerifyUser<{
+  const {
+    userId = null,
+    // mentor_id = null
+  } = UseVerifyUser<{
     userId: number | null | undefined;
     mentor_id: number | null | undefined;
   }>({

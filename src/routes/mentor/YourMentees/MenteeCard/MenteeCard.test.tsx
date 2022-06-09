@@ -3,14 +3,13 @@ import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
 import MenteeCard from "./MenteeCard";
 import { BrowserRouter } from "react-router-dom";
-import { MenteeType } from "../../../../types/Mentee";
 
 describe("<MenteeCard />", () => {
   test("it should mount", () => {
     render(
       <BrowserRouter>
         <MenteeCard
-          onTerminateMentorship={function (mentee: MenteeType): void {
+          onTerminateMentorship={function (): void {
             throw new Error("Function not implemented.");
           }}
           mentee={{

@@ -1,16 +1,6 @@
-import React, {
-  FC,
-  Fragment,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
-import { useNavigate } from "react-router-dom";
-import { get, update } from "../../../api/api";
-import UseVerifyAuth from "../../../hooks/UseVerifyAuth/UseVerifyAuth";
+import React, { FC, Fragment, useState } from "react";
+import { update } from "../../../api/api";
 import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
-import UserDataContext from "../../../store/UserDataContext";
 import styles from "./YourMentor.module.scss";
 import { MentorType } from "../../../types/Mentor";
 import Tag from "../../../components/UI/Tag/Tag";

@@ -10,7 +10,7 @@ import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
 import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
 import { MeetingType } from "../../../types/Meeting";
 import { UserType } from "../../../types/User";
-import styles from "./GiveFeedbackForMeeting.module.scss";
+import LoadingSpinner from "../../../components/UI/LoadingSpinner/LoadingSpinner";
 
 interface GiveFeedbackForMeetingProps {}
 
@@ -80,7 +80,9 @@ const GiveFeedbackForMeeting: FC<GiveFeedbackForMeetingProps> = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     meetingId,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     JSON.stringify(meetings_attending),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     JSON.stringify(meetings_hosted),
     navigate,
     showMessage,
@@ -135,7 +137,7 @@ const GiveFeedbackForMeeting: FC<GiveFeedbackForMeetingProps> = () => {
 
   return (
     <DashboardSubpageLayout title="Give Feedback on the Meeting">
-      {meeting && (
+      {meeting ? (
         <>
           <Title
             text={`${meeting.title} - ${
@@ -157,7 +159,10 @@ const GiveFeedbackForMeeting: FC<GiveFeedbackForMeetingProps> = () => {
             Submit
           </Button>
         </>
+      ) : (
+        <LoadingSpinner />
       )}
+      <div data-testid="GiveFeedbackForMeeting" />
     </DashboardSubpageLayout>
   );
 };

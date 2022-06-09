@@ -2,7 +2,7 @@ from api.app import app
 from api.middleware.auth import auth_required
 from api.routes.verifyemail import verifyemail
 from api.routes.api import api
-from json import dumps, loads
+from json import dumps
 
 app.register_blueprint(api)
 app.register_blueprint(verifyemail)

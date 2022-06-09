@@ -2,11 +2,7 @@ import React, { FC } from "react";
 import styles from "./MentorshipRequestCard.module.scss";
 import { MentorshipRequestType } from "../../../../types/MentorshipRequest";
 import Tag from "../../../../components/UI/Tag/Tag";
-import { update } from "../../../../api/api";
 import ContentCard from "../../../../components/UI/ContentCard/ContentCard";
-import UseSystemMessage from "../../../../hooks/UseSystemMessage/UseSystemMessage";
-import { MenteeType } from "../../../../types/Mentee";
-import { MenteeFeedbackType } from "../../../../types/MenteeFeedback";
 import StarPicker from "../../../../components/UI/FormInput/StarPicker/StarPicker";
 
 //Probably need to pass mentor id along

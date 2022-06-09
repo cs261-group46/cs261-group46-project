@@ -4,7 +4,7 @@ from flask import session, current_app
 from api.models.User import User
 import jwt
 from datetime import datetime
-from api.utils.auth import get_login_token_timeout, set_login_token
+from api.utils.auth import set_login_token
 
 
 def verify_auth(f, required_permission_level, *args, **kwargs):

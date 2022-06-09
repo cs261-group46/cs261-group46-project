@@ -1,4 +1,4 @@
-import React, { FormEventHandler, useContext, useState } from "react";
+import React, { useState } from "react";
 import MainLayout from "../../layouts/MainLayout/MainLayout";
 import Button from "../../components/UI/Button/Button";
 import styles from "./Setup.module.scss";

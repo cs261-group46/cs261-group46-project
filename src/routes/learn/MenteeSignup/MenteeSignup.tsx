@@ -1,4 +1,4 @@
-import React, { FC, FormEventHandler, useCallback, useContext } from "react";
+import React, { FC, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { index, store } from "../../../api/api";
 import Button from "../../../components/UI/Button/Button";
@@ -20,7 +20,10 @@ function validateInterests(_interests: SearchSelectOptions<number>) {
 }
 
 const MenteeSignup: FC<MenteeSignupProps> = () => {
-  const { userId = null, mentee_id = null } = UseVerifyUser<{
+  const {
+    userId = null,
+    // mentee_id
+  } = UseVerifyUser<{
     userId: number | null | undefined;
     mentee_id: number | null | undefined;
   }>({

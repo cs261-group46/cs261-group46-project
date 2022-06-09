@@ -1,8 +1,5 @@
-import React, { FC, Fragment, useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import styles from "./ViewGroupSessions.module.scss";
-import Title from "../../../components/UI/Title/Title";
-import Button from "../../../components/UI/Button/Button";
-import PageStepper from "../../../components/UI/PageStepper/PageStepper";
 import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
 import ContentCard from "../../../components/UI/ContentCard/ContentCard";
 import Tag from "../../../components/UI/Tag/Tag";
@@ -15,19 +12,19 @@ import UseSystemMessage from "../../../hooks/UseSystemMessage/UseSystemMessage";
 
 interface ViewGroupSessionsProps {}
 
-interface GroupSessionType {
-  id: string;
-  host: string;
-  title: string;
-  date: Date;
-  room_name: string;
-  duration: number;
-  capacity: number;
-  signups: number;
-  type: "workshop" | "group session";
-  headline: string;
-  description: string;
-}
+// interface GroupSessionType {
+//   id: string;
+//   host: string;
+//   title: string;
+//   date: Date;
+//   room_name: string;
+//   duration: number;
+//   capacity: number;
+//   signups: number;
+//   type: "workshop" | "group session";
+//   headline: string;
+//   description: string;
+// }
 
 const getDateString = (date: Date, duration: number) => {
   let start = date;

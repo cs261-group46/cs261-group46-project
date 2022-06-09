@@ -4,9 +4,9 @@ import UseVerifyUser from "../../../../hooks/UseVerifyUser/UseVerifyUser";
 import MainLayout from "../../../../layouts/MainLayout/MainLayout";
 import styles from "./VerifyEmail.module.scss";
 
-type Verifier = {
-  userId: number | null | undefined;
-};
+// type Verifier = {
+//   userId: number | null | undefined;
+// };
 
 function VerifyEmail() {
   UseVerifyUser({

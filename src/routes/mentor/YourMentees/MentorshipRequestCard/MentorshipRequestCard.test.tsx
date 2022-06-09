@@ -2,16 +2,12 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
 import MentorshipRequestCard from "./MentorshipRequestCard";
-import { MentorshipRequestType } from "../../../../types/MentorshipRequest";
 
 describe("<MentorshipRequestCard />", () => {
   test("it should mount", () => {
     render(
       <MentorshipRequestCard
-        onProcessRequest={function (
-          mentorshipRequest: MentorshipRequestType,
-          accepted: boolean
-        ): void {
+        onProcessRequest={function (): void {
           throw new Error("Function not implemented.");
         }}
         mentorshipRequest={{

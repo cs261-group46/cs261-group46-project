@@ -1,4 +1,4 @@
-import React, { FC, FormEventHandler, useCallback, useEffect } from "react";
+import React, { FC, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { index, update } from "../../../api/api";
 import Button from "../../../components/UI/Button/Button";
@@ -62,6 +62,7 @@ const Interests: FC<InterestsProps> = () => {
   };
   const searchPromise: SearchPromise<number> = useCallback((_search) => {
     return new Promise((resolve) => resolve(getTopics(_search)));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const {

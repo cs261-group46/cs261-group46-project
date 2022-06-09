@@ -56,6 +56,7 @@ def register():
 
         # verify_url = url_for('verifyemail.verify_email', token=token, _external=True)
         verify_url = f'{current_app.config.get("SERVER")}/verifyemail/{token}'
+        # noinspection PyUnresolvedReferences
         html = render_template(
             'emails/verify_email.html',
             user={

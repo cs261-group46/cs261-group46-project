@@ -1,14 +1,6 @@
-import React, {
-  FC,
-  Fragment,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import React, { FC, useEffect, useState } from "react";
 import styles from "./YourGroupSessions.module.scss";
 import Button from "../../../components/UI/Button/Button";
-import PageStepper from "../../../components/UI/PageStepper/PageStepper";
 import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
 import ContentCard from "../../../components/UI/ContentCard/ContentCard";
 import Tag from "../../../components/UI/Tag/Tag";
@@ -45,11 +37,7 @@ const getDateString = (date: Date, duration: number) => {
 };
 
 const YourGroupSessions: FC<YourGroupSessionsProps> = () => {
-  const {
-    expert_id = null,
-    meetings_hosted = undefined,
-    stateChangingHandler,
-  } = UseVerifyUser<{
+  const { meetings_hosted = undefined, stateChangingHandler } = UseVerifyUser<{
     expert_id: number | null;
     meetings_hosted: MeetingType[] | [];
   }>({

@@ -1,18 +1,16 @@
 import React, { FC, useEffect, useState } from "react";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
-import { store, update } from "../../../api/api";
+import { useNavigate, useParams } from "react-router-dom";
+import { update } from "../../../api/api";
 import Button from "../../../components/UI/Button/Button";
 import BigTextInput from "../../../components/UI/FormInput/BigTextInput/BigTextInput";
 import StarPicker from "../../../components/UI/FormInput/StarPicker/StarPicker";
-import TextInput from "../../../components/UI/FormInput/TextInput/TextInput";
 import Title from "../../../components/UI/Title/Title";
 import useInput from "../../../hooks/UseInput/UseInput";
 import UseSystemMessage from "../../../hooks/UseSystemMessage/UseSystemMessage";
 import UseVerifyUser from "../../../hooks/UseVerifyUser/UseVerifyUser";
 import DashboardSubpageLayout from "../../../layouts/MainLayout/DashboardSubpageLayout/DashboardSubpageLayout";
-import { MenteeType } from "../../../types/Mentee";
 import { MenteeFeedbackType } from "../../../types/MenteeFeedback";
-import styles from "./GiveFeedbackToMentee.module.scss";
+import LoadingSpinner from "../../../components/UI/LoadingSpinner/LoadingSpinner";
 
 interface GiveFeedbackToMenteeProps {}
 
@@ -60,6 +58,7 @@ const GiveFeedbackToMentee: FC<GiveFeedbackToMenteeProps> = () => {
   }, [
     userId,
     menteeId,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     JSON.stringify(mentor_feedback_given),
     showMessage,
     navigate,
@@ -121,7 +120,7 @@ const GiveFeedbackToMentee: FC<GiveFeedbackToMenteeProps> = () => {
 
   return (
     <DashboardSubpageLayout title="Give Feedback to Past Mentee">
-      {feedback && (
+      {feedback ? (
         <>
           <Title
             text={`${feedback.mentee.user.first_name} ${feedback.mentee.user.last_name}`}
@@ -151,7 +150,10 @@ const GiveFeedbackToMentee: FC<GiveFeedbackToMenteeProps> = () => {
             Submit
           </Button>
         </>
+      ) : (
+        <LoadingSpinner />
       )}
+      <div data-testid="GiveFeedbackToMentee" />
     </DashboardSubpageLayout>
   );
 };

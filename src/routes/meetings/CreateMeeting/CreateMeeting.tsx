@@ -7,7 +7,6 @@ import React, {
   useState,
 } from "react";
 import styles from "./CreateMeeting.module.scss";
-import MainLayout from "../../../layouts/MainLayout/MainLayout";
 import SearchSelect from "../../../components/UI/FormInput/SearchSelect/SearchSelect";
 import {
   SearchSelectOptions,

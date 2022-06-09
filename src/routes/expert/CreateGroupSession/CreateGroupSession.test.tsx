@@ -4,7 +4,7 @@ import "@testing-library/jest-dom/extend-expect";
 import CreateGroupSession from "./CreateGroupSession";
 import { BrowserRouter } from "react-router-dom";
 
-describe("<CreateWorkshop />", () => {
+describe("<CreateGroupSession />", () => {
   test("it should mount", () => {
     render(
       <BrowserRouter>

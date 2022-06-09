@@ -4,12 +4,8 @@ import BarChart from "../../../../components/UI/BarChart/BarChart";
 import { MenteeType } from "../../../../types/Mentee";
 import Tag from "../../../../components/UI/Tag/Tag";
 import ContentCard from "../../../../components/UI/ContentCard/ContentCard";
-import { destroy, update } from "../../../../api/api";
-import UseSystemMessage from "../../../../hooks/UseSystemMessage/UseSystemMessage";
 import SystemMessage from "../../../../components/UI/SystemMessage/SystemMessage";
 import Button from "../../../../components/UI/Button/Button";
-import { MentorshipRequestType } from "../../../../types/MentorshipRequest";
-import { MenteeFeedbackType } from "../../../../types/MenteeFeedback";
 
 //Probably need to pass mentor id along
 interface MenteeProp {

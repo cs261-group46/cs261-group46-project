@@ -2,7 +2,6 @@ import React, {
   FC,
   FormEventHandler,
   useCallback,
-  useContext,
   useEffect,
   useState,
 } from "react";
@@ -92,6 +91,10 @@ const Register: FC = () => {
       showMessage("error", errors);
     }
   }, [showMessage]);
+
+  useEffect(() => {
+    getDepartments();
+  }, [getDepartments]);
 
   useEffect(() => {
     getDepartments();

@@ -1,7 +1,6 @@
-import { useEffect, useCallback, useContext, useState } from "react";
+import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { custom, get } from "../../api/api";
-import UserDataContext from "../../store/UserDataContext";
+import { custom } from "../../api/api";
 import UseSystemMessage from "../UseSystemMessage/UseSystemMessage";
 import UseVerifyUserData from "../UseVerifyUserData/UseVerifyUserData";
 
@@ -59,6 +58,7 @@ const UseVerifyAuth = () => {
         return null;
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [navigate, userDataVerifier]
   );
 
